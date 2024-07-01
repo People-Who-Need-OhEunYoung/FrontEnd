@@ -5,6 +5,7 @@ import { Footer } from './components/Footer';
 import { Main } from './components/Main';
 import { useState } from 'react';
 import { Login } from './components/Login';
+import { Mypage } from './components/Mypage';
 import './App.css';
 
 function App() {
@@ -22,6 +23,12 @@ function App() {
       <Header></Header>
       {loginClick === 'Main' ? <Main event={loginUser} /> : <Login />}
       <Footer></Footer>
+      
+      <BrowserRouter>
+        <Routes>
+            <Route path = '/mypage' element = {<Mypage />} />
+        </Routes>
+      </BrowserRouter>
     </>
    
   );
