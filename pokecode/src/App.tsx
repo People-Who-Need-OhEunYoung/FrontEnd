@@ -12,13 +12,20 @@ function App() {
     cssMain.classList.add('hidden');
     setTimeout(() => {
       setLoginClick('Login');
-    }, 1000); //
+    }, 1000);
   };
 
+  let content = null;
+  // 화면 내부 분기
+  if (loginClick === 'Main') {
+    content = <Main event={loginUser} />;
+  } else if (loginClick === 'Login') {
+    content = <Login />;
+  }
   return (
     <>
       <Header></Header>
-      {loginClick === 'Main' ? <Main event={loginUser} /> : <Login />}
+      {content}
       <Footer></Footer>
     </>
   );

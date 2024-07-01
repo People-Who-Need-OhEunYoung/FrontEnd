@@ -6,3 +6,10 @@
   opacity: 1;
   transition: 1s;
 }
+input::placeholder {
+  color: white;
+}
+/* Chrome, Firefox, Opera, Safari 10.1+ */
+input {
+  outline: none;
+}
