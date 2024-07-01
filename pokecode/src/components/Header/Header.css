@@ -1,0 +1,10 @@
+.header {
+  height: 100px;
+}
+.titleLogo {
+  line-height: 100px;
+  margin: 0 0 0 30px;
+  font-size: 2em;
+  font-weight: bold;
+  color: white;
+}
