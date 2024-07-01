@@ -18,6 +18,7 @@ const Login = ({ event }: any) => {
     </Div>
   );
 };
+
 const Div = styled.div`
   color: white;
   text-align: center;
