@@ -1,33 +1,31 @@
+// App.js
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { Main } from './components/Main';
-import { useState } from 'react';
-import { Login } from './components/Login';
+import { Main } from './pages/Main';
+import { Login } from './pages/Login';
+import { Mypage } from './pages/Mypage';
+import { Signin } from './pages/Signin';
 import './App.css';
 
 function App() {
-  const [loginClick, setLoginClick] = useState('Main');
-  const loginUser = () => {
-    const cssMain = document.getElementsByClassName('main')[0];
-    cssMain.classList.add('hidden');
-    setTimeout(() => {
-      setLoginClick('Login');
-    }, 1000);
-  };
-
-  let content = null;
-  // 화면 내부 분기
-  if (loginClick === 'Main') {
-    content = <Main event={loginUser} />;
-  } else if (loginClick === 'Login') {
-    content = <Login />;
-  }
   return (
-    <>
-      <Header></Header>
-      {content}
-      <Footer></Footer>
-    </>
+    <BrowserRouter>
+      <div className="App">
+        <Header />
+        <AnimatePresence>
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signin" element={<Signin />} />
+            <Route path="/mypage" element={<Mypage />} />
+          </Routes>
+        </AnimatePresence>
+        <Footer />
+      </div>
+    </BrowserRouter>
   );
 }
+
 export default App;
