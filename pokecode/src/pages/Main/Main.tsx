@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { DesignedButton } from '../DesignedButton';
+import { DesignedButton } from '../../components/DesignedButton';
 const Main = ({ event }: any) => {
   return (
     <Div className="main">
