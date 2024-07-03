@@ -20,8 +20,8 @@ const Signin = () => {
             <DesignedButton text="백준연동체크" link="" />
             <Input type="text" name="nickname" placeholder="Nickname" />
             <ButtonDiv>
-              <DesignedButton text="회원가입" link="" />
-              <DesignedButton text="메인으로" link=".." />
+              <DesignedButton text="회원가입" link="/UserMain" />
+              <DesignedButton text="메인으로" link="/" />
             </ButtonDiv>
           </form>
         </Modal>
@@ -40,7 +40,10 @@ const Modal = styled.div`
   filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
   background: rgba(161, 174, 219, 0.15);
   border-radius: 50px;
-  @media (max-width: 550px) {
+  @media (max-width: 1240px) {
+    width: 80vw;
+  }
+  @media (max-width: 850px) {
     width: 100vw;
   }
 `;
@@ -55,7 +58,10 @@ const Input = styled.input`
   padding: 10px;
   box-sizing: border-box;
   color: white;
-  @media (max-width: 550px) {
+  @media (max-width: 1240px) {
+    width: 60vw;
+  }
+  @media (max-width: 850px) {
     width: 80vw;
   }
 `;

@@ -17,10 +17,9 @@ const Login = () => {
           <form action="">
             <Input type="text" name="id" placeholder="Username" />
             <Input type="text" name="password" placeholder="Password" />
-            <Input type="text" name="nickname" placeholder="Nickname" />
             <ButtonDiv>
-              <DesignedButton text="로그인" link="/test" />
-              <DesignedButton text="회원가입" link="../signin" />
+              <DesignedButton text="로그인" link="/usermain" />
+              <DesignedButton text="회원가입" link="/signin" />
             </ButtonDiv>
           </form>
         </Modal>
@@ -39,7 +38,10 @@ const Modal = styled.div`
   filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
   background: rgba(161, 174, 219, 0.15);
   border-radius: 50px;
-  @media (max-width: 550px) {
+  @media (max-width: 1240px) {
+    width: 80vw;
+  }
+  @media (max-width: 800px) {
     width: 100vw;
   }
 `;
@@ -54,7 +56,10 @@ const Input = styled.input`
   padding: 10px;
   box-sizing: border-box;
   color: white;
-  @media (max-width: 550px) {
+  @media (max-width: 1240px) {
+    width: 60vw;
+  }
+  @media (max-width: 800px) {
     width: 80vw;
   }
 `;

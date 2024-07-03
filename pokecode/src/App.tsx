@@ -8,6 +8,7 @@ import { Login } from './pages/Login';
 import { Mypage } from './pages/Mypage';
 import { Signin } from './pages/Signin';
 import './App.css';
+import { UserMain } from './pages/UserMain';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signin" element={<Signin />} />
             <Route path="/mypage" element={<Mypage />} />
+            <Route path="/usermain" element={<UserMain />} />
           </Routes>
         </AnimatePresence>
         <Footer />
