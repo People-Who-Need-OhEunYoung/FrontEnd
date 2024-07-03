@@ -1,8 +1,7 @@
-import React, { useState, useRef, ChangeEvent } from 'react';
+import React, { useState, useRef, ChangeEvent, useEffect  } from 'react';
 import styled from 'styled-components';
 import defaultImage from '../../assets/images/default_profile.png'
 import { useNavigate  } from 'react-router-dom';
-import axios from 'axios';  
 
 type ImageState = {
   image_file: File | null;
@@ -19,6 +18,16 @@ const Uploader = () => {
   const navigate  = useNavigate();
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const [query, setQuery] = useState(""); // 사용자 검색 쿼리
+  const [userData, setUserData] = useState(null); // API로부터 받은 데이터
+  const [page, setPage] = useState(1); // 페이지 번호, 초기값 1
+
+  useEffect(() => {
+  
+  }, [query, page]); // 쿼리 또는 페이지가 변경될 때마다 useEffect 실행
+
+
 
   const previewImage = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -60,15 +69,7 @@ const Uploader = () => {
 
   return (
     <div className="uploader-wrapper">
-      <input type="file" accept="image/*"
-        onChange={previewImage}
-        onClick={(e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
-          const target = e.target as HTMLInputElement;
-          target.value = '';
-        }}
-        ref={inputRef}
-        style={{ display: "none" }}
-      />
+      
       
       <MainContainer>
         <UploadImageContainer>
@@ -81,10 +82,23 @@ const Uploader = () => {
           </Button> */}
         </UploadImageContainer>
         <InfoContainer>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Enter search query..."
+          />
+          <input
+            type="number"
+            value={page}
+            onChange={(e) => setPage(Number(e.target.value))}
+            placeholder="Page number"
+          />
           <Text>닉네임:</Text>
           <Text>크레딧:</Text>
           <Text>맞은 문제 수: </Text>
           <Text>소속: </Text>
+          {userData && <div>{JSON.stringify(userData)}</div>}
         </InfoContainer>
       </MainContainer>
       <Submit>

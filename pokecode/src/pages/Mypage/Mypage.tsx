@@ -4,6 +4,15 @@ import Solvedlist from './Solvedlist';
 
 const Mypage = () => {
 
+  // const getSolvedac = () => {
+  //   fetch("https://solved.ac/api/v3/search/user", {
+  //     method: "GET",
+  //     body: JSON.stringify({
+
+  //     })
+  //   })
+  // }
+
   return (
     <div>
         <RectangleWrap>
@@ -12,6 +21,7 @@ const Mypage = () => {
         </RectangleWrap>
     </div>
   )
+
 }
 
 const RectangleWrap = styled.div`
