@@ -1,4 +1,4 @@
-// App.js
+import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Header } from './components/Header';
@@ -7,8 +7,9 @@ import { Main } from './pages/Main';
 import { Login } from './pages/Login';
 import { Mypage } from './pages/Mypage';
 import { Signin } from './pages/Signin';
-import './App.css';
 import { UserMain } from './pages/UserMain';
+import { Problem } from './pages/Problem';
+import { ProblemList } from './pages/ProblemList';
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
             <Route path="/signin" element={<Signin />} />
             <Route path="/mypage" element={<Mypage />} />
             <Route path="/usermain" element={<UserMain />} />
+            <Route path="/problem" element={<Problem />} />
+            <Route path="/problemlist" element={<ProblemList />} />
           </Routes>
         </AnimatePresence>
         <Footer />
