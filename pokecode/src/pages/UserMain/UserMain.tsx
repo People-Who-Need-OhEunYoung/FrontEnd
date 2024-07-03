@@ -72,7 +72,7 @@ const UserMain = () => {
               animate={controls}
               style={{
                 position: 'absolute',
-                transform: 'translate(-50%, -50%)',
+                transform: 'translate(50%, 50%)',
                 top: position.y,
                 left: position.x,
                 display: 'inline-block',
