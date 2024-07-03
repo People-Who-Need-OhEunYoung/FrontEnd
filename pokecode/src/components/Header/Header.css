@@ -8,3 +8,9 @@
   font-weight: bold;
   color: white;
 }
+
+@media (max-width: 750px) {
+  .titleLogo {
+    display: none;
+  }
+}

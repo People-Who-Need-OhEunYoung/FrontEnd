@@ -63,10 +63,6 @@ const UserMain = () => {
       style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
     >
       <Modal>
-        <ButtonDiv>
-          <Nav />
-        </ButtonDiv>
-
         <Home onClick={handleDivClick}>
           <motion.div
             animate={controls}
@@ -148,15 +144,12 @@ const Home = styled.div`
   position: relative;
   width: 70%;
   margin: auto;
-  height: calc(100% - 8em);
+  height: calc(100% - 4em);
   background: url(${background}) no-repeat;
   background-size: cover;
   overflow: hidden;
   border-radius: 10px;
-  margin-bottom: 4em;
-`;
-const ButtonDiv = styled.div`
-  margin: 1em 0;
+  margin: 2em auto;
 `;
 const Pokemon = styled.img``;
 
@@ -170,6 +163,9 @@ const PokeNameWrap = styled.div`
   background: #625787;
   border-radius: 0px 0px 0px 20px;
 
+  @media (max-width: 750px) {
+    display: none;
+  }
   &:before {
     content: '';
     width: 20px;
