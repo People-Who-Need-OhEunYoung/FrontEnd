@@ -2,6 +2,7 @@ import React, { useState, useRef, ChangeEvent, useEffect  } from 'react';
 import styled from 'styled-components';
 import defaultImage from '../../assets/images/default_profile.png'
 import { useNavigate  } from 'react-router-dom';
+import { userSearch } from '../../utils/api/solvedAc';
 
 type ImageState = {
   image_file: File | null;
@@ -19,35 +20,21 @@ const Uploader = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [query, setQuery] = useState(""); // 사용자 검색 쿼리
-  const [userData, setUserData] = useState(null); // API로부터 받은 데이터
-  const [page, setPage] = useState(1); // 페이지 번호, 초기값 1
+  const [query, setQuery] = useState(''); // 사용자 검색 쿼리
+  const [userData, setUserData] = useState(''); // API로부터 받은 데이터
+  // const [page, setPage] = useState(1); // 페이지 번호, 초기값 1
 
-  useEffect(() => {
-    // if (query.length > 0) {
-    //   const fetchData = async () => {
-    //     // 쿼리와 페이지 번호를 URL에 포함
-    //     const url = `http://localhost:8481/proxy/search/user?query=${encodeURIComponent(query)}&page=${page}`;
-    //     const response = await fetch(url, {
-    //       method: "GET",
-    //       headers: {
-      
-    //         // 'Content-Type': 'application/json',
-    //         // 'x-solvedac-language': 'en' // 여기서 사용할 언어 설정, 'en' 또는 'ko' 등
-    //       }
-    //     })
-    //     .then((res)=>{console.log(res)})
-    //     if (response.ok) {
-    //       const data = await response.json();
-    //       setUserData(data);
-    //     } else {
-    //       console.error("Failed to fetch data:", response.status);
-    //     }
-    //   };
-
-    //   fetchData();
-    // }
-  }, [query, page]); // 쿼리 또는 페이지가 변경될 때마다 useEffect 실행
+  const handleClick = () => {
+    console.log(query)
+    userSearch(query)
+      .then((res) => {
+        console.log(res); // 받아온 데이터를 콘솔에 출력
+        setUserData(JSON.stringify(res)); // 받아온 데이터를 state에 저장
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error); // 에러 처리
+      });
+  };
 
   const previewImage = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -107,12 +94,18 @@ const Uploader = () => {
             삭제
           </Button> */}
         </UploadImageContainer>
+        
         <InfoContainer>
+          <input
+          type="text"
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Enter search query..."
+          />
+          <button onClick={handleClick}>Search</button>
           <Text>닉네임:</Text>
           <Text>크레딧:</Text>
           <Text>맞은 문제 수: </Text>
           <Text>소속: </Text>
-          {userData && <div>{JSON.stringify(userData)}</div>}
         </InfoContainer>
       </MainContainer>
       <Submit>

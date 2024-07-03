@@ -1,7 +1,7 @@
 export { userSearch };
 
 function userSearch(name: string): Promise<any> {
-  return fetch(`http://192.168.1.5:8481/proxy/search/user?query=${name}`, {
+  return fetch(`http://localhost:8481/proxy/search/user?query=${name}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
