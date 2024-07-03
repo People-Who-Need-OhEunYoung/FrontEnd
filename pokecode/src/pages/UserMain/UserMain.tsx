@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
-import Nav from '../../components/Nav/Nav';
 import background from '../../assets/images/background.jpg';
 import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';

@@ -37,7 +37,9 @@ const ProblemList = () => {
           </Orderli>
         </Orderul>
         <Listul>
-          <Listli>테스트 문제입니다.</Listli>
+          <Listli>
+            테스트 문제입니다 <Link to={'/problem'}>입장</Link>
+          </Listli>
         </Listul>
       </Modal>
     </motion.div>
@@ -87,6 +89,7 @@ const Listul = styled.ul`
   box-shadow: inset;
 `;
 const Listli = styled.li`
+  color: black;
   padding: 15px;
 `;
 export default ProblemList;
