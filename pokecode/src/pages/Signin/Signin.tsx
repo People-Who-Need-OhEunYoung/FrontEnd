@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { DesignedButton } from '../../components/DesignedButton';
 import { motion } from 'framer-motion';
-const Login = () => {
+const Signin = () => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -11,15 +11,17 @@ const Login = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <Div className="Login hidden">
+      <Div className="Signin">
         <Modal>
-          <H1>LOGIN</H1>
+          <H1>SIGN IN</H1>
           <form action="">
             <Input type="text" name="id" placeholder="Username" />
             <Input type="text" name="password" placeholder="Password" />
+            <DesignedButton text="백준연동체크" link="" />
+            <Input type="text" name="nickname" placeholder="Nickname" />
             <ButtonDiv>
-              <DesignedButton text="로그인" link="/usermain" />
-              <DesignedButton text="회원가입" link="/signin" />
+              <DesignedButton text="회원가입" link="/UserMain" />
+              <DesignedButton text="메인으로" link="/" />
             </ButtonDiv>
           </form>
         </Modal>
@@ -41,7 +43,7 @@ const Modal = styled.div`
   @media (max-width: 1240px) {
     width: 80vw;
   }
-  @media (max-width: 800px) {
+  @media (max-width: 850px) {
     width: 100vw;
   }
 `;
@@ -49,7 +51,7 @@ const Modal = styled.div`
 // /* INPUT */
 const Input = styled.input`
   width: 15vw;
-  margin: 2em;
+  margin: 1em;
   background: none;
   border: none;
   border-bottom: 1px solid #fff;
@@ -59,7 +61,7 @@ const Input = styled.input`
   @media (max-width: 1240px) {
     width: 60vw;
   }
-  @media (max-width: 800px) {
+  @media (max-width: 850px) {
     width: 80vw;
   }
 `;
@@ -79,4 +81,4 @@ const H1 = styled.h1`
   font-size: 4em;
 `;
 
-export default Login;
+export default Signin;

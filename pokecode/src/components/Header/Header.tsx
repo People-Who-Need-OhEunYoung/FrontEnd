@@ -1,10 +1,11 @@
+import { Link } from 'react-router-dom';
 import './Header.css';
 const Header = () => {
   return (
     <div className="header">
-      <a className="titleLogo" href=".">
+      <Link className="titleLogo" to={'/'}>
         POKE CODE
-      </a>
+      </Link>
     </div>
   );
 };

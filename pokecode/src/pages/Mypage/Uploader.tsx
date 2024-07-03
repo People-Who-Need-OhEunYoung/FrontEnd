@@ -24,10 +24,30 @@ const Uploader = () => {
   const [page, setPage] = useState(1); // 페이지 번호, 초기값 1
 
   useEffect(() => {
-  
+    // if (query.length > 0) {
+    //   const fetchData = async () => {
+    //     // 쿼리와 페이지 번호를 URL에 포함
+    //     const url = `http://localhost:8481/proxy/search/user?query=${encodeURIComponent(query)}&page=${page}`;
+    //     const response = await fetch(url, {
+    //       method: "GET",
+    //       headers: {
+      
+    //         // 'Content-Type': 'application/json',
+    //         // 'x-solvedac-language': 'en' // 여기서 사용할 언어 설정, 'en' 또는 'ko' 등
+    //       }
+    //     })
+    //     .then((res)=>{console.log(res)})
+    //     if (response.ok) {
+    //       const data = await response.json();
+    //       setUserData(data);
+    //     } else {
+    //       console.error("Failed to fetch data:", response.status);
+    //     }
+    //   };
+
+    //   fetchData();
+    // }
   }, [query, page]); // 쿼리 또는 페이지가 변경될 때마다 useEffect 실행
-
-
 
   const previewImage = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -63,14 +83,20 @@ const Uploader = () => {
   };
 
   const goToMain = () => {
-    navigate('/');
-  
+    navigate('/usermain');
   };
 
   return (
     <div className="uploader-wrapper">
-      
-      
+      <input type="file" accept="image/*"
+        onChange={previewImage}
+        onClick={(e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+          const target = e.target as HTMLInputElement;
+          target.value = '';
+        }}
+        ref={inputRef}
+        style={{ display: "none" }}
+      />
       <MainContainer>
         <UploadImageContainer>
           <Image src={image.preview_URL} alt="Preview" />
@@ -82,18 +108,6 @@ const Uploader = () => {
           </Button> */}
         </UploadImageContainer>
         <InfoContainer>
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Enter search query..."
-          />
-          <input
-            type="number"
-            value={page}
-            onChange={(e) => setPage(Number(e.target.value))}
-            placeholder="Page number"
-          />
           <Text>닉네임:</Text>
           <Text>크레딧:</Text>
           <Text>맞은 문제 수: </Text>
