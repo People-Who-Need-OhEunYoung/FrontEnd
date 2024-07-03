@@ -24,29 +24,28 @@ const Uploader = () => {
   const [page, setPage] = useState(1); // 페이지 번호, 초기값 1
 
   useEffect(() => {
-    // if (query.length > 0) {
-    //   const fetchData = async () => {
-    //     // 쿼리와 페이지 번호를 URL에 포함
-    //     const url = `http://localhost:8481/proxy/search/user?query=${encodeURIComponent(query)}&page=${page}`;
-    //     const response = await fetch(url, {
-    //       method: "GET",
-    //       headers: {
-      
-    //         // 'Content-Type': 'application/json',
-    //         // 'x-solvedac-language': 'en' // 여기서 사용할 언어 설정, 'en' 또는 'ko' 등
-    //       }
-    //     })
-    //     .then((res)=>{console.log(res)})
-    //     if (response.ok) {
-    //       const data = await response.json();
-    //       setUserData(data);
-    //     } else {
-    //       console.error("Failed to fetch data:", response.status);
-    //     }
-    //   };
+    if (query.length > 0) {
+      const fetchData = async () => {
+        // 쿼리와 페이지 번호를 URL에 포함
+        const url = `http://localhost:8481/proxy/search/user?query=${encodeURIComponent(query)}&page=${page}`;
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            'x-solvedac-language': 'en' // 여기서 사용할 언어 설정, 'en' 또는 'ko' 등
+          }
+        })
+        .then((res)=>{console.log(res)})
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data);
+        } else {
+          console.error("Failed to fetch data:", response.status);
+        }
+      };
 
-    //   fetchData();
-    // }
+      fetchData();
+    }
   }, [query, page]); // 쿼리 또는 페이지가 변경될 때마다 useEffect 실행
 
   const previewImage = (e: ChangeEvent<HTMLInputElement>) => {
