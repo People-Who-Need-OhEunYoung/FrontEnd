@@ -2,7 +2,10 @@ import { motion, useAnimation } from 'framer-motion';
 import { Pokemon } from '../UserMain/UserMain';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
+import { TestSharedEditor } from '../../components/TestSharedEditor';
+import background from '../../assets/images/background.jpg';
+import problem1011 from '../../assets/images/1011번-Fly-me-to-the-Alpha-Centauri.png';
+import terminal from '../../assets/images/터미널.png';
 const Problem = () => {
   const [position, setPosition] = useState({
     x: '50%',
@@ -55,12 +58,16 @@ const Problem = () => {
       exit={{ opacity: 0 }}
       style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
     >
-      <ProblemContent
-        src="/problem/3990"
-        width="100%"
-        height="1000px"
-        title="Problem Iframe"
-      />
+      <div
+        style={{
+          position: 'absolute',
+          width: '50%',
+          height: '80%',
+          overflow: 'auto',
+        }}
+      >
+        <img src={problem1011} width={'100%'} alt="" />
+      </div>
       <Home onClick={handleDivClick}>
         <motion.div
           animate={controls}
@@ -91,31 +98,31 @@ const Problem = () => {
           height: '100%',
         }}
       >
+        <div style={{ background: 'green', width: '100%', height: '80%' }}>
+          <TestSharedEditor />
+        </div>
         <div
-          style={{ background: 'green', width: '100%', height: '80%' }}
-        ></div>
-        <div
-          style={{ background: 'yellow', width: '100%', height: '20%' }}
-        ></div>
+          style={{
+            background: 'yellow',
+            width: '100%',
+            height: '20%',
+            overflow: 'hidden',
+          }}
+        >
+          <img src={terminal} width={'100%'} />{' '}
+        </div>
       </div>
     </motion.div>
   );
 };
 
-const ProblemContent = styled.iframe`
-  position: absolute;
-  width: 50%;
-  margin: auto;
-  height: 80%;
-  overflow: auto;
-`;
 const Home = styled.div`
   position: absolute;
   bottom: 0;
   width: 100%;
   margin: auto;
   height: 20%;
-  background: blue;
+  background: url(${background});
   overflow: hidden;
 `;
 export default Problem;

@@ -10,6 +10,7 @@ import { Signin } from './pages/Signin';
 import { UserMain } from './pages/UserMain';
 import { Problem } from './pages/Problem';
 import { ProblemList } from './pages/ProblemList';
+import { TestSharedEditor } from './components/TestSharedEditor';
 
 function App() {
   return (
