@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 
 const ProblemList = () => {
   return (
@@ -13,35 +12,7 @@ const ProblemList = () => {
       exit={{ opacity: 0 }}
       style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
     >
-      <Modal>
-        <Titleh1>문제선택</Titleh1>
-        <Inputsearch type="text" />
-        <Orderul>
-          <Orderli>
-            <Link to={'./id'}>ID</Link>
-          </Orderli>
-          <Orderli>
-            <Link to={'./level'}>레벨</Link>
-          </Orderli>
-          <Orderli>
-            <Link to={'./title'}>제목</Link>
-          </Orderli>
-          <Orderli>
-            <Link to={'./resolvedUser'}>푼 사람 수</Link>
-          </Orderli>
-          <Orderli>
-            <Link to={'./try'}>평균시도</Link>
-          </Orderli>
-          <Orderli>
-            <Link to={'./randum'}>랜덤</Link>
-          </Orderli>
-        </Orderul>
-        <Listul>
-          <Listli>
-            테스트 문제입니다 <Link to={'/problem'}>입장</Link>
-          </Listli>
-        </Listul>
-      </Modal>
+      <Modal></Modal>
     </motion.div>
   );
 };
@@ -62,34 +33,5 @@ const Modal = styled.div`
   @media (max-width: 550px) {
     width: 100vw;
   }
-`;
-const Inputsearch = styled.input`
-  width: 50%;
-  padding: 5px;
-  border-radius: 30px;
-`;
-const Titleh1 = styled.h1`
-  padding: 20px;
-`;
-const Orderul = styled.ul`
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
-`;
-const Orderli = styled.li`
-  padding: 15px;
-`;
-const Listul = styled.ul`
-  width: 80%;
-  background: white;
-  margin: auto;
-  max-height: 60%;
-  overflow: auto;
-  box-shadow: inset;
-`;
-const Listli = styled.li`
-  color: black;
-  padding: 15px;
 `;
 export default ProblemList;

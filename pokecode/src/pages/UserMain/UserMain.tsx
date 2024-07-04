@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
+import Nav from '../../components/Nav/Nav';
 import background from '../../assets/images/background.jpg';
 import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
@@ -62,6 +63,10 @@ const UserMain = () => {
       style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
     >
       <Modal>
+        <ButtonDiv>
+          <Nav />
+        </ButtonDiv>
+
         <Home onClick={handleDivClick}>
           <motion.div
             animate={controls}
@@ -143,12 +148,15 @@ const Home = styled.div`
   position: relative;
   width: 70%;
   margin: auto;
-  height: calc(100% - 4em);
+  height: calc(100% - 8em);
   background: url(${background}) no-repeat;
   background-size: cover;
   overflow: hidden;
   border-radius: 10px;
-  margin: 2em auto;
+  margin-bottom: 4em;
+`;
+const ButtonDiv = styled.div`
+  margin: 1em 0;
 `;
 const Pokemon = styled.img``;
 
@@ -162,9 +170,6 @@ const PokeNameWrap = styled.div`
   background: #625787;
   border-radius: 0px 0px 0px 20px;
 
-  @media (max-width: 750px) {
-    display: none;
-  }
   &:before {
     content: '';
     width: 20px;

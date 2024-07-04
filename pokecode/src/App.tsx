@@ -10,6 +10,8 @@ import { Signin } from './pages/Signin';
 import { UserMain } from './pages/UserMain';
 import { Problem } from './pages/Problem';
 import { ProblemList } from './pages/ProblemList';
+import { TestSharedEditor } from './pages/TestSharedEditor';
+
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
             <Route path="/usermain" element={<UserMain />} />
             <Route path="/problem" element={<Problem />} />
             <Route path="/problemlist" element={<ProblemList />} />
+            <Route path="/TestSharedEditor" element={<TestSharedEditor />} />
           </Routes>
         </AnimatePresence>
         <Footer />
