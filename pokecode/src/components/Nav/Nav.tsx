@@ -15,7 +15,7 @@ const cssHeadNav = {
   padding: '25px 0',
   width: '100%',
   height: '50px',
-  'line-height': '50px',
+  lineHeight: '50px',
 };
 
 const LinkButton = styled(Link)`

@@ -150,7 +150,7 @@ const Home = styled.div`
   border-radius: 10px;
   margin: 2em auto;
 `;
-const Pokemon = styled.img``;
+export const Pokemon = styled.img``;
 
 const PokeNameWrap = styled.div`
   position: absolute;
