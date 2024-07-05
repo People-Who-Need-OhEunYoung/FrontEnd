@@ -1,25 +1,35 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const DesignedButton = ({ event, text }: any) => {
-  return <Button onClick={event}>{text}</Button>;
+const DesignedButton = ({ event, text, link }: any) => {
+  return (
+    <LinkButton to={link} onClick={event}>
+      {text}
+    </LinkButton>
+  );
 };
 
-const Button = styled.button`
+const LinkButton = styled(Link)`
   display: inline-block;
   box-sizing: border-box;
-  width: 500px;
-  height: 80px;
+  width: 9em;
+  height: 2em;
+  line-height: 1.8em;
   border: 1px solid #ffffff;
   background: rgba(0, 0, 0, 0);
-  margin: 0 1rem 0 1rem;
   font-weight: 700;
-  font-size: 2rem;
-  line-height: 36px;
+  font-size: 1.5em;
   color: #ffffff;
-  @media (max-width: 1900px) {
-    width: 300px;
-    height: 60px;
-    font-size: 1rem;
+  margin: 0.5em;
+  @media (min-width: 1900px) {
+    width: 12em;
+    height: 2em;
+    font-size: 1.5em;
+  }
+  @media (min-width: 1900px) {
+    width: 12em;
+    height: 2em;
+    font-size: 1.5em;
   }
 `;
 

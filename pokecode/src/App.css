@@ -1,8 +1,13 @@
-.hidden {
-  opacity: 0;
-  transition: 1s;
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+input::placeholder {
+  color: white;
 }
-.open {
-  opacity: 1;
-  transition: 1s;
+/* Chrome, Firefox, Opera, Safari 10.1+ */
+input {
+  outline: none;
+}
+
+* {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-optical-sizing: auto;
 }

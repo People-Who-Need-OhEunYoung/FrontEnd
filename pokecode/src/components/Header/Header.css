@@ -1,5 +1,6 @@
 .header {
   height: 100px;
+  position: relative;
 }
 .titleLogo {
   line-height: 100px;
@@ -7,4 +8,15 @@
   font-size: 2em;
   font-weight: bold;
   color: white;
+}
+
+@media (max-width: 1240px) {
+  .titleLogo {
+    left: 0 !important;
+  }
+}
+@media (max-width: 750px) {
+  .titleLogo {
+    display: none;
+  }
 }

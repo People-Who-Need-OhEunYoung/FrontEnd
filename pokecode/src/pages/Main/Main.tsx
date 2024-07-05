@@ -1,19 +1,29 @@
 import styled from 'styled-components';
 import { DesignedButton } from '../../components/DesignedButton';
+import { motion } from 'framer-motion';
 const Main = ({ event }: any) => {
   return (
-    <Div className="main">
-      <H1>POKE CODE</H1>
-      <P>
-        포켓코드는 알고리즘 학습을 보조하고
-        <br />
-        귀여운 펫들을 성장 시킬 수 있습니다
-      </P>
-      <ButtonDiv>
-        <DesignedButton text="회원가입" />
-        <DesignedButton event={event} text="로그인" />
-      </ButtonDiv>
-    </Div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      transition={{
+        duration: 1,
+      }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <Div className="main">
+        <H1>POKE CODE</H1>
+        <P>
+          포켓코드는 알고리즘 학습을 보조하고
+          <br />
+          귀여운 펫들을 성장 시킬 수 있습니다
+        </P>
+        <ButtonDiv>
+          <DesignedButton text="회원가입" link="signin" />
+          <DesignedButton event={event} text="로그인" link="login" />
+        </ButtonDiv>
+      </Div>
+    </motion.div>
   );
 };
 const Div = styled.div`
