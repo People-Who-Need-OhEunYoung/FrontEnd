@@ -1,4 +1,4 @@
-import { ResizableTabs } from '../ResizableTabs';
+import { ResizableTabs } from '../../components/ResizableTabs';
 const Problem = () => {
   return <ResizableTabs />;
 };

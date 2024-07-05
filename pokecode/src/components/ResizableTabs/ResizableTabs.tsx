@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, useAnimation } from 'framer-motion';
-import { Pokemon } from '../UserMain/UserMain';
-import { TestSharedEditor } from '../../components/TestSharedEditor';
+import { Pokemon } from '../../pages/UserMain/UserMain';
+import { TestSharedEditor } from '../TestSharedEditor';
 import background from '../../assets/images/background.jpg';
 import problem1011 from '../../assets/images/1011번-Fly-me-to-the-Alpha-Centauri.png';
 import terminal from '../../assets/images/터미널.png';

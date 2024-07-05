@@ -11,7 +11,7 @@ import { UserMain } from './pages/UserMain';
 import { Problem } from './pages/Problem';
 import { ProblemList } from './pages/ProblemList';
 import { Header3 } from './components/Header/Header';
-import { ResizableTabs } from './pages/ResizableTabs';
+import { ResizableTabs } from './components/ResizableTabs';
 
 function App() {
   return (
