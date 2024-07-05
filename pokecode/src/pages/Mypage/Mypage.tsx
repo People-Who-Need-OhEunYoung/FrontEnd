@@ -5,14 +5,13 @@ import Solvedlist from './Solvedlist';
 const Mypage = () => {
   return (
     <div>
-        <RectangleWrap>
-          <Uploader/>
-          <Solvedlist/>
-        </RectangleWrap>
+      <RectangleWrap>
+        <Uploader />
+        <Solvedlist />
+      </RectangleWrap>
     </div>
-  )
-
-}
+  );
+};
 
 const RectangleWrap = styled.div`
   position: relative;
@@ -21,8 +20,8 @@ const RectangleWrap = styled.div`
   width: 75vw;
   background-color: #47464630;
   border-radius: 40px;
-  margin : auto;
-  justify-content:center;
+  margin: auto;
+  justify-content: center;
   align-items: center; // 자식 요소들을 세로 방향으로 중앙 정렬
   box-shadow: 0px 1px 4px #ffffff48;
   display:flex;

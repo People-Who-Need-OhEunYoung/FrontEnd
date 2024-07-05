@@ -1,4 +1,4 @@
-import React, { useState, useRef, ChangeEvent, useEffect  } from 'react';
+import React, { useState, useRef, ChangeEvent, useEffect } from 'react';
 import styled from 'styled-components';
 import defaultImage from '../../assets/images/default_profile.png'
 import { useNavigate  } from 'react-router-dom';
@@ -16,7 +16,7 @@ const Uploader = () => {
   });
 
   const [buttonText, setButtonText] = useState<string>('수정하기');
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -61,21 +61,22 @@ const Uploader = () => {
     }
   };
 
-  const deleteImage = () => {
-    setImage({
-      image_file: null,
-      preview_URL: defaultImage,
-    });
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
-  };
-
+  // const deleteImage = () => {
+  //   setImage({
+  //     image_file: null,
+  //     preview_URL: defaultImage,
+  //   });
+  //   if (inputRef.current) {
+  //     inputRef.current.value = '';
+  //   }
+  // };
 
   const handleButtonClick = () => {
-    setButtonText(prevText => (prevText === '수정하기' ? '변경하기' : '수정하기'));
+    setButtonText((prevText) =>
+      prevText === '수정하기' ? '변경하기' : '수정하기'
+    );
     if (inputRef.current) {
-      inputRef.current.value = "";
+      inputRef.current.value = '';
     }
   };
 
@@ -92,7 +93,7 @@ const Uploader = () => {
           target.value = '';
         }}
         ref={inputRef}
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
       />
       <MainContainer>
         <UploadImageContainer>
@@ -110,12 +111,8 @@ const Uploader = () => {
         </InfoContainer>
       </MainContainer>
       <Submit>
-        <SubmitBtn onClick={handleButtonClick} >
-          {buttonText}
-        </SubmitBtn> 
-        <SubmitBtn onClick={goToMain}>
-          메인으로
-        </SubmitBtn> 
+        <SubmitBtn onClick={handleButtonClick}>{buttonText}</SubmitBtn>
+        <SubmitBtn onClick={goToMain}>메인으로</SubmitBtn>
       </Submit>
     </Uploaderwrapper>
   );
@@ -158,7 +155,7 @@ const Image = styled.img`
   width: 140px;
   height: 140px;
   object-fit: cover; // 이미지 비율을 유지하면서 요소에 완벽히 맞도록 조정
-  border-radius: 50%;  // 이미지를 원형으로 만듬
+  border-radius: 50%; // 이미지를 원형으로 만듬
   margin: 10px;
 `;
 

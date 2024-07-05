@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
-import Nav from '../../components/Nav/Nav';
 import background from '../../assets/images/background.jpg';
 import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
@@ -151,7 +150,14 @@ const Home = styled.div`
   border-radius: 10px;
   margin: 2em auto;
 `;
-const Pokemon = styled.img``;
+export const Pokemon = styled.img`
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  -webkit-user-drag: none;
+  user-select: none;
+`;
 
 const PokeNameWrap = styled.div`
   position: absolute;
