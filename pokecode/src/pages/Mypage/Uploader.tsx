@@ -157,6 +157,8 @@ const Image = styled.img`
   object-fit: cover; // 이미지 비율을 유지하면서 요소에 완벽히 맞도록 조정
   border-radius: 50%; // 이미지를 원형으로 만듬
   margin: 10px;
+  box-shadow: 0px 1px 22px #ffffff7d;
+  //border: 2px,solid, white;
 `;
 
 const UploadImageContainer = styled.section`
@@ -213,15 +215,16 @@ const SubmitBtn = styled.button`
   margin: 7px;
 
   &:hover {
-    background-color: #4ea6ff;
+    background-color: #4ea7ff52;
+    box-shadow: 0px 1px 22px #ffffff7d;
   }
 
   &:active {
-    background-color: #389ae6;
+    background-color: #4ea7ff52;
   }
 
   &:focus {
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
+    //box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
   }
 `;
 
