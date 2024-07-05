@@ -135,7 +135,7 @@ const Modal = styled.div`
   background: #625787;
   border-radius: 50px;
   filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
-  @media (max-width: 550px) {
+  @media (max-width: 750px) {
     width: 100vw;
   }
 `;
@@ -153,10 +153,13 @@ const Home = styled.div`
 export const Pokemon = styled.img`
   -webkit-user-drag: none;
   -khtml-user-drag: none;
+  -webkit-user-drag: none;
   -moz-user-drag: none;
   -o-user-drag: none;
-  -webkit-user-drag: none;
   user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
 `;
 
 const PokeNameWrap = styled.div`

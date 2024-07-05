@@ -116,9 +116,6 @@ const ProfileWrap2 = styled.div`
   width: 250px;
   height: 100%;
   right: 0%;
-  @media (max-width: 1240px) {
-    display: none;
-  }
 `;
 
 const NavWrap = styled.div`

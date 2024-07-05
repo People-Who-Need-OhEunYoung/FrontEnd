@@ -10,7 +10,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   height: 100%;
-  border: 1px solid #ccc;
+  border: none;
 `;
 
 interface TabProps {
@@ -20,19 +20,34 @@ interface TabProps {
 const Tab = styled.div<TabProps>`
   background-color: #f0f0f0;
   height: 100%;
-  border-right: 1px solid #ccc;
+  border-right: none;
   flex-basis: ${({ width }) => width}%;
   z-index: 100;
 `;
 
 const Resizer = styled.div`
-  width: 10px;
+  opacity: 0;
+  width: 20px;
   cursor: ew-resize;
-  background-color: #ddd;
+  background-color: #8f0000;
   transform: translateX(-50%);
-  height: 30px;
+  height: 100px;
   z-index: 100;
   position: absolute;
+  border-radius: 20px;
+  transition: 0.5s;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const ResizableTabs: React.FC = () => {
