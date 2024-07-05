@@ -157,6 +157,8 @@ const Image = styled.img`
   object-fit: cover; // 이미지 비율을 유지하면서 요소에 완벽히 맞도록 조정
   border-radius: 50%; // 이미지를 원형으로 만듬
   margin: 10px;
+  box-shadow: 0px 1px 22px #ffffff7d;
+  //border: 2px,solid, white;
 `;
 
 const UploadImageContainer = styled.section`
@@ -166,20 +168,20 @@ const UploadImageContainer = styled.section`
   width: 40%;
   text-align: center;
   justify-content: center; // 세로 방향 중앙 정렬
-  margin: 30px 0px 40px 40px; //상에서 시계방향
+  margin: 25px 50px;
 `;
 
 const MainContainer = styled.div`
-  display: inline-flex; // 자식 요소를 옆으로 나란히 배치
-  flex-direction: row; // 가로 방향 정렬
+  display: flex; // 자식 요소를 옆으로 나란히 배치
   background-color: #31313888;
   border-radius: 20px;
   margin-left: 10%;
+  justify-content: center;
 `;
 
 const InfoContainer = styled.div`
-  margin-top: 40px;
-  align-items: auto; // 가로 방향 중앙 정렬
+  margin-top: 30px;
+  width: 50%;
   font-size: 1.4em;
 `;
 
@@ -193,8 +195,7 @@ const Text = styled.p`
 const Submit = styled.div`
   display: flex; // 자식 요소를 옆으로 나란히 배치
   justify-content: center;
-  margin-top: 39%;
-  transform: translateX(6%);
+  margin-top: 40%;
 `;
 
 const SubmitBtn = styled.button`
@@ -213,15 +214,16 @@ const SubmitBtn = styled.button`
   margin: 7px;
 
   &:hover {
-    background-color: #4ea6ff;
+    background-color: #4ea7ff52;
+    box-shadow: 0px 1px 22px #ffffff7d;
   }
 
   &:active {
-    background-color: #389ae6;
+    background-color: #4ea7ff52;
   }
 
   &:focus {
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
+    //box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
   }
 `;
 

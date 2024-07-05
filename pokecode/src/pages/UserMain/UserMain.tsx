@@ -4,6 +4,7 @@ import { motion, useAnimation } from 'framer-motion';
 import background from '../../assets/images/background.jpg';
 import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
+import { MainWrapper } from '../../components/MainWrapper';
 
 const UserMain = () => {
   const [position, setPosition] = useState({
@@ -61,7 +62,8 @@ const UserMain = () => {
       exit={{ opacity: 0 }}
       style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
     >
-      <Modal>
+      <MainWrapper>
+        `
         <Home onClick={handleDivClick}>
           <motion.div
             animate={controls}
@@ -117,31 +119,14 @@ const UserMain = () => {
             </Button>
           </ButtonWrap>
         </Home>
-      </Modal>
+      </MainWrapper>
     </motion.div>
   );
 };
-/* 모달 */
-const Modal = styled.div`
-  position: absolute;
-  transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
-  width: 60%;
-  height: 100%;
-  margin: auto;
-  text-align: center;
-  color: white;
-  background: #625787;
-  border-radius: 50px;
-  filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
-  @media (max-width: 750px) {
-    width: 100vw;
-  }
-`;
+
 const Home = styled.div`
   position: relative;
-  width: 70%;
+  width: 80%;
   margin: auto;
   height: calc(100% - 4em);
   background: url(${background}) no-repeat;

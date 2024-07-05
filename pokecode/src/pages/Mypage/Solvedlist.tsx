@@ -77,7 +77,7 @@ const Solvedlist = () => {
 
 const Wrap = styled.div`
     position: relative;
-    height: 80%;
+    height: 90%;
     width: 40%;
     margin: auto;    
 `;
@@ -85,7 +85,7 @@ const Wrap = styled.div`
 const ListView = styled.div`
   background-color: #ffffff;
   border-radius: 10px;
-  height: 100%;
+  height: 90%;
   overflow-y: scroll;
 `;
 
