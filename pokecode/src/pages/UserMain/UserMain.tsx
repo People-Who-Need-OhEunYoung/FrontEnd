@@ -63,7 +63,7 @@ const UserMain = () => {
       style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
     >
       <MainWrapper>
-        <Home onClick={handleDivClick}>
+        `<Home onClick={handleDivClick}>
           <motion.div
             animate={controls}
             style={{

@@ -3,14 +3,13 @@ import styled from 'styled-components';
 
 /* 모달 */
 const Modal = styled.div`
-  position: absolute;
-  transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center; // 자식 요소들을 세로 방향으로 중앙 정렬
   width: 75%;
-  height: 100%;
-  margin: auto;
-  text-align: center;
+  height: calc(100vh - 180px);
+  margin: 0 auto;
   color: white;
   background: #625787;
   border-radius: 50px;

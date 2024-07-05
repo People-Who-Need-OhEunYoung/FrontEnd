@@ -168,20 +168,20 @@ const UploadImageContainer = styled.section`
   width: 40%;
   text-align: center;
   justify-content: center; // 세로 방향 중앙 정렬
-  margin: 30px 0px 40px 40px; //상에서 시계방향
+  margin: 25px 50px;
 `;
 
 const MainContainer = styled.div`
-  display: inline-flex; // 자식 요소를 옆으로 나란히 배치
-  flex-direction: row; // 가로 방향 정렬
+  display: flex; // 자식 요소를 옆으로 나란히 배치
   background-color: #31313888;
   border-radius: 20px;
   margin-left: 10%;
+  justify-content: center;
 `;
 
 const InfoContainer = styled.div`
-  margin-top: 40px;
-  align-items: auto; // 가로 방향 중앙 정렬
+  margin-top: 30px;
+  width: 50%;
   font-size: 1.4em;
 `;
 
@@ -195,8 +195,7 @@ const Text = styled.p`
 const Submit = styled.div`
   display: flex; // 자식 요소를 옆으로 나란히 배치
   justify-content: center;
-  margin-top: 39%;
-  transform: translateX(6%);
+  margin-top: 40%;
 `;
 
 const SubmitBtn = styled.button`
