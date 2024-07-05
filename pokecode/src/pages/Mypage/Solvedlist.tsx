@@ -59,7 +59,6 @@ const Solvedlist = () => {
         <hr style= {{marginBottom: '12px'}}></hr>
         <ListView>
           {visibleList === 'list1' && items.map((item, index) => (
-
               <Item key={index}>
                  {(() => {
                     const link = `https://www.acmicpc.net/problem/${item.problemId}`;
