@@ -24,15 +24,6 @@ const Solvedlist = () => {
     }
   };
 
-  const fetchProb = async () => {
-    try {
-      const res = await probSearch(id, 'id');
-      setUserData(JSON.stringify(res));
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
   useEffect(() => {
     fetchUserData();
     if (userData) {
@@ -83,7 +74,7 @@ const Wrap = styled.div`
 `;
 
 const ListView = styled.div`
-  background-color: #ffffff;
+  background-color: #020202;
   border-radius: 10px;
   height: 90%;
   overflow-y: scroll;
