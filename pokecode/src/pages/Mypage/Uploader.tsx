@@ -1,7 +1,8 @@
-import React, { useState, useRef, ChangeEvent } from 'react';
+import React, { useState, useRef, ChangeEvent, useEffect } from 'react';
 import styled from 'styled-components';
-import defaultImage from '../../assets/images/default_profile.png';
-import { useNavigate } from 'react-router-dom';
+import defaultImage from '../../assets/images/default_profile.png'
+import { useNavigate  } from 'react-router-dom';
+import { userSearch } from '../../utils/api/solvedAc';
 
 type ImageState = {
   image_file: File | null;
@@ -19,33 +20,31 @@ const Uploader = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // const [query, setQuery] = useState(""); // 사용자 검색 쿼리
-  // const [userData, setUserData] = useState(null); // API로부터 받은 데이터
+  const [query, setQuery] = useState('jade0179'); // 사용자 검색 쿼리
+  const [userData, setUserData] = useState(''); // API로부터 받은 데이터
   // const [page, setPage] = useState(1); // 페이지 번호, 초기값 1
+  const [solvedCount, setsolvedCount] = useState(0); // 페이지 번호, 초기값 0
+  const [tierImg, settierImg] = useState('');
 
-  // useEffect(() => {
-  // if (query.length > 0) {
-  //   const fetchData = async () => {
-  //     // 쿼리와 페이지 번호를 URL에 포함
-  //     const url = `http://localhost:8481/proxy/search/user?query=${encodeURIComponent(query)}&page=${page}`;
-  //     const response = await fetch(url, {
-  //       method: "GET",
-  //       headers: {
-  //         // 'Content-Type': 'application/json',
-  //         // 'x-solvedac-language': 'en' // 여기서 사용할 언어 설정, 'en' 또는 'ko' 등
-  //       }
-  //     })
-  //     .then((res)=>{console.log(res)})
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       setUserData(data);
-  //     } else {
-  //       console.error("Failed to fetch data:", response.status);
-  //     }
-  //   };
-  //   fetchData();
-  // }
-  // }, [query, page]); // 쿼리 또는 페이지가 변경될 때마다 useEffect 실행
+  useEffect(() => {
+    userSearch(query)
+    .then((res) => {
+      setUserData(JSON.stringify(res)); // 받아온 데이터를 state에 저장
+    })
+    .catch((error) => {
+      console.error('Error fetching data:', error); // 에러 처리
+    });
+
+    if (userData) {
+      const parsedData = JSON.parse(userData);
+      if (parsedData.count > 0) {
+        setsolvedCount(parsedData.items[0].solvedCount);
+        const tiersrc = `https://static.solved.ac/tier_small/${parsedData.items[0].tier}.svg`;
+        settierImg(tiersrc);
+        console.log('solvedCount:', solvedCount);
+      }
+    }
+  }, [userData, query]);
 
   const previewImage = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -86,10 +85,8 @@ const Uploader = () => {
   };
 
   return (
-    <div className="uploader-wrapper">
-      <input
-        type="file"
-        accept="image/*"
+    <Uploaderwrapper>
+      <input type="file" accept="image/*"
         onChange={previewImage}
         onClick={(e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
           const target = e.target as HTMLInputElement;
@@ -100,44 +97,46 @@ const Uploader = () => {
       />
       <MainContainer>
         <UploadImageContainer>
+          <TierImg src = {tierImg}/>
           <Image src={image.preview_URL} alt="Preview" />
           <Button onClick={() => inputRef.current?.click()}>
             이미지 업로드
-          </Button>
-          {/* <Button onClick={deleteImage}>
-            삭제
-          </Button> */}
+          </Button> 
         </UploadImageContainer>
         <InfoContainer>
-          <Text>닉네임:</Text>
+          <Text>닉네임: {query} </Text>
           <Text>크레딧:</Text>
-          <Text>맞은 문제 수: </Text>
+          <Text>맞은 문제 수: {solvedCount} </Text>
           <Text>소속: </Text>
-          {/* {userData && <div>{JSON.stringify(userData)}</div>} */}
         </InfoContainer>
       </MainContainer>
       <Submit>
         <SubmitBtn onClick={handleButtonClick}>{buttonText}</SubmitBtn>
         <SubmitBtn onClick={goToMain}>메인으로</SubmitBtn>
       </Submit>
-    </div>
+    </Uploaderwrapper>
   );
 };
 
+const Uploaderwrapper = styled.div`
+  height: 75%;
+  width: 50%;
+`;
+
 const Button = styled.button`
-  background-color: #ffffff;
-  color: #000000;
-  padding: 4px 35px;
-  border: none;
+  background-color: transparent;
+  border: 2px solid white; /* 2px 두께의 흰색 실선 테두리 */;
+  color: #ffffff;
+  padding: 4px 35px ;
   border-radius: 20px;
   outline: none;
   cursor: pointer;
-  font-size: 1em;
+  font-size: 0.75rem;
   font-weight: 500;
-  line-height: 1.75;
+  line-height: 1.5;
   text-transform: uppercase;
   transition: background-color 0.3s;
-  margin: 7px;
+  margin: 10px;
 
   &:hover {
     background-color: #4ea6ff;
@@ -153,52 +152,56 @@ const Button = styled.button`
 `;
 
 const Image = styled.img`
-  width: 160px;
-  height: 160px;
+  width: 140px;
+  height: 140px;
   object-fit: cover; // 이미지 비율을 유지하면서 요소에 완벽히 맞도록 조정
   border-radius: 50%; // 이미지를 원형으로 만듬
   margin: 10px;
 `;
 
 const UploadImageContainer = styled.section`
+  position: relative; // 내가 짱이다. (내 안에 있는 absolute들을 통치하겠다.)
   display: inline-block;
   flex-direction: column; // 세로 방향으로 정렬
-  width: 30%;
+  width: 40%;
   text-align: center;
   justify-content: center; // 세로 방향 중앙 정렬
-  align-items: center; // 가로 방향 중앙 정렬
-  gap: 10px; // 버튼과 이미지 사이의 간격
-  margin: 60px 10px 30px 100px; //상에서 시계방향
+  margin: 30px 0px 40px 40px; //상에서 시계방향
 `;
 
 const MainContainer = styled.div`
   display: inline-flex; // 자식 요소를 옆으로 나란히 배치
   flex-direction: row; // 가로 방향 정렬
+  background-color: #31313888;
+  border-radius: 20px;
+  margin-left: 10%;
 `;
 
 const InfoContainer = styled.div`
-  margin-top: 70px;
+  margin-top: 40px;
   align-items: auto; // 가로 방향 중앙 정렬
   font-size: 1.4em;
 `;
 
-const Text = styled.h4`
+const Text = styled.p`
   margin: 20px 40px;
-  color: white;
+  color: #ffffff;
   text-align: left;
+  font-size: 1rem;
 `;
 
 const Submit = styled.div`
   display: flex; // 자식 요소를 옆으로 나란히 배치
-  justify-content: end;
-  width: 92%;
+  justify-content: center;
+  margin-top: 39%;
+  transform: translateX(6%);
 `;
 
 const SubmitBtn = styled.button`
-  background-color: #ffffff;
-  color: #000000;
-  padding: 4px 70px;
-  border: none;
+  background-color: transparent;
+  color: #ffffff;
+  padding: 4px 70px ;
+  border: 2px solid white; /* 2px 두께의 흰색 실선 테두리 */;
   border-radius: 15px;
   outline: none;
   cursor: pointer;
@@ -221,5 +224,14 @@ const SubmitBtn = styled.button`
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
   }
 `;
+
+const TierImg = styled.img`
+  position: absolute; //나는 부모에게 빌붙겠다. 
+  left : 50%;
+  bottom: 50px;
+  transform: translateX(-50%);
+  width: 30px;
+`;
+
 
 export default Uploader;
