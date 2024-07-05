@@ -150,7 +150,14 @@ const Home = styled.div`
   border-radius: 10px;
   margin: 2em auto;
 `;
-export const Pokemon = styled.img``;
+export const Pokemon = styled.img`
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  -webkit-user-drag: none;
+  user-select: none;
+`;
 
 const PokeNameWrap = styled.div`
   position: absolute;

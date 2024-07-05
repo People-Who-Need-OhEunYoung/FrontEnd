@@ -11,6 +11,7 @@ import { UserMain } from './pages/UserMain';
 import { Problem } from './pages/Problem';
 import { ProblemList } from './pages/ProblemList';
 import { Header3 } from './components/Header/Header';
+import { ResizableTabs } from './pages/ResizableTabs';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route path="/usermain" element={<UserMain />} />
             <Route path="/problemlist" element={<ProblemList />} />
             <Route path="/problem" element={<Problem />} />
+            <Route path="/resizableTabs" element={<ResizableTabs />} />
           </Routes>
           <Routes>
             <Route path="/" element={<Footer />} />

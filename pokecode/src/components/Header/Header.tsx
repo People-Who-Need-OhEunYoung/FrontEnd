@@ -88,19 +88,9 @@ export const Header3 = () => {
       >
         POKE CODE
       </Link>
-      <div
-        style={{
-          position: 'absolute',
-          top: '0',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          color: 'white',
-          textAlign: 'center',
-          width: '350px',
-        }}
-      >
+      <NavWrap>
         <Nav></Nav>
-      </div>
+      </NavWrap>
       <ProfileWrap2>
         <Profile name={'알맞은 데이터'} />
       </ProfileWrap2>
@@ -128,6 +118,19 @@ const ProfileWrap2 = styled.div`
   right: 0%;
   @media (max-width: 1240px) {
     display: none;
+  }
+`;
+
+const NavWrap = styled.div`
+  position: absolute;
+  top: 0;
+  left: 220px;
+  color: white;
+  text-align: center;
+  width: 350px;
+  @media (max-width: 750px) {
+    left: 50%;
+    transform: translateX(-50%);
   }
 `;
 export default Header;
