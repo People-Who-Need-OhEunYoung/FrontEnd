@@ -20,6 +20,21 @@ app.use(
   }),
 );
 
+app.use(
+  '/proxyuser',
+  createProxyMiddleware({
+    target: 'https://www.acmicpc.net/user/',
+    changeOrigin: true,
+    pathRewrite: {
+      '^/proxy': '', // /proxy 경로를 타겟 경로로 매핑
+    },
+    onProxyRes: function (proxyRes, req, res) {
+      proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+    },
+  }),
+);
+
+
 const port = 8481;
 app.listen(port, () => {
   console.log(`Proxy server is running on port ${port}`);

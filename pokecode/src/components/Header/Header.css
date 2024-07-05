@@ -6,7 +6,7 @@
   margin: 0 0 0 30px;
   font-size: 2em;
   font-weight: bold;
-  color: white;
+  color: rgb(218, 183, 255);
 }
 
 @media (max-width: 750px) {
