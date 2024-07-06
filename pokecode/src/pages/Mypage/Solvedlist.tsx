@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { useState, useEffect  } from 'react';
 import { getTop100, probSearch } from '../../utils/api/solvedAc';
+import { crawlUserprob }  from '../../utils/api/solvedAc';
+import cheerio from 'cheerio';
 
 type ItemType = {
   problemId: number;
@@ -10,10 +12,12 @@ type ItemType = {
 
 const Solvedlist = () => {
   const [query, setQuery] = useState('jade0179'); // 사용자 검색 쿼리
+
   const [userData, setUserData] = useState(''); // API로부터 받은 데이터
   const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
+
   const [visibleList, setVisibleList] = useState('list1'); // Manage which list is visible
-  const [id, setId] = useState('');
+  const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
 
   const fetchUserData = async () => {
     try {
@@ -24,8 +28,23 @@ const Solvedlist = () => {
     }
   };
 
+  const fetchCrawlData = async () => {
+      try {
+        const res = await crawlUserprob(query,1);
+        const $ = cheerio.load(res);
+        const nextData : any = $('#__NEXT_DATA__').html();
+        const parsedData = JSON.parse(nextData);
+        const solvedProblems = parsedData.props.pageProps.problems.items; // 이 부분은 실제 데이터 구조에 맞게 조정해야 합니다.
+        setProblems(solvedProblems);
+        console.log(problems);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+   };
+
   useEffect(() => {
     fetchUserData();
+    fetchCrawlData();
     if (userData) {
       const parsedData = JSON.parse(userData);
       if (parsedData.count > 0) {
@@ -35,10 +54,11 @@ const Solvedlist = () => {
           itemsArray.push(item);
         }
         setItems(itemsArray); // items 상태 업데이트
-        console.log(items);
+        console.log('items: ', items);
       }
     }
   }, [userData, query]);
+
 
   return (
      <Wrap>
@@ -57,13 +77,18 @@ const Solvedlist = () => {
                   })()}
               </Item>
           ))}
-          {visibleList === 'list2' && <div>List 2 content here</div>}
+          {visibleList === 'list2' && problems.map((item, index) => (
+              <Item key={index}>
+                 {(() => {
+                    const link = `https://www.acmicpc.net/problem/${item.problemId}`;
+                    return <a href={link}>{index} {item.problemId} {item.titleKo}</a>;
+                  })()}
+              </Item>
+          ))}
           {visibleList === 'list3' && <div>List 3 content here</div>}
         </ListView>
      </Wrap>
-    
   )
-
 }
 
 const Wrap = styled.div`
@@ -74,7 +99,7 @@ const Wrap = styled.div`
 `;
 
 const ListView = styled.div`
-  background-color: #020202;
+  background-color: #f7f7f726;
   border-radius: 10px;
   height: 90%;
   overflow-y: scroll;
