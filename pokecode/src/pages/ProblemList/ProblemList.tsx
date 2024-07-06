@@ -1,8 +1,51 @@
 import styled from 'styled-components';
+import { useState, useEffect  } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { probSearch } from '../../utils/api/solvedAc';
+
+import SortList from './SortList';
+
+type ItemType = {
+  problemId: number;
+  titleKo: string;
+  level: number;
+};
+
 
 const ProblemList = () => {
+  const [query, setQuery] = useState(' '); // 검색 문자열 쿼리
+
+  const [probData, setProbData] = useState(''); // API로부터 받은 데이터
+  const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
+  const [sort, setSort] = useState<string>('id');
+  const [page, setPage] = useState<number>(1);
+
+  const fetchProbData = async () => {
+    try {
+      const res = await probSearch(query, sort, page);
+      setProbData(JSON.stringify(res));
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProbData();
+    if (probData) {
+      const parsedData = JSON.parse(probData);
+      if (parsedData.count > 0) {
+        const itemsArray = [];
+        for (let i = 0; i < parsedData.items.length; i++) {
+          const item = parsedData.items[i];
+          itemsArray.push(item);
+        }
+        setProblems(itemsArray); // items 상태 업데이트
+        console.log('items: ', problems);
+      }
+    }
+  }, [probData, query, sort]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -14,62 +57,109 @@ const ProblemList = () => {
       style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
     >
       <Modal>
-        <Titleh1>문제선택</Titleh1>
-        <Inputsearch type="text" />
-        <Orderul>
-          <Orderli>
-            <Link to={'./id'}>ID</Link>
-          </Orderli>
-          <Orderli>
-            <Link to={'./level'}>레벨</Link>
-          </Orderli>
-          <Orderli>
-            <Link to={'./title'}>제목</Link>
-          </Orderli>
-          <Orderli>
-            <Link to={'./resolvedUser'}>푼 사람 수</Link>
-          </Orderli>
-          <Orderli>
-            <Link to={'./try'}>평균시도</Link>
-          </Orderli>
-          <Orderli>
-            <Link to={'./randum'}>랜덤</Link>
-          </Orderli>
-        </Orderul>
-        <Listul>
-          <Listli>
+        <SearchWrapper>
+          <Titleh1>문제 검색</Titleh1>
+          <Inputsearch type="text" value={query} onChange={(e) => {setQuery(e.target.value)}} />
+          <ButtonGroup>
+            <SelectBtn onClick={() => {setSort('id')} }> ID </SelectBtn>
+            <SelectBtn onClick={() => {setSort('level')}}>레벨</SelectBtn>
+            <SelectBtn onClick={() => {setSort('title')}}>제목</SelectBtn>
+            <SelectBtn onClick={() => {setSort('solved')}}>푼 사람 수</SelectBtn>
+            <SelectBtn onClick={() => {setSort('average_try')}}>평균 시도</SelectBtn>
+            <SelectBtn onClick={() => {setSort('random')}}>랜덤</SelectBtn>
+          </ButtonGroup>
+        </SearchWrapper>
+      
+        {/* <SortList/> */}
+        <Listheader>
+          <h4 style={{width: '24px'}}>#</h4>
+          <h4 style={{'width': '30%'}}>  제목 </h4>
+          <h4 style={{'width': '10%'}}>  푼 사람 수 </h4>
+          <h4 style={{'width': '10%'}}>  평균 시도 </h4>
+        </Listheader>
+        {/* <hr style= {{ width: '75%', margin: 'auto',marginBottom: '15px'}}></hr> */}
+        <ListView>
+          {/* <Listli>
             테스트 문제입니다 <Link to={'/problem'}>입장</Link>
-          </Listli>
-        </Listul>
+          </Listli> */}
+          {problems.map((item, index) => (
+              <Item key={index}>
+                 {(() => {
+                    const link = `https://www.acmicpc.net/problem/${item.problemId}`;
+                    const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
+                    return <div>
+                      <TierImg src={tiersrc} /> 
+                      <a href={link} style={{display: 'inline-block', 'width': '15%'}}> {item.problemId}</a> 
+                      <a href={link} style={{'width': '60%'}}> {item.titleKo}</a>
+                    </div>;
+                  })()}
+              </Item>
+          ))}
+        </ListView>
       </Modal>
     </motion.div>
   );
 };
+
+const ListView = styled.div`
+  background-color: #ffffff1d;
+  width: 75%;
+  height: 62%;
+  overflow-y: auto;
+  margin: auto;
+  /* align-items: stretch;
+  flex-direction: column; */
+`;
+
+const Listheader = styled.div`
+  width: 75%;
+  display: flex;
+  margin: auto;
+  justify-content: space-around;
+  padding: 10px;
+`;
+
+const SearchWrapper = styled.div`
+  text-align: center; 
+  margin: 10px auto;
+`;
+
 /* 모달 */
 const Modal = styled.div`
   position: absolute;
   transform: translate(-50%, -50%);
   top: 50%;
   left: 50%;
-  width: 60%;
+  width: 75%;
   height: 100%;
   margin: auto;
-  text-align: center;
   color: white;
-  background: #625787;
-  border-radius: 50px;
+  background: #47464630;
+  border-radius: 20px;;
   filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
+  box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.267);
   @media (max-width: 550px) {
     width: 100vw;
   }
 `;
+
+const TierImg = styled.img`
+  position :relative;
+  width: 15px;
+  margin-right: 3%;
+
+`;
+
 const Inputsearch = styled.input`
-  width: 50%;
+  width: 40%;
   padding: 5px;
   border-radius: 30px;
+  box-shadow: 0 0 15px 7px rgba(255, 255, 255, 0.267);
 `;
-const Titleh1 = styled.h1`
-  padding: 20px;
+
+const Titleh1 = styled.p`
+  padding: 10px;
+  font-size: 1.2rem;
 `;
 const Orderul = styled.ul`
   width: 50%;
@@ -92,4 +182,44 @@ const Listli = styled.li`
   color: black;
   padding: 15px;
 `;
+
+const Item = styled.div`
+  border-bottom: 1px solid #8d8d8d;
+  padding: 10px;
+`;
+
+const ButtonGroup = styled.div`
+  border-radius: 10px;
+`;
+
+
+const SelectBtn = styled.button`
+  color: white;
+  background-color: transparent;
+  padding: 4px 10px ;
+  border: none;
+  border-radius: 15px;
+  outline: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.75;
+  text-transform: uppercase;
+  transition: background-color 0.3s;
+  margin: 7px;
+
+  &:hover {
+    background-color: #4ea7ff52;
+  }
+
+  &:active {
+    background-color: #4ea7ff52;
+  }
+
+  /* &:focus {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
+  } */
+`;
+
+
 export default ProblemList;

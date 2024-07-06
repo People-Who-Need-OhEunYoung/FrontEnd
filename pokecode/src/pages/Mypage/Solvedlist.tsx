@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect  } from 'react';
-import { getTop100, probSearch } from '../../utils/api/solvedAc';
+import { getTop100} from '../../utils/api/solvedAc';
 import { crawlUserprob }  from '../../utils/api/solvedAc';
 import cheerio from 'cheerio';
 
@@ -73,7 +73,6 @@ const Solvedlist = () => {
       }
     }
   }, [userData, query]);
-
 
   return (
      <Wrap>

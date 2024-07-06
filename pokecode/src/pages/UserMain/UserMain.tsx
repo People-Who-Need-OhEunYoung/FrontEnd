@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
-import background from '../../assets/images/background.jpg';
+import background from '../../assets/images/background3.gif';
 import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
 import { MainWrapper } from '../../components/MainWrapper';
