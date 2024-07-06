@@ -9,8 +9,8 @@ const Modal = styled.div`
   width: 75%;
   height: calc(100vh - 180px);
   margin: 0 auto;
-  color: white;
-  background: #625787;
+  color: #ffffff;
+  background: #47464630;
   border-radius: 50px;
   filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
   @media (max-width: 750px) {

@@ -1,15 +1,16 @@
-import styled from 'styled-components';
 import Uploader from './Uploader';
 import Solvedlist from './Solvedlist';
 import { MainWrapper } from '../../components/MainWrapper';
 
 const Mypage = () => {
+    
   return (
+
       <MainWrapper>
         <Uploader />
+        {/* <button onClick={fetchProblems}>Get Solved Problems</button> */}
         <Solvedlist />
       </MainWrapper>
-    
   );
 };
 
