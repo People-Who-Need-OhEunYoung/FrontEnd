@@ -3,13 +3,14 @@ import { useState, useEffect  } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { probSearch } from '../../utils/api/solvedAc';
-
 import SortList from './SortList';
 
 type ItemType = {
   problemId: number;
   titleKo: string;
   level: number;
+  acceptedUserCount: number;
+  averageTries: number;
 };
 
 
@@ -20,14 +21,21 @@ const ProblemList = () => {
   const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
   const [sort, setSort] = useState<string>('id');
   const [page, setPage] = useState<number>(1);
+  const [order, setOrder] = useState<string>('asc');
 
   const fetchProbData = async () => {
     try {
-      const res = await probSearch(query, sort, page);
+      const res = await probSearch(query, sort, page, order);
       setProbData(JSON.stringify(res));
     } catch (error) {
       console.error('Error fetching data:', error);
     }
+  };
+
+  const OrderButtonClick = () => {
+    setOrder((prevText) =>
+      prevText === 'asc' ? 'desc' : 'asc'
+    );
   };
 
   useEffect(() => {
@@ -42,9 +50,10 @@ const ProblemList = () => {
         }
         setProblems(itemsArray); // items 상태 업데이트
         console.log('items: ', problems);
+        console.log('order:', order);
       }
     }
-  }, [probData, query, sort]);
+  }, [probData, query, sort, order]);
 
   return (
     <motion.div
@@ -61,12 +70,11 @@ const ProblemList = () => {
           <Titleh1>문제 검색</Titleh1>
           <Inputsearch type="text" value={query} onChange={(e) => {setQuery(e.target.value)}} />
           <ButtonGroup>
-            <SelectBtn onClick={() => {setSort('id')} }> ID </SelectBtn>
-            <SelectBtn onClick={() => {setSort('level')}}>레벨</SelectBtn>
-            <SelectBtn onClick={() => {setSort('title')}}>제목</SelectBtn>
-            <SelectBtn onClick={() => {setSort('solved')}}>푼 사람 수</SelectBtn>
-            <SelectBtn onClick={() => {setSort('average_try')}}>평균 시도</SelectBtn>
-            <SelectBtn onClick={() => {setSort('random')}}>랜덤</SelectBtn>
+            <SelectBtn onClick={() => {setSort('id');  OrderButtonClick();}}> ID </SelectBtn>
+            <SelectBtn onClick={() => {setSort('level'); OrderButtonClick();}}>레벨</SelectBtn>
+            <SelectBtn onClick={() => {setSort('title'); OrderButtonClick();}}>제목</SelectBtn>
+            <SelectBtn onClick={() => {setSort('solved'); OrderButtonClick();}}>푼 사람 수</SelectBtn>
+            <SelectBtn onClick={() => {setSort('average_try'); OrderButtonClick();}}>평균 시도</SelectBtn>
           </ButtonGroup>
         </SearchWrapper>
       
@@ -87,11 +95,13 @@ const ProblemList = () => {
                  {(() => {
                     const link = `https://www.acmicpc.net/problem/${item.problemId}`;
                     const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
-                    return <div>
+                    return <ProblemComponent>
                       <TierImg src={tiersrc} /> 
-                      <a href={link} style={{display: 'inline-block', 'width': '15%'}}> {item.problemId}</a> 
-                      <a href={link} style={{'width': '60%'}}> {item.titleKo}</a>
-                    </div>;
+                        <a href={link} style={{'width': '16%'}}> {item.problemId}</a> 
+                        <a href={link} style={{'width': '44%'}}> {item.titleKo}</a>
+                        <p style={{'width': '23%'}}> {item.acceptedUserCount}</p>
+                        <p style={{'width': '10%'}}> {item.averageTries}</p>
+                    </ProblemComponent>;
                   })()}
               </Item>
           ))}
@@ -100,6 +110,12 @@ const ProblemList = () => {
     </motion.div>
   );
 };
+
+const ProblemComponent = styled.div`
+  display: flex;
+  margin: auto;
+  align-items: center;
+`;
 
 const ListView = styled.div`
   background-color: #ffffff1d;
@@ -146,8 +162,7 @@ const Modal = styled.div`
 const TierImg = styled.img`
   position :relative;
   width: 15px;
-  margin-right: 3%;
-
+  margin-right: 2%;
 `;
 
 const Inputsearch = styled.input`
