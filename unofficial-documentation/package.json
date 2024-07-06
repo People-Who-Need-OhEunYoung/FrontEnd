@@ -20,7 +20,10 @@
     "@typespec/prettier-plugin-typespec": "0.54.0-dev.2",
     "@typespec/rest": "0.54.0-dev.2",
     "@typespec/versioning": "0.54.0-dev.4",
+    "axios": "^1.7.2",
+    "cheerio": "1.0.0-rc.12",
     "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
     "deepmerge": "^4.3.1",
     "express": "^4.19.2",
     "http-proxy-middleware": "^3.0.0",
@@ -28,8 +31,7 @@
     "prettier": "^3.2.5",
     "serve-reload-replace": "^4.0.3",
     "yaml": "^2.4.0",
-    "zx": "^7.2.3",
-    "cors": "^2.8.5"
+    "zx": "^7.2.3"
   },
   "private": true,
   "pnpm": {
