@@ -1,6 +1,0 @@
-아래 폴더 작업 전 각 폴더에서 install 필요
-// 사용자 접속용 서버 해당 서버가 우리 node 서버를 보도록 설정 필요할 것으로 보임 혹인 우리 서버에 해당 모듈 적재 필요
-vidu/openvidu-tutorials/openvidu-basic-node 에서 node index.js 실행
-// 사용자 서버
-vidu/openvidu-tutorials/openvidu-react 에서 리액트 실행
-
