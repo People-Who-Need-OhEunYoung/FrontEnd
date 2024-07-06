@@ -106,7 +106,10 @@ const ProblemList = () => {
               </Item>
           ))}
         </ListView>
+        <SearchWrapper>{page}</SearchWrapper> 
+
       </Modal>
+      
     </motion.div>
   );
 };
