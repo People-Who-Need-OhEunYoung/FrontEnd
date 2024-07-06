@@ -80,7 +80,7 @@ const UserMain = () => {
             <Pokemon
               width={'100%'}
               // src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/132.gif"
-              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/shiny/132.gif"
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/shiny/257.gif"
             ></Pokemon>
           </motion.div>
           <PokeNameWrap>
