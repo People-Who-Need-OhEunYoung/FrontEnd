@@ -10,13 +10,14 @@ type ItemType = {
   level: number;
 };
 
+
 const Solvedlist = () => {
   const [query, setQuery] = useState('jade0179'); // 사용자 검색 쿼리
 
   const [userData, setUserData] = useState(''); // API로부터 받은 데이터
   const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
 
-  const [visibleList, setVisibleList] = useState('list1'); // Manage which list is visible
+  const [visibleList, setVisibleList] = useState<string>('list1'); // Manage which list is visible
   const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
 
   const fetchUserData = async () => {
@@ -29,17 +30,31 @@ const Solvedlist = () => {
   };
 
   const fetchCrawlData = async () => {
+    let allProblems: ItemType[] = [];
+    let page = 1;
+
+     while (true) {
       try {
-        const res = await crawlUserprob(query,1);
+        const res = await crawlUserprob(query, page);
         const $ = cheerio.load(res);
-        const nextData : any = $('#__NEXT_DATA__').html();
+        const nextData: any = $('#__NEXT_DATA__').html();
         const parsedData = JSON.parse(nextData);
-        const solvedProblems = parsedData.props.pageProps.problems.items; // 이 부분은 실제 데이터 구조에 맞게 조정해야 합니다.
-        setProblems(solvedProblems);
-        console.log(problems);
+        const solvedProblems: ItemType[] = parsedData.props.pageProps.problems.items; // Adjust this part according to the actual data structure.
+
+        if (solvedProblems.length === 0) {
+          break;
+        }
+        allProblems = allProblems.concat(solvedProblems);
+        page++;
+
       } catch (error) {
         console.error('Error fetching data:', error);
+        break;
       }
+    }
+
+    setProblems(allProblems);
+    console.log(allProblems);
    };
 
   useEffect(() => {
@@ -69,19 +84,30 @@ const Solvedlist = () => {
         </ButtonGroup>
         <hr style= {{marginBottom: '12px'}}></hr>
         <ListView>
+          <Tiergrid>
           {visibleList === 'list1' && items.map((item, index) => (
-              <Item key={index}>
+              <div style = {{position: 'relative'}}>
                  {(() => {
+                    const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
                     const link = `https://www.acmicpc.net/problem/${item.problemId}`;
-                    return <a href={link}>{index} {item.problemId} {item.titleKo}</a>;
+                    return <a href={link}>
+                      <TierImg src={tiersrc} />
+                      <ProblemId>{item.problemId}번 {item.titleKo}</ProblemId>
+                    </a>
                   })()}
-              </Item>
+              </div>
           ))}
+          </Tiergrid>
           {visibleList === 'list2' && problems.map((item, index) => (
               <Item key={index}>
                  {(() => {
                     const link = `https://www.acmicpc.net/problem/${item.problemId}`;
-                    return <a href={link}>{index} {item.problemId} {item.titleKo}</a>;
+                    const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
+                    return <ProblemList>
+                      <TierImg src={tiersrc} /> 
+                      <a href={link} style={{'width': '20%'}}> {item.problemId}</a> 
+                      <a href={link} style={{'width': '30%'}}> {item.titleKo}</a>
+                    </ProblemList>;
                   })()}
               </Item>
           ))}
@@ -102,7 +128,11 @@ const ListView = styled.div`
   background-color: #f7f7f726;
   border-radius: 10px;
   height: 90%;
-  overflow-y: scroll;
+  overflow-y: auto;
+  display: flex;
+  justify-items: center;
+  align-items: stretch;
+  flex-direction: column;
 `;
 
 const List_title = styled.p`
@@ -148,4 +178,42 @@ const SelectBtn = styled.button`
   }
 `;
 
+const TierImg = styled.img`
+  position :relative;
+
+  width: 15px;
+  margin-right: 3%;
+
+  cursor: pointer;
+
+  &:hover + span {
+    display: block;
+  }
+`;
+
+const ProblemList = styled.div`
+  display: flex;
+`;
+
+const ProblemId = styled.span`
+  position: absolute;
+  top: 100%;
+  width: 150px;
+  left: -80px;
+  background-color: #000000;
+  color: #ffffff;
+  padding: 5px;
+  border-radius: 5px;
+  display: none;
+  transition: opacity 0.3s;
+  z-index: 100;
+  text-align:center;
+`;
+
+const Tiergrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 25px;
+  margin: auto;
+`;
 export default Solvedlist;
