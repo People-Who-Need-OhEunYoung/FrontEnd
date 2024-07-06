@@ -106,7 +106,7 @@ const Solvedlist = () => {
                     return <ProblemList>
                       <TierImg src={tiersrc} /> 
                       <a href={link} style={{'width': '20%'}}> {item.problemId}</a> 
-                      <a href={link} style={{'width': '30%'}}> {item.titleKo}</a>
+                      <a href={link} style={{'width': '60%'}}> {item.titleKo}</a>
                     </ProblemList>;
                   })()}
               </Item>
@@ -198,8 +198,8 @@ const ProblemList = styled.div`
 const ProblemId = styled.span`
   position: absolute;
   top: 100%;
-  width: 150px;
-  left: -80px;
+  width: 130px;
+  left: -65px;
   background-color: #000000;
   color: #ffffff;
   padding: 5px;
