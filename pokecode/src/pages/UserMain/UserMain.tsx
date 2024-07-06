@@ -63,7 +63,7 @@ const UserMain = () => {
       style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
     >
       <MainWrapper>
-        `<Home onClick={handleDivClick}>
+        <Home onClick={handleDivClick}>
           <motion.div
             animate={controls}
             style={{
@@ -79,6 +79,7 @@ const UserMain = () => {
           >
             <Pokemon
               width={'100%'}
+
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/133.gif"
             ></Pokemon>
           </motion.div>
@@ -137,10 +138,13 @@ const Home = styled.div`
 export const Pokemon = styled.img`
   -webkit-user-drag: none;
   -khtml-user-drag: none;
+  -webkit-user-drag: none;
   -moz-user-drag: none;
   -o-user-drag: none;
-  -webkit-user-drag: none;
   user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
 `;
 
 const PokeNameWrap = styled.div`

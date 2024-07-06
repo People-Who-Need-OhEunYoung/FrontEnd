@@ -11,7 +11,7 @@ const Login = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <Div className="Login hidden">
+      <Div className="Login">
         <Modal>
           <H1>LOGIN</H1>
           <form action="">
