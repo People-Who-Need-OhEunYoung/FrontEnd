@@ -12,6 +12,7 @@ import { Problem } from './pages/Problem';
 import { ProblemList } from './pages/ProblemList';
 import { Header3 } from './components/Header/Header';
 import { ResizableTabs } from './components/ResizableTabs';
+import { Modal } from './components/Modal';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="/problemlist" element={<ProblemList />} />
             <Route path="/problem" element={<Problem />} />
             <Route path="/resizableTabs" element={<ResizableTabs />} />
+            <Route path="/modal" element={<Modal />} />
           </Routes>
           <Routes>
             <Route path="/" element={<Footer />} />

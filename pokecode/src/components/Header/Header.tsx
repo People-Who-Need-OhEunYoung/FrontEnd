@@ -42,7 +42,7 @@ export const Header2 = () => {
         style={{
           position: 'absolute',
           zIndex: 100,
-          left: '20%',
+          left: '12.5%',
         }}
       >
         POKE CODE
@@ -104,7 +104,7 @@ const ProfileWrap = styled.div`
   color: white;
   width: 250px;
   height: 100%;
-  right: 20%;
+  right: 12.5%;
   @media (max-width: 1240px) {
     right: 0%;
   }
