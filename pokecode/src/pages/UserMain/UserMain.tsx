@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
-import background from '../../assets/images/background.jpg';
+import background from '../../assets/images/background2.jpg';
 import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
 import { MainWrapper } from '../../components/MainWrapper';
@@ -79,8 +79,8 @@ const UserMain = () => {
           >
             <Pokemon
               width={'100%'}
-              // src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/132.gif"
-              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/shiny/132.gif"
+
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/133.gif"
             ></Pokemon>
           </motion.div>
           <PokeNameWrap>

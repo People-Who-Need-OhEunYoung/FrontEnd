@@ -48,8 +48,8 @@ function getTop100(name: string): Promise<any> {
     });
 }
 
-function probSearch(title: string, sort: string): Promise<any> {
-  return fetch(`http://localhost:8481/proxy/search/problem?query=+${title}&direction=asc&sort=${sort}`, {
+function probSearch(title: string, sort: string, page: number, order: string): Promise<any> {
+  return fetch(`http://localhost:8481/proxy/search/problem?query=+${title}&direction=${order}&page=${page}&sort=${sort}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',

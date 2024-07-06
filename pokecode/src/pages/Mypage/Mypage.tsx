@@ -5,7 +5,6 @@ import { MainWrapper } from '../../components/MainWrapper';
 const Mypage = () => {
     
   return (
-
       <MainWrapper>
         <Uploader />
         {/* <button onClick={fetchProblems}>Get Solved Problems</button> */}
