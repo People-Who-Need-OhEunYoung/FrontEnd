@@ -15,6 +15,8 @@ import { ResizableTabs } from './components/ResizableTabs';
 import { Modal } from './components/Modal';
 import { RainEffect } from './components/RainEffect';
 import { Gacha } from './pages/Gacha';
+import { RoomList } from './pages/RoomList';
+import { Room } from './pages/Room';
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
             <Route path="/problemlist" element={<Header2 />} />
             <Route path="/problem" element={<Header3 />} />
             <Route path="/gacha" element={<Header2 />} />
+            <Route path="/roomlist" element={<Header2 />} />
+            <Route path="/room" element={<Header3 />} />
           </Routes>
           <Routes>
             <Route path="/" element={<Main />} />
@@ -39,8 +43,9 @@ function App() {
             <Route path="/usermain" element={<UserMain />} />
             <Route path="/problemlist" element={<ProblemList />} />
             <Route path="/problem" element={<Problem />} />
-            <Route path="/resizableTabs" element={<ResizableTabs />} />
             <Route path="/gacha" element={<Gacha />} />
+            <Route path="/roomlist" element={<RoomList />} />
+            <Route path="/room" element={<Room />} />
           </Routes>
           <Routes>
             <Route path="/" element={<Footer />} />
@@ -51,6 +56,8 @@ function App() {
             <Route path="/problemlist" element={<Footer />} />
             <Route path="/problem" element={<Footer />} />
             <Route path="/gacha" element={<Footer />} />
+            <Route path="/roomlist" element={<Footer />} />
+            <Route path="/room" element={<Footer />} />
           </Routes>
         </AnimatePresence>
       </div>
