@@ -1,9 +1,11 @@
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import cors from 'cors';
+import axios from 'axios';
+import cheerio from 'cheerio';
 
 const app = express();
-
+const port = 8481;
 app.use(cors());
 
 app.use(
@@ -21,12 +23,12 @@ app.use(
 );
 
 app.use(
-  '/proxyuser',
+  '/proxy_profile',
   createProxyMiddleware({
-    target: 'https://www.acmicpc.net/user/',
+    target: 'https://solved.ac/profile',
     changeOrigin: true,
     pathRewrite: {
-      '^/proxy': '', // /proxy 경로를 타겟 경로로 매핑
+      '^/proxy_profile': '', // /proxy 경로를 타겟 경로로 매핑
     },
     onProxyRes: function (proxyRes, req, res) {
       proxyRes.headers['Access-Control-Allow-Origin'] = '*';
@@ -35,7 +37,6 @@ app.use(
 );
 
 
-const port = 8481;
 app.listen(port, () => {
   console.log(`Proxy server is running on port ${port}`);
 });
