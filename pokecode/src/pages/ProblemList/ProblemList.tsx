@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { probSearch } from '../../utils/api/solvedAc';
 import upArrow from '../../assets/images/upArrow.png';
 import downArrow from '../../assets/images/downArrow.png';
-
+import Search from '../../assets/images/search.png';
 
 type ItemType = {
   problemId: number;
@@ -103,13 +103,17 @@ const ProblemList = () => {
       <Modal>
         <SearchWrapper>
           <Titleh1>문제 검색</Titleh1>
-          <Inputsearch
-            type="text"
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-            }}
-          />
+          <div style = {{position:'relative', width:'35%', margin: 'auto'}}>
+            <img src={Search} style = {{position: 'absolute', width: '20px', right: '15px', top:'6px', cursor: 'pointer'}}></img>
+            <Inputsearch
+              type="text"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+              }}
+            />
+          </div>
+            
           <ButtonGroup style = {{}}>
             <SelectBtn
               onClick={() => {
@@ -129,7 +133,6 @@ const ProblemList = () => {
             <SelectBtn
               onClick={() => {
                 handleSortClick('title');
-               
               }}
             >
               제목
@@ -286,10 +289,11 @@ const TierImg = styled.img`
 `;
 
 const Inputsearch = styled.input`
-  width: 40%;
-  padding: 5px;
+  width: 100%;
+  padding: 5px 40px 5px 15px;
   border-radius: 30px;
   box-shadow: 0 0 15px 7px rgba(255, 255, 255, 0.267);
+  box-sizing: border-box;
 `;
 
 const Titleh1 = styled.p`
