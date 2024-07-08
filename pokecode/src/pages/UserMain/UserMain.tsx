@@ -79,12 +79,11 @@ const UserMain = () => {
           >
             <Pokemon
               width={'100%'}
-
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/133.gif"
             ></Pokemon>
           </motion.div>
           <PokeNameWrap>
-            <PokeName>메타몽</PokeName>
+            <PokeName>이브이</PokeName>
           </PokeNameWrap>
           <LevelWrap>
             <Level>

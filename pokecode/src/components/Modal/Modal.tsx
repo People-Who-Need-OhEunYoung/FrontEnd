@@ -1,19 +1,16 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import './Modal.css';
-const Modal = ({
-  width = '25%',
-  height = '50%',
-  text = '테스트',
-  p1 = '',
-  p2 = '',
-  button = [
-    { color: 'cadetblue', text: '테스트1' },
-    { color: 'cadetblue', text: '테스트2' },
-  ],
-  on,
-}: any) => {
+import DesignedButton1 from '../DesignedButton/DesignedButton1';
+import ModalContent1 from './ModalContent1';
+import ModalContent2 from './ModalContent2';
+import ModalContent3 from './ModalContent3';
+import ModalContent4 from './ModalContent4';
+import ModalContent5 from './ModalContent5';
+
+const Modal = ({ text = '문제명', on, component = 4 }: any) => {
   const [flag, setFlag] = useState(false);
+  const [nowcompnent, setNowcompnent] = useState(component);
+
   const onOff = () => {
     if (on == null) on = flag;
     setFlag(!on);
@@ -21,96 +18,114 @@ const Modal = ({
   return (
     <>
       <Background className={flag ? '' : 'hidden'}>
-        <ModalWrap width={width} height={height}>
-          <Title>{text}</Title>
-          <img src="" alt="" />
-          <p>{p1}</p>
-          <p>{p2}</p>
-          {button.map((item: any, index: any) => (
-            <CustomButtom key={index} color={item.color} onClick={onOff}>
-              {item.text}
-            </CustomButtom>
-          ))}
-          <CustomButtom color="blue" onClick={onOff}>
+        <ModalWrap>
+          {nowcompnent === 1 ? (
+            <>
+              <Title>{text}</Title>
+              <ModalContent1 onOff={onOff} />
+            </>
+          ) : nowcompnent === 2 ? (
+            <>
+              <Title>{'리뷰방 만들기'}</Title>
+              <ModalContent2 />
+            </>
+          ) : nowcompnent === 3 ? (
+            <>
+              <Title>{'축하합니다!'}</Title>
+              <ModalContent3 />
+            </>
+          ) : nowcompnent === 4 ? (
+            <>
+              <Title>{'다시 도전해보세요'}</Title>
+              <ModalContent4 event={setNowcompnent} />
+            </>
+          ) : nowcompnent === 5 ? (
+            <>
+              <Title>{'테스트 케이스 입력'}</Title>
+              <ModalContent5 />
+            </>
+          ) : (
+            ''
+          )}
+          <DesignedButton1
+            color="cadetblue"
+            onClick={onOff}
+            style={{ marginBottom: '10px' }}
+          >
             닫기
-          </CustomButtom>
+          </DesignedButton1>
         </ModalWrap>
       </Background>
-      <button onClick={onOff}>test</button>
-    </>
-  );
-};
-
-const ModalContent1 = () => {
-  return (
-    <>
-      <div></div>
-    </>
-  );
-};
-const ModalContent2 = () => {
-  return (
-    <>
-      <div></div>
-    </>
-  );
-};
-const ModalContent3 = () => {
-  return (
-    <>
-      <div></div>
-    </>
-  );
-};
-const ModalContent4 = () => {
-  return (
-    <>
-      <div></div>
-    </>
-  );
-};
-const ModalContent5 = () => {
-  return (
-    <>
-      <div></div>
+      <button
+        onClick={() => {
+          onOff();
+          setNowcompnent(1);
+        }}
+      >
+        test1
+      </button>
+      <button
+        onClick={() => {
+          onOff();
+          setNowcompnent(2);
+        }}
+      >
+        test2
+      </button>
+      <button
+        onClick={() => {
+          onOff();
+          setNowcompnent(3);
+        }}
+      >
+        test3
+      </button>
+      <button
+        onClick={() => {
+          onOff();
+          setNowcompnent(4);
+        }}
+      >
+        test4
+      </button>
+      <button
+        onClick={() => {
+          onOff();
+          setNowcompnent(5);
+        }}
+      >
+        test5
+      </button>
     </>
   );
 };
 
 const Background = styled.div`
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 9999;
   background: #00000055;
   text-align: center;
 `;
-const ModalWrap = styled.div<{ width: string; height: string }>`
+
+const ModalWrap = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
+  color: white;
   transform: translate(-50%, -50%);
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-  background: #fff;
+  background: #914fbc;
   border-radius: 10px;
   filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
 `;
 
-const CustomButtom = styled.button<{ color: string }>`
-  position: relative;
-  color: white;
-  width: 60%;
-  margin: 5px 20%;
-  padding: 0.5em 2em;
-  font-size: 1.2em;
-  border-radius: 30px;
-  background-color: ${(props) => (props.color ? 'cadetblue' : props.color)};
-  border: none;
-`;
 const Title = styled.p`
-  padding: 1.5em 0;
+  padding: 1em 0;
   font-weight: bold;
   font-size: 2em;
 `;
+
 export default Modal;

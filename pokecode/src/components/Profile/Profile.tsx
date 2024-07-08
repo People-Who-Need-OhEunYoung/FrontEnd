@@ -37,7 +37,7 @@ export const Profile = ({ ...props }) => {
           <Link to={'/gacha'}>뽑기</Link>
         </MyMenuList>
         <MyMenuList>
-          <Link to={'/logout'}>로그아웃</Link>
+          <Link to={'/'}>로그아웃</Link>
         </MyMenuList>
       </MyMenu>
       <Logout>

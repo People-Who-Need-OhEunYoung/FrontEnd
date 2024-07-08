@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import { useState, useEffect  } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { probSearch } from '../../utils/api/solvedAc';
-import SortList from './SortList';
 
 type ItemType = {
   problemId: number;
@@ -13,35 +12,29 @@ type ItemType = {
   averageTries: number;
 };
 
-
 const ProblemList = () => {
   const [query, setQuery] = useState(' '); // 검색 문자열 쿼리
-
-  const [probData, setProbData] = useState(''); // API로부터 받은 데이터
   const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
-  const [sort, setSort] = useState<string>('id');
+  const [sort, setSort] = useState<string>('random');
   const [page, setPage] = useState<number>(1);
   const [order, setOrder] = useState<string>('asc');
 
   const fetchProbData = async () => {
     try {
       const res = await probSearch(query, sort, page, order);
-      setProbData(JSON.stringify(res));
+      return res;
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
   const OrderButtonClick = () => {
-    setOrder((prevText) =>
-      prevText === 'asc' ? 'desc' : 'asc'
-    );
+    setOrder((prevText) => (prevText === 'asc' ? 'desc' : 'asc'));
   };
-
   useEffect(() => {
-    fetchProbData();
-    if (probData) {
-      const parsedData = JSON.parse(probData);
+    fetchProbData().then((res) => {
+      const parsedData = res;
+
       if (parsedData.count > 0) {
         const itemsArray = [];
         for (let i = 0; i < parsedData.items.length; i++) {
@@ -52,8 +45,8 @@ const ProblemList = () => {
         console.log('items: ', problems);
         console.log('order:', order);
       }
-    }
-  }, [probData, query, sort, order]);
+    });
+  }, [query, sort, page, order]);
 
   return (
     <motion.div
@@ -68,22 +61,64 @@ const ProblemList = () => {
       <Modal>
         <SearchWrapper>
           <Titleh1>문제 검색</Titleh1>
-          <Inputsearch type="text" value={query} onChange={(e) => {setQuery(e.target.value)}} />
+          <Inputsearch
+            type="text"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+            }}
+          />
           <ButtonGroup>
-            <SelectBtn onClick={() => {setSort('id');  OrderButtonClick();}}> ID </SelectBtn>
-            <SelectBtn onClick={() => {setSort('level'); OrderButtonClick();}}>레벨</SelectBtn>
-            <SelectBtn onClick={() => {setSort('title'); OrderButtonClick();}}>제목</SelectBtn>
-            <SelectBtn onClick={() => {setSort('solved'); OrderButtonClick();}}>푼 사람 수</SelectBtn>
-            <SelectBtn onClick={() => {setSort('average_try'); OrderButtonClick();}}>평균 시도</SelectBtn>
+            <SelectBtn
+              onClick={() => {
+                setSort('id');
+                OrderButtonClick();
+              }}
+            >
+              {' '}
+              ID{' '}
+            </SelectBtn>
+            <SelectBtn
+              onClick={() => {
+                setSort('level');
+                OrderButtonClick();
+              }}
+            >
+              레벨
+            </SelectBtn>
+            <SelectBtn
+              onClick={() => {
+                setSort('title');
+                OrderButtonClick();
+              }}
+            >
+              제목
+            </SelectBtn>
+            <SelectBtn
+              onClick={() => {
+                setSort('solved');
+                OrderButtonClick();
+              }}
+            >
+              푼 사람 수
+            </SelectBtn>
+            <SelectBtn
+              onClick={() => {
+                setSort('average_try');
+                OrderButtonClick();
+              }}
+            >
+              평균 시도
+            </SelectBtn>
           </ButtonGroup>
         </SearchWrapper>
-      
+
         {/* <SortList/> */}
         <Listheader>
-          <h4 style={{width: '24px'}}>#</h4>
-          <h4 style={{'width': '30%'}}>  제목 </h4>
-          <h4 style={{'width': '10%'}}>  푼 사람 수 </h4>
-          <h4 style={{'width': '10%'}}>  평균 시도 </h4>
+          <h4 style={{ width: '24px' }}>#</h4>
+          <h4 style={{ width: '30%' }}> 제목 </h4>
+          <h4 style={{ width: '10%' }}> 푼 사람 수 </h4>
+          <h4 style={{ width: '10%' }}> 평균 시도 </h4>
         </Listheader>
         {/* <hr style= {{ width: '75%', margin: 'auto',marginBottom: '15px'}}></hr> */}
         <ListView>
@@ -91,25 +126,31 @@ const ProblemList = () => {
             테스트 문제입니다 <Link to={'/problem'}>입장</Link>
           </Listli> */}
           {problems.map((item, index) => (
-              <Item key={index}>
-                 {(() => {
-                    const link = `https://www.acmicpc.net/problem/${item.problemId}`;
-                    const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
-                    return <ProblemComponent>
-                      <TierImg src={tiersrc} /> 
-                        <a href={link} style={{'width': '16%'}}> {item.problemId}</a> 
-                        <a href={link} style={{'width': '44%'}}> {item.titleKo}</a>
-                        <p style={{'width': '23%'}}> {item.acceptedUserCount}</p>
-                        <p style={{'width': '10%'}}> {item.averageTries}</p>
-                    </ProblemComponent>;
-                  })()}
-              </Item>
+            <Item key={index}>
+              {(() => {
+                const link = `https://www.acmicpc.net/problem/${item.problemId}`;
+                const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
+                return (
+                  <ProblemComponent>
+                    <TierImg src={tiersrc} />
+                    <a href={link} style={{ width: '16%' }}>
+                      {' '}
+                      {item.problemId}
+                    </a>
+                    <a href={link} style={{ width: '44%' }}>
+                      {' '}
+                      {item.titleKo}
+                    </a>
+                    <p style={{ width: '23%' }}> {item.acceptedUserCount}</p>
+                    <p style={{ width: '10%' }}> {item.averageTries}</p>
+                  </ProblemComponent>
+                );
+              })()}
+            </Item>
           ))}
         </ListView>
-        <SearchWrapper>{page}</SearchWrapper> 
-
+        <SearchWrapper>{page}</SearchWrapper>
       </Modal>
-      
     </motion.div>
   );
 };
@@ -139,7 +180,7 @@ const Listheader = styled.div`
 `;
 
 const SearchWrapper = styled.div`
-  text-align: center; 
+  text-align: center;
   margin: 10px auto;
 `;
 
@@ -154,7 +195,7 @@ const Modal = styled.div`
   margin: auto;
   color: white;
   background: #47464630;
-  border-radius: 20px;;
+  border-radius: 20px;
   filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
   box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.267);
   @media (max-width: 550px) {
@@ -163,7 +204,7 @@ const Modal = styled.div`
 `;
 
 const TierImg = styled.img`
-  position :relative;
+  position: relative;
   width: 15px;
   margin-right: 2%;
 `;
@@ -210,11 +251,10 @@ const ButtonGroup = styled.div`
   border-radius: 10px;
 `;
 
-
 const SelectBtn = styled.button`
   color: white;
   background-color: transparent;
-  padding: 4px 10px ;
+  padding: 4px 10px;
   border: none;
   border-radius: 15px;
   outline: none;
@@ -238,6 +278,5 @@ const SelectBtn = styled.button`
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
   } */
 `;
-
 
 export default ProblemList;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { useState, useEffect  } from 'react';
-import { getTop100} from '../../utils/api/solvedAc';
-import { crawlUserprob }  from '../../utils/api/solvedAc';
+import { useState, useEffect } from 'react';
+import { getTop100 } from '../../utils/api/solvedAc';
+import { crawlUserprob } from '../../utils/api/solvedAc';
 import cheerio from 'cheerio';
 
 type ItemType = {
@@ -9,7 +9,6 @@ type ItemType = {
   titleKo: string;
   level: number;
 };
-
 
 const Solvedlist = () => {
   const [query, setQuery] = useState('jade0179'); // 사용자 검색 쿼리
@@ -33,20 +32,20 @@ const Solvedlist = () => {
     let allProblems: ItemType[] = [];
     let page = 1;
 
-     while (true) {
+    while (true) {
       try {
         const res = await crawlUserprob(query, page);
         const $ = cheerio.load(res);
         const nextData: any = $('#__NEXT_DATA__').html();
         const parsedData = JSON.parse(nextData);
-        const solvedProblems: ItemType[] = parsedData.props.pageProps.problems.items; // Adjust this part according to the actual data structure.
+        const solvedProblems: ItemType[] =
+          parsedData.props.pageProps.problems.items; // Adjust this part according to the actual data structure.
 
         if (solvedProblems.length === 0) {
           break;
         }
         allProblems = allProblems.concat(solvedProblems);
         page++;
-
       } catch (error) {
         console.error('Error fetching data:', error);
         break;
@@ -55,7 +54,7 @@ const Solvedlist = () => {
 
     setProblems(allProblems);
     console.log(allProblems);
-   };
+  };
 
   useEffect(() => {
     fetchUserData();
@@ -75,52 +74,68 @@ const Solvedlist = () => {
   }, [userData, query]);
 
   return (
-     <Wrap>
-        <ButtonGroup>
-          <SelectBtn onClick={() => setVisibleList('list1')}>Top 100 </SelectBtn>
-          <SelectBtn onClick={() => setVisibleList('list2')}>내가 해결한 문제 </SelectBtn>
-          <SelectBtn onClick={() => setVisibleList('list3')}>List 3</SelectBtn>
-        </ButtonGroup>
-        <hr style= {{marginBottom: '12px'}}></hr>
-        <ListView>
-          <Tiergrid>
-          {visibleList === 'list1' && items.map((item, index) => (
-              <div style = {{position: 'relative'}}>
-                 {(() => {
-                    const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
-                    const link = `https://www.acmicpc.net/problem/${item.problemId}`;
-                    return <a href={link}>
+    <Wrap>
+      <ButtonGroup>
+        <SelectBtn onClick={() => setVisibleList('list1')}>Top 100 </SelectBtn>
+        <SelectBtn onClick={() => setVisibleList('list2')}>
+          내가 해결한 문제{' '}
+        </SelectBtn>
+        <SelectBtn onClick={() => setVisibleList('list3')}>List 3</SelectBtn>
+      </ButtonGroup>
+      <hr style={{ marginBottom: '12px' }}></hr>
+      <ListView>
+        <Tiergrid>
+          {visibleList === 'list1' &&
+            items.map((item, index) => (
+              <div style={{ position: 'relative' }} key={index}>
+                {(() => {
+                  const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
+                  const link = `https://www.acmicpc.net/problem/${item.problemId}`;
+                  return (
+                    <a href={link}>
                       <TierImg src={tiersrc} />
-                      <ProblemId>{item.problemId}번 {item.titleKo}</ProblemId>
+                      <ProblemId>
+                        {item.problemId}번 {item.titleKo}
+                      </ProblemId>
                     </a>
-                  })()}
+                  );
+                })()}
               </div>
+            ))}
+        </Tiergrid>
+        {visibleList === 'list2' &&
+          problems.map((item, index) => (
+            <Item key={index}>
+              {(() => {
+                const link = `https://www.acmicpc.net/problem/${item.problemId}`;
+                const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
+                return (
+                  <ProblemList>
+                    <TierImg src={tiersrc} />
+                    <a href={link} style={{ width: '20%' }}>
+                      {' '}
+                      {item.problemId}
+                    </a>
+                    <a href={link} style={{ width: '60%' }}>
+                      {' '}
+                      {item.titleKo}
+                    </a>
+                  </ProblemList>
+                );
+              })()}
+            </Item>
           ))}
-          </Tiergrid>
-          {visibleList === 'list2' && problems.map((item, index) => (
-              <Item key={index}>
-                 {(() => {
-                    const link = `https://www.acmicpc.net/problem/${item.problemId}`;
-                    const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
-                    return <ProblemList>
-                      <TierImg src={tiersrc} /> 
-                      <a href={link} style={{'width': '20%'}}> {item.problemId}</a> 
-                      <a href={link} style={{'width': '60%'}}> {item.titleKo}</a>
-                    </ProblemList>;
-                  })()}
-              </Item>
-          ))}
-          {visibleList === 'list3' && <div>List 3 content here</div>}
-        </ListView>
-     </Wrap>
-  )
-}
+        {visibleList === 'list3' && <div>List 3 content here</div>}
+      </ListView>
+    </Wrap>
+  );
+};
 
 const Wrap = styled.div`
-    position: relative;
-    height: 90%;
-    width: 40%;
-    margin: auto;    
+  position: relative;
+  height: 90%;
+  width: 40%;
+  margin: auto;
 `;
 
 const ListView = styled.div`
@@ -152,7 +167,7 @@ const ButtonGroup = styled.div`
 const SelectBtn = styled.button`
   color: white;
   background-color: transparent;
-  padding: 4px 10px ;
+  padding: 4px 10px;
   border: none;
   border-radius: 15px;
   outline: none;
@@ -178,7 +193,7 @@ const SelectBtn = styled.button`
 `;
 
 const TierImg = styled.img`
-  position :relative;
+  position: relative;
 
   width: 15px;
   margin-right: 3%;
@@ -206,7 +221,7 @@ const ProblemId = styled.span`
   display: none;
   transition: opacity 0.3s;
   z-index: 100;
-  text-align:center;
+  text-align: center;
 `;
 
 const Tiergrid = styled.div`

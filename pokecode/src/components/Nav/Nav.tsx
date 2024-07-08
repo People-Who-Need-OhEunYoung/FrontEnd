@@ -6,7 +6,7 @@ const Nav = () => {
     <div style={cssHeadNav}>
       <LinkButton to={'/usermain'}>메인</LinkButton>
       <LinkButton to={'/problemlist'}>문제 풀기</LinkButton>
-      <LinkButton to={'/review'}>코드 리뷰</LinkButton>
+      <LinkButton to={'/roomlist'}>코드 리뷰</LinkButton>
     </div>
   );
 };
