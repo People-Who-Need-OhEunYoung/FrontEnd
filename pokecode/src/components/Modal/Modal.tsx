@@ -7,23 +7,40 @@ import ModalContent3 from './ModalContent3';
 import ModalContent4 from './ModalContent4';
 import ModalContent5 from './ModalContent5';
 
-const Modal = ({ text = '문제명', on, component = 4 }: any) => {
-  const [flag, setFlag] = useState(false);
-  const [nowcomponent, setNowcomponent] = useState(component);
+/*
 
-  const onOff = () => {
-    if (on == null) on = flag;
-    setFlag(!on);
-  };
-  
+모달 사용법 : 
+text, component, on, event props 를 사용한다.
+
+text
+=> 문제명 넘겨주기
+
+component
+=> 번호 넘겨주기
+1 : 문제 풀기 입장 모달
+2 : 리뷰 방만들기 입장 모달
+3 : 문제 풀기 성공 모달
+4 : 문제 풀기 실패 모달
+5 : 테스트케이스 셋팅 모달
+
+on(모달 상태 [false 꺼짐, true:켜짐]), 
+event(모달에서 자체적으로 닫기 위해 setState function)
+=> 모달 컴포넌트를 위한 state 생성 
+   const [isModalOpen, setIsModalOpen] = useState(false);
+   다음과 같이 모달에 넘겨준다
+   on={isModalOpen} event={setIsModalOpen}
+*/
+const Modal = ({ text = '문제명', component, on = false, event }: any) => {
+  const [nowcompnent, setNowcompnent] = useState(component);
+
   return (
     <>
-      <Background className={flag ? '' : 'hidden'}>
+      <Background className={on ? '' : 'hidden'}>
         <ModalWrap>
           {nowcomponent === 1 ? (
             <>
               <Title>{text}</Title>
-              <ModalContent1 onOff={onOff} />
+              <ModalContent1 />
             </>
           ) : nowcomponent === 2 ? (
             <>
@@ -50,53 +67,13 @@ const Modal = ({ text = '문제명', on, component = 4 }: any) => {
           )}
           <DesignedButton1
             color="cadetblue"
-            onClick={onOff}
             style={{ marginBottom: '10px' }}
+            onClick={() => event(false)}
           >
             닫기
           </DesignedButton1>
         </ModalWrap>
       </Background>
-      <button
-        onClick={() => {
-          onOff();
-          setNowcomponent(1);
-        }}
-      >
-        test1
-      </button>
-      <button
-        onClick={() => {
-          onOff();
-          setNowcomponent(2);
-        }}
-      >
-        test2
-      </button>
-      <button
-        onClick={() => {
-          onOff();
-          setNowcomponent(3);
-        }}
-      >
-        test3
-      </button>
-      <button
-        onClick={() => {
-          onOff();
-          setNowcomponent(4);
-        }}
-      >
-        test4
-      </button>
-      <button
-        onClick={() => {
-          onOff();
-          setNowcomponent(5);
-        }}
-      >
-        test5
-      </button>
     </>
   );
 };
