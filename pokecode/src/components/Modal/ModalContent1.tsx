@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { DesignedButton1 } from '../DesignedButton';
+
 const ModalContent1 = ({ width, onOff }: any) => {
   const [timeck, setTimeck] = useState('OFF');
   const [time, setTime] = useState<number>(0);
