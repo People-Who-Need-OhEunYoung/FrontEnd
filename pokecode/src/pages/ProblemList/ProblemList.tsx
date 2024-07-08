@@ -173,11 +173,7 @@ const ProblemList = () => {
           <h4 style={{ width: '10%' }}> 푼 사람 수 </h4>
           <h4 style={{ width: '10%' }}> 평균 시도 </h4>
         </Listheader>
-        {/* <hr style= {{ width: '75%', margin: 'auto',marginBottom: '15px'}}></hr> */}
         <ListView>
-          {/* <Listli>
-            테스트 문제입니다 <Link to={'/problem'}>입장</Link>
-          </Listli> */}
           {problems.map((item, index) => (
             <Item key={index}>
               {(() => {
@@ -300,27 +296,7 @@ const Titleh1 = styled.p`
   padding: 10px;
   font-size: 1.2rem;
 `;
-const Orderul = styled.ul`
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
-`;
-const Orderli = styled.li`
-  padding: 15px;
-`;
-const Listul = styled.ul`
-  width: 80%;
-  background: white;
-  margin: auto;
-  max-height: 60%;
-  overflow: auto;
-  box-shadow: inset;
-`;
-const Listli = styled.li`
-  color: black;
-  padding: 15px;
-`;
+
 
 const Item = styled.div`
   border-bottom: 1px solid #8d8d8d;
@@ -356,9 +332,6 @@ const SelectBtn = styled.button`
     background-color: #4ea7ff52;
   }
 
-  /* &:focus {
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
-  } */
 `;
 
 export default ProblemList;
