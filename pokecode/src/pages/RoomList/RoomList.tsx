@@ -1,10 +1,7 @@
 import styled, { css }  from 'styled-components';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { probSearch } from '../../utils/api/solvedAc';
-import upArrow from '../../assets/images/upArrow.png';
-import downArrow from '../../assets/images/downArrow.png';
+import {Modal} from '../../components/Modal/Modal';
 
 
 type ItemType = {
@@ -69,7 +66,7 @@ const RoomList = () => {
       exit={{ opacity: 0 }}
       style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
     >
-      <Modal>
+      <Modal1>
         <SearchWrapper>
           <Titleh1>코드 리뷰 방</Titleh1>
           <SearchHeader>
@@ -97,7 +94,7 @@ const RoomList = () => {
           
         </ListView>
         <ButtonGroup style={{ margin: '1.5%' }}>{renderPageButtons()}</ButtonGroup>
-      </Modal>
+      </Modal1>
     </motion.div>
   );
 };
@@ -253,7 +250,7 @@ const SearchWrapper = styled.div`
 `;
 
 /* 모달 */
-const Modal = styled.div`
+const Modal1 = styled.div`
   position: absolute;
   transform: translate(-50%, -50%);
   top: 50%;
