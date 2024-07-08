@@ -61,7 +61,7 @@ export const Header2 = () => {
         <Nav></Nav>
       </div>
       <ProfileWrap>
-        <Profile name={'알맞은 데이터'} />
+        <Profile name={'알맞은 데이터'} credit={30000} />
       </ProfileWrap>
     </motion.div>
   );
@@ -92,7 +92,7 @@ export const Header3 = () => {
         <Nav></Nav>
       </NavWrap>
       <ProfileWrap2>
-        <Profile name={'알맞은 데이터'} />
+        <Profile name={'알맞은 데이터'} credit={3000000} />
       </ProfileWrap2>
     </motion.div>
   );

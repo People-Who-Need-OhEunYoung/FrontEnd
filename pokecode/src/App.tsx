@@ -96,7 +96,7 @@ function App() {
               path="/gacha"
               element={
                 <>
-                  <Header3 />
+                  <Header2 />
                   <Gacha />
                   <Footer />
                 </>

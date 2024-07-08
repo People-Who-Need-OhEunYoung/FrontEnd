@@ -16,9 +16,9 @@ export const Profile = ({ ...props }) => {
       <MyPic src={defaultImage} alt="" />
       <Myinfo>
         <p>
-          환영합니다.
-          <br />
           {props.name}님
+          <br />
+          <span style={{ fontSize: '0.7em' }}>보유크래딧 : {props.credit}</span>
         </p>
       </Myinfo>
       <DownMenu
