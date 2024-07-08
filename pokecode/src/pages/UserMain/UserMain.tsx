@@ -5,13 +5,16 @@ import background from '../../assets/images/background2.jpg';
 import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
 import { MainWrapper } from '../../components/MainWrapper';
+import poo from '../../assets/images/poo.png';
 
 const UserMain = () => {
   const [position, setPosition] = useState({
     x: '50%',
     y: '50%',
   });
+  const [pooset, setPooset] = useState<{ x: number; y: number }[]>([]);
   const controls = useAnimation();
+  const controlsPoo = useAnimation();
   const handleDivClick = (e: any) => {
     const containerRect = e.currentTarget.getBoundingClientRect();
     const offsetX: any = e.clientX - containerRect.left;
@@ -52,6 +55,23 @@ const UserMain = () => {
     };
     animateRandomly();
   }, [controls]);
+
+  let pooCount = 1;
+  let newPositions: any = [];
+  for (let i = 0; i < pooCount; i++) {
+    const x = Math.random() * 90;
+    const y = Math.random() * 50 + 40;
+    newPositions.push({ x, y });
+  }
+  if (pooCount != 0 && pooset.length == 0) setPooset(newPositions);
+  const handlePooClick = () => {
+    controlsPoo.start({
+      transform: 'translateY(-30%)',
+      opacity: 0,
+      transition: { duration: 1 },
+    });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -64,6 +84,24 @@ const UserMain = () => {
     >
       <MainWrapper>
         <Home onClick={handleDivClick}>
+          {pooset.map((item: any, index: any) => (
+            <motion.img
+              key={index}
+              src={poo}
+              alt="Poo"
+              initial={{ opacity: 1 }}
+              animate={controlsPoo}
+              draggable="false"
+              style={{
+                position: 'absolute',
+                left: `${item.x}%`,
+                top: `${item.y}%`,
+                width: '100px',
+                height: '100px',
+                userSelect: 'none',
+              }}
+            />
+          ))}
           <motion.div
             animate={controls}
             style={{
@@ -79,11 +117,11 @@ const UserMain = () => {
           >
             <Pokemon
               width={'100%'}
-              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/133.gif"
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/shiny/649.gif"
             ></Pokemon>
           </motion.div>
           <PokeNameWrap>
-            <PokeName>이브이</PokeName>
+            <PokeName>게노세크트</PokeName>
           </PokeNameWrap>
           <LevelWrap>
             <Level>
@@ -95,7 +133,7 @@ const UserMain = () => {
             </Level>
           </LevelWrap>
           <ButtonWrap>
-            <Button to={''}>
+            <Button to={''} onClick={handlePooClick}>
               <svg
                 fill="rgb(212, 134, 207)"
                 width={40}
@@ -153,7 +191,7 @@ const PokeNameWrap = styled.div`
   right: 0;
   font-weight: 500;
   padding: 0 0 20px 20px;
-  background: #625787;
+  background: #111826;
   border-radius: 0px 0px 0px 20px;
 
   @media (max-width: 750px) {
@@ -183,7 +221,7 @@ const PokeName = styled.div`
   height: 40px;
   line-height: 40px;
   text-align: center;
-  background: #847dd9;
+  background: #80495c;
 `;
 
 const LevelWrap = styled.div`
@@ -193,7 +231,7 @@ const LevelWrap = styled.div`
   left: 0;
   font-weight: 500;
   padding: 10px;
-  background: #625787;
+  background: #111826;
   border-radius: 0px 20px 0px 0px;
 
   &:before {
@@ -201,8 +239,8 @@ const LevelWrap = styled.div`
     width: 20px;
     height: 20px;
     position: absolute;
-    top: -19px;
-    left: 0;
+    top: -18px;
+    left: -1px;
     transform: rotate(-180deg);
     background: url(${art});
   }
@@ -211,8 +249,8 @@ const LevelWrap = styled.div`
     width: 20px;
     height: 20px;
     position: absolute;
-    right: -20px;
-    bottom: -1px;
+    right: -18px;
+    bottom: -2px;
     transform: rotate(-180deg);
     background: url(${art});
   }
@@ -230,7 +268,7 @@ const ButtonWrap = styled.div`
   right: 0;
   font-weight: 500;
   padding: 15px;
-  background: #625787;
+  background: #111826;
   border-radius: 20px 0px 0px 0;
 
   &:before {
@@ -238,8 +276,8 @@ const ButtonWrap = styled.div`
     width: 20px;
     height: 20px;
     position: absolute;
-    right: 0px;
-    top: -20px;
+    right: -1px;
+    top: -19px;
     transform: rotate(90deg);
     background: url(${art});
   }

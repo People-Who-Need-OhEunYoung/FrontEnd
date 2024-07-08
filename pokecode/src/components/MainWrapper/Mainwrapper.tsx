@@ -10,13 +10,12 @@ const Modal = styled.div`
   height: calc(100vh - 180px);
   margin: 0 auto;
   color: #ffffff;
-  background: #47464630;
+  background: #111826;
   border-radius: 20px;
   filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
 
   box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.267);
   @media (max-width: 750px) {
-
     width: 100vw;
   }
 `;
