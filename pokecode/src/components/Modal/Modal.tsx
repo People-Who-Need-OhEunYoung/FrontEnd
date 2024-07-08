@@ -102,6 +102,8 @@ const Modal = ({ text = '문제명', on, component = 4 }: any) => {
 
 const Background = styled.div`
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 9999;
@@ -115,7 +117,7 @@ const ModalWrap = styled.div`
   left: 50%;
   color: white;
   transform: translate(-50%, -50%);
-  background: rgba(215, 167, 213, 0.5);
+  background: #914fbc;
   border-radius: 10px;
   filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
 `;

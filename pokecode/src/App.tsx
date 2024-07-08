@@ -2,21 +2,19 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Header, Header2 } from './components/Header';
-import { Footer } from './components/Footer';
+import { Footer, Footer1 } from './components/Footer';
 import { Main } from './pages/Main';
 import { Login } from './pages/Login';
 import { Mypage } from './pages/Mypage';
 import { Signin } from './pages/Signin';
 import { UserMain } from './pages/UserMain';
 import { Problem } from './pages/Problem';
-import { ProblemList } from './pages/ProblemList';
 import { Header3 } from './components/Header/Header';
-import { ResizableTabs } from './components/ResizableTabs';
 import { Modal } from './components/Modal';
-import { RainEffect } from './components/RainEffect';
 import { Gacha } from './pages/Gacha';
 import { RoomList } from './pages/RoomList';
 import { Room } from './pages/Room';
+import { ProblemList } from './pages/ProblemList';
 
 function App() {
   return (
@@ -24,40 +22,116 @@ function App() {
       <div className="App">
         <AnimatePresence>
           <Routes>
-            <Route path="/" element={<Header />} />
-            <Route path="/login" element={<Header />} />
-            <Route path="/signin" element={<Header />} />
-            <Route path="/mypage" element={<Header2 />} />
-            <Route path="/usermain" element={<Header2 />} />
-            <Route path="/problemlist" element={<Header2 />} />
-            <Route path="/problem" element={<Header3 />} />
-            <Route path="/gacha" element={<Header2 />} />
-            <Route path="/roomlist" element={<Header2 />} />
-            <Route path="/room" element={<Header3 />} />
-          </Routes>
-          <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signin" element={<Signin />} />
-            <Route path="/mypage" element={<Mypage />} />
-            <Route path="/usermain" element={<UserMain />} />
-            <Route path="/problemlist" element={<ProblemList />} />
-            <Route path="/problem" element={<Problem />} />
-            <Route path="/gacha" element={<Gacha />} />
-            <Route path="/roomlist" element={<RoomList />} />
-            <Route path="/room" element={<Room />} />
-          </Routes>
-          <Routes>
-            <Route path="/" element={<Footer />} />
-            <Route path="/login" element={<Footer />} />
-            <Route path="/signin" element={<Footer />} />
-            <Route path="/mypage" element={<Footer />} />
-            <Route path="/usermain" element={<Footer />} />
-            <Route path="/problemlist" element={<Footer />} />
-            <Route path="/problem" element={<Footer />} />
-            <Route path="/gacha" element={<Footer />} />
-            <Route path="/roomlist" element={<Footer />} />
-            <Route path="/room" element={<Footer />} />
+            <Route
+              path="/"
+              element={
+                <>
+                  <Header />
+                  <Main />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <>
+                  <Header />
+                  <Login />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/signin"
+              element={
+                <>
+                  <Header />
+                  <Signin />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/mypage"
+              element={
+                <>
+                  <Header2 />
+                  <Mypage />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/usermain"
+              element={
+                <>
+                  <Header2 />
+                  <UserMain />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/problemlist"
+              element={
+                <>
+                  <Header2 />
+                  <ProblemList />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/problem"
+              element={
+                <>
+                  <Header3 />
+                  <Problem />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/gacha"
+              element={
+                <>
+                  <Header3 />
+                  <Gacha />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/roomlist"
+              element={
+                <>
+                  <Header2 />
+                  <RoomList />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/room"
+              element={
+                <>
+                  <Header3 />
+                  <Room />
+                  <Footer1 />
+                </>
+              }
+            />
+            <Route
+              path="/modal"
+              element={
+                <>
+                  <Header2 />
+                  <Modal />
+                  <Footer />
+                </>
+              }
+            />
           </Routes>
         </AnimatePresence>
       </div>
