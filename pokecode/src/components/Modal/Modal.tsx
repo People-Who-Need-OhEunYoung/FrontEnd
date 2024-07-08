@@ -37,27 +37,27 @@ const Modal = ({ text = '문제명', component, on = false, event }: any) => {
     <>
       <Background className={on ? '' : 'hidden'}>
         <ModalWrap>
-          {nowcompnent === 1 ? (
+          {nowcomponent === 1 ? (
             <>
               <Title>{text}</Title>
               <ModalContent1 />
             </>
-          ) : nowcompnent === 2 ? (
+          ) : nowcomponent === 2 ? (
             <>
               <Title>{'리뷰방 만들기'}</Title>
               <ModalContent2 />
             </>
-          ) : nowcompnent === 3 ? (
+          ) : nowcomponent === 3 ? (
             <>
               <Title>{'축하합니다!'}</Title>
               <ModalContent3 />
             </>
-          ) : nowcompnent === 4 ? (
+          ) : nowcomponent === 4 ? (
             <>
               <Title>{'다시 도전해보세요'}</Title>
-              <ModalContent4 event={setNowcompnent} />
+              <ModalContent4 event={setNowcomponent} />
             </>
-          ) : nowcompnent === 5 ? (
+          ) : nowcomponent === 5 ? (
             <>
               <Title>{'테스트 케이스 입력'}</Title>
               <ModalContent5 />

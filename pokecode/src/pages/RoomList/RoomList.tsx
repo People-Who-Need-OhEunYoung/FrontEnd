@@ -3,7 +3,9 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { probSearch } from '../../utils/api/solvedAc';
-import SortList from './SortList';
+import upArrow from '../../assets/images/upArrow.png';
+import downArrow from '../../assets/images/downArrow.png';
+
 
 type ItemType = {
   problemId: number;
@@ -15,17 +17,18 @@ type ItemType = {
 
 const RoomList = () => {
   const [query, setQuery] = useState(' '); // 검색 문자열 쿼리
-
-  const [probData, setProbData] = useState(''); // API로부터 받은 데이터
   const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
   const [sort, setSort] = useState<string>('id');
   const [page, setPage] = useState<number>(1);
   const [order, setOrder] = useState<string>('asc');
+  const [pageCount, setPageCount] = useState<number>(1);
+  const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
+  const [orderButtonText, setOrderButtonText] = useState<JSX.Element>(<OrderButton src= {upArrow}/>);
 
   const fetchProbData = async () => {
     try {
       const res = await probSearch(query, sort, page, order);
-      setProbData(JSON.stringify(res));
+      return res;
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -33,12 +36,44 @@ const RoomList = () => {
 
   const OrderButtonClick = () => {
     setOrder((prevText) => (prevText === 'asc' ? 'desc' : 'asc'));
+    setOrderButtonText(order === 'asc' ? <OrderButton  src={downArrow} /> : <OrderButton src={upArrow} /> );
   };
 
+  const renderPageButtons = () => {
+      const buttons = [];
+      const startPage = currentPageGroup * 10 + 1;
+      const endPage = Math.min(startPage + 9, pageCount);
+
+      for (let i = startPage; i <= endPage; i++) {
+        buttons.push(
+          <PageButton key={i} onClick={() => setPage(i)}>
+            {i}
+          </PageButton>
+        );
+      }
+
+      return (
+        <>
+          {currentPageGroup > 0 && (
+            <PageButton onClick={() => setCurrentPageGroup(currentPageGroup - 1)}>
+              &lt;
+            </PageButton>
+          )}
+          {buttons}
+          {endPage < pageCount && (
+            <PageButton onClick={() => setCurrentPageGroup(currentPageGroup + 1)}>
+              &gt;
+            </PageButton>
+          )}
+        </>
+      );
+    };
+
   useEffect(() => {
-    fetchProbData();
-    if (probData) {
-      const parsedData = JSON.parse(probData);
+    fetchProbData().then((res) => {
+      const parsedData = res;
+      const page_count = Math.ceil((res.count)/parsedData.items.length);
+      setPageCount(page_count);
       if (parsedData.count > 0) {
         const itemsArray = [];
         for (let i = 0; i < parsedData.items.length; i++) {
@@ -49,8 +84,8 @@ const RoomList = () => {
         console.log('items: ', problems);
         console.log('order:', order);
       }
-    }
-  }, [probData, query, sort, order]);
+    });
+  }, [query, sort, page, order]);
 
   return (
     <motion.div
@@ -64,57 +99,22 @@ const RoomList = () => {
     >
       <Modal>
         <SearchWrapper>
-          <Titleh1>코드리뷰 방 검색</Titleh1>
-          <Inputsearch
+          <Titleh1>코드 리뷰 방</Titleh1>
+          <SearchHeader>
+            <Inputsearch
             type="text"
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
             }}
-          />
-          <ButtonGroup>
-            <SelectBtn
-              onClick={() => {
-                setSort('id');
+            />
+            <MakeRoomButton onClick={() => {
                 OrderButtonClick();
-              }}
-            >
-              {' '}
-              ID{' '}
-            </SelectBtn>
-            <SelectBtn
-              onClick={() => {
-                setSort('level');
-                OrderButtonClick();
-              }}
-            >
-              레벨
-            </SelectBtn>
-            <SelectBtn
-              onClick={() => {
-                setSort('title');
-                OrderButtonClick();
-              }}
-            >
-              제목
-            </SelectBtn>
-            <SelectBtn
-              onClick={() => {
-                setSort('solved');
-                OrderButtonClick();
-              }}
-            >
-              푼 사람 수
-            </SelectBtn>
-            <SelectBtn
-              onClick={() => {
-                setSort('average_try');
-                OrderButtonClick();
-              }}
-            >
-              평균 시도
-            </SelectBtn>
-          </ButtonGroup>
+              }}>
+              방 만들기
+            </MakeRoomButton>
+          </SearchHeader>
+          
         </SearchWrapper>
 
         {/* <SortList/> */}
@@ -124,11 +124,7 @@ const RoomList = () => {
           <h4 style={{ width: '10%' }}> 푼 사람 수 </h4>
           <h4 style={{ width: '10%' }}> 평균 시도 </h4>
         </Listheader>
-        {/* <hr style= {{ width: '75%', margin: 'auto',marginBottom: '15px'}}></hr> */}
         <ListView>
-          {/* <Listli>
-            테스트 문제입니다 <Link to={'/problem'}>입장</Link>
-          </Listli> */}
           {problems.map((item, index) => (
             <Item key={index}>
               {(() => {
@@ -153,11 +149,62 @@ const RoomList = () => {
             </Item>
           ))}
         </ListView>
-        <SearchWrapper>{page}</SearchWrapper>
+        <ButtonGroup style={{ margin: '1.5%' }}>{renderPageButtons()}</ButtonGroup>
       </Modal>
     </motion.div>
   );
 };
+
+const SearchHeader = styled.div`
+  display: flex;
+  justify-content:center;
+`;
+
+const OrderButton = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-top: 5px;
+  filter: invert(1);
+`;
+
+const MakeRoomButton = styled.button`
+  width: 10%;
+  margin: 0 20px;
+  padding: 5px;
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  border: none;
+  box-shadow: 0 0 10px 7px rgba(255, 255, 255, 0.267);
+  
+  &:hover {
+    background-color: #4ea7ff52;
+  }
+
+  &:active {
+    background-color: #4ea7ff52;
+  }
+`;
+
+
+const PageButton = styled.button`
+  width: 30px;
+  margin-right: 10px;
+  background-color: transparent;
+  color: white;
+  border-radius: 10px;
+  font-size: 1rem;
+  border: none;
+  
+  &:hover {
+    background-color: #4ea7ff52;
+  }
+
+  &:active {
+    background-color: #4ea7ff52;
+  }
+`;
 
 const ProblemComponent = styled.div`
   display: flex;
@@ -224,27 +271,7 @@ const Titleh1 = styled.p`
   padding: 10px;
   font-size: 1.2rem;
 `;
-const Orderul = styled.ul`
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
-`;
-const Orderli = styled.li`
-  padding: 15px;
-`;
-const Listul = styled.ul`
-  width: 80%;
-  background: white;
-  margin: auto;
-  max-height: 60%;
-  overflow: auto;
-  box-shadow: inset;
-`;
-const Listli = styled.li`
-  color: black;
-  padding: 15px;
-`;
+
 
 const Item = styled.div`
   border-bottom: 1px solid #8d8d8d;
@@ -253,6 +280,8 @@ const Item = styled.div`
 
 const ButtonGroup = styled.div`
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
 `;
 
 const SelectBtn = styled.button`
@@ -278,9 +307,6 @@ const SelectBtn = styled.button`
     background-color: #4ea7ff52;
   }
 
-  /* &:focus {
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
-  } */
 `;
 
 export default RoomList;
