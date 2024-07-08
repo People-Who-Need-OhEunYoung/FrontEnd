@@ -23,7 +23,6 @@ const ProblemList = () => {
   const [order, setOrder] = useState<string>('asc');
   const [pageCount, setPageCount] = useState<number>(1);
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
-  const [orderButtonText, setOrderButtonText] = useState<JSX.Element>(<OrderButton src= {upArrow}/>);
 
   const fetchProbData = async () => {
     try {
@@ -34,9 +33,14 @@ const ProblemList = () => {
     }
   };
 
-  const OrderButtonClick = () => {
-    setOrder((prevText) => (prevText === 'asc' ? 'desc' : 'asc'));
-    setOrderButtonText(order === 'asc' ? <OrderButton  src={downArrow} /> : <OrderButton src={upArrow} /> );
+  const handleSortClick = (currentClick : string) => {
+    if(currentClick === sort) {
+      setOrder(order === 'asc' ? 'desc' : 'asc');
+    }
+    else {
+      setOrder('asc');
+    }
+    setSort(currentClick);
   };
 
   const renderPageButtons = () => {
@@ -82,7 +86,6 @@ const ProblemList = () => {
         }
         setProblems(itemsArray); // items 상태 업데이트
         console.log('items: ', problems);
-        console.log('order:', order);
       }
     });
   }, [query, sort, page, order]);
@@ -110,58 +113,55 @@ const ProblemList = () => {
           <ButtonGroup style = {{}}>
             <SelectBtn
               onClick={() => {
-                setSort('id');
-                OrderButtonClick();
+                handleSortClick('id');
+               
               }}
             >
               ID
             </SelectBtn>
             <SelectBtn
               onClick={() => {
-                setSort('level');
-                OrderButtonClick();
+                handleSortClick('level');
               }}
             >
               레벨
             </SelectBtn>
             <SelectBtn
               onClick={() => {
-                setSort('title');
-                OrderButtonClick();
+                handleSortClick('title');
+               
               }}
             >
               제목
             </SelectBtn>
             <SelectBtn
               onClick={() => {
-                setSort('solved');
-                OrderButtonClick();
+                handleSortClick('solved');
               }}
             >
               푼 사람 수
             </SelectBtn>
             <SelectBtn
               onClick={() => {
-                setSort('average_try');
-                OrderButtonClick();
+                handleSortClick('average_try');
+                
               }}
             >
               평균 시도
             </SelectBtn>
             <SelectBtn
               onClick={() => {
-                setSort('random');
-                OrderButtonClick();
+                handleSortClick('random');
               }}
             >
               랜덤
             </SelectBtn>
             <SelectBtn style = {{fontSize: '1.5rem', fontFamily: 'math', lineHeight: '1.5rem'}}
               onClick={() => {
-                OrderButtonClick();
+                setOrder(order === 'asc' ? 'desc' : 'asc');
               }}
             >
-            {orderButtonText}
+            {order === 'asc' ? <OrderButton  src={upArrow} /> : <OrderButton src={downArrow} />}
             </SelectBtn>
           </ButtonGroup>
         </SearchWrapper>

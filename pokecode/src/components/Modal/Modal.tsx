@@ -9,37 +9,38 @@ import ModalContent5 from './ModalContent5';
 
 const Modal = ({ text = '문제명', on, component = 4 }: any) => {
   const [flag, setFlag] = useState(false);
-  const [nowcompnent, setNowcompnent] = useState(component);
+  const [nowcomponent, setNowcomponent] = useState(component);
 
   const onOff = () => {
     if (on == null) on = flag;
     setFlag(!on);
   };
+  
   return (
     <>
       <Background className={flag ? '' : 'hidden'}>
         <ModalWrap>
-          {nowcompnent === 1 ? (
+          {nowcomponent === 1 ? (
             <>
               <Title>{text}</Title>
               <ModalContent1 onOff={onOff} />
             </>
-          ) : nowcompnent === 2 ? (
+          ) : nowcomponent === 2 ? (
             <>
               <Title>{'리뷰방 만들기'}</Title>
               <ModalContent2 />
             </>
-          ) : nowcompnent === 3 ? (
+          ) : nowcomponent === 3 ? (
             <>
               <Title>{'축하합니다!'}</Title>
               <ModalContent3 />
             </>
-          ) : nowcompnent === 4 ? (
+          ) : nowcomponent === 4 ? (
             <>
               <Title>{'다시 도전해보세요'}</Title>
-              <ModalContent4 event={setNowcompnent} />
+              <ModalContent4 event={setNowcomponent} />
             </>
-          ) : nowcompnent === 5 ? (
+          ) : nowcomponent === 5 ? (
             <>
               <Title>{'테스트 케이스 입력'}</Title>
               <ModalContent5 />
@@ -59,7 +60,7 @@ const Modal = ({ text = '문제명', on, component = 4 }: any) => {
       <button
         onClick={() => {
           onOff();
-          setNowcompnent(1);
+          setNowcomponent(1);
         }}
       >
         test1
@@ -67,7 +68,7 @@ const Modal = ({ text = '문제명', on, component = 4 }: any) => {
       <button
         onClick={() => {
           onOff();
-          setNowcompnent(2);
+          setNowcomponent(2);
         }}
       >
         test2
@@ -75,7 +76,7 @@ const Modal = ({ text = '문제명', on, component = 4 }: any) => {
       <button
         onClick={() => {
           onOff();
-          setNowcompnent(3);
+          setNowcomponent(3);
         }}
       >
         test3
@@ -83,7 +84,7 @@ const Modal = ({ text = '문제명', on, component = 4 }: any) => {
       <button
         onClick={() => {
           onOff();
-          setNowcompnent(4);
+          setNowcomponent(4);
         }}
       >
         test4
@@ -91,7 +92,7 @@ const Modal = ({ text = '문제명', on, component = 4 }: any) => {
       <button
         onClick={() => {
           onOff();
-          setNowcompnent(5);
+          setNowcomponent(5);
         }}
       >
         test5

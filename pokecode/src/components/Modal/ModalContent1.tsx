@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { DesignedButton1 } from '../DesignedButton';
 
-const ModalContent1 = ({ width, onOff }: any) => {
+const ModalContent1 = ({ width, title, onOff }: any) => {
   const [timeck, setTimeck] = useState('OFF');
   const [time, setTime] = useState<number>(0);
   const [isEditing, setIsEditing] = useState(false);
@@ -37,6 +37,7 @@ const ModalContent1 = ({ width, onOff }: any) => {
 
   return (
     <div style={{ width: '400px' }}>
+      <Title>{title}</Title>
       <div
         style={{
           width: width,
@@ -113,6 +114,7 @@ const TimeLimit = styled.div<{ timeck: string }>`
       background: rgba(79, 70, 229, 1);
     `}
 `;
+
 const TimeLimitCk = styled.div<{ timeck: string }>`
   height: 1rem;
   width: 1rem;
@@ -170,5 +172,12 @@ const Time = styled.input`
     margin: 0;
   }
 `;
+
+const Title = styled.p`
+  padding: 1em 0;
+  font-weight: bold;
+  font-size: 2em;
+`;
+
 
 export default ModalContent1;
