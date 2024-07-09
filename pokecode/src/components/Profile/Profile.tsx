@@ -13,7 +13,6 @@ export const Profile = ({ ...props }) => {
 
   const navigate = useNavigate();
   const logout = () => {
-    debugger;
     localStorage.removeItem('token');
     alert('로그아웃했습니다.');
     navigate('/');
