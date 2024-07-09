@@ -141,7 +141,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
     >
       <Container ref={containerRef}>
         <Tab width={width}>
-          <ProblemHeader/>
+          <ProblemHeader />
           <div
             style={{
               width: '100%',
@@ -195,7 +195,6 @@ const ProblemHeader = styled.div`
   background-color: black;
 `;
 
-
 const Home = styled.div`
   width: 100%;
   height: 20%;
@@ -203,6 +202,5 @@ const Home = styled.div`
   background: url(${background});
   overflow: hidden;
 `;
-
 
 export default ResizableTabs;
