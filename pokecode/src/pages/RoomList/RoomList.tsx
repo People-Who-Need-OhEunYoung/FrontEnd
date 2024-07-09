@@ -1,6 +1,10 @@
 import styled, { css }  from 'styled-components';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+// import { Link } from 'react-router-dom';
+import { probSearch } from '../../utils/api/solvedAc';
+import upArrow from '../../assets/images/upArrow.png';
+import downArrow from '../../assets/images/downArrow.png';
 import Modal from '../../components/Modal/Modal';
 
 type ItemType = {
@@ -18,42 +22,78 @@ const RoomList = () => {
   const [page, setPage] = useState<number>(1);
   const [pageCount, setPageCount] = useState<number>(1);
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
-  const [check, setCheck] = useState('OFF');
+  const [orderButtonText, setOrderButtonText] = useState<JSX.Element>(
+    <OrderButton src={upArrow} />
+  );
+  console.log(orderButtonText);
+  setSort('id');
+  const fetchProbData = async () => {
+    try {
+      const res = await probSearch(query, sort, page, order);
+      return res;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
-
-  const switchButton = () => {
-    setCheck(check === 'ON' ? 'OFF' : 'ON');
+  const OrderButtonClick = () => {
+    setOrder((prevText) => (prevText === 'asc' ? 'desc' : 'asc'));
+    setOrderButtonText(
+      order === 'asc' ? (
+        <OrderButton src={downArrow} />
+      ) : (
+        <OrderButton src={upArrow} />
+      )
+    );
   };
 
   const renderPageButtons = () => {
-      const buttons = [];
-      const startPage = currentPageGroup * 10 + 1;
-      const endPage = Math.min(startPage + 9, pageCount);
+    const buttons = [];
+    const startPage = currentPageGroup * 10 + 1;
+    const endPage = Math.min(startPage + 9, pageCount);
 
-      for (let i = startPage; i <= endPage; i++) {
-        buttons.push(
-          <PageButton key={i} onClick={() => setPage(i)}>
-            {i}
-          </PageButton>
-        );
-      }
-
-      return (
-        <>
-          {currentPageGroup > 0 && (
-            <PageButton onClick={() => setCurrentPageGroup(currentPageGroup - 1)}>
-              &lt;
-            </PageButton>
-          )}
-          {buttons}
-          {endPage < pageCount && (
-            <PageButton onClick={() => setCurrentPageGroup(currentPageGroup + 1)}>
-              &gt;
-            </PageButton>
-          )}
-        </>
+    for (let i = startPage; i <= endPage; i++) {
+      buttons.push(
+        <PageButton key={i} onClick={() => setPage(i)}>
+          {i}
+        </PageButton>
       );
-    };
+    }
+
+    return (
+      <>
+        {currentPageGroup > 0 && (
+          <PageButton onClick={() => setCurrentPageGroup(currentPageGroup - 1)}>
+            &lt;
+          </PageButton>
+        )}
+        {buttons}
+        {endPage < pageCount && (
+          <PageButton onClick={() => setCurrentPageGroup(currentPageGroup + 1)}>
+            &gt;
+          </PageButton>
+        )}
+      </>
+    );
+  };
+
+  useEffect(() => {
+    fetchProbData().then((res) => {
+      const parsedData = res;
+      const page_count = Math.ceil(res.count / parsedData.items.length);
+      setPageCount(page_count);
+      if (parsedData.count > 0) {
+        const itemsArray = [];
+        for (let i = 0; i < parsedData.items.length; i++) {
+          const item = parsedData.items[i];
+          itemsArray.push(item);
+        }
+        setProblems(itemsArray); // items 상태 업데이트
+        console.log('items: ', problems);
+        console.log('order:', order);
+      }
+    });
+  }, [query, sort, page, order]);
 
   return (
     <motion.div
@@ -69,21 +109,18 @@ const RoomList = () => {
         <SearchWrapper>
           <Titleh1>코드 리뷰 방</Titleh1>
           <SearchHeader>
-            <div style = {{position:'relative', width:'35%', display: 'flex'}}>
-              <Inputsearch 
-                type="text"
-                value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                }}
-              />
-              <CheckSlide onClick={switchButton} timeck={check} style = {{position: 'absolute' , right: 0, top: '6px'}}>
-                <CheckBtn timeck={check}></CheckBtn>
-                <OnOffText timeck={check}>{check}</OnOffText>
-              </CheckSlide>
-              <CheckDoc>내가 푼 문제만 보기</CheckDoc>
-            </div>
-            <MakeRoomButton onClick={() => {}}>
+            <Inputsearch
+              type="text"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+              }}
+            />
+            <MakeRoomButton
+              onClick={() => {
+                OrderButtonClick();
+              }}
+            >
               방 만들기
             </MakeRoomButton>
           </SearchHeader>
@@ -92,8 +129,10 @@ const RoomList = () => {
         <ListView>
         
         </ListView>
-        <ButtonGroup style={{ margin: '1.5%' }}>{renderPageButtons()}</ButtonGroup>
-      </MainWrapper>
+        <ButtonGroup style={{ margin: '1.5%' }}>
+          {renderPageButtons()}
+        </ButtonGroup>
+      </Modal>
     </motion.div>
   );
 };
@@ -192,7 +231,7 @@ const OnOffText = styled.span<{ timeck: string }>`
 
 const SearchHeader = styled.div`
   display: flex;
-  justify-content:center;
+  justify-content: center;
 `;
 
 
@@ -205,7 +244,7 @@ const MakeRoomButton = styled.button`
   font-size: 1.1rem;
   font-weight:bold;
   border: none;
-  margin-left: 2%;
+  box-shadow: 0 0 10px 7px rgba(255, 255, 255, 0.267);
 
   &:hover {
     box-shadow: 0 0 5px 3px rgba(255, 255, 255, 0.267);
@@ -216,7 +255,6 @@ const MakeRoomButton = styled.button`
   }
 `;
 
-
 const PageButton = styled.button`
   width: 30px;
   margin-right: 10px;
@@ -225,7 +263,7 @@ const PageButton = styled.button`
   border-radius: 10px;
   font-size: 1rem;
   border: none;
-  
+
   &:hover {
     background-color: #4ea7ff52;
   }
@@ -311,30 +349,5 @@ const ButtonGroup = styled.div`
   display: flex;
   justify-content: center;
 `;
-
-// const SelectBtn = styled.button`
-//   color: white;
-//   background-color: transparent;
-//   padding: 4px 10px;
-//   border: none;
-//   border-radius: 15px;
-//   outline: none;
-//   cursor: pointer;
-//   font-size: 1rem;
-//   font-weight: 500;
-//   line-height: 1.75;
-//   text-transform: uppercase;
-//   transition: background-color 0.3s;
-//   margin: 7px;
-
-//   &:hover {
-//     background-color: #4ea7ff52;
-//   }
-
-//   &:active {
-//     background-color: #4ea7ff52;
-//   }
-
-// `;
 
 export default RoomList;
