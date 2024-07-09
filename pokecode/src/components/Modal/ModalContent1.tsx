@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { DesignedButton1 } from '../DesignedButton';
 
-const ModalContent1 = ({ width, title, onOff }: any) => {
+const ModalContent1 = ({ width, onOff }: any) => {
   const [timeck, setTimeck] = useState('OFF');
   const [time, setTime] = useState<number>(0);
   const [isEditing, setIsEditing] = useState(false);
@@ -37,7 +37,6 @@ const ModalContent1 = ({ width, title, onOff }: any) => {
 
   return (
     <div style={{ width: '400px' }}>
-      <Title>{title}</Title>
       <div
         style={{
           width: width,

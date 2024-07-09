@@ -24,6 +24,8 @@ const ProblemList = () => {
   const [order, setOrder] = useState<string>('asc');
   const [pageCount, setPageCount] = useState<number>(1);
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selected, setSelected] = useState<string>('');
 
   const fetchProbData = async () => {
     try {
@@ -103,8 +105,8 @@ const ProblemList = () => {
     >
       <MainWrapper>
         <SearchWrapper>
-          <Titleh1>문제 검색</Titleh1>
-          <div style = {{position:'relative', width:'35%', margin: 'auto'}}>
+          {/* <Titleh1>문제 검색</Titleh1> */}
+          <div style = {{position:'relative', width:'35%', margin: 'auto', marginTop:'4%'}}>
             <img src={Search} style = {{position: 'absolute', width: '20px', right: '15px', top:'6px', cursor: 'pointer'}}></img>
             <Inputsearch
               type="text"
@@ -190,23 +192,35 @@ const ProblemList = () => {
                       {' '}
                       {item.problemId}
                     </a>
-                    <a href={link} style={{ width: '44%' }}>
+                    <TitleBtn onClick={() => {setIsModalOpen(true); setSelected(item.titleKo);}} style={{}}>
                       {' '}
                       {item.titleKo}
-                    </a>
-                    <p style={{ width: '23%' }}> {item.acceptedUserCount}</p>
-                    <p style={{ width: '10%' }}> {item.averageTries}</p>
+                    </TitleBtn>
+                    <p style={{ width: '52%', textAlign: 'end' }}> {item.acceptedUserCount}</p>
+                    <p style={{ width: '21.5%', textAlign: 'end'  }}> {item.averageTries}</p>
                   </ProblemComponent>
                 );
               })()}
             </Item>
           ))}
         </ListView>
+        <Modal text = {selected} component={1} on={isModalOpen} event={setIsModalOpen}></Modal>
         <ButtonGroup style={{ margin: '1.5%' }}>{renderPageButtons()}</ButtonGroup>
       </MainWrapper>
     </motion.div>
   );
 };
+
+
+const TitleBtn = styled.button`
+  position: absolute;
+  background-color: transparent;
+  color: white;
+  border: none;
+  width: 60%; 
+  text-align:left;
+  left: 20%;
+`;
 
 const OrderButton = styled.img`
   width: 20px;
@@ -237,6 +251,7 @@ const ProblemComponent = styled.div`
   display: flex;
   margin: auto;
   align-items: center;
+  position: relative;
 `;
 
 const ListView = styled.div`
@@ -289,7 +304,7 @@ const TierImg = styled.img`
 
 const Inputsearch = styled.input`
   width: 100%;
-  padding: 5px 40px 5px 15px;
+  padding: 10px 40px 5px 15px;
   border-radius: 30px;
   box-shadow: 0 0 15px 7px rgba(255, 255, 255, 0.267);
   box-sizing: border-box;
