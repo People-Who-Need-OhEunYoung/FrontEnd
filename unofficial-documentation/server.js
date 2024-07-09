@@ -1,8 +1,9 @@
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import cors from 'cors';
-import axios from 'axios';
 import cheerio from 'cheerio';
+import https from 'https';
+import _path from 'path';
 
 const app = express();
 const port = 8481;
@@ -36,6 +37,74 @@ app.use(
   }),
 );
 
+app.get('/problem/:id', (req, res) => {
+  const id = req.params.id;
+  const url = `https://www.acmicpc.net/problem/${id}`;
+
+  const options = {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    },
+  };
+
+  https
+    .get(url, options, (response) => {
+      let body = '';
+
+      response.on('data', (chunk) => {
+        body += chunk;
+      });
+
+      response.on('end', () => {
+        console.log('end:', body);
+        const $ = cheerio.load(body);
+        const title = $('#problem_title').text();
+        const problemBody = $('#problem-body');
+        const description = problemBody
+          .find('#problem_description')
+          .text()
+          .trim();
+        const input = problemBody.find('#problem_input').text();
+        const output = problemBody.find('#problem_output').text();
+        const samples = [];
+        const imgs = [];
+
+        $('[id*=sample-input]').each((i, el) => {
+          const input = $(el).text();
+          const output = $(el)
+            .parent()
+            .parent()
+            .next()
+            .find('[id*=sample-output]')
+            .text();
+          samples[i] = { input, output };
+        });
+
+        problemBody
+          .find('#problem_description')
+          .find('img')
+          .each((i, el) => {
+            const src = $(el).attr('src');
+            if (src) {
+              imgs.push(src);
+            }
+          });
+
+        res.json({
+          title,
+          description,
+          input,
+          output,
+          samples,
+          imgs,
+        });
+      });
+    })
+    .on('error', (error) => {
+      res.status(500).json({ error: error.message });
+    });
+});
 
 app.listen(port, () => {
   console.log(`Proxy server is running on port ${port}`);
