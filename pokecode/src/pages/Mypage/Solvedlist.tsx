@@ -16,13 +16,11 @@ const Solvedlist = () => {
   const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
   const [visibleList, setVisibleList] = useState<string>('list1'); // Manage which list is visible
   const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
-
   const fetchUserData = async () => {
     try {
       const res = await getTop100(query);
       setUserData(JSON.stringify(res));
-      return res;
-      
+
     } catch (error) {
       console.error('Error fetching data:', error);
     }

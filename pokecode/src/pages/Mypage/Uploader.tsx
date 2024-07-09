@@ -19,7 +19,7 @@ const Uploader = () => {
   const navigate = useNavigate();
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const query = 'jade0179'
+  const query = 'jade0179';
   //const [query, setQuery] = useState('jade0179'); // 사용자 검색 쿼리
   const [userData, setUserData] = useState(''); // API로부터 받은 데이터
   // const [page, setPage] = useState(1); // 페이지 번호, 초기값 1

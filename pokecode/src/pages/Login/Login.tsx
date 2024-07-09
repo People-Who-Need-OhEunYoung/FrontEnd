@@ -46,7 +46,11 @@ const Login = () => {
         throw error;
       });
   };
-
+  const handleKeyDown = (event: any) => {
+    if (event.key === 'Enter') {
+      loginCall({ id: id, pw: pw });
+    }
+  };
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -66,6 +70,7 @@ const Login = () => {
               placeholder="Username"
               value={id}
               onChange={(e: any) => setId(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <Input
               type="password"
@@ -73,6 +78,7 @@ const Login = () => {
               placeholder="Password"
               value={pw}
               onChange={(e: any) => setPw(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <ButtonDiv>
               <DesignedButton
