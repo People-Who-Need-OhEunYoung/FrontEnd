@@ -16,6 +16,7 @@
     "cheerio": "^1.0.0-rc.12",
     "codemirror": "^5.65.16",
     "framer-motion": "^11.2.12",
+    "https": "^1.0.0",
     "nodemon": "^3.1.4",
     "path": "^0.12.7",
     "react": "^18.3.1",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@types/codemirror": "^5.60.15",
+    "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/react-transition-group": "^4.4.10",

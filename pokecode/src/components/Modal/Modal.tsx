@@ -35,7 +35,6 @@ const Modal = ({ text = '문제명', component, on = false, event }: any) => {
 
   const [nowcomponent, setNowcomponent] = useState(component);
 
-
   return (
     <>
       <Background className={on ? '' : 'hidden'}>
