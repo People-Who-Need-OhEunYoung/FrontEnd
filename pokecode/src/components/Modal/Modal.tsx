@@ -32,7 +32,9 @@ event(모달에서 자체적으로 닫기 위해 setState function)
 */
 
 const Modal = ({ text = '문제명', component, on = false, event }: any) => {
+
   const [nowcomponent, setNowcomponent] = useState(component);
+
 
   return (
     <>

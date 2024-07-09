@@ -11,7 +11,6 @@ import './TestSharedEditor.css';
 
 const TestSharedEditor: React.FC = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
-  //const userIdRef = useRef<HTMLDivElement>(null); // 사용자 ID를 표시할 ref 추가
   useEffect(() => {
     const ydoc = new Y.Doc();
     const provider = new WebsocketProvider(
