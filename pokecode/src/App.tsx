@@ -15,7 +15,6 @@ import { Gacha } from './pages/Gacha';
 import { RoomList } from './pages/RoomList';
 import { Room } from './pages/Room';
 import { ProblemList } from './pages/ProblemList';
-
 function App() {
   return (
     <BrowserRouter>

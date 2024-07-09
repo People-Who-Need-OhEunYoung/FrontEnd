@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { probSearch } from '../../utils/api/solvedAc';
 import upArrow from '../../assets/images/upArrow.png';
 import downArrow from '../../assets/images/downArrow.png';
-
 
 type ItemType = {
   problemId: number;
@@ -33,50 +31,49 @@ const ProblemList = () => {
     }
   };
 
-  const handleSortClick = (currentClick : string) => {
-    if(currentClick === sort) {
+  const handleSortClick = (currentClick: string) => {
+    if (currentClick === sort) {
       setOrder(order === 'asc' ? 'desc' : 'asc');
-    }
-    else {
+    } else {
       setOrder('asc');
     }
     setSort(currentClick);
   };
 
   const renderPageButtons = () => {
-      const buttons = [];
-      const startPage = currentPageGroup * 10 + 1;
-      const endPage = Math.min(startPage + 9, pageCount);
+    const buttons = [];
+    const startPage = currentPageGroup * 10 + 1;
+    const endPage = Math.min(startPage + 9, pageCount);
 
-      for (let i = startPage; i <= endPage; i++) {
-        buttons.push(
-          <PageButton key={i} onClick={() => setPage(i)}>
-            {i}
-          </PageButton>
-        );
-      }
-
-      return (
-        <>
-          {currentPageGroup > 0 && (
-            <PageButton onClick={() => setCurrentPageGroup(currentPageGroup - 1)}>
-              &lt;
-            </PageButton>
-          )}
-          {buttons}
-          {endPage < pageCount && (
-            <PageButton onClick={() => setCurrentPageGroup(currentPageGroup + 1)}>
-              &gt;
-            </PageButton>
-          )}
-        </>
+    for (let i = startPage; i <= endPage; i++) {
+      buttons.push(
+        <PageButton key={i} onClick={() => setPage(i)}>
+          {i}
+        </PageButton>
       );
-    };
+    }
+
+    return (
+      <>
+        {currentPageGroup > 0 && (
+          <PageButton onClick={() => setCurrentPageGroup(currentPageGroup - 1)}>
+            &lt;
+          </PageButton>
+        )}
+        {buttons}
+        {endPage < pageCount && (
+          <PageButton onClick={() => setCurrentPageGroup(currentPageGroup + 1)}>
+            &gt;
+          </PageButton>
+        )}
+      </>
+    );
+  };
 
   useEffect(() => {
     fetchProbData().then((res) => {
       const parsedData = res;
-      const page_count = Math.ceil((res.count)/parsedData.items.length);
+      const page_count = Math.ceil(res.count / parsedData.items.length);
       setPageCount(page_count);
       if (parsedData.count > 0) {
         const itemsArray = [];
@@ -110,11 +107,10 @@ const ProblemList = () => {
               setQuery(e.target.value);
             }}
           />
-          <ButtonGroup style = {{}}>
+          <ButtonGroup style={{}}>
             <SelectBtn
               onClick={() => {
                 handleSortClick('id');
-               
               }}
             >
               ID
@@ -129,7 +125,6 @@ const ProblemList = () => {
             <SelectBtn
               onClick={() => {
                 handleSortClick('title');
-               
               }}
             >
               제목
@@ -144,7 +139,6 @@ const ProblemList = () => {
             <SelectBtn
               onClick={() => {
                 handleSortClick('average_try');
-                
               }}
             >
               평균 시도
@@ -156,12 +150,21 @@ const ProblemList = () => {
             >
               랜덤
             </SelectBtn>
-            <SelectBtn style = {{fontSize: '1.5rem', fontFamily: 'math', lineHeight: '1.5rem'}}
+            <SelectBtn
+              style={{
+                fontSize: '1.5rem',
+                fontFamily: 'math',
+                lineHeight: '1.5rem',
+              }}
               onClick={() => {
                 setOrder(order === 'asc' ? 'desc' : 'asc');
               }}
             >
-            {order === 'asc' ? <OrderButton  src={upArrow} /> : <OrderButton src={downArrow} />}
+              {order === 'asc' ? (
+                <OrderButton src={upArrow} />
+              ) : (
+                <OrderButton src={downArrow} />
+              )}
             </SelectBtn>
           </ButtonGroup>
         </SearchWrapper>
@@ -198,7 +201,9 @@ const ProblemList = () => {
             </Item>
           ))}
         </ListView>
-        <ButtonGroup style={{ margin: '1.5%' }}>{renderPageButtons()}</ButtonGroup>
+        <ButtonGroup style={{ margin: '1.5%' }}>
+          {renderPageButtons()}
+        </ButtonGroup>
       </Modal>
     </motion.div>
   );
@@ -219,7 +224,7 @@ const PageButton = styled.button`
   border-radius: 10px;
   font-size: 1rem;
   border: none;
-  
+
   &:hover {
     background-color: #4ea7ff52;
   }
@@ -227,8 +232,6 @@ const PageButton = styled.button`
   &:active {
     background-color: #4ea7ff52;
   }
-
-
 `;
 
 const ProblemComponent = styled.div`
@@ -297,7 +300,6 @@ const Titleh1 = styled.p`
   font-size: 1.2rem;
 `;
 
-
 const Item = styled.div`
   border-bottom: 1px solid #8d8d8d;
   padding: 10px;
@@ -331,7 +333,6 @@ const SelectBtn = styled.button`
   &:active {
     background-color: #4ea7ff52;
   }
-
 `;
 
 export default ProblemList;

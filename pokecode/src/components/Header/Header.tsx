@@ -1,5 +1,5 @@
 import './Header.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Profile } from '../Profile';
 import Nav from '../Nav/Nav';
@@ -26,6 +26,40 @@ const Header = () => {
 };
 
 export const Header2 = () => {
+  const navigate = useNavigate();
+  const loginChecker = async () => {
+    await fetch(`http://${import.meta.env.VITE_APP_IP}/tokenTest`, {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        console.log(res);
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        if (data.result == 'success') {
+        } else {
+          confirm('세션이 만료되었습니다. 현재화면을 유지하시겠습니까?')
+            ? ''
+            : navigate('/');
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        alert('통신에러');
+        throw error;
+      });
+  };
+
+  loginChecker();
+
   return (
     <motion.div
       className="header"
@@ -68,6 +102,39 @@ export const Header2 = () => {
 };
 
 export const Header3 = () => {
+  const navigate = useNavigate();
+  const loginChecker = async () => {
+    await fetch(`http://${import.meta.env.VITE_APP_IP}/tokenTest`, {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        console.log(res);
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        if (data.result == 'success') {
+        } else {
+          confirm('세션이 만료되었습니다. 현재화면을 유지하시겠습니까?')
+            ? ''
+            : navigate('/');
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        alert('통신에러');
+        throw error;
+      });
+  };
+
+  loginChecker();
   return (
     <motion.div
       className="header"
