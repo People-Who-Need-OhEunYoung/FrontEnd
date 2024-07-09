@@ -11,7 +11,8 @@ type ItemType = {
 };
 
 const Solvedlist = () => {
-  const [query, setQuery] = useState('jade0179'); // 사용자 검색 쿼리
+  const query = 'jade0179'
+  //const [query, setQuery] = useState('jade0179'); // 사용자 검색 쿼리
 
   const [userData, setUserData] = useState(''); // API로부터 받은 데이터
   const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
@@ -149,11 +150,11 @@ const ListView = styled.div`
   flex-direction: column;
 `;
 
-const List_title = styled.p`
-  color: white;
-  margin-bottom: 10px;
-  font-size: 1.2rem;
-`;
+// const List_title = styled.p`
+//   color: white;
+//   margin-bottom: 10px;
+//   font-size: 1.2rem;
+// `;
 
 const Item = styled.div`
   border-bottom: 1px solid #eee;

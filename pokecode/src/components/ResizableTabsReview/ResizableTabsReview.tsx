@@ -4,7 +4,7 @@ import {
   motion,
   useAnimation,
   useDragControls,
-  useMotionValue,
+  //useMotionValue,
 } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
 import { TestSharedEditor } from '../TestSharedEditor';

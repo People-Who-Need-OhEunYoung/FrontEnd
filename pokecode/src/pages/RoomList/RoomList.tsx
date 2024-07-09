@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import { probSearch } from '../../utils/api/solvedAc';
 import upArrow from '../../assets/images/upArrow.png';
 import downArrow from '../../assets/images/downArrow.png';
@@ -18,13 +18,14 @@ type ItemType = {
 const RoomList = () => {
   const [query, setQuery] = useState(' '); // 검색 문자열 쿼리
   const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
-  const [sort, setSort] = useState<string>('id');
+  const sort = 'id';
+  //const [sort, setSort] = useState<string>('id');
   const [page, setPage] = useState<number>(1);
   const [order, setOrder] = useState<string>('asc');
   const [pageCount, setPageCount] = useState<number>(1);
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
   const [orderButtonText, setOrderButtonText] = useState<JSX.Element>(<OrderButton src= {upArrow}/>);
-
+  console.log(orderButtonText);
   const fetchProbData = async () => {
     try {
       const res = await probSearch(query, sort, page, order);
@@ -284,29 +285,29 @@ const ButtonGroup = styled.div`
   justify-content: center;
 `;
 
-const SelectBtn = styled.button`
-  color: white;
-  background-color: transparent;
-  padding: 4px 10px;
-  border: none;
-  border-radius: 15px;
-  outline: none;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  line-height: 1.75;
-  text-transform: uppercase;
-  transition: background-color 0.3s;
-  margin: 7px;
+// const SelectBtn = styled.button`
+//   color: white;
+//   background-color: transparent;
+//   padding: 4px 10px;
+//   border: none;
+//   border-radius: 15px;
+//   outline: none;
+//   cursor: pointer;
+//   font-size: 1rem;
+//   font-weight: 500;
+//   line-height: 1.75;
+//   text-transform: uppercase;
+//   transition: background-color 0.3s;
+//   margin: 7px;
 
-  &:hover {
-    background-color: #4ea7ff52;
-  }
+//   &:hover {
+//     background-color: #4ea7ff52;
+//   }
 
-  &:active {
-    background-color: #4ea7ff52;
-  }
+//   &:active {
+//     background-color: #4ea7ff52;
+//   }
 
-`;
+// `;
 
 export default RoomList;
