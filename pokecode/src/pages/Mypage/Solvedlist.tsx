@@ -11,16 +11,16 @@ type ItemType = {
 };
 
 const Solvedlist = () => {
-  const [query, setQuery] = useState('jade0179'); // 사용자 검색 쿼리
+  const [query, setQuery] = useState(''); // 사용자 검색 쿼리
   const [userData, setUserData] = useState(''); // API로부터 받은 데이터
   const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
   const [visibleList, setVisibleList] = useState<string>('list1'); // Manage which list is visible
   const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
-  setQuery('jade0179');
   const fetchUserData = async () => {
     try {
       const res = await getTop100(query);
       setUserData(JSON.stringify(res));
+      setQuery('jade0179');
     } catch (error) {
       console.error('Error fetching data:', error);
     }

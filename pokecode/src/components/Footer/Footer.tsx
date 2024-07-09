@@ -49,17 +49,7 @@ export const Footer1 = () => {
         >
           테스트케이스 추가
         </DesignedButton1>
-        <DesignedButton1
-          style={{
-            margin: '0',
-            width: '190px',
-            fontSize: '1em',
-            marginRight: '10px',
-          }}
-          color="#a62df1"
-        >
-          테스트케이스 실행
-        </DesignedButton1>
+
         <DesignedButton1
           style={{
             margin: '0',

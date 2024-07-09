@@ -3,10 +3,9 @@ import styled from 'styled-components';
 import { motion, useAnimation } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
 import background from '../../assets/images/background.jpg';
-import terminal from '../../assets/images/터미널.png';
 import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
-
+import { userInfo } from '../../utils/api/api';
 const Container = styled.div`
   display: flex;
   align-items: center;
@@ -61,6 +60,12 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const [position, setPosition] = useState({
     x: '50%',
   });
+  const [user, setUser] = useState({
+    credit: 0,
+    curPokeId: 0,
+    nickName: '기본값',
+    result: '기본값',
+  });
   const containerRef = useRef<HTMLDivElement | null>(null);
   const controls = useAnimation();
   const handleDivClick = (e: any) => {
@@ -95,8 +100,11 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   };
 
   const sleep = (ms: any) => new Promise((resolve) => setTimeout(resolve, ms));
-
+  const userSet = async () => {
+    setUser(await userInfo());
+  };
   useEffect(() => {
+    userSet();
     const animateRandomly = async () => {
       while (true) {
         // 무작위 위치로 애니메이션 시작
@@ -148,7 +156,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
               style={{
                 position: 'relative',
                 transform: 'translate(50%, 50%)',
-                top: '50%',
+                top: '30%',
                 left: position.x,
                 display: 'inline-block',
                 width: '4vw',
@@ -158,7 +166,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
             >
               <Pokemon
                 width={'100%'}
-                src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/132.gif"
+                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${user.curPokeId}.gif`}
               ></Pokemon>
             </motion.div>
           </Home>
@@ -171,18 +179,8 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
             height: '100%',
           }}
         >
-          <div style={{ background: 'green', width: '100%', height: '80%' }}>
+          <div style={{ background: 'green', width: '100%', height: '100%' }}>
             <TestEditor />
-          </div>
-          <div
-            style={{
-              background: 'yellow',
-              width: '100%',
-              height: '20%',
-              overflow: 'hidden',
-            }}
-          >
-            <img src={terminal} width={'100%'} />{' '}
           </div>
         </div>
       </Container>

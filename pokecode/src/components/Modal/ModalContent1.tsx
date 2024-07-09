@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
-import { DesignedButton1 } from '../DesignedButton';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const ModalContent1 = ({ width, onOff, id }: any) => {
+const ModalContent1 = ({ width, id }: any) => {
   const [timeck, setTimeck] = useState('OFF');
   const [time, setTime] = useState<number>(0);
   const [isEditing, setIsEditing] = useState(false);
@@ -38,12 +37,12 @@ const ModalContent1 = ({ width, onOff, id }: any) => {
     setIsEditing(false);
   };
 
-  const gotoSolve = (id : number) => {
+  const gotoSolve = (id: number) => {
     navigate(`/problem?id=${id}`);
   };
 
   return (
-    <div style={{ width: '400px'}}>
+    <div style={{ width: '400px' }}>
       <div
         style={{
           width: width,
@@ -194,12 +193,5 @@ const Time = styled.input`
     margin: 0;
   }
 `;
-
-const Title = styled.p`
-  padding: 1em 0;
-  font-weight: bold;
-  font-size: 2em;
-`;
-
 
 export default ModalContent1;

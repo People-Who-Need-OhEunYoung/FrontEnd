@@ -60,8 +60,9 @@ const UserMain = () => {
   const pokemonnameSet = async (name: number) => {
     setPokemonname(await pokemonName(name));
   };
+  pokemonnameSet(user.curPokeId);
   useEffect(() => {
-    userSet().then(() => pokemonnameSet(user.curPokeId));
+    userSet();
     pooCount();
     const animateRandomly = async () => {
       while (true) {
