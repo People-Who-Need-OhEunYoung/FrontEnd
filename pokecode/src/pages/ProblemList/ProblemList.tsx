@@ -109,15 +109,16 @@ const ProblemList = () => {
     >
       <MainWrapper>
         <SearchWrapper>
-
-          <Titleh1>문제 검색</Titleh1>
-          <Inputsearch
-            type="text"
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-            }}
-          />
+          <div style = {{position:'relative', width:'35%', margin: 'auto', marginTop:'4%'}}>
+            <img src={Search} style = {{position: 'absolute', width: '20px', right: '15px', top:'9px', cursor: 'pointer'}}></img>
+            <Inputsearch
+              type="text"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+              }}
+            />
+          </div>
           <ButtonGroup style={{}}>
 
             <SelectBtn
@@ -264,7 +265,7 @@ const ProblemComponent = styled.div`
 `;
 
 const ListView = styled.div`
-  background-color: #ffffff1d;
+  background-color: #6666661d;
   width: 75%;
   height: 62%;
   overflow-y: auto;

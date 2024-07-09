@@ -69,11 +69,11 @@ const Modal = ({ text = '문제명', id = '', component, on = false, event }: an
             ''
           )}
           <DesignedButton1
-            color="cadetblue"
-            style={{ marginBottom: '10px' }}
+            color='rgba(79, 70, 229, 1)'
+            style={{ marginBottom: '40px' }}
             onClick={() => event(false)}
           >
-            닫기
+            <b>닫기</b>
           </DesignedButton1>
         </ModalWrap>
       </Background>
@@ -88,25 +88,34 @@ const Background = styled.div`
   width: 100%;
   height: 100%;
   z-index: 9999;
-  background: #00000055;
+  background: #46464647;
   text-align: center;
+  backdrop-filter: blur(5px);
+  border-radius: 20px;
 `;
 
 const ModalWrap = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
-  color: white;
+  color: #272727;
   transform: translate(-50%, -50%);
-  background: #914fbc;
+  background: #ffffff;
   border-radius: 10px;
-  filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
+  box-shadow: 10px 10px 10px 0 rgba(68, 68, 68, 0.836);
+  /* filter: drop-shadow(5px 5px rgba(255, 255, 255, 0.336)); */
 `;
 
 const Title = styled.p`
-  padding: 1em 0;
+  padding: 10% 0 15%;
   font-weight: bold;
-  font-size: 2em;
+  font-size: 1.6rem;
+  word-wrap: break-word; /* Deprecated, use overflow-wrap instead */
+  word-break: break-word; /* For non-CJK text */
+  overflow-wrap: break-word;
+  width: 300px;
+  margin: auto;
+
 `;
 
 export default Modal;
