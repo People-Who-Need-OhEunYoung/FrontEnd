@@ -8,7 +8,7 @@ import Search from '../../assets/images/search.png';
 import Modal from '../../components/Modal/Modal';
 
 type ItemType = {
-  problemId: number;
+  problemId: string;
   titleKo: string;
   level: number;
   acceptedUserCount: number;
@@ -25,6 +25,7 @@ const ProblemList = () => {
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selected, setSelected] = useState<string>('');
+  const [probId, setProbId] = useState<string>('');
 
   const fetchProbData = async () => {
     try {
@@ -200,7 +201,7 @@ const ProblemList = () => {
                       {' '}
                       {item.problemId}
                     </a>
-                    <TitleBtn onClick={() => {setIsModalOpen(true); setSelected(item.titleKo);}} style={{}}>
+                    <TitleBtn onClick={() => {setIsModalOpen(true); setSelected(item.titleKo); setProbId(item.problemId);}} style={{}}>
                       {' '}
                       {item.titleKo}
                     </TitleBtn>
@@ -212,8 +213,7 @@ const ProblemList = () => {
             </Item>
           ))}
         </ListView>
-
-        <Modal text = {selected} component={1} on={isModalOpen} event={setIsModalOpen}></Modal>
+        <Modal text = {selected} id = {probId} component={1} on={isModalOpen} event={setIsModalOpen}></Modal>
         <ButtonGroup style={{ margin: '1.5%' }}>{renderPageButtons()}</ButtonGroup>
       </MainWrapper>
     </motion.div>

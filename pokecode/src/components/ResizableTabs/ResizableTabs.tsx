@@ -15,6 +15,7 @@ const Container = styled.div`
   border: none;
 `;
 
+
 interface TabProps {
   width: number;
 }
@@ -53,7 +54,11 @@ const Resizer = styled.div`
   }
 `;
 
-const ResizableTabs: React.FC = () => {
+interface ResizableTabsProps {
+  id: string;
+}
+
+const ResizableTabs: React.FC<ResizableTabsProps> = ({id}) => {
   const [width, setWidth] = useState<number>(50);
   const [position, setPosition] = useState({
     x: '50%',
@@ -137,7 +142,7 @@ const ResizableTabs: React.FC = () => {
               overflow: 'auto',
             }}
           >
-            <ProblemText/>
+            <ProblemText id = {id} />
           </div>
           <Home onClick={handleDivClick}>
             <motion.div

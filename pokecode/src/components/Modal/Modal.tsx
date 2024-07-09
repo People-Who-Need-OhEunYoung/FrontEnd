@@ -31,7 +31,7 @@ event(모달에서 자체적으로 닫기 위해 setState function)
    on={isModalOpen} event={setIsModalOpen}
 */
 
-const Modal = ({ text = '문제명', component, on = false, event }: any) => {
+const Modal = ({ text = '문제명', id = '', component, on = false, event }: any) => {
 
   const [nowcomponent, setNowcomponent] = useState(component);
 
@@ -42,7 +42,7 @@ const Modal = ({ text = '문제명', component, on = false, event }: any) => {
           {nowcomponent === 1 ? (
             <>
               <Title>{text}</Title>
-              <ModalContent1 />
+              <ModalContent1 id = {id}/>
             </>
           ) : nowcomponent === 2 ? (
             <>
