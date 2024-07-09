@@ -13,6 +13,7 @@ const UserMain = () => {
     y: '50%',
   });
   const [pooset, setPooset] = useState<{ x: number; y: number }[]>([]);
+
   const controls = useAnimation();
   const controlsPoo = useAnimation();
   const handleDivClick = (e: any) => {
