@@ -55,7 +55,7 @@ const Modal = ({ text = '문제명', component, on = false, event }: any) => {
           ) : nowcomponent === 4 ? (
             <>
               <Title>{'다시 도전해보세요'}</Title>
-              <ModalContent4 event={setNowcompnent} />
+              <ModalContent4 event={setNowcomponent} />
             </>
           ) : nowcomponent === 5 ? (
             <>
