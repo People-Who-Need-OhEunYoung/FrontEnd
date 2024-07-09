@@ -1,43 +1,28 @@
-import styled from 'styled-components';
+import styled, { css }  from 'styled-components';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-//import { Link } from 'react-router-dom';
-import { probSearch } from '../../utils/api/solvedAc';
-import upArrow from '../../assets/images/upArrow.png';
-import downArrow from '../../assets/images/downArrow.png';
-
+import Modal from '../../components/Modal/Modal';
 
 type ItemType = {
   problemId: number;
   titleKo: string;
   level: number;
+  roomTitle: string;
   acceptedUserCount: number;
-  averageTries: number;
+  nickname: string;
 };
 
 const RoomList = () => {
   const [query, setQuery] = useState(' '); // 검색 문자열 쿼리
-  const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
-  const sort = 'id';
-  //const [sort, setSort] = useState<string>('id');
+  const [Room, setRoom] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
   const [page, setPage] = useState<number>(1);
-  const [order, setOrder] = useState<string>('asc');
   const [pageCount, setPageCount] = useState<number>(1);
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
-  const [orderButtonText, setOrderButtonText] = useState<JSX.Element>(<OrderButton src= {upArrow}/>);
-  console.log(orderButtonText);
-  const fetchProbData = async () => {
-    try {
-      const res = await probSearch(query, sort, page, order);
-      return res;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+  const [check, setCheck] = useState('OFF');
 
-  const OrderButtonClick = () => {
-    setOrder((prevText) => (prevText === 'asc' ? 'desc' : 'asc'));
-    setOrderButtonText(order === 'asc' ? <OrderButton  src={downArrow} /> : <OrderButton src={upArrow} /> );
+
+  const switchButton = () => {
+    setCheck(check === 'ON' ? 'OFF' : 'ON');
   };
 
   const renderPageButtons = () => {
@@ -70,24 +55,6 @@ const RoomList = () => {
       );
     };
 
-  useEffect(() => {
-    fetchProbData().then((res) => {
-      const parsedData = res;
-      const page_count = Math.ceil((res.count)/parsedData.items.length);
-      setPageCount(page_count);
-      if (parsedData.count > 0) {
-        const itemsArray = [];
-        for (let i = 0; i < parsedData.items.length; i++) {
-          const item = parsedData.items[i];
-          itemsArray.push(item);
-        }
-        setProblems(itemsArray); // items 상태 업데이트
-        console.log('items: ', problems);
-        console.log('order:', order);
-      }
-    });
-  }, [query, sort, page, order]);
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -98,93 +65,154 @@ const RoomList = () => {
       exit={{ opacity: 0 }}
       style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
     >
-      <Modal>
+      <MainWrapper>
         <SearchWrapper>
           <Titleh1>코드 리뷰 방</Titleh1>
           <SearchHeader>
-            <Inputsearch
-            type="text"
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-            }}
-            />
-            <MakeRoomButton onClick={() => {
-                OrderButtonClick();
-              }}>
+            <div style = {{position:'relative', width:'35%', display: 'flex'}}>
+              <Inputsearch 
+                type="text"
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                }}
+              />
+              <CheckSlide onClick={switchButton} timeck={check} style = {{position: 'absolute' , right: 0, top: '6px'}}>
+                <CheckBtn timeck={check}></CheckBtn>
+                <OnOffText timeck={check}>{check}</OnOffText>
+              </CheckSlide>
+              <CheckDoc>내가 푼 문제만 보기</CheckDoc>
+            </div>
+            <MakeRoomButton onClick={() => {}}>
               방 만들기
             </MakeRoomButton>
           </SearchHeader>
-          
         </SearchWrapper>
 
-        {/* <SortList/> */}
-        <Listheader>
-          <h4 style={{ width: '24px' }}>#</h4>
-          <h4 style={{ width: '30%' }}> 제목 </h4>
-          <h4 style={{ width: '10%' }}> 푼 사람 수 </h4>
-          <h4 style={{ width: '10%' }}> 평균 시도 </h4>
-        </Listheader>
         <ListView>
-          {problems.map((item, index) => (
-            <Item key={index}>
-              {(() => {
-                const link = `https://www.acmicpc.net/problem/${item.problemId}`;
-                const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
-                return (
-                  <ProblemComponent>
-                    <TierImg src={tiersrc} />
-                    <a href={link} style={{ width: '16%' }}>
-                      {' '}
-                      {item.problemId}
-                    </a>
-                    <a href={link} style={{ width: '44%' }}>
-                      {' '}
-                      {item.titleKo}
-                    </a>
-                    <p style={{ width: '23%' }}> {item.acceptedUserCount}</p>
-                    <p style={{ width: '10%' }}> {item.averageTries}</p>
-                  </ProblemComponent>
-                );
-              })()}
-            </Item>
-          ))}
+        
         </ListView>
         <ButtonGroup style={{ margin: '1.5%' }}>{renderPageButtons()}</ButtonGroup>
-      </Modal>
+      </MainWrapper>
     </motion.div>
   );
 };
+
+const CheckSlide = styled.div<{ timeck: string }>`
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #75757c;
+  pointer-events: auto;
+  height: 2rem;
+  line-height: 1.4rem;
+  width: 4.6rem;
+  border-radius: 9999px;
+  background: #ffffff;
+  padding: 0.25rem;
+  margin: 0 10px;
+  cursor: pointer;
+  ${(props: any) =>
+    props.timeck === 'ON' &&
+    css`
+      background: #4ce285;
+    `}
+
+  &:hover + p {
+    display: block;
+  }
+`;
+
+const CheckDoc = styled.p`
+  display: none;
+  position: absolute;
+  width: 130px;
+  padding: 8px;
+  right: -8%;
+  top: 100%;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  background: #646464;
+  color: #fff;
+  font-size: 14px;
+
+  &::after {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    margin-left: -10px;
+    border: solid transparent;
+    border-color: rgba(51, 51, 51, 0);
+    border-bottom-color: #646464;
+    border-width: 10px;
+    pointer-events: none;
+    content: ' ';
+  }
+
+`;
+
+
+const CheckBtn = styled.div<{ timeck: string }>`
+  height: 1rem;
+  width: 1rem;
+  color: white;
+  text-align: right;
+  border-radius: 50%;
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+    backdrop-filter, -webkit-backdrop-filter;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  background: #47c47b;
+  ${(props: any) =>
+    props.timeck === 'ON' &&
+    css`
+      transform: translateX(40px);
+      background: #ffffff;
+    `}
+`;
+
+const OnOffText = styled.span<{ timeck: string }>`
+  position: absolute;
+  color: #4b4b4b;
+  font-weight:bold;
+  top: 0px;
+  right: 7px;
+  ${(props: any) =>
+    props.timeck === 'ON' &&
+    css`
+      transform: translateX(-23px);
+    `}
+`;
 
 const SearchHeader = styled.div`
   display: flex;
   justify-content:center;
 `;
 
-const OrderButton = styled.img`
-  width: 20px;
-  height: 20px;
-  margin-top: 5px;
-  filter: invert(1);
-`;
 
 const MakeRoomButton = styled.button`
   width: 10%;
-  margin: 0 20px;
   padding: 5px;
-  background-color: black;
-  color: white;
-  border-radius: 10px;
-  font-size: 1.2rem;
+  background-color: #4152b3;
+  color: #e6e6e6;
+  border-radius: 20px;
+  font-size: 1.1rem;
+  font-weight:bold;
   border: none;
-  box-shadow: 0 0 10px 7px rgba(255, 255, 255, 0.267);
-  
+  margin-left: 2%;
+
   &:hover {
-    background-color: #4ea7ff52;
+    box-shadow: 0 0 5px 3px rgba(255, 255, 255, 0.267);
   }
 
   &:active {
-    background-color: #4ea7ff52;
+    background-color: #35428b;
   }
 `;
 
@@ -233,11 +261,11 @@ const Listheader = styled.div`
 
 const SearchWrapper = styled.div`
   text-align: center;
-  margin: 10px auto;
+  margin: 3% auto;
 `;
 
 /* 모달 */
-const Modal = styled.div`
+const MainWrapper = styled.div`
   position: absolute;
   transform: translate(-50%, -50%);
   top: 50%;
@@ -246,7 +274,7 @@ const Modal = styled.div`
   height: 100%;
   margin: auto;
   color: white;
-  background: #47464630;
+  background: #111826;
   border-radius: 20px;
   filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
   box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.267);
@@ -262,17 +290,16 @@ const TierImg = styled.img`
 `;
 
 const Inputsearch = styled.input`
-  width: 40%;
-  padding: 5px;
+  width: 100%;
   border-radius: 30px;
   box-shadow: 0 0 15px 7px rgba(255, 255, 255, 0.267);
+  padding: 10px 90px 10px 20px;
 `;
 
 const Titleh1 = styled.p`
   padding: 10px;
   font-size: 1.2rem;
 `;
-
 
 const Item = styled.div`
   border-bottom: 1px solid #8d8d8d;

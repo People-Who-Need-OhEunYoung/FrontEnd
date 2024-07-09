@@ -133,6 +133,7 @@ const TimeLimitCk = styled.div<{ timeck: string }>`
       transform: translateX(40px);
     `}
 `;
+
 const OnOffText = styled.span<{ timeck: string }>`
   position: absolute;
   color: white;

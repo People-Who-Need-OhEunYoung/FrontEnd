@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-//import { Link } from 'react-router-dom';
 import { probSearch } from '../../utils/api/solvedAc';
 import upArrow from '../../assets/images/upArrow.png';
 import downArrow from '../../assets/images/downArrow.png';
+import Search from '../../assets/images/search.png';
+import Modal from '../../components/Modal/Modal';
 
 
 type ItemType = {
@@ -100,16 +101,20 @@ const ProblemList = () => {
       exit={{ opacity: 0 }}
       style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
     >
-      <Modal>
+      <MainWrapper>
         <SearchWrapper>
           <Titleh1>문제 검색</Titleh1>
-          <Inputsearch
-            type="text"
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-            }}
-          />
+          <div style = {{position:'relative', width:'35%', margin: 'auto'}}>
+            <img src={Search} style = {{position: 'absolute', width: '20px', right: '15px', top:'6px', cursor: 'pointer'}}></img>
+            <Inputsearch
+              type="text"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+              }}
+            />
+          </div>
+            
           <ButtonGroup style = {{}}>
             <SelectBtn
               onClick={() => {
@@ -129,7 +134,6 @@ const ProblemList = () => {
             <SelectBtn
               onClick={() => {
                 handleSortClick('title');
-               
               }}
             >
               제목
@@ -199,7 +203,7 @@ const ProblemList = () => {
           ))}
         </ListView>
         <ButtonGroup style={{ margin: '1.5%' }}>{renderPageButtons()}</ButtonGroup>
-      </Modal>
+      </MainWrapper>
     </motion.div>
   );
 };
@@ -227,8 +231,6 @@ const PageButton = styled.button`
   &:active {
     background-color: #4ea7ff52;
   }
-
-
 `;
 
 const ProblemComponent = styled.div`
@@ -257,11 +259,11 @@ const Listheader = styled.div`
 
 const SearchWrapper = styled.div`
   text-align: center;
-  margin: 10px auto;
+  margin: 5px;
 `;
 
 /* 모달 */
-const Modal = styled.div`
+const MainWrapper = styled.div`
   position: absolute;
   transform: translate(-50%, -50%);
   top: 50%;
@@ -270,7 +272,7 @@ const Modal = styled.div`
   height: 100%;
   margin: auto;
   color: white;
-  background: #47464630;
+  background: #111826;
   border-radius: 20px;
   filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
   box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.267);
@@ -286,10 +288,11 @@ const TierImg = styled.img`
 `;
 
 const Inputsearch = styled.input`
-  width: 40%;
-  padding: 5px;
+  width: 100%;
+  padding: 5px 40px 5px 15px;
   border-radius: 30px;
   box-shadow: 0 0 15px 7px rgba(255, 255, 255, 0.267);
+  box-sizing: border-box;
 `;
 
 const Titleh1 = styled.p`
