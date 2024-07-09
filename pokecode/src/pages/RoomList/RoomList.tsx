@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const RoomList = () => {
   const [query, setQuery] = useState(' '); // 검색 문자열 쿼리
@@ -8,7 +9,11 @@ const RoomList = () => {
   const [pageCount, setPageCount] = useState<number>(1);
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
   const [check, setCheck] = useState('OFF');
-  setPageCount(1);
+
+  //임시 빌드 로직 제거 해도 되요 start
+  if (pageCount == null) setPageCount(1);
+  //임시 빌드 로직 제거 해도 되요 end
+
   console.log(page);
   const switchButton = () => {
     setCheck(check === 'ON' ? 'OFF' : 'ON');
@@ -81,8 +86,50 @@ const RoomList = () => {
             <MakeRoomButton onClick={() => {}}>방 만들기</MakeRoomButton>
           </SearchHeader>
         </SearchWrapper>
-
-        <ListView></ListView>
+        <ListView>
+          <div
+            style={{
+              position: 'relative',
+              width: '100%',
+              background: 'white',
+              height: '100px',
+              color: 'black',
+            }}
+          >
+            <img
+              src="https://static.solved.ac/tier_small/5.svg"
+              height={100}
+              alt=""
+            />
+            <Link
+              to={'/room'}
+              style={{
+                height: '100px',
+                position: 'absolute',
+                fontSize: '2em',
+                paddingLeft: '20px',
+              }}
+            >
+              <span style={{ fontWeight: 'bold' }}>1000번 문제</span>
+              <br />
+              문제가 너무 어려워요~!
+            </Link>
+            <div
+              style={{
+                height: '100px',
+                position: 'absolute',
+                fontSize: '2em',
+                paddingLeft: '20px',
+                right: 0,
+                top: 0,
+              }}
+            >
+              방인원:1/4
+              <br />
+              닉네임
+            </div>
+          </div>
+        </ListView>
         <ButtonGroup style={{ margin: '1.5%' }}>
           {renderPageButtons()}
         </ButtonGroup>

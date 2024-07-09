@@ -6,6 +6,7 @@ import 'codemirror/mode/python/python';
 import 'codemirror/theme/dracula.css';
 import './TestEditor.css';
 import { DesignedButton1 } from '../DesignedButton';
+import { Modal } from '../Modal';
 
 const TestEditor = ({ ...props }) => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
@@ -17,6 +18,7 @@ const TestEditor = ({ ...props }) => {
   // 현재까지 타이핑된 문자열의 위치(인덱스)를 나타내는 변수 textCount를 선언합니다.
   const [isTypingPaused, setIsTypingPaused] = useState<boolean>(false);
   // 모든 문자열이 타이핑된 후 일시정지인지 아닌지 여부를 나타내는 변수를 선언합니다.
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (editorContainerRef.current) {
     if (editor == null) {
@@ -102,6 +104,7 @@ const TestEditor = ({ ...props }) => {
 
   return (
     <>
+      <Modal component={5} on={isModalOpen} event={setIsModalOpen}></Modal>
       <div
         style={{ height: '80%' }}
         ref={editorContainerRef}
@@ -125,6 +128,24 @@ const TestEditor = ({ ...props }) => {
         >
           {sequence}
         </pre>
+        <DesignedButton1
+          style={{
+            position: 'absolute',
+            left: '10px',
+            margin: '0',
+            width: '190px',
+            bottom: '-55px',
+            fontSize: '1em',
+            zIndex: 999999,
+          }}
+          onClick={() => {
+            console.log(isModalOpen);
+            setIsModalOpen(true);
+          }}
+          color="#a62df1"
+        >
+          테스트케이스 추가
+        </DesignedButton1>
         <DesignedButton1
           className="submit-button"
           onClick={handleSubmit}
