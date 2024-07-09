@@ -90,6 +90,9 @@ const ProblemList = () => {
         setProblems(itemsArray); // items 상태 업데이트
         console.log('items: ', problems);
       }
+      else {
+        setProblems([]);
+      }
     });
   }, [query, sort, page, order]);
 
@@ -107,7 +110,7 @@ const ProblemList = () => {
         <SearchWrapper>
           {/* <Titleh1>문제 검색</Titleh1> */}
           <div style = {{position:'relative', width:'35%', margin: 'auto', marginTop:'4%'}}>
-            <img src={Search} style = {{position: 'absolute', width: '20px', right: '15px', top:'6px', cursor: 'pointer'}}></img>
+            <img src={Search} style = {{position: 'absolute', width: '20px', right: '15px', top:'9px', cursor: 'pointer'}}></img>
             <Inputsearch
               type="text"
               value={query}
@@ -304,7 +307,7 @@ const TierImg = styled.img`
 
 const Inputsearch = styled.input`
   width: 100%;
-  padding: 10px 40px 5px 15px;
+  padding: 7px 40px 7px 15px;
   border-radius: 30px;
   box-shadow: 0 0 15px 7px rgba(255, 255, 255, 0.267);
   box-sizing: border-box;

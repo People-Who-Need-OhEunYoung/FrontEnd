@@ -45,14 +45,14 @@ const Solvedlist = () => {
           break;
         }
         allProblems = allProblems.concat(solvedProblems);
+        setProblems(allProblems);
         page++;
       } catch (error) {
         console.error('Error fetching data:', error);
         break;
       }
-    }
 
-    setProblems(allProblems);
+    }
     console.log(allProblems);
   };
 

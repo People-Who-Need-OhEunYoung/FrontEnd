@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { DesignedButton1 } from '../DesignedButton';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const ModalContent1 = ({ width, onOff }: any) => {
   const [timeck, setTimeck] = useState('OFF');
   const [time, setTime] = useState<number>(0);
   const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
+
   const switchButton = () => {
     setTimeck(timeck === 'ON' ? 'OFF' : 'ON');
   };
@@ -33,6 +36,10 @@ const ModalContent1 = ({ width, onOff }: any) => {
 
   const handleBlur = () => {
     setIsEditing(false);
+  };
+
+  const gotoSolve = () => {
+    navigate('/problem');
   };
 
   return (
@@ -84,7 +91,7 @@ const ModalContent1 = ({ width, onOff }: any) => {
           +
         </span>
       </TimeSelecter>
-      <DesignedButton1 color="cadetblue" onClick={onOff}>
+      <DesignedButton1 color="cadetblue" onClick={gotoSolve}>
         문제풀기
       </DesignedButton1>
     </div>
