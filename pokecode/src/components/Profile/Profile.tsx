@@ -1,7 +1,6 @@
-// import { useState } from 'react';
 import styled from 'styled-components';
 import defaultImage from '../../assets/images/default_profile.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 export const Profile = ({ ...props }) => {
   const [isHovering, setIsHovering] = useState(false);
@@ -10,6 +9,14 @@ export const Profile = ({ ...props }) => {
   };
   const handleMouseOut = () => {
     setIsHovering(false);
+  };
+
+  const navigate = useNavigate();
+  const logout = () => {
+    debugger;
+    localStorage.removeItem('token');
+    alert('로그아웃했습니다.');
+    navigate('/');
   };
   return (
     <div onMouseLeave={handleMouseOut} onMouseOver={handleMouseOver}>
@@ -37,7 +44,9 @@ export const Profile = ({ ...props }) => {
           <Link to={'/gacha'}>뽑기</Link>
         </MyMenuList>
         <MyMenuList>
-          <Link to={'/'}>로그아웃</Link>
+          <a style={{ cursor: 'pointer' }} onClick={logout}>
+            로그아웃
+          </a>
         </MyMenuList>
       </MyMenu>
       <Logout>

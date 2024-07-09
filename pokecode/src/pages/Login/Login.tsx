@@ -1,7 +1,48 @@
 import styled from 'styled-components';
 import { DesignedButton } from '../../components/DesignedButton';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 const Login = () => {
+  const [id, setId] = useState<string>('');
+  const [pw, setPw] = useState<string>('');
+  type userinfo = {
+    id: string;
+    pw: string;
+  };
+  const navigate = useNavigate();
+  const loginCall = async (params: userinfo) => {
+    await fetch(`http://52.79.197.126/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: params.id, pw: params.pw }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        console.log(res);
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        if (data.result == 'success') {
+          alert('로그인에 성공했습니다.');
+          localStorage.setItem('token', data.token);
+          navigate('/usermain');
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        alert('통신에러');
+        throw error;
+      });
+  };
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -15,10 +56,25 @@ const Login = () => {
         <Modal>
           <H1>LOGIN</H1>
           <form action="">
-            <Input type="text" name="id" placeholder="Username" />
-            <Input type="text" name="password" placeholder="Password" />
+            <Input
+              type="text"
+              name="id"
+              placeholder="Username"
+              value={id}
+              onChange={(e: any) => setId(e.target.value)}
+            />
+            <Input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={pw}
+              onChange={(e: any) => setPw(e.target.value)}
+            />
             <ButtonDiv>
-              <DesignedButton text="로그인" link="/usermain" />
+              <DesignedButton
+                text="로그인"
+                event={() => loginCall({ id: id, pw: pw })}
+              />
               <DesignedButton text="회원가입" link="/signin" />
             </ButtonDiv>
           </form>
