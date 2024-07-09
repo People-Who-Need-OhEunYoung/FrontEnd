@@ -7,7 +7,7 @@ import 'codemirror/theme/dracula.css';
 import './TestEditor.css';
 import { DesignedButton1 } from '../DesignedButton';
 
-const TestEditor = (id: any) => {
+const TestEditor = ({ ...props }) => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
   const [testcaseResult, setTestcaseResult] = useState('');
@@ -84,7 +84,7 @@ const TestEditor = (id: any) => {
             Authorization:
               'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiSldUIiwiaWQiOiJ5c2s5NTI2IiwiaWF0IjoxNzIwNTA2MzgzLCJleHAiOjE3MjA1OTI3ODMsImlzcyI6InlzayJ9.NUPm6Jo0dtRrhmuSz-WJHEJ31r_Z138RHppLZCKq9Wk',
           },
-          body: JSON.stringify({ code: editorContent, bojNumber: id }),
+          body: JSON.stringify({ code: editorContent, bojNumber: props.id }),
         });
 
         if (!response.ok) {
