@@ -23,7 +23,7 @@ const Tab = styled.div<TabProps>`
   border-right: none;
   flex-basis: ${({ width }) => width}%;
   z-index: 100;
-  box-shadow: rgba(156, 156, 156, 0.5) 3px 3px 10px inset;
+  //box-shadow: rgba(156, 156, 156, 0.5) 3px 3px 10px inset;
 `;
 
 const Resizer = styled.div`
@@ -141,10 +141,11 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
     >
       <Container ref={containerRef}>
         <Tab width={width}>
+          <ProblemHeader/>
           <div
             style={{
               width: '100%',
-              height: '80%',
+              height: '70%',
               overflow: 'auto',
             }}
           >
@@ -187,6 +188,14 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
     </motion.div>
   );
 };
+
+const ProblemHeader = styled.div`
+  width: 100%;
+  height: 10%;
+  background-color: black;
+`;
+
+
 const Home = styled.div`
   width: 100%;
   height: 20%;
@@ -194,4 +203,6 @@ const Home = styled.div`
   background: url(${background});
   overflow: hidden;
 `;
+
+
 export default ResizableTabs;

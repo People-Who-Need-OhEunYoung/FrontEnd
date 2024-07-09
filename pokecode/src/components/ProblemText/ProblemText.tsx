@@ -49,7 +49,6 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
             <p  style = {{margin: '10px 0'}} dangerouslySetInnerHTML={{ __html: parseDescription(problemDetails.description) }} />
           </InoutWrap>
 
-         
           <InoutWrap>
             <TextBox>입력</TextBox>
             <Hr/>
@@ -63,7 +62,6 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
           </InoutWrap>
           
          <InoutWrap>
-            
             {problemDetails.samples.map((sample, index) => (
               <div key={index}>
                 <TextBox> 예시 {index + 1} </TextBox>
@@ -88,11 +86,15 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
   );
 };
 
+
+
 const ProblemWrap = styled.div`
   box-sizing: border-box;
+  height: 70%;
   padding: 1% 6%;
   color: #ffffff;
   font-size: 1.1rem;
+  overflow: auto;
 `;
 
 const InoutWrap = styled.div`

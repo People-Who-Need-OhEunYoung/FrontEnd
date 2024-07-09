@@ -20,7 +20,7 @@ const Solvedlist = () => {
     try {
       const res = await getTop100(query);
       setUserData(JSON.stringify(res));
-      setQuery('jade0179');
+
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -42,6 +42,7 @@ const Solvedlist = () => {
         if (solvedProblems.length === 0) {
           break;
         }
+        
         allProblems = allProblems.concat(solvedProblems);
         setProblems(allProblems);
         page++;
@@ -49,13 +50,18 @@ const Solvedlist = () => {
         console.error('Error fetching data:', error);
         break;
       }
+      
     }
-    console.log(allProblems);
+    
   };
 
   useEffect(() => {
-    fetchUserData();
-    fetchCrawlData();
+    setQuery('jade0179');
+    if(query != '') {
+      fetchUserData();
+      fetchCrawlData();
+    }
+    
     if (userData) {
       const parsedData = JSON.parse(userData);
       if (parsedData.count > 0) {
@@ -65,10 +71,9 @@ const Solvedlist = () => {
           itemsArray.push(item);
         }
         setItems(itemsArray); // items 상태 업데이트
-        console.log('items: ', items);
       }
     }
-  }, [userData, query]);
+  }, [userData, query, problems]);
 
   return (
     <Wrap>
