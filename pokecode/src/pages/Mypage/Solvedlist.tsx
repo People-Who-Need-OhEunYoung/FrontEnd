@@ -23,8 +23,7 @@ const Solvedlist = () => {
     try {
       const res = await getTop100(query);
       setUserData(JSON.stringify(res));
-      return res;
-      
+
     } catch (error) {
       console.error('Error fetching data:', error);
     }
