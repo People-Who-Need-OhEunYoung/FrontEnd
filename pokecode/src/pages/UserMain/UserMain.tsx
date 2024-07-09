@@ -21,7 +21,7 @@ const UserMain = () => {
   const [pooset, setPooset] = useState<{ x: number; y: number }[]>([]);
   const [user, setUser] = useState({
     credit: 0,
-    curPokeId: 1,
+    curPokeId: 0,
     nickName: '기본값',
     result: '기본값',
   });
@@ -142,9 +142,11 @@ const UserMain = () => {
             <Pokemon
               width={'100%'}
               src={
-                'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-                user.curPokeId +
-                '.gif'
+                user.curPokeId == 0
+                  ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
+                  : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
+                    user.curPokeId +
+                    '.gif'
               }
             ></Pokemon>
           </motion.div>
