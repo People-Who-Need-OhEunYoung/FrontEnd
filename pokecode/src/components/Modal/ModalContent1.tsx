@@ -43,7 +43,7 @@ const ModalContent1 = ({ width, onOff, id }: any) => {
   };
 
   return (
-    <div style={{ width: '400px' }}>
+    <div style={{ width: '400px'}}>
       <div
         style={{
           width: width,
@@ -91,12 +91,25 @@ const ModalContent1 = ({ width, onOff, id }: any) => {
           +
         </span>
       </TimeSelecter>
-      <DesignedButton1 color="cadetblue" onClick={() => gotoSolve(id)}>
-        문제풀기
-      </DesignedButton1>
+      <SolveBtn onClick={() => gotoSolve(id)}>
+        <b>문제풀기</b>
+      </SolveBtn>
     </div>
   );
 };
+
+const SolveBtn = styled.button`
+  position: relative;
+  width: 55%;
+  margin: 10px 20%;
+  padding: 0.3rem 1rem;
+  font-size: 1.2em;
+  border-radius: 30px;
+  background-color: white;
+  border: none;
+  box-sizing: border-box;
+  cursor: pointer;
+`;
 
 const TimeLimit = styled.div<{ timeck: string }>`
   position: relative;
@@ -110,7 +123,7 @@ const TimeLimit = styled.div<{ timeck: string }>`
   line-height: 1.5rem;
   width: 4rem;
   border-radius: 9999px;
-  background: #aaa;
+  background: #6e6e6e;
   padding: 0.25rem;
   margin: 0 10px;
   cursor: pointer;
@@ -153,9 +166,11 @@ const OnOffText = styled.span<{ timeck: string }>`
 `;
 const TimeSelecter = styled.ul<{ timeck: string }>`
   display: none;
-  background: rgba(79, 70, 229, 1);
-
-  width: 45%;
+  background: #f0f0f0;
+  color: black;
+  font-weight: bold;
+  font-size: 1.2rem;
+  width: 50%;
   margin: 0 auto 50px;
   height: 40px;
   line-height: 40px;
