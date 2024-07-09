@@ -28,7 +28,7 @@ const Header = () => {
 export const Header2 = () => {
   const navigate = useNavigate();
   const loginChecker = async () => {
-    await fetch(`http://${import.meta.env.VITE_APP_IP}/tokenTest`, {
+    await fetch(`${import.meta.env.VITE_APP_IP}/tokenTest`, {
       method: 'POST',
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -39,11 +39,11 @@ export const Header2 = () => {
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
-        console.log(res);
+        //console.log(res);
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         if (data.result == 'success') {
         } else {
           confirm('세션이 만료되었습니다. 현재화면을 유지하시겠습니까?')
@@ -53,7 +53,9 @@ export const Header2 = () => {
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
-        alert('통신에러');
+        alert('통신에러로 로그인화면으로 돌아갑니다');
+        localStorage.removeItem('token');
+        navigate('/login');
         throw error;
       });
   };
@@ -104,7 +106,7 @@ export const Header2 = () => {
 export const Header3 = () => {
   const navigate = useNavigate();
   const loginChecker = async () => {
-    await fetch(`http://${import.meta.env.VITE_APP_IP}/tokenTest`, {
+    await fetch(`${import.meta.env.VITE_APP_IP}/tokenTest`, {
       method: 'POST',
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token'),

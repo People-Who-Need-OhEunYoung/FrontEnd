@@ -1,11 +1,6 @@
 import { useState, useRef } from 'react';
 import styled from 'styled-components';
-import {
-  motion,
-  useAnimation,
-  useDragControls,
-  useMotionValue,
-} from 'framer-motion';
+import { motion, useAnimation, useDragControls } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
 import { TestSharedEditor } from '../TestSharedEditor';
 import background from '../../assets/images/background.jpg';

@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { probSearch } from '../../utils/api/solvedAc';
 import upArrow from '../../assets/images/upArrow.png';
 import downArrow from '../../assets/images/downArrow.png';
-
 
 type ItemType = {
   problemId: number;
@@ -23,8 +22,11 @@ const RoomList = () => {
   const [order, setOrder] = useState<string>('asc');
   const [pageCount, setPageCount] = useState<number>(1);
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
-  const [orderButtonText, setOrderButtonText] = useState<JSX.Element>(<OrderButton src= {upArrow}/>);
-
+  const [orderButtonText, setOrderButtonText] = useState<JSX.Element>(
+    <OrderButton src={upArrow} />
+  );
+  console.log(orderButtonText);
+  setSort('id');
   const fetchProbData = async () => {
     try {
       const res = await probSearch(query, sort, page, order);
@@ -36,43 +38,49 @@ const RoomList = () => {
 
   const OrderButtonClick = () => {
     setOrder((prevText) => (prevText === 'asc' ? 'desc' : 'asc'));
-    setOrderButtonText(order === 'asc' ? <OrderButton  src={downArrow} /> : <OrderButton src={upArrow} /> );
+    setOrderButtonText(
+      order === 'asc' ? (
+        <OrderButton src={downArrow} />
+      ) : (
+        <OrderButton src={upArrow} />
+      )
+    );
   };
 
   const renderPageButtons = () => {
-      const buttons = [];
-      const startPage = currentPageGroup * 10 + 1;
-      const endPage = Math.min(startPage + 9, pageCount);
+    const buttons = [];
+    const startPage = currentPageGroup * 10 + 1;
+    const endPage = Math.min(startPage + 9, pageCount);
 
-      for (let i = startPage; i <= endPage; i++) {
-        buttons.push(
-          <PageButton key={i} onClick={() => setPage(i)}>
-            {i}
-          </PageButton>
-        );
-      }
-
-      return (
-        <>
-          {currentPageGroup > 0 && (
-            <PageButton onClick={() => setCurrentPageGroup(currentPageGroup - 1)}>
-              &lt;
-            </PageButton>
-          )}
-          {buttons}
-          {endPage < pageCount && (
-            <PageButton onClick={() => setCurrentPageGroup(currentPageGroup + 1)}>
-              &gt;
-            </PageButton>
-          )}
-        </>
+    for (let i = startPage; i <= endPage; i++) {
+      buttons.push(
+        <PageButton key={i} onClick={() => setPage(i)}>
+          {i}
+        </PageButton>
       );
-    };
+    }
+
+    return (
+      <>
+        {currentPageGroup > 0 && (
+          <PageButton onClick={() => setCurrentPageGroup(currentPageGroup - 1)}>
+            &lt;
+          </PageButton>
+        )}
+        {buttons}
+        {endPage < pageCount && (
+          <PageButton onClick={() => setCurrentPageGroup(currentPageGroup + 1)}>
+            &gt;
+          </PageButton>
+        )}
+      </>
+    );
+  };
 
   useEffect(() => {
     fetchProbData().then((res) => {
       const parsedData = res;
-      const page_count = Math.ceil((res.count)/parsedData.items.length);
+      const page_count = Math.ceil(res.count / parsedData.items.length);
       setPageCount(page_count);
       if (parsedData.count > 0) {
         const itemsArray = [];
@@ -102,19 +110,20 @@ const RoomList = () => {
           <Titleh1>코드 리뷰 방</Titleh1>
           <SearchHeader>
             <Inputsearch
-            type="text"
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-            }}
+              type="text"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+              }}
             />
-            <MakeRoomButton onClick={() => {
+            <MakeRoomButton
+              onClick={() => {
                 OrderButtonClick();
-              }}>
+              }}
+            >
               방 만들기
             </MakeRoomButton>
           </SearchHeader>
-          
         </SearchWrapper>
 
         {/* <SortList/> */}
@@ -149,7 +158,9 @@ const RoomList = () => {
             </Item>
           ))}
         </ListView>
-        <ButtonGroup style={{ margin: '1.5%' }}>{renderPageButtons()}</ButtonGroup>
+        <ButtonGroup style={{ margin: '1.5%' }}>
+          {renderPageButtons()}
+        </ButtonGroup>
       </Modal>
     </motion.div>
   );
@@ -157,7 +168,7 @@ const RoomList = () => {
 
 const SearchHeader = styled.div`
   display: flex;
-  justify-content:center;
+  justify-content: center;
 `;
 
 const OrderButton = styled.img`
@@ -177,7 +188,7 @@ const MakeRoomButton = styled.button`
   font-size: 1.2rem;
   border: none;
   box-shadow: 0 0 10px 7px rgba(255, 255, 255, 0.267);
-  
+
   &:hover {
     background-color: #4ea7ff52;
   }
@@ -187,7 +198,6 @@ const MakeRoomButton = styled.button`
   }
 `;
 
-
 const PageButton = styled.button`
   width: 30px;
   margin-right: 10px;
@@ -196,7 +206,7 @@ const PageButton = styled.button`
   border-radius: 10px;
   font-size: 1rem;
   border: none;
-  
+
   &:hover {
     background-color: #4ea7ff52;
   }
@@ -272,7 +282,6 @@ const Titleh1 = styled.p`
   font-size: 1.2rem;
 `;
 
-
 const Item = styled.div`
   border-bottom: 1px solid #8d8d8d;
   padding: 10px;
@@ -282,31 +291,6 @@ const ButtonGroup = styled.div`
   border-radius: 10px;
   display: flex;
   justify-content: center;
-`;
-
-const SelectBtn = styled.button`
-  color: white;
-  background-color: transparent;
-  padding: 4px 10px;
-  border: none;
-  border-radius: 15px;
-  outline: none;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  line-height: 1.75;
-  text-transform: uppercase;
-  transition: background-color 0.3s;
-  margin: 7px;
-
-  &:hover {
-    background-color: #4ea7ff52;
-  }
-
-  &:active {
-    background-color: #4ea7ff52;
-  }
-
 `;
 
 export default RoomList;

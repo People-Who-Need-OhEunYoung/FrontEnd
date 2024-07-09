@@ -6,6 +6,12 @@ import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
 import { MainWrapper } from '../../components/MainWrapper';
 import poo from '../../assets/images/poo.png';
+import {
+  userInfo,
+  pokemonName,
+  getPooCount,
+  removePoo,
+} from '../../utils/api/api';
 
 const UserMain = () => {
   const [position, setPosition] = useState({
@@ -13,7 +19,14 @@ const UserMain = () => {
     y: '50%',
   });
   const [pooset, setPooset] = useState<{ x: number; y: number }[]>([]);
-
+  const [user, setUser] = useState({
+    credit: 0,
+    curPokeId: 1,
+    nickName: '기본값',
+    result: '기본값',
+  });
+  const [pokemonname, setPokemonname] = useState('');
+  //const [pooCount, setPooCount] = useState(0);
   const controls = useAnimation();
   const controlsPoo = useAnimation();
   const handleDivClick = (e: any) => {
@@ -30,7 +43,26 @@ const UserMain = () => {
 
   const sleep = (ms: any) => new Promise((resolve) => setTimeout(resolve, ms));
 
+  const pooCount = () => {
+    getPooCount().then((res) => {
+      let newPositions: any = [];
+      for (let i = 0; i < res.poo; i++) {
+        const x = Math.random() * 90;
+        const y = Math.random() * 50 + 40;
+        newPositions.push({ x, y });
+      }
+      if (res.poo !== 0 && pooset.length === 0) setPooset(newPositions);
+    });
+  };
+  const userSet = async () => {
+    setUser(await userInfo());
+  };
+  const pokemonnameSet = async (name: number) => {
+    setPokemonname(await pokemonName(name));
+  };
   useEffect(() => {
+    userSet().then(() => pokemonnameSet(user.curPokeId));
+    pooCount();
     const animateRandomly = async () => {
       while (true) {
         // 무작위 위치로 애니메이션 시작
@@ -55,16 +87,8 @@ const UserMain = () => {
       }
     };
     animateRandomly();
-  }, [controls]);
+  }, [controls, pokemonname]);
 
-  let pooCount = 1;
-  let newPositions: any = [];
-  for (let i = 0; i < pooCount; i++) {
-    const x = Math.random() * 90;
-    const y = Math.random() * 50 + 40;
-    newPositions.push({ x, y });
-  }
-  if (pooCount != 0 && pooset.length == 0) setPooset(newPositions);
   const handlePooClick = () => {
     controlsPoo.start({
       transform: 'translateY(-30%)',
@@ -72,7 +96,6 @@ const UserMain = () => {
       transition: { duration: 1 },
     });
   };
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -118,11 +141,15 @@ const UserMain = () => {
           >
             <Pokemon
               width={'100%'}
-              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/shiny/45.gif"
+              src={
+                'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
+                user.curPokeId +
+                '.gif'
+              }
             ></Pokemon>
           </motion.div>
           <PokeNameWrap>
-            <PokeName>게노세크트</PokeName>
+            <PokeName>{pokemonname}</PokeName>
           </PokeNameWrap>
           <LevelWrap>
             <Level>
@@ -134,7 +161,13 @@ const UserMain = () => {
             </Level>
           </LevelWrap>
           <ButtonWrap>
-            <Button to={''} onClick={handlePooClick}>
+            <Button
+              to={''}
+              onClick={() => {
+                handlePooClick();
+                removePoo();
+              }}
+            >
               <svg
                 fill="rgb(212, 134, 207)"
                 width={40}

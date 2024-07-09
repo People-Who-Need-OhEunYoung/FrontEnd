@@ -1,7 +1,7 @@
 import React, { useState, useRef, ChangeEvent, useEffect } from 'react';
 import styled from 'styled-components';
-import defaultImage from '../../assets/images/default_profile.png'
-import { useNavigate  } from 'react-router-dom';
+import defaultImage from '../../assets/images/default_profile.png';
+import { useNavigate } from 'react-router-dom';
 import { userSearch } from '../../utils/api/solvedAc';
 
 type ImageState = {
@@ -26,14 +26,17 @@ const Uploader = () => {
   const [solvedCount, setsolvedCount] = useState(0); // 페이지 번호, 초기값 0
   const [tierImg, settierImg] = useState('');
 
+  //빌드를 위해 임시 셋
+
   useEffect(() => {
+    setQuery('jade0179');
     userSearch(query)
-    .then((res) => {
-      setUserData(JSON.stringify(res)); // 받아온 데이터를 state에 저장
-    })
-    .catch((error) => {
-      console.error('Error fetching data:', error); // 에러 처리
-    });
+      .then((res) => {
+        setUserData(JSON.stringify(res)); // 받아온 데이터를 state에 저장
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error); // 에러 처리
+      });
 
     if (userData) {
       const parsedData = JSON.parse(userData);
@@ -86,7 +89,9 @@ const Uploader = () => {
 
   return (
     <Uploaderwrapper>
-      <input type="file" accept="image/*"
+      <input
+        type="file"
+        accept="image/*"
         onChange={previewImage}
         onClick={(e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
           const target = e.target as HTMLInputElement;
@@ -97,11 +102,11 @@ const Uploader = () => {
       />
       <MainContainer>
         <UploadImageContainer>
-          <TierImg src = {tierImg}/>
+          <TierImg src={tierImg} />
           <Image src={image.preview_URL} alt="Preview" />
           <Button onClick={() => inputRef.current?.click()}>
             이미지 업로드
-          </Button> 
+          </Button>
         </UploadImageContainer>
         <InfoContainer>
           <Text>닉네임: {query} </Text>
@@ -125,9 +130,9 @@ const Uploaderwrapper = styled.div`
 
 const Button = styled.button`
   background-color: transparent;
-  border: 2px solid white; /* 2px 두께의 흰색 실선 테두리 */;
+  border: 2px solid white; /* 2px 두께의 흰색 실선 테두리 */
   color: #ffffff;
-  padding: 4px 35px ;
+  padding: 4px 35px;
   border-radius: 20px;
   outline: none;
   cursor: pointer;
@@ -201,8 +206,8 @@ const Submit = styled.div`
 const SubmitBtn = styled.button`
   background-color: transparent;
   color: #ffffff;
-  padding: 4px 70px ;
-  border: 2px solid white; /* 2px 두께의 흰색 실선 테두리 */;
+  padding: 4px 70px;
+  border: 2px solid white; /* 2px 두께의 흰색 실선 테두리 */
   border-radius: 15px;
   outline: none;
   cursor: pointer;
@@ -228,12 +233,11 @@ const SubmitBtn = styled.button`
 `;
 
 const TierImg = styled.img`
-  position: absolute; //나는 부모에게 빌붙겠다. 
-  left : 50%;
+  position: absolute; //나는 부모에게 빌붙겠다.
+  left: 50%;
   bottom: 50px;
   transform: translateX(-50%);
   width: 30px;
 `;
-
 
 export default Uploader;
