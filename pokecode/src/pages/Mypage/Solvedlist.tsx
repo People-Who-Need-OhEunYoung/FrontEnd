@@ -11,16 +11,18 @@ type ItemType = {
 };
 
 const Solvedlist = () => {
-  const [query, setQuery] = useState('jade0179'); // 사용자 검색 쿼리
+  const [query, setQuery] = useState(''); // 사용자 검색 쿼리
   const [userData, setUserData] = useState(''); // API로부터 받은 데이터
   const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
   const [visibleList, setVisibleList] = useState<string>('list1'); // Manage which list is visible
   const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
-  setQuery('jade0179');
+
   const fetchUserData = async () => {
     try {
       const res = await getTop100(query);
       setUserData(JSON.stringify(res));
+      return res;
+      
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -42,6 +44,7 @@ const Solvedlist = () => {
         if (solvedProblems.length === 0) {
           break;
         }
+        
         allProblems = allProblems.concat(solvedProblems);
         setProblems(allProblems);
         page++;
@@ -49,13 +52,18 @@ const Solvedlist = () => {
         console.error('Error fetching data:', error);
         break;
       }
+      
     }
-    console.log(allProblems);
+    
   };
 
   useEffect(() => {
-    fetchUserData();
-    fetchCrawlData();
+    setQuery('jade0179');
+    if(query != '') {
+      fetchUserData();
+      fetchCrawlData();
+    }
+    
     if (userData) {
       const parsedData = JSON.parse(userData);
       if (parsedData.count > 0) {
@@ -65,10 +73,9 @@ const Solvedlist = () => {
           itemsArray.push(item);
         }
         setItems(itemsArray); // items 상태 업데이트
-        console.log('items: ', items);
       }
     }
-  }, [userData, query]);
+  }, [userData, query, problems]);
 
   return (
     <Wrap>

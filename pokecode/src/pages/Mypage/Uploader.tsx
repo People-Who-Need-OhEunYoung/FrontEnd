@@ -29,7 +29,6 @@ const Uploader = () => {
   //빌드를 위해 임시 셋
 
   useEffect(() => {
-    setQuery('jade0179');
     userSearch(query)
       .then((res) => {
         setUserData(JSON.stringify(res)); // 받아온 데이터를 state에 저장

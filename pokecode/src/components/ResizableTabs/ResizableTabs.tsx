@@ -26,7 +26,7 @@ const Tab = styled.div<TabProps>`
   border-right: none;
   flex-basis: ${({ width }) => width}%;
   z-index: 100;
-  box-shadow: rgba(156, 156, 156, 0.5) 3px 3px 10px inset;
+  //box-shadow: rgba(156, 156, 156, 0.5) 3px 3px 10px inset;
 `;
 
 const Resizer = styled.div`
@@ -135,14 +135,15 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({id}) => {
     >
       <Container ref={containerRef}>
         <Tab width={width}>
+          <ProblemHeader/>
           <div
             style={{
               width: '100%',
-              height: '80%',
+              height: '70%',
               overflow: 'auto',
             }}
           >
-            <ProblemText id = {id} />
+          <ProblemText id = {id} />
           </div>
           <Home onClick={handleDivClick}>
             <motion.div
@@ -175,23 +176,29 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({id}) => {
         >
           <div style={{ background: 'green', width: '100%', height: '80%' }}>
             <TestEditor />
-          
           </div>
           <div
             style={{
-              background: 'yellow',
+              background: 'black',
               width: '100%',
               height: '20%',
               overflow: 'hidden',
             }}
           >
-            <img src={terminal} width={'100%'} />{' '}
           </div>
         </div>
       </Container>
     </motion.div>
   );
 };
+
+const ProblemHeader = styled.div`
+  width: 100%;
+  height: 10%;
+  background-color: black;
+`;
+
+
 const Home = styled.div`
   width: 100%;
   height: 20%;
@@ -199,4 +206,6 @@ const Home = styled.div`
   background: url(${background});
   overflow: hidden;
 `;
+
+
 export default ResizableTabs;
