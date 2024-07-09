@@ -35,7 +35,7 @@ const Signin = () => {
     }
   };
   const signinChecker = async (params: any) => {
-    await fetch(`http://${import.meta.env.VITE_APP_IP}/signUp`, {
+    await fetch(`${import.meta.env.VITE_APP_IP}/signUp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

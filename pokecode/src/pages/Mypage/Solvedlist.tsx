@@ -43,14 +43,13 @@ const Solvedlist = () => {
           break;
         }
         allProblems = allProblems.concat(solvedProblems);
+        setProblems(allProblems);
         page++;
       } catch (error) {
         console.error('Error fetching data:', error);
         break;
       }
     }
-
-    setProblems(allProblems);
     console.log(allProblems);
   };
 
@@ -147,6 +146,11 @@ const ListView = styled.div`
   flex-direction: column;
 `;
 
+// const List_title = styled.p`
+//   color: white;
+//   margin-bottom: 10px;
+//   font-size: 1.2rem;
+// `;
 // const List_title = styled.p`
 //   color: white;
 //   margin-bottom: 10px;

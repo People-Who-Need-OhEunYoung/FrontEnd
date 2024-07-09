@@ -4,8 +4,10 @@ import { motion, useAnimation } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
 import { TestSharedEditor } from '../TestSharedEditor';
 import background from '../../assets/images/background.jpg';
-import problem1011 from '../../assets/images/1011번-Fly-me-to-the-Alpha-Centauri.png';
 import terminal from '../../assets/images/터미널.png';
+import { ProblemText } from '../ProblemText';
+import { TestEditor } from '../TestEditor';
+
 const Container = styled.div`
   display: flex;
   align-items: center;
@@ -134,7 +136,7 @@ const ResizableTabs: React.FC = () => {
               overflow: 'auto',
             }}
           >
-            <img src={problem1011} width={'100%'} alt="" />
+            <ProblemText/>
           </div>
           <Home onClick={handleDivClick}>
             <motion.div
@@ -166,7 +168,8 @@ const ResizableTabs: React.FC = () => {
           }}
         >
           <div style={{ background: 'green', width: '100%', height: '80%' }}>
-            <TestSharedEditor />
+            <TestEditor />
+          
           </div>
           <div
             style={{

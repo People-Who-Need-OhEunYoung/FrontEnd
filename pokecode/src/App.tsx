@@ -87,7 +87,7 @@ function App() {
                 <>
                   <Header3 />
                   <Problem />
-                  <Footer />
+                  <Footer1 />
                 </>
               }
             />

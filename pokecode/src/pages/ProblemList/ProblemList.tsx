@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { probSearch } from '../../utils/api/solvedAc';
 import upArrow from '../../assets/images/upArrow.png';
 import downArrow from '../../assets/images/downArrow.png';
+import Search from '../../assets/images/search.png';
+import Modal from '../../components/Modal/Modal';
 
 type ItemType = {
   problemId: number;
@@ -21,6 +23,8 @@ const ProblemList = () => {
   const [order, setOrder] = useState<string>('asc');
   const [pageCount, setPageCount] = useState<number>(1);
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selected, setSelected] = useState<string>('');
 
   const fetchProbData = async () => {
     try {
@@ -84,6 +88,9 @@ const ProblemList = () => {
         setProblems(itemsArray); // items 상태 업데이트
         console.log('items: ', problems);
       }
+      else {
+        setProblems([]);
+      }
     });
   }, [query, sort, page, order]);
 
@@ -97,8 +104,9 @@ const ProblemList = () => {
       exit={{ opacity: 0 }}
       style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
     >
-      <Modal>
+      <MainWrapper>
         <SearchWrapper>
+
           <Titleh1>문제 검색</Titleh1>
           <Inputsearch
             type="text"
@@ -108,6 +116,7 @@ const ProblemList = () => {
             }}
           />
           <ButtonGroup style={{}}>
+
             <SelectBtn
               onClick={() => {
                 handleSortClick('id');
@@ -189,25 +198,36 @@ const ProblemList = () => {
                       {' '}
                       {item.problemId}
                     </a>
-                    <a href={link} style={{ width: '44%' }}>
+                    <TitleBtn onClick={() => {setIsModalOpen(true); setSelected(item.titleKo);}} style={{}}>
                       {' '}
                       {item.titleKo}
-                    </a>
-                    <p style={{ width: '23%' }}> {item.acceptedUserCount}</p>
-                    <p style={{ width: '10%' }}> {item.averageTries}</p>
+                    </TitleBtn>
+                    <p style={{ width: '52%', textAlign: 'end' }}> {item.acceptedUserCount}</p>
+                    <p style={{ width: '21.5%', textAlign: 'end'  }}> {item.averageTries}</p>
                   </ProblemComponent>
                 );
               })()}
             </Item>
           ))}
         </ListView>
-        <ButtonGroup style={{ margin: '1.5%' }}>
-          {renderPageButtons()}
-        </ButtonGroup>
-      </Modal>
+
+        <Modal text = {selected} component={1} on={isModalOpen} event={setIsModalOpen}></Modal>
+        <ButtonGroup style={{ margin: '1.5%' }}>{renderPageButtons()}</ButtonGroup>
+      </MainWrapper>
     </motion.div>
   );
 };
+
+
+const TitleBtn = styled.button`
+  position: absolute;
+  background-color: transparent;
+  color: white;
+  border: none;
+  width: 60%; 
+  text-align:left;
+  left: 20%;
+`;
 
 const OrderButton = styled.img`
   width: 20px;
@@ -238,6 +258,7 @@ const ProblemComponent = styled.div`
   display: flex;
   margin: auto;
   align-items: center;
+  position: relative;
 `;
 
 const ListView = styled.div`
@@ -260,11 +281,11 @@ const Listheader = styled.div`
 
 const SearchWrapper = styled.div`
   text-align: center;
-  margin: 10px auto;
+  margin: 5px;
 `;
 
 /* 모달 */
-const Modal = styled.div`
+const MainWrapper = styled.div`
   position: absolute;
   transform: translate(-50%, -50%);
   top: 50%;
@@ -273,7 +294,7 @@ const Modal = styled.div`
   height: 100%;
   margin: auto;
   color: white;
-  background: #47464630;
+  background: #111826;
   border-radius: 20px;
   filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
   box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.267);
@@ -289,10 +310,11 @@ const TierImg = styled.img`
 `;
 
 const Inputsearch = styled.input`
-  width: 40%;
-  padding: 5px;
+  width: 100%;
+  padding: 7px 40px 7px 15px;
   border-radius: 30px;
   box-shadow: 0 0 15px 7px rgba(255, 255, 255, 0.267);
+  box-sizing: border-box;
 `;
 
 const Titleh1 = styled.p`
