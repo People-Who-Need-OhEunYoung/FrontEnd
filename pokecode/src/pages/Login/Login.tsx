@@ -4,16 +4,18 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+type userinfo = {
+  id: string;
+  pw: string;
+};
+
 const Login = () => {
   const [id, setId] = useState<string>('');
   const [pw, setPw] = useState<string>('');
-  type userinfo = {
-    id: string;
-    pw: string;
-  };
+
   const navigate = useNavigate();
   const loginCall = async (params: userinfo) => {
-    await fetch(`http://52.79.197.126/login`, {
+    await fetch(`http://${import.meta.env.VITE_APP_IP}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -43,6 +45,7 @@ const Login = () => {
         throw error;
       });
   };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
