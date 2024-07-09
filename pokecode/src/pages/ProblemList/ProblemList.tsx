@@ -78,8 +78,8 @@ const ProblemList = () => {
   useEffect(() => {
     fetchProbData().then((res) => {
       const parsedData = res;
+      const page_count = Math.ceil(res.count/parsedData.items.length);
       console.log(res);
-      const page_count = Math.ceil((res.count)/parsedData.items.length);
 
       setPageCount(page_count);
       if (parsedData.count > 0) {
