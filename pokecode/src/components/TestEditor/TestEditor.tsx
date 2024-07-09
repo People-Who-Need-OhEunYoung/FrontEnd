@@ -4,12 +4,11 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/theme/dracula.css';
 
-import './TestSharedEditor.css';
+import './TestEditor.css';
 
 const TestEditor: React.FC = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-
 
     if (editorContainerRef.current) {
       const editor = CodeMirror(editorContainerRef.current, {
@@ -40,7 +39,6 @@ const TestEditor: React.FC = () => {
 
   return (
     <>
-      {/* <div ref={userIdRef} className="user-id"></div>{' '} */}
       <div ref={editorContainerRef} className="editor-container"></div>
     </>
   );
