@@ -15,7 +15,7 @@ const Login = () => {
 
   const navigate = useNavigate();
   const loginCall = async (params: userinfo) => {
-    await fetch(`http://${import.meta.env.VITE_APP_IP}/login`, {
+    await fetch(`${import.meta.env.VITE_APP_IP}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -42,6 +42,7 @@ const Login = () => {
       .catch((error) => {
         console.error('Error fetching data:', error);
         alert('통신에러');
+        navigate('/login');
         throw error;
       });
   };
