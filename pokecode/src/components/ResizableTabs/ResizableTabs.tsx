@@ -58,7 +58,7 @@ interface ResizableTabsProps {
 const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const [width, setWidth] = useState<number>(50);
   const [position, setPosition] = useState({
-    x: '50%',
+    x: '80%',
   });
   const [user, setUser] = useState({
     credit: 0,
