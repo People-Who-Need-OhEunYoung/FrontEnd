@@ -57,29 +57,26 @@ app.get('/problem/:id', (req, res) => {
       });
 
       response.on('end', () => {
-        console.log('end:', body);
         const $ = cheerio.load(body);
         const title = $('#problem_title').text();
         const problemBody = $('#problem-body');
-        const description = problemBody
-          .find('#problem_description')
-          .text()
-          .trim();
-        const input = problemBody.find('#problem_input').text();
-        const output = problemBody.find('#problem_output').text();
+        const description = problemBody.find('#problem_description').html();
+        const input = problemBody.find('#problem_input').html();
+        const output = problemBody.find('#problem_output').html();
         const samples = [];
         const imgs = [];
 
         $('[id*=sample-input]').each((i, el) => {
-          const input = $(el).text();
+          const input = $(el).html();
           const output = $(el)
             .parent()
             .parent()
             .next()
             .find('[id*=sample-output]')
-            .text();
+            .html();
           samples[i] = { input, output };
         });
+        console.log(samples);
 
         problemBody
           .find('#problem_description')
