@@ -9,6 +9,7 @@ interface ResizableTabsProps {
 
 const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
   const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(null);
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
 
   const fetchCrawlData = async () => {
 
@@ -24,8 +25,8 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
   const parseDescription = (description : string) => {
     // '$text$'를 '<i>text</i>'로 변환
     const italicBoldText = description.replace(/\$(.*?)\$/g, '<i><b>$1</b></i>');
-    const imgWithWidth = italicBoldText.replace(/<p(.*?)>/g, '<p$1 style="padding: 15px 0;" />');
-    console.log(imgWithWidth)
+    const pPadding = italicBoldText.replace(/<p(.*?)>/g, '<p$1 style="padding: 15px 0;" />');
+    const imgWithWidth = pPadding.replace(/<img(.*?)>/g, '<img$1 style=" width: 65%" />')
     return imgWithWidth;
     
   };
@@ -35,18 +36,48 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
       if (res) {
         setProblemDetails(res);
       }
-      console.log(res);
     });
-  }, [])
+
+    // 타이머 시작
+    const startTime = Date.now();
+    const timer = setInterval(() => {
+      setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
+    }, 1000);
+
+    // 컴포넌트 언마운트 시 타이머 정리
+    return () => clearInterval(timer);
+
+  }, [id])
+
+    // 경과 시간을 시:분:초 형식으로 변환
+  const formatTime = (seconds: number) => {
+    const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+    const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+    return `${h}:${m}:${s}`;
+  };
   
  return (
-    <div>
-      {problemDetails && (
+    <div style = {{height: '100%'}}>
+      <Header>
+        {problemDetails && (
+          <HeaderTxt> 
+            <Timer>{id}번 {problemDetails.title}</Timer>
+            <Timer>{formatTime(elapsedTime)}</Timer>
+            <div style = {{marginLeft:'200px'}}>
+              <HeaderBtn> 코드 리뷰 요청</HeaderBtn>
+              <HeaderBtn> 힌트 보기 </HeaderBtn>
+            </div>
+          </HeaderTxt>
+        )}
+      </Header>
+      <Wrap>
+        {problemDetails && (
         <ProblemWrap>
           <InoutWrap>
             <TextBox> 문제</TextBox>
             <Hr/>
-            <p  style = {{margin: '10px 0'}} dangerouslySetInnerHTML={{ __html: parseDescription(problemDetails.description) }} />
+            <p style = {{margin: '10px 0'}} dangerouslySetInnerHTML={{ __html: parseDescription(problemDetails.description) }} />
           </InoutWrap>
 
           <InoutWrap>
@@ -82,19 +113,51 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
           
         </ProblemWrap>
       )}
+      </Wrap>
+      
     </div>
   );
 };
 
+const Wrap = styled.div`
+  height: calc(100% - 60px);
+  overflow: auto;
+`;
 
+const Header = styled.div`
+  position: relative;
+  height: 60px;
+  
+  background-color: transparent;
+  border-bottom: 2px solid #b6b5b546;
+  color: white;
+  font-weight: bold;
+`;
+
+const HeaderBtn = styled.button`
+  padding: 5px 15px;
+  border-radius: 30px;
+  font-weight: bold;
+  margin-left: 10px;
+`;
+
+const HeaderTxt = styled.div`
+  display: flex;
+  line-height: 60px;
+  font-size: 1rem;
+  color: white;
+`;
+
+const Timer = styled.p`
+  margin-left: 30px;
+`;
 
 const ProblemWrap = styled.div`
   box-sizing: border-box;
-  height: 70%;
   padding: 1% 6%;
   color: #ffffff;
   font-size: 1.1rem;
-  overflow: auto;
+  
 `;
 
 const InoutWrap = styled.div`
@@ -130,6 +193,7 @@ const Exampletxt = styled.pre`
   background-color: #b9b9b92f;
   padding: 3%;
   box-sizing: border-box;
+  overflow: auto;
 `;
 
 const Example = styled.pre`

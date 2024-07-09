@@ -16,6 +16,8 @@ const Solvedlist = () => {
   const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
   const [visibleList, setVisibleList] = useState<string>('list1'); // Manage which list is visible
   const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
   const fetchUserData = async () => {
     try {
@@ -29,36 +31,36 @@ const Solvedlist = () => {
   };
 
   const fetchCrawlData = async () => {
-    let allProblems: ItemType[] = [];
-    let page = 1;
+     try {
+      const res = await crawlUserprob(query, page);
+      const $ = cheerio.load(res);
+      const nextData: any = $('#__NEXT_DATA__').html();
+      const parsedData = JSON.parse(nextData);
+      const solvedProblems: ItemType[] =
+        parsedData.props.pageProps.problems.items; // Adjust this part according to the actual data structure.
 
-    while (true) {
-      try {
-        const res = await crawlUserprob(query, page);
-        const $ = cheerio.load(res);
-        const nextData: any = $('#__NEXT_DATA__').html();
-        const parsedData = JSON.parse(nextData);
-        const solvedProblems: ItemType[] =
-          parsedData.props.pageProps.problems.items; // Adjust this part according to the actual data structure.
-
-        if (solvedProblems.length === 0) {
-          break;
-        }
-        
-        allProblems = allProblems.concat(solvedProblems);
-        setProblems(allProblems);
-        page++;
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        break;
-      }
-      
+      setProblems(solvedProblems);
+      setTotalPages(parsedData.props.pageProps.problems.totalPages); // Adjust this part according to the actual data structure.
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
-    
   };
 
+  const renderPageButtons = () => {
+    const buttons = [];
+    for (let i = 1; i <= totalPages; i++) {
+      buttons.push(
+        <PageButton key={i} onClick={() => setPage(i)}>
+          {i}
+        </PageButton>
+      );
+    }
+    return buttons;
+  };
+
+
   useEffect(() => {
-    setQuery('jade0179');
+    setQuery('ejrrl6931');
     if(query != '') {
       fetchUserData();
       fetchCrawlData();
@@ -129,11 +131,31 @@ const Solvedlist = () => {
               })()}
             </Item>
           ))}
-        {visibleList === 'list3' && <div>List 3 content here</div>}
+        {visibleList === 'list3' && <div>문제 별 획득한 크레딧 확인 페이지</div>}
       </ListView>
+      {renderPageButtons()}
     </Wrap>
   );
 };
+
+
+const PageButton = styled.button`
+  width: 30px;
+  margin-right: 10px;
+  background-color: transparent;
+  color: white;
+  border-radius: 10px;
+  font-size: 1rem;
+  border: none;
+
+  &:hover {
+    background-color: #4ea7ff52;
+  }
+
+  &:active {
+    background-color: #4ea7ff52;
+  }
+`;
 
 const Wrap = styled.div`
   position: relative;

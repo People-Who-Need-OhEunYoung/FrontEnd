@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { motion, useAnimation } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
 import { TestSharedEditor } from '../TestSharedEditor';
-import background from '../../assets/images/background.jpg';
-import terminal from '../../assets/images/터미널.png';
+import background from '../../assets/images/background3.gif';
 import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 
@@ -135,12 +134,11 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({id}) => {
     >
       <Container ref={containerRef}>
         <Tab width={width}>
-          <ProblemHeader/>
+          {/* <ProblemHeader/> */}
           <div
             style={{
               width: '100%',
-              height: '70%',
-              overflow: 'auto',
+              height: '80%'
             }}
           >
           <ProblemText id = {id} />

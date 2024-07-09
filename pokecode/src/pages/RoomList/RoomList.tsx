@@ -67,7 +67,6 @@ const RoomList = () => {
     >
       <MainWrapper>
         <SearchWrapper>
-          <Titleh1>코드 리뷰 방</Titleh1>
           <SearchHeader>
             <div style = {{position:'relative', width:'35%', display: 'flex'}}>
               <Inputsearch 
@@ -193,6 +192,7 @@ const OnOffText = styled.span<{ timeck: string }>`
 const SearchHeader = styled.div`
   display: flex;
   justify-content:center;
+
 `;
 
 
@@ -244,7 +244,7 @@ const ProblemComponent = styled.div`
 const ListView = styled.div`
   background-color: #ffffff1d;
   width: 75%;
-  height: 62%;
+  height: 70%;
   overflow-y: auto;
   margin: auto;
   /* align-items: stretch;
@@ -261,7 +261,7 @@ const Listheader = styled.div`
 
 const SearchWrapper = styled.div`
   text-align: center;
-  margin: 3% auto;
+  margin: 5% auto 3%;
 `;
 
 /* 모달 */
