@@ -11,11 +11,10 @@ import './TestSharedEditor.css';
 
 const TestSharedEditor: React.FC = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
-  //const userIdRef = useRef<HTMLDivElement>(null); // 사용자 ID를 표시할 ref 추가
   useEffect(() => {
     const ydoc = new Y.Doc();
     const provider = new WebsocketProvider(
-      'ws://192.168.10.106:1236',
+      'ws://52.79.197.126:44444',
       'codemirror',
       ydoc
     );
