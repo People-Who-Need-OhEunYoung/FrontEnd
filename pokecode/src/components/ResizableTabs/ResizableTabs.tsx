@@ -4,6 +4,7 @@ import { motion, useAnimation } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
 import background from '../../assets/images/background.jpg';
 import terminal from '../../assets/images/터미널.png';
+import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 
 const Container = styled.div`
