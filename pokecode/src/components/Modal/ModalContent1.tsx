@@ -105,8 +105,8 @@ const SolveBtn = styled.button`
   padding: 0.3rem 1rem;
   font-size: 1.2em;
   border-radius: 30px;
-  background-color: white;
   border: none;
+  background-color: #d6d4d4;
   box-sizing: border-box;
   cursor: pointer;
 `;
