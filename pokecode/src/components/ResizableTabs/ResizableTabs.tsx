@@ -180,7 +180,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           }}
         >
           <div style={{ background: 'green', width: '100%', height: '100%' }}>
-            <TestEditor />
+            <TestEditor id={id} />
           </div>
         </div>
       </Container>

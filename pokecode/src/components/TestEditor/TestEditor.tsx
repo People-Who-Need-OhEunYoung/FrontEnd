@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
@@ -7,7 +7,7 @@ import 'codemirror/theme/dracula.css';
 import './TestEditor.css';
 import { DesignedButton1 } from '../DesignedButton';
 
-const TestEditor: React.FC = (id: any) => {
+const TestEditor = (id: any) => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
   const [testcaseResult, setTestcaseResult] = useState('');
