@@ -15,16 +15,18 @@ const Container = styled.div`
   border: none;
 `;
 
+
 interface TabProps {
   width: number;
 }
 
 const Tab = styled.div<TabProps>`
-  background-color: #f0f0f0;
+  background-color: #171a25;
   height: 100%;
   border-right: none;
   flex-basis: ${({ width }) => width}%;
   z-index: 100;
+  box-shadow: rgba(156, 156, 156, 0.5) 3px 3px 10px inset;
 `;
 
 const Resizer = styled.div`
@@ -52,7 +54,11 @@ const Resizer = styled.div`
   }
 `;
 
-const ResizableTabs: React.FC = () => {
+interface ResizableTabsProps {
+  id: string;
+}
+
+const ResizableTabs: React.FC<ResizableTabsProps> = ({id}) => {
   const [width, setWidth] = useState<number>(50);
   const [position, setPosition] = useState({
     x: '50%',
@@ -136,7 +142,7 @@ const ResizableTabs: React.FC = () => {
               overflow: 'auto',
             }}
           >
-            <ProblemText/>
+            <ProblemText id = {id} />
           </div>
           <Home onClick={handleDivClick}>
             <motion.div

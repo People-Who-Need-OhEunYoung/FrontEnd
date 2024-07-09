@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { DesignedButton1 } from '../DesignedButton';
 import { Navigate, useNavigate } from 'react-router-dom';
 
-const ModalContent1 = ({ width, onOff }: any) => {
+const ModalContent1 = ({ width, onOff, id }: any) => {
   const [timeck, setTimeck] = useState('OFF');
   const [time, setTime] = useState<number>(0);
   const [isEditing, setIsEditing] = useState(false);
@@ -38,8 +38,8 @@ const ModalContent1 = ({ width, onOff }: any) => {
     setIsEditing(false);
   };
 
-  const gotoSolve = () => {
-    navigate('/problem');
+  const gotoSolve = (id : number) => {
+    navigate(`/problem?id=${id}`);
   };
 
   return (
@@ -91,7 +91,7 @@ const ModalContent1 = ({ width, onOff }: any) => {
           +
         </span>
       </TimeSelecter>
-      <DesignedButton1 color="cadetblue" onClick={gotoSolve}>
+      <DesignedButton1 color="cadetblue" onClick={() => gotoSolve(id)}>
         문제풀기
       </DesignedButton1>
     </div>
