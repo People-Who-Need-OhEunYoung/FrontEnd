@@ -312,29 +312,29 @@ const ButtonGroup = styled.div`
   justify-content: center;
 `;
 
-const SelectBtn = styled.button`
-  color: white;
-  background-color: transparent;
-  padding: 4px 10px;
-  border: none;
-  border-radius: 15px;
-  outline: none;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  line-height: 1.75;
-  text-transform: uppercase;
-  transition: background-color 0.3s;
-  margin: 7px;
+// const SelectBtn = styled.button`
+//   color: white;
+//   background-color: transparent;
+//   padding: 4px 10px;
+//   border: none;
+//   border-radius: 15px;
+//   outline: none;
+//   cursor: pointer;
+//   font-size: 1rem;
+//   font-weight: 500;
+//   line-height: 1.75;
+//   text-transform: uppercase;
+//   transition: background-color 0.3s;
+//   margin: 7px;
 
-  &:hover {
-    background-color: #4ea7ff52;
-  }
+//   &:hover {
+//     background-color: #4ea7ff52;
+//   }
 
-  &:active {
-    background-color: #4ea7ff52;
-  }
+//   &:active {
+//     background-color: #4ea7ff52;
+//   }
 
-`;
+// `;
 
 export default RoomList;
