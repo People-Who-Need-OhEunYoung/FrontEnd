@@ -1,8 +1,7 @@
 import styled, { css }  from 'styled-components';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import {Modal} from '../../components/Modal/Modal';
-
+import Modal from '../../components/Modal/Modal';
 
 type ItemType = {
   problemId: number;
@@ -66,7 +65,7 @@ const RoomList = () => {
       exit={{ opacity: 0 }}
       style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
     >
-      <Modal1>
+      <MainWrapper>
         <SearchWrapper>
           <Titleh1>코드 리뷰 방</Titleh1>
           <SearchHeader>
@@ -91,10 +90,10 @@ const RoomList = () => {
         </SearchWrapper>
 
         <ListView>
-          
+        
         </ListView>
         <ButtonGroup style={{ margin: '1.5%' }}>{renderPageButtons()}</ButtonGroup>
-      </Modal1>
+      </MainWrapper>
     </motion.div>
   );
 };
@@ -121,25 +120,42 @@ const CheckSlide = styled.div<{ timeck: string }>`
       background: #4ce285;
     `}
 
-  &:hover + span {
+  &:hover + p {
     display: block;
   }
 `;
 
-const CheckDoc = styled.span`
-  position: absolute;
-  bottom: 100%;
-  width: 130px;
-  right: -12%;
-  background-color: #6e6e6e;
-  color: #ffffff;
-  padding: 5px;
-  border-radius: 5px;
+const CheckDoc = styled.p`
   display: none;
-  transition: opacity 0.3s;
-  z-index: 100;
-  text-align: center;
+  position: absolute;
+  width: 130px;
+  padding: 8px;
+  right: -8%;
+  top: 100%;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  background: #646464;
+  color: #fff;
+  font-size: 14px;
+
+  &::after {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    margin-left: -10px;
+    border: solid transparent;
+    border-color: rgba(51, 51, 51, 0);
+    border-bottom-color: #646464;
+    border-width: 10px;
+    pointer-events: none;
+    content: ' ';
+  }
+
 `;
+
 
 const CheckBtn = styled.div<{ timeck: string }>`
   height: 1rem;
@@ -178,7 +194,6 @@ const SearchHeader = styled.div`
   display: flex;
   justify-content:center;
 `;
-
 
 
 const MakeRoomButton = styled.button`
@@ -250,7 +265,7 @@ const SearchWrapper = styled.div`
 `;
 
 /* 모달 */
-const Modal1 = styled.div`
+const MainWrapper = styled.div`
   position: absolute;
   transform: translate(-50%, -50%);
   top: 50%;
@@ -259,7 +274,7 @@ const Modal1 = styled.div`
   height: 100%;
   margin: auto;
   color: white;
-  background: #47464630;
+  background: #111826;
   border-radius: 20px;
   filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.25));
   box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.267);
