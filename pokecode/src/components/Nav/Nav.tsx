@@ -23,8 +23,14 @@ const LinkButton = styled(Link)`
   padding: 0 20px;
   width: 33.3333%;
   box-sizing: border-box;
+  border-radius: 20px;
   @media (min-width: 1900px) {
     font-size: 1.2em;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
+    
   }
 `;
 
