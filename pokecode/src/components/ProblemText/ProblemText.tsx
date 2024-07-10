@@ -132,6 +132,7 @@ const Header = styled.div`
   border-bottom: 2px solid #b6b5b546;
   color: white;
   font-weight: bold;
+ 
 `;
 
 const HeaderBtn = styled.button`
@@ -144,12 +145,16 @@ const HeaderBtn = styled.button`
 const HeaderTxt = styled.div`
   display: flex;
   line-height: 60px;
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: white;
+  justify-content: space-around;
 `;
 
 const Timer = styled.p`
   margin-left: 30px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap
 `;
 
 const ProblemWrap = styled.div`
