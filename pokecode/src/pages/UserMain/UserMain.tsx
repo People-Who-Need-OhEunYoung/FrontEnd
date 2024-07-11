@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
-import background from '../../assets/images/background2.jpg';
+import background from '../../assets/images/background.jpg';
 import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
 import { MainWrapper } from '../../components/MainWrapper';
@@ -42,7 +42,7 @@ const UserMain = () => {
   });
 
   const sleep = (ms: any) => new Promise((resolve) => setTimeout(resolve, ms));
-
+  //똥 갯수 가져오는 로직
   const pooCount = () => {
     getPooCount().then((res) => {
       let newPositions: any = [];
@@ -54,6 +54,7 @@ const UserMain = () => {
       if (res.poo !== 0 && pooset.length === 0) setPooset(newPositions);
     });
   };
+
   const userSet = async () => {
     setUser(await userInfo());
   };
