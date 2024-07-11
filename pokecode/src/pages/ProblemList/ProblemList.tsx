@@ -7,9 +7,8 @@ import downArrow from '../../assets/images/downArrow.png';
 import Search from '../../assets/images/search.png';
 import Modal from '../../components/Modal/Modal';
 
-
 type ItemType = {
-  problemId: number;
+  problemId: string;
   titleKo: string;
   level: number;
   acceptedUserCount: number;
@@ -24,6 +23,9 @@ const ProblemList = () => {
   const [order, setOrder] = useState<string>('asc');
   const [pageCount, setPageCount] = useState<number>(1);
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selected, setSelected] = useState<string>('');
+  const [probId, setProbId] = useState<string>('');
 
   const fetchProbData = async () => {
     try {
@@ -34,50 +36,51 @@ const ProblemList = () => {
     }
   };
 
-  const handleSortClick = (currentClick : string) => {
-    if(currentClick === sort) {
+  const handleSortClick = (currentClick: string) => {
+    if (currentClick === sort) {
       setOrder(order === 'asc' ? 'desc' : 'asc');
-    }
-    else {
+    } else {
       setOrder('asc');
     }
     setSort(currentClick);
   };
 
   const renderPageButtons = () => {
-      const buttons = [];
-      const startPage = currentPageGroup * 10 + 1;
-      const endPage = Math.min(startPage + 9, pageCount);
+    const buttons = [];
+    const startPage = currentPageGroup * 10 + 1;
+    const endPage = Math.min(startPage + 9, pageCount);
 
-      for (let i = startPage; i <= endPage; i++) {
-        buttons.push(
-          <PageButton key={i} onClick={() => setPage(i)}>
-            {i}
-          </PageButton>
-        );
-      }
-
-      return (
-        <>
-          {currentPageGroup > 0 && (
-            <PageButton onClick={() => setCurrentPageGroup(currentPageGroup - 1)}>
-              &lt;
-            </PageButton>
-          )}
-          {buttons}
-          {endPage < pageCount && (
-            <PageButton onClick={() => setCurrentPageGroup(currentPageGroup + 1)}>
-              &gt;
-            </PageButton>
-          )}
-        </>
+    for (let i = startPage; i <= endPage; i++) {
+      buttons.push(
+        <PageButton key={i} onClick={() => setPage(i)}>
+          {i}
+        </PageButton>
       );
-    };
+    }
+
+    return (
+      <>
+        {currentPageGroup > 0 && (
+          <PageButton onClick={() => setCurrentPageGroup(currentPageGroup - 1)}>
+            &lt;
+          </PageButton>
+        )}
+        {buttons}
+        {endPage < pageCount && (
+          <PageButton onClick={() => setCurrentPageGroup(currentPageGroup + 1)}>
+            &gt;
+          </PageButton>
+        )}
+      </>
+    );
+  };
 
   useEffect(() => {
     fetchProbData().then((res) => {
       const parsedData = res;
-      const page_count = Math.ceil((res.count)/parsedData.items.length);
+      const page_count = Math.ceil(res.count / parsedData.items.length);
+      console.log(res);
+
       setPageCount(page_count);
       if (parsedData.count > 0) {
         const itemsArray = [];
@@ -87,6 +90,8 @@ const ProblemList = () => {
         }
         setProblems(itemsArray); // items 상태 업데이트
         console.log('items: ', problems);
+      } else {
+        setProblems([]);
       }
     });
   }, [query, sort, page, order]);
@@ -103,9 +108,24 @@ const ProblemList = () => {
     >
       <MainWrapper>
         <SearchWrapper>
-          <Titleh1>문제 검색</Titleh1>
-          <div style = {{position:'relative', width:'35%', margin: 'auto'}}>
-            <img src={Search} style = {{position: 'absolute', width: '20px', right: '15px', top:'6px', cursor: 'pointer'}}></img>
+          <div
+            style={{
+              position: 'relative',
+              width: '35%',
+              margin: 'auto',
+              marginTop: '4%',
+            }}
+          >
+            <img
+              src={Search}
+              style={{
+                position: 'absolute',
+                width: '20px',
+                right: '15px',
+                top: '9px',
+                cursor: 'pointer',
+              }}
+            ></img>
             <Inputsearch
               type="text"
               value={query}
@@ -114,12 +134,10 @@ const ProblemList = () => {
               }}
             />
           </div>
-            
-          <ButtonGroup style = {{}}>
+          <ButtonGroup style={{}}>
             <SelectBtn
               onClick={() => {
                 handleSortClick('id');
-               
               }}
             >
               ID
@@ -148,7 +166,6 @@ const ProblemList = () => {
             <SelectBtn
               onClick={() => {
                 handleSortClick('average_try');
-                
               }}
             >
               평균 시도
@@ -160,12 +177,21 @@ const ProblemList = () => {
             >
               랜덤
             </SelectBtn>
-            <SelectBtn style = {{fontSize: '1.5rem', fontFamily: 'math', lineHeight: '1.5rem'}}
+            <SelectBtn
+              style={{
+                fontSize: '1.5rem',
+                fontFamily: 'math',
+                lineHeight: '1.5rem',
+              }}
               onClick={() => {
                 setOrder(order === 'asc' ? 'desc' : 'asc');
               }}
             >
-            {order === 'asc' ? <OrderButton  src={upArrow} /> : <OrderButton src={downArrow} />}
+              {order === 'asc' ? (
+                <OrderButton src={upArrow} />
+              ) : (
+                <OrderButton src={downArrow} />
+              )}
             </SelectBtn>
           </ButtonGroup>
         </SearchWrapper>
@@ -190,23 +216,55 @@ const ProblemList = () => {
                       {' '}
                       {item.problemId}
                     </a>
-                    <a href={link} style={{ width: '44%' }}>
+                    <TitleBtn
+                      onClick={() => {
+                        setIsModalOpen(true);
+                        setSelected(item.titleKo);
+                        setProbId(item.problemId);
+                      }}
+                      style={{}}
+                    >
                       {' '}
                       {item.titleKo}
-                    </a>
-                    <p style={{ width: '23%' }}> {item.acceptedUserCount}</p>
-                    <p style={{ width: '10%' }}> {item.averageTries}</p>
+                    </TitleBtn>
+                    <p style={{ width: '52%', textAlign: 'end' }}>
+                      {' '}
+                      {item.acceptedUserCount}
+                    </p>
+                    <p style={{ width: '21.5%', textAlign: 'end' }}>
+                      {' '}
+                      {item.averageTries}
+                    </p>
                   </ProblemComponent>
                 );
               })()}
             </Item>
           ))}
         </ListView>
-        <ButtonGroup style={{ margin: '1.5%' }}>{renderPageButtons()}</ButtonGroup>
+        <Modal
+          text={selected}
+          id={probId}
+          component={1}
+          on={isModalOpen}
+          event={setIsModalOpen}
+        ></Modal>
+        <ButtonGroup style={{ margin: '1.5%' }}>
+          {renderPageButtons()}
+        </ButtonGroup>
       </MainWrapper>
     </motion.div>
   );
 };
+
+const TitleBtn = styled.button`
+  position: absolute;
+  background-color: transparent;
+  color: white;
+  border: none;
+  width: 60%;
+  text-align: left;
+  left: 20%;
+`;
 
 const OrderButton = styled.img`
   width: 20px;
@@ -223,7 +281,7 @@ const PageButton = styled.button`
   border-radius: 10px;
   font-size: 1rem;
   border: none;
-  
+
   &:hover {
     background-color: #4ea7ff52;
   }
@@ -237,10 +295,11 @@ const ProblemComponent = styled.div`
   display: flex;
   margin: auto;
   align-items: center;
+  position: relative;
 `;
 
 const ListView = styled.div`
-  background-color: #ffffff1d;
+  background-color: #6666661d;
   width: 75%;
   height: 62%;
   overflow-y: auto;
@@ -289,17 +348,11 @@ const TierImg = styled.img`
 
 const Inputsearch = styled.input`
   width: 100%;
-  padding: 5px 40px 5px 15px;
+  padding: 7px 40px 7px 15px;
   border-radius: 30px;
   box-shadow: 0 0 15px 7px rgba(255, 255, 255, 0.267);
   box-sizing: border-box;
 `;
-
-const Titleh1 = styled.p`
-  padding: 10px;
-  font-size: 1.2rem;
-`;
-
 
 const Item = styled.div`
   border-bottom: 1px solid #8d8d8d;
@@ -334,7 +387,6 @@ const SelectBtn = styled.button`
   &:active {
     background-color: #4ea7ff52;
   }
-
 `;
 
 export default ProblemList;

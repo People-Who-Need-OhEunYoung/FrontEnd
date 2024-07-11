@@ -4,16 +4,18 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+type userinfo = {
+  id: string;
+  pw: string;
+};
+
 const Login = () => {
   const [id, setId] = useState<string>('');
   const [pw, setPw] = useState<string>('');
-  type userinfo = {
-    id: string;
-    pw: string;
-  };
+
   const navigate = useNavigate();
   const loginCall = async (params: userinfo) => {
-    await fetch(`http://52.79.197.126/login`, {
+    await fetch(`${import.meta.env.VITE_APP_IP}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -40,8 +42,14 @@ const Login = () => {
       .catch((error) => {
         console.error('Error fetching data:', error);
         alert('통신에러');
+        navigate('/login');
         throw error;
       });
+  };
+  const handleKeyDown = (event: any) => {
+    if (event.key === 'Enter') {
+      loginCall({ id: id, pw: pw });
+    }
   };
   return (
     <motion.div
@@ -62,6 +70,7 @@ const Login = () => {
               placeholder="Username"
               value={id}
               onChange={(e: any) => setId(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <Input
               type="password"
@@ -69,6 +78,7 @@ const Login = () => {
               placeholder="Password"
               value={pw}
               onChange={(e: any) => setPw(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <ButtonDiv>
               <DesignedButton

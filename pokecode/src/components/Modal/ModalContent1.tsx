@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
-import { DesignedButton1 } from '../DesignedButton';
+import { useNavigate } from 'react-router-dom';
 
-const ModalContent1 = ({ width, title, onOff }: any) => {
+const ModalContent1 = ({ width, id }: any) => {
   const [timeck, setTimeck] = useState('OFF');
   const [time, setTime] = useState<number>(0);
   const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
+
   const switchButton = () => {
     setTimeck(timeck === 'ON' ? 'OFF' : 'ON');
   };
@@ -35,9 +37,12 @@ const ModalContent1 = ({ width, title, onOff }: any) => {
     setIsEditing(false);
   };
 
+  const gotoSolve = (id: number) => {
+    navigate(`/problem?id=${id}`);
+  };
+
   return (
     <div style={{ width: '400px' }}>
-      <Title>{title}</Title>
       <div
         style={{
           width: width,
@@ -85,12 +90,25 @@ const ModalContent1 = ({ width, title, onOff }: any) => {
           +
         </span>
       </TimeSelecter>
-      <DesignedButton1 color="cadetblue" onClick={onOff}>
-        문제풀기
-      </DesignedButton1>
+      <SolveBtn onClick={() => gotoSolve(id)}>
+        <b>문제풀기</b>
+      </SolveBtn>
     </div>
   );
 };
+
+const SolveBtn = styled.button`
+  position: relative;
+  width: 55%;
+  margin: 10px 20%;
+  padding: 0.3rem 1rem;
+  font-size: 1.2em;
+  border-radius: 30px;
+  border: none;
+  background-color: #d6d4d4;
+  box-sizing: border-box;
+  cursor: pointer;
+`;
 
 const TimeLimit = styled.div<{ timeck: string }>`
   position: relative;
@@ -104,7 +122,7 @@ const TimeLimit = styled.div<{ timeck: string }>`
   line-height: 1.5rem;
   width: 4rem;
   border-radius: 9999px;
-  background: #aaa;
+  background: #6e6e6e;
   padding: 0.25rem;
   margin: 0 10px;
   cursor: pointer;
@@ -147,9 +165,11 @@ const OnOffText = styled.span<{ timeck: string }>`
 `;
 const TimeSelecter = styled.ul<{ timeck: string }>`
   display: none;
-  background: rgba(79, 70, 229, 1);
-
-  width: 45%;
+  background: #f0f0f0;
+  color: black;
+  font-weight: bold;
+  font-size: 1.2rem;
+  width: 50%;
   margin: 0 auto 50px;
   height: 40px;
   line-height: 40px;
@@ -173,12 +193,5 @@ const Time = styled.input`
     margin: 0;
   }
 `;
-
-const Title = styled.p`
-  padding: 1em 0;
-  font-weight: bold;
-  font-size: 2em;
-`;
-
 
 export default ModalContent1;

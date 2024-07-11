@@ -1,11 +1,6 @@
 import { useState, useRef } from 'react';
 import styled from 'styled-components';
-import {
-  motion,
-  useAnimation,
-  useDragControls,
-  //useMotionValue,
-} from 'framer-motion';
+import { motion, useAnimation, useDragControls } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
 import { TestSharedEditor } from '../TestSharedEditor';
 import background from '../../assets/images/background.jpg';
@@ -130,10 +125,10 @@ const ResizableTabsReview = () => {
         style={{
           position: 'fixed',
           display: 'inline-block',
-          width: '4vw',
+          width: '5vw',
           zIndex: 9999,
           bottom: '30%',
-          right: 150,
+          right: 100,
           transform: 'translateX(0px) translateY(0px) translateZ(0px)',
           transition: '0.1s',
         }}
@@ -154,7 +149,7 @@ const ResizableTabsReview = () => {
           width: '4vw',
           zIndex: 9999,
           bottom: '30%',
-          right: 200,
+          right: 150,
           transform: 'translateX(0px) translateY(0px) translateZ(0px)',
           transition: '0.1s',
         }}
@@ -175,7 +170,7 @@ const ResizableTabsReview = () => {
           width: '4vw',
           zIndex: 9999,
           bottom: '30%',
-          right: 250,
+          right: 200,
           transform: 'translateX(0px) translateY(0px) translateZ(0px)',
           transition: '0.1s',
         }}
@@ -193,10 +188,10 @@ const ResizableTabsReview = () => {
         style={{
           position: 'fixed',
           display: 'inline-block',
-          width: '4vw',
+          width: '6vw',
           zIndex: 9999,
           bottom: '30%',
-          right: 350,
+          right: 250,
           transform: 'translateX(0px) translateY(0px) translateZ(0px)',
           transition: '0.1s',
         }}
@@ -205,69 +200,6 @@ const ResizableTabsReview = () => {
         <Pokemon
           width={'100%'}
           src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/149.gif"
-        ></Pokemon>
-      </motion.div>
-      <motion.div
-        drag
-        dragControls={dragControls}
-        animate={animationControls} // 애니메이션 컨트롤 적용
-        style={{
-          position: 'fixed',
-          display: 'inline-block',
-          width: '4vw',
-          zIndex: 9999,
-          bottom: '30%',
-          right: 400,
-          transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-          transition: '0.1s',
-        }}
-        className="pokemon"
-      >
-        <Pokemon
-          width={'100%'}
-          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/150.gif"
-        ></Pokemon>
-      </motion.div>
-      <motion.div
-        drag
-        dragControls={dragControls}
-        animate={animationControls} // 애니메이션 컨트롤 적용
-        style={{
-          position: 'fixed',
-          display: 'inline-block',
-          width: '4vw',
-          zIndex: 9999,
-          bottom: '30%',
-          right: 300,
-          transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-          transition: '0.1s',
-        }}
-        className="pokemon"
-      >
-        <Pokemon
-          width={'100%'}
-          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/151.gif"
-        ></Pokemon>
-      </motion.div>
-      <motion.div
-        drag
-        dragControls={dragControls}
-        animate={animationControls} // 애니메이션 컨트롤 적용
-        style={{
-          position: 'fixed',
-          display: 'inline-block',
-          width: '4vw',
-          zIndex: 9999,
-          bottom: '30%',
-          right: 450,
-          transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-          transition: '0.1s',
-        }}
-        className="pokemon"
-      >
-        <Pokemon
-          width={'100%'}
-          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/135.gif"
         ></Pokemon>
       </motion.div>
       <Container ref={containerRef}>
