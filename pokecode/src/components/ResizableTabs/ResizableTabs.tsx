@@ -7,6 +7,7 @@ import background from '../../assets/images/background3.gif';
 import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 import { userInfo } from '../../utils/api/api';
+
 const Container = styled.div`
   display: flex;
   align-items: center;
