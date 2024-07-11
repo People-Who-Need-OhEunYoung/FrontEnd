@@ -26,7 +26,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
+      working-directory: ./pokecode
     - run: npm run build --if-present
+      working-directory: ./pokecode
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
