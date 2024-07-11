@@ -312,10 +312,10 @@ const Inputsearch = styled.input`
   padding: 10px 90px 10px 20px;
 `;
 
-const Titleh1 = styled.p`
-  padding: 10px;
-  font-size: 1.2rem;
-`;
+// const Titleh1 = styled.p`
+//   padding: 10px;
+//   font-size: 1.2rem;
+// `;
 
 const ButtonGroup = styled.div`
   border-radius: 10px;

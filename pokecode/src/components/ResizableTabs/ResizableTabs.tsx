@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, useAnimation } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
-import { TestSharedEditor } from '../TestSharedEditor';
+// import { TestSharedEditor } from '../TestSharedEditor';
 import background from '../../assets/images/background3.gif';
 import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
@@ -189,11 +189,11 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   );
 };
 
-const ProblemHeader = styled.div`
-  width: 100%;
-  height: 10%;
-  background-color: black;
-`;
+// const ProblemHeader = styled.div`
+//   width: 100%;
+//   height: 10%;
+//   background-color: black;
+// `;
 
 const Home = styled.div`
   width: 100%;
