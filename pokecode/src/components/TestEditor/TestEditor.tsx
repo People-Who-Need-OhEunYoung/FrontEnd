@@ -3,12 +3,29 @@ import CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/python/python';
+import 'codemirror/mode/clike/clike';
 import 'codemirror/theme/dracula.css';
+import 'codemirror/addon/hint/show-hint';
+import 'codemirror/addon/hint/show-hint.css';
+import 'codemirror/addon/hint/javascript-hint';
+import 'codemirror/addon/hint/anyword-hint';
+import 'codemirror/addon/hint/html-hint';
+import 'codemirror/addon/hint/css-hint';
+import 'codemirror/addon/edit/matchbrackets';
+import 'codemirror/keymap/sublime';
+import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/addon/edit/closetag';
+import 'codemirror/addon/fold/foldcode';
+import 'codemirror/addon/fold/foldgutter';
+import 'codemirror/addon/fold/brace-fold';
+import 'codemirror/addon/fold/comment-fold';
+import 'codemirror/addon/fold/foldgutter.css';
 import './TestEditor.css';
 import { DesignedButton1 } from '../DesignedButton';
 import { Modal } from '../Modal';
 import wordballoon from '../../assets/images/wordballoon.png';
 import styled from 'styled-components';
+
 const TestEditor = ({ ...props }) => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
@@ -24,37 +41,45 @@ const TestEditor = ({ ...props }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isai, setIsai] = useState(false);
   const [isModal, setIsModal] = useState(false);
+  const [language, setLanguage] = useState('python');
 
-  if (editorContainerRef.current) {
-    if (editor == null) {
-      const cmEditor = CodeMirror(editorContainerRef.current, {
-        theme: 'dracula',
-        mode: 'python',
-        lineNumbers: true,
-      });
-      setEditor(cmEditor);
-    }
-
-    //---------- 실시간으로 에디터 변경사항이 생기면 바로 서버에게 전송하는 로직 폴리싱 ------------//
-    // const handleChange = useRef((instance: any, changeObj: any) => {
-    //   const editedContent = instance.getValue();
-    //   // Fetch를 사용하여 서버로 변경된 내용 전송
-    //   fetch('/problem/editor-content', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ content: editedContent })
-    //   })
-    //   .then(response => response.json())
-    //   .then(data => console.log('Data sent successfully', data))
-    //   .catch(error => console.error('Error sending data:', error));
-    // });
-    //  // CodeMirror 에디터에 Change 이벤트 리스너를 추가, 해당 리스너는 에디터 내용이 변경될 때마다 호출
-    //  editor.on('change', handleChange.current);
-    // return () => {
-    //   //editor.off('change', handleChange.current);  // 이벤트 리스너를 제거할 때 핸들러 함수를 함께 제공
-    // };
-  }
   useEffect(() => {
+    if (editorContainerRef.current) {
+      if (editor == null) {
+        const cmEditor = CodeMirror(editorContainerRef.current, {
+          theme: 'dracula',
+          mode: language,
+          lineNumbers: true,
+          spellcheck: true,
+          autocorrect: true,
+          autoCloseBrackets: true, // 자동 괄호 닫기
+          matchBrackets: true, // 괄호 매칭
+          showHint: true, // 자동 완성 힌트
+          extraKeys: {
+            'Ctrl-Space': 'autocomplete', // 자동 완성 키 설정
+          },
+        });
+        setEditor(cmEditor);
+      }
+      //---------- 실시간으로 에디터 변경사항이 생기면 바로 서버에게 전송하는 로직 폴리싱 ------------//
+      // const handleChange = useRef((instance: any, changeObj: any) => {
+      //   const editedContent = instance.getValue();
+      //   // Fetch를 사용하여 서버로 변경된 내용 전송
+      //   fetch('/problem/editor-content', {
+      //     method: 'POST',
+      //     headers: { 'Content-Type': 'application/json' },
+      //     body: JSON.stringify({ content: editedContent })
+      //   })
+      //   .then(response => response.json())
+      //   .then(data => console.log('Data sent successfully', data))
+      //   .catch(error => console.error('Error sending data:', error));
+      // });
+      //  // CodeMirror 에디터에 Change 이벤트 리스너를 추가, 해당 리스너는 에디터 내용이 변경될 때마다 호출
+      //  editor.on('change', handleChange.current);
+      // return () => {
+      //   //editor.off('change', handleChange.current);  // 이벤트 리스너를 제거할 때 핸들러 함수를 함께 제공
+      // };
+    }
     if (!isai) {
       const typingInterval = setInterval(() => {
         if (isTypingPaused) {
@@ -119,7 +144,7 @@ const TestEditor = ({ ...props }) => {
             role: 'system',
           },
           {
-            content: `${codedata}\n백준 ${problemNumber}번 문제에 대한 정답 코드인데, 코드는 제외하고 반드시 5줄 안으로 구체적인 피드백 부탁해`,
+            content: `${codedata}\n백준 ${problemNumber}번 문제에 대한 코드인데, 코드는 제외하고 정답여부 체크해서 반드시 5줄 안으로 구체적인 피드백 부탁해`,
             role: 'user',
           },
         ],
@@ -170,8 +195,7 @@ const TestEditor = ({ ...props }) => {
               return ''; // 파싱 실패 시 빈 문자열 반환
             }
           })
-          .join()
-          .replace(/,/g, '');
+          .join('');
         console.log(parts);
         result += parts;
         setAiResult(result);
@@ -213,6 +237,8 @@ const TestEditor = ({ ...props }) => {
       }
     }
   };
+
+  //프론트 AI 피드백 호출
   const handleAI = async () => {
     setIsModal(true);
     setSequenceai('');
@@ -222,35 +248,12 @@ const TestEditor = ({ ...props }) => {
     if (editor) {
       const editorContent = editor.getValue();
       try {
-        const response: string = await callApi(props.id, editorContent);
-        // 서버 요청 방식(제거)
-        // const response = await fetch(
-        //   'http://52.79.197.126:3000/aiAlgoFeedBack',
-        //   {
-        //     method: 'POST',
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //       Authorization: `Bearer ${localStorage.getItem('token')}`,
-        //     },
-        //     body: JSON.stringify({
-        //       code: editorContent,
-        //       bojNumber: props.id,
-        //       isCorrect: '0',
-        //     }),
-        //   }
-        // );
-        // if (!response.ok) {
-        //   throw new Error(`Error: ${response.statusText}`);
-        // }
-        // const data = await response.json();
+        await callApi(props.id, editorContent);
       } catch (error) {
         console.error('제출과정 에러 발생', error);
       }
     }
   };
-  // const handleAiClient = async () => {
-  //   callApi();
-  // };
 
   return (
     <>
@@ -284,13 +287,13 @@ const TestEditor = ({ ...props }) => {
             position: 'fixed',
             left: 0,
             bottom: '150px',
-            height: '200px',
+            height: '300px',
             width: '50%',
             background: `url(${wordballoon})`,
             backgroundSize: '100% 100%',
             color: 'black',
             overflow: 'auto',
-            zIndex: 99999999,
+            zIndex: 999,
             padding: '20px 4%',
             boxSizing: 'border-box',
             fontSize: '1.5em',
@@ -300,7 +303,8 @@ const TestEditor = ({ ...props }) => {
           <a
             style={{
               position: 'absolute',
-              right: '50px',
+              right: '70px',
+              top: '0',
               cursor: 'pointer',
               fontSize: '2em',
             }}
@@ -339,6 +343,37 @@ const TestEditor = ({ ...props }) => {
           color="#a62df1"
         >
           테스트케이스 추가
+        </DesignedButton1>
+        <DesignedButton1
+          style={{
+            position: 'absolute',
+            margin: '0',
+            width: '190px',
+            fontSize: '1em',
+            bottom: '-55px',
+            marginRight: '10px',
+            right: '600px',
+            zIndex: 999999,
+          }}
+          color="#a62df1"
+        >
+          <label htmlFor="language">언어 : </label>
+          <select
+            id="language"
+            style={{ background: '#a62df1', border: 'none', color: 'white' }}
+            onChange={(e: any) => {
+              if (editor != null) editor.setOption('mode', e.target.value);
+              setLanguage(e.target.value);
+            }}
+            value={language}
+          >
+            <option value="javascript">JavaScript</option>
+            <option value="text/x-java">Java</option>
+            <option value="python">Python</option>
+            <option value="text/x-csrc">C</option>
+            <option value="text/x-c++src">C++</option>
+            <option value="text/x-csharp">C#</option>
+          </select>
         </DesignedButton1>
         <DesignedButton1
           className="submit-button"
