@@ -6,12 +6,19 @@ import getDetails from "./getDetails";
 import { ProblemDetails, ResizableTabsProps } from "./index";
 import { RootState } from '../../store/index';
 
+
 const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
   const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(null);
 
   const dispatch = useDispatch();
   const {startTime, elapsedTime, limitTime} = useSelector((state: RootState) => state.timer);
 
+  const SolvedTime = {
+    _id : id,
+    start_time : startTime,
+    elapsed_time: elapsedTime,
+    limit_time: limitTime,
+  }
 
   const fetchCrawlData = async () => {
     try {
@@ -32,31 +39,29 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
   };
 
   useEffect(() => {
-    const storedStartTime = localStorage.getItem('startTime');
-    const storedElapsedTime = localStorage.getItem('elapseTime');
-    const start_time = Date.now();
-    localStorage.setItem('startTime', start_time.toString());
+
+    const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`);
+    let start_time = Date.now();
     dispatch(setStartTime(start_time));
+    
 
-    console.log('limitTime: ',limitTime)
-
-    if (storedStartTime  && storedElapsedTime) {
-      const parsedElapsedTime = parseInt(storedElapsedTime);
-      const updateElapsedTime = parsedElapsedTime + Math.floor((Date.now() - start_time) / 1000);
+    if (storedSolvedTime) {
+      const solvedData = JSON.parse(storedSolvedTime);
+      const updateElapsedTime = solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000);
       dispatch(setElapsedTime(updateElapsedTime));
     } else {
-      dispatch(setElapsedTime(0));
+      localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time: start_time, elapsed_time: 0, limit_time: limitTime }));
     }
 
     const interval = setInterval(() => {
       if (startTime !== null) {
         const newElapsedTime = Math.floor((Date.now() - startTime) / 1000) + elapsedTime;
         dispatch(setElapsedTime(newElapsedTime));
-        localStorage.setItem('elapseTime', newElapsedTime.toString());
+        localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time, elapsed_time: newElapsedTime, limit_time: limitTime }));
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, [startTime]);
+  }, [startTime, id]);
 
   useEffect(() => {
     fetchCrawlData().then((res)=> {

@@ -11,7 +11,6 @@ const ModalContent1 = ({ width, id }: any) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
   const switchButton = () => {
     setTimeck(timeck === 'ON' ? 'OFF' : 'ON');
   };
@@ -45,6 +44,7 @@ const ModalContent1 = ({ width, id }: any) => {
 
   const gotoSolve = (id: number) => {
     dispatch(setLimitTime(time));
+
     navigate(`/problem?id=${id}`);
   };
 
