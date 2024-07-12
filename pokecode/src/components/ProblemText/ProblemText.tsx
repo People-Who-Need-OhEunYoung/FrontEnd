@@ -1,23 +1,19 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setElapsedTime, resetElapsedTime } from '../../store/timerSlice';
+import { setElapsedTime, resetElapsedTime, setStartTime } from '../../store/timerSlice';
 import getDetails from "./getDetails";
 import { ProblemDetails, ResizableTabsProps } from "./index";
 import { RootState } from '../../store/index';
 
-
-
 const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
   const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(null);
-  // const [elapsedTime, setElapsedTime] = useState<number>(0);
 
   const dispatch = useDispatch();
-  const elapsedTime = useSelector((state: RootState) => state.timer.elapsedTime);
+  const {startTime, elapsedTime, limitTime} = useSelector((state: RootState) => state.timer);
 
 
   const fetchCrawlData = async () => {
-
     try {
       const res: ProblemDetails = await getDetails(id);
       return res; // 객체 형태의 데이터를 반환
@@ -31,10 +27,37 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
     // '$text$'를 '<i>text</i>'로 변환
     const italicBoldText = description.replace(/\$(.*?)\$/g, '<i><b>$1</b></i>');
     const pPadding = italicBoldText.replace(/<p(.*?)>/g, '<p$1 style="padding: 15px 0;" />');
-    const imgWithWidth = pPadding.replace(/<img(.*?)>/g, '<img$1 style=" width: 65%" />')
+    const imgWithWidth = pPadding.replace(/<img(.*?)>/g, '<img$1 style=" width: 65%" />');
     return imgWithWidth;
   };
-  
+
+  useEffect(() => {
+    const storedStartTime = localStorage.getItem('startTime');
+    const storedElapsedTime = localStorage.getItem('elapseTime');
+    const start_time = Date.now();
+    localStorage.setItem('startTime', start_time.toString());
+    dispatch(setStartTime(start_time));
+
+    console.log('limitTime: ',limitTime)
+
+    if (storedStartTime  && storedElapsedTime) {
+      const parsedElapsedTime = parseInt(storedElapsedTime);
+      const updateElapsedTime = parsedElapsedTime + Math.floor((Date.now() - start_time) / 1000);
+      dispatch(setElapsedTime(updateElapsedTime));
+    } else {
+      dispatch(setElapsedTime(0));
+    }
+
+    const interval = setInterval(() => {
+      if (startTime !== null) {
+        const newElapsedTime = Math.floor((Date.now() - startTime) / 1000) + elapsedTime;
+        dispatch(setElapsedTime(newElapsedTime));
+        localStorage.setItem('elapseTime', newElapsedTime.toString());
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [startTime]);
+
   useEffect(() => {
     fetchCrawlData().then((res)=> {
       if (res) {
@@ -42,21 +65,7 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
       }
     });
 
-    // 타이머 시작
-    const startTime = Date.now();
-    const timer = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - startTime) / 1000);
-      dispatch(setElapsedTime(elapsed));
-
-    }, 1000);
-
-    // 컴포넌트 언마운트 시 타이머 정리
-    return () => {
-      clearInterval(timer);
-      dispatch(resetElapsedTime());
-    }
-
-  }, [id])
+  }, [])
 
   // 경과 시간을 시:분:초 형식으로 변환
   const formatTime = (seconds: number) => {
