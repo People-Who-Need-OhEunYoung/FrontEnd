@@ -27,3 +27,7 @@ export interface CreateProblemsResult {
   fail: number;
   errorList: Array<{ problemData: Problem | null; error: any }>;
 }
+
+export interface ResizableTabsProps {
+  id: string;
+}
