@@ -35,11 +35,17 @@ const UserMain = () => {
   const controls = useAnimation();
   const controlsPoo = useAnimation();
 
+
+  //포켓몬 무빙 핸들러
   const handleDivClick = (e: any) => {
     const containerRect = e.currentTarget.getBoundingClientRect();
     const offsetX: any = e.clientX - containerRect.left;
     const offsetY: any = e.clientY - containerRect.top;
-
+    controls.start({
+      x: 0,
+      y: 0,
+      transition: { duration: 1 + Math.random() * 3 },
+    });
     setPosition({ x: offsetX, y: offsetY });
   };
   const getRandomPosition = () => ({
@@ -65,6 +71,7 @@ const UserMain = () => {
     setPokemonname(await pokemonName(name));
   };
 
+
   useEffect(() => {
     if(pokemonId)
       pokemonnameSet(pokemonId);
@@ -73,7 +80,6 @@ const UserMain = () => {
   useEffect(() => {
     pooCount();
     const animateRandomly = async () => {
-      
       while (true) {
         // 무작위 위치로 애니메이션 시작
         const newPosition = getRandomPosition();
@@ -96,7 +102,7 @@ const UserMain = () => {
         await sleep(1000);
       }
     };
-    
+
     animateRandomly();
   }, [controls]);
 
@@ -141,17 +147,16 @@ const UserMain = () => {
             animate={controls}
             style={{
               position: 'absolute',
-              transform: 'translate(50%, 50%)',
+              transform: 'translateX(0px) translateY(0px) translateZ(0px)',
               top: position.y,
               left: position.x,
               display: 'inline-block',
-              width: '15%',
               transition: '1s',
             }}
             className="pokemon"
           >
             <Pokemon
-              width={'100%'}
+              style={{ transform: 'scale(2.5)' }}
               src={
                 pokemonId == 0
                   ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'

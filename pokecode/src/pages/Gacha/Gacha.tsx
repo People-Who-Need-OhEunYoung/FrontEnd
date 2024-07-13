@@ -26,11 +26,12 @@ const Gacha = () => {
   const [getPokemon, setGetPokemon] = useState(0);
   const [getpokemonName, setGetpokemonName] = useState(0);
   const [duplication, setDuplication] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const dispatch = useDispatch();
 
   const gachaRunning = async () => {
-    const pokemonObj = await getGachaPokemon().then(async (res) => {
+    const pokemonObj = await getGachaPokemon().then(async (res: any) => {
       return await setGachaPokemon(res);
     });
     if (pokemonObj.result == 'fail') {
@@ -47,6 +48,7 @@ const Gacha = () => {
       setGetPokemon(pokemonObj.poke_id);
       setGetpokemonName(await pokemonName(pokemonObj.poke_id));
       setGachaResult(true);
+      setIsDisabled(false);
     }, Math.random() * 4000 + 3000);
   };
   return (
@@ -72,28 +74,37 @@ const Gacha = () => {
         >
           <img src={garchimg} width={'100%'} />
         </div>
-        <div>
-          <DesignedButton1
-            style={{ width: '400px', margin: '20px 0' }}
-            color="#80495C"
-            onClick={() => {
-              dispatch(minusUserCredit());
-              setGachaRun(true);
-              setBackground(gachaArray[Math.floor(Math.random() * 6)]);
-              gachaRunning();
-            }}
-          >
-            뽑기 크래딧 (100)
-          </DesignedButton1>
-        </div>
-        <div>
-          <DesignedButton1
-            style={{ width: '400px', margin: '20px 0' }}
-            color="#80495C"
-          >
-            <Link to={'/usermain'}>나가기</Link>
-          </DesignedButton1>
-        </div>
+
+        {isDisabled ? (
+          <div style={{ height: '155px' }} />
+        ) : (
+          <>
+            <div>
+              <DesignedButton1
+                style={{ width: '400px', margin: '20px 0' }}
+                color="#80495C"
+                onClick={(e) => {
+                  e.preventDefault();
+                  dispatch(minusUserCredit());
+                  setGachaRun(true);
+                  setBackground(gachaArray[Math.floor(Math.random() * 6)]);
+                  gachaRunning();
+                  setIsDisabled(true);
+                }}
+              >
+                뽑기 크래딧 (100)
+              </DesignedButton1>
+            </div>
+            <div>
+              <DesignedButton1
+                style={{ width: '400px', margin: '20px 0' }}
+                color="#80495C"
+              >
+                <Link to={'/usermain'}>나가기</Link>
+              </DesignedButton1>
+            </div>
+          </>
+        )}
         <div>
           <MainWrapper
             style={{
