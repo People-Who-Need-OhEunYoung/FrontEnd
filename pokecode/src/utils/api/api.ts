@@ -109,7 +109,7 @@ const pokemonName = async (number: number) => {
     });
 };
 
-//사용자 포켓몬 도감 등록
+//사용자 포켓몬 도감 등록 및 크래딧 차감
 const setGachaPokemon = async (number: number) => {
   return await fetch(`${import.meta.env.VITE_APP_IP}/gambling`, {
     method: 'POST',
@@ -137,7 +137,7 @@ const setGachaPokemon = async (number: number) => {
 };
 
 //사용자 포켓몬 뽑기
-const getGachaPokemon = async () => {
+const getGachaPokemon: Function = async () => {
   return await fetch(
     `https://pokeapi.co/api/v2/evolution-chain/${Math.floor(
       Math.random() * 336 + 1
@@ -163,13 +163,17 @@ const getGachaPokemon = async () => {
           }
           return res.json();
         })
-        .then((idData) => {
+        .then(async (idData) => {
           console.log(idData.id);
+          if (idData.id > 649) {
+            await getGachaPokemon();
+          }
           return idData.id;
         });
     })
-    .catch((error) => {
-      return 'ERROR : ' + error;
+    .catch(async (error) => {
+      console.log(error);
+      return await getGachaPokemon();
     });
 };
 
@@ -197,6 +201,7 @@ const updateMyPokemon = async (pokId: number) => {
       return data;
     })
     .catch((error) => {
+      console.log(error);
       return 'ERROR : ' + error;
     });
 };
