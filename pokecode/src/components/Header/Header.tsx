@@ -75,7 +75,7 @@ export const Header2 = () => {
     >
       <Link
         className="titleLogo"
-        to={'/'}
+        to={'/usermain'}
         style={{
           position: 'absolute',
           zIndex: 100,
@@ -150,7 +150,7 @@ export const Header3 = () => {
     >
       <Link
         className="titleLogo"
-        to={'/'}
+        to={'/usermain'}
         style={{
           position: 'absolute',
           zIndex: 100,
