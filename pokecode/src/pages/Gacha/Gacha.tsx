@@ -10,7 +10,7 @@ import gacha4 from '../../assets/images/가챠4.gif';
 import gacha5 from '../../assets/images/가챠5.gif';
 import gacha6 from '../../assets/images/가챠6.gif';
 import { useState } from 'react';
-import { getGachaPokemon } from '../../utils/api/api';
+import { getGachaPokemon, setGachaPokemon } from '../../utils/api/api';
 import { pokemonName } from '../../utils/api/api';
 import { updateMyPokemon } from '../../utils/api/api';
 
@@ -24,8 +24,8 @@ const Gacha = () => {
   const [duplication, setDuplication] = useState(false);
 
   const gachaRunning = async () => {
-    const pokemonObj = await getGachaPokemon().then((res) => {
-      return res;
+    const pokemonObj = await getGachaPokemon().then(async (res) => {
+      return await setGachaPokemon(res);
     });
     if (pokemonObj.result == 'fail') {
       alert('크래딧 부족입니다.');
