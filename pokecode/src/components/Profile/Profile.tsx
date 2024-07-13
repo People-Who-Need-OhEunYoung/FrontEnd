@@ -37,13 +37,42 @@ export const Profile = ({ ...props }) => {
       </DownMenu>
       <MyMenu style={isHovering ? { display: 'flex', opacity: 1 } : {}}>
         <MyMenuList>
-          <Link to={'/mypage'}>마이페이지</Link>
+          <Link
+            style={{
+              display: 'inline-block',
+              width: '100%',
+              padding: '15px',
+              boxSizing: 'border-box',
+            }}
+            to={'/mypage'}
+          >
+            마이페이지
+          </Link>
         </MyMenuList>
         <MyMenuList>
-          <Link to={'/gacha'}>뽑기</Link>
+          <Link
+            style={{
+              display: 'inline-block',
+              width: '100%',
+              padding: '15px',
+              boxSizing: 'border-box',
+            }}
+            to={'/gacha'}
+          >
+            뽑기
+          </Link>
         </MyMenuList>
         <MyMenuList>
-          <a style={{ cursor: 'pointer' }} onClick={logout}>
+          <a
+            style={{
+              display: 'inline-block',
+              width: '100%',
+              padding: '15px',
+              cursor: 'pointer',
+              boxSizing: 'border-box',
+            }}
+            onClick={logout}
+          >
             로그아웃
           </a>
         </MyMenuList>
@@ -96,7 +125,7 @@ const MyMenu = styled.ul`
   border-radius: 20px;
 `;
 const MyMenuList = styled.li`
-  padding: 15px;
+  width: 100%;
   border-radius: 20px;
   text-align: center;
   &:hover {

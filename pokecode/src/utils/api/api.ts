@@ -137,6 +137,7 @@ const updateMyPokemon = async (pokId: number) => {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       pok_id: pokId,
