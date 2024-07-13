@@ -97,5 +97,7 @@ const pokemonName = async (number: number) => {
     .then((data) => {
       console.log(data.names[2].name);
       return data.names[2].name;
-    });
+    }).catch(() =>{
+      return 'error';
+  });
 };

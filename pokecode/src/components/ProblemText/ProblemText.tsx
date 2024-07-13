@@ -78,7 +78,7 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
         {problemDetails && (
           <HeaderTxt> 
             <Title>{id}번 {problemDetails.title}</Title>
-            <Timer isTimeExceeded = {elapsedTime > limitTime} isLimit = {limitTime > 0} > {formatTime(elapsedTime)}</Timer>
+            <Timer istimerxceeded = {(elapsedTime > limitTime).toString()} islimit = {(limitTime > 0).toString()} > {formatTime(elapsedTime)}</Timer>
             <div>
               <HeaderBtn> 코드 리뷰 요청</HeaderBtn>
               <HeaderBtn> 힌트 보기 </HeaderBtn>
@@ -172,12 +172,12 @@ const Title = styled.p`
   white-space: nowrap;
 `;
 
-const Timer = styled.p<{isTimeExceeded: boolean, isLimit: boolean}>`
+const Timer = styled.p<{istimerxceeded: string, islimit: string}>`
   margin-left: 30px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: ${(props) => (props.isTimeExceeded && props.isLimit) ? 'red' : 'white'}; // 조건부 스타일
+  color: ${(props) => (props.istimerxceeded == 'true' && props.islimit == 'true') ? 'red' : 'white'}; // 조건부 스타일
 `;
 
 const ProblemWrap = styled.div`

@@ -55,17 +55,26 @@ const UserMain = () => {
     });
   };
 
-  const userSet = async () => {
-    setUser(await userInfo());
-  };
   const pokemonnameSet = async (name: number) => {
     setPokemonname(await pokemonName(name));
   };
-  pokemonnameSet(user.curPokeId);
+
+
+  const userSet = async () => {
+    setUser(await userInfo());
+  };
+
+  useEffect(() => {
+    if (user.curPokeId) {
+      pokemonnameSet(user.curPokeId);
+    }
+  },[user]);
+
   useEffect(() => {
     userSet();
     pooCount();
     const animateRandomly = async () => {
+      
       while (true) {
         // 무작위 위치로 애니메이션 시작
         const newPosition = getRandomPosition();
@@ -88,8 +97,9 @@ const UserMain = () => {
         await sleep(1000);
       }
     };
+    
     animateRandomly();
-  }, [controls, pokemonname]);
+  }, [controls]);
 
   const handlePooClick = () => {
     controlsPoo.start({
@@ -153,7 +163,7 @@ const UserMain = () => {
             ></Pokemon>
           </motion.div>
           <PokeNameWrap>
-            <PokeName>{pokemonname}</PokeName>
+            <PokeName>{user.curPokeId==0?'error':pokemonname}</PokeName>
           </PokeNameWrap>
           <LevelWrap>
             <Level>
