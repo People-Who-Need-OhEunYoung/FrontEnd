@@ -12,6 +12,8 @@ import {
   getPooCount,
   removePoo,
 } from '../../utils/api/api';
+import { RootState } from '../../store';
+import { useSelector } from 'react-redux';
 
 const UserMain = () => {
   const [position, setPosition] = useState({
@@ -25,10 +27,14 @@ const UserMain = () => {
     nickName: '기본값',
     result: '기본값',
   });
+
   const [pokemonname, setPokemonname] = useState('');
   //const [pooCount, setPooCount] = useState(0);
+
+  const {pokemonId} = useSelector((state: RootState) => state.userinfo);
   const controls = useAnimation();
   const controlsPoo = useAnimation();
+
 
   //포켓몬 무빙 핸들러
   const handleDivClick = (e: any) => {
@@ -65,18 +71,13 @@ const UserMain = () => {
     setPokemonname(await pokemonName(name));
   };
 
-  const userSet = async () => {
-    setUser(await userInfo());
-  };
 
   useEffect(() => {
-    if (user.curPokeId) {
-      pokemonnameSet(user.curPokeId);
-    }
-  }, [user]);
+    if(pokemonId)
+      pokemonnameSet(pokemonId);
+  },[pokemonId]);
 
   useEffect(() => {
-    userSet();
     pooCount();
     const animateRandomly = async () => {
       while (true) {
@@ -157,16 +158,16 @@ const UserMain = () => {
             <Pokemon
               style={{ transform: 'scale(2.5)' }}
               src={
-                user.curPokeId == 0
+                pokemonId == 0
                   ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
                   : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-                    user.curPokeId +
+                    pokemonId +
                     '.gif'
               }
             ></Pokemon>
           </motion.div>
           <PokeNameWrap>
-            <PokeName>{user.curPokeId == 0 ? 'error' : pokemonname}</PokeName>
+            <PokeName>{pokemonId==0?'error':pokemonname}</PokeName>
           </PokeNameWrap>
           <LevelWrap>
             <Level>

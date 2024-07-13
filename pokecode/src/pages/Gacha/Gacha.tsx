@@ -13,6 +13,10 @@ import { useState } from 'react';
 import { getGachaPokemon, setGachaPokemon } from '../../utils/api/api';
 import { pokemonName } from '../../utils/api/api';
 import { updateMyPokemon } from '../../utils/api/api';
+import { minusUserCredit } from '../../store/userInfo';
+import { RootState } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 const gachaArray = [gacha1, gacha2, gacha3, gacha4, gacha5, gacha6];
 const Gacha = () => {
@@ -23,6 +27,8 @@ const Gacha = () => {
   const [getpokemonName, setGetpokemonName] = useState(0);
   const [duplication, setDuplication] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+
+  const dispatch = useDispatch();
 
   const gachaRunning = async () => {
     const pokemonObj = await getGachaPokemon().then(async (res: any) => {
@@ -68,6 +74,7 @@ const Gacha = () => {
         >
           <img src={garchimg} width={'100%'} />
         </div>
+
         {isDisabled ? (
           <div style={{ height: '155px' }} />
         ) : (
@@ -78,6 +85,7 @@ const Gacha = () => {
                 color="#80495C"
                 onClick={(e) => {
                   e.preventDefault();
+                  dispatch(minusUserCredit());
                   setGachaRun(true);
                   setBackground(gachaArray[Math.floor(Math.random() * 6)]);
                   gachaRunning();

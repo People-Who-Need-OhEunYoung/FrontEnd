@@ -35,7 +35,7 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
     const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`);
     let start_time = Date.now();
     dispatch(setStartTime(start_time));
-    
+
     if (storedSolvedTime) {
       const solvedData = JSON.parse(storedSolvedTime);
       const updateElapsedTime = solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000);
@@ -61,7 +61,6 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
         setProblemDetails(res);
       }
     });
-
   }, [])
 
   // 경과 시간을 시:분:초 형식으로 변환

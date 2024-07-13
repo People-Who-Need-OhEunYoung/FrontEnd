@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import defaultImage from '../../assets/images/default_profile.png';
 import { useNavigate } from 'react-router-dom';
 import { userSearch } from '../../utils/api/solvedAc';
+import { RootState } from '../../store/index';
+import { useSelector } from 'react-redux';
 
 type ImageState = {
   image_file: File | null;
@@ -25,6 +27,8 @@ const Uploader = () => {
   // const [page, setPage] = useState(1); // 페이지 번호, 초기값 1
   const [solvedCount, setsolvedCount] = useState(0); // 페이지 번호, 초기값 0
   const [tierImg, settierImg] = useState('');
+
+  const {userNickname, credit} = useSelector((state: RootState) => state.userinfo);
 
   //빌드를 위해 임시 셋
   useEffect(() => {
@@ -107,8 +111,8 @@ const Uploader = () => {
           </Button>
         </UploadImageContainer>
         <InfoContainer>
-          <Text>닉네임: {query} </Text>
-          <Text>크레딧:</Text>
+          <Text>닉네임: {userNickname} </Text>
+          <Text>크레딧: {credit}</Text>
           <Text>맞은 문제 수: {solvedCount} </Text>
         </InfoContainer>
       </MainContainer>
