@@ -19,7 +19,10 @@ export const Profile = ({ ...props }) => {
   };
   return (
     <div onMouseLeave={handleMouseOut} onMouseOver={handleMouseOver}>
-      <MyPic src={defaultImage} alt="" />
+      <MyPic
+        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${props.pokemonId}.svg`}
+        alt=""
+      />
       <Myinfo>
         <p>
           {props.name}님

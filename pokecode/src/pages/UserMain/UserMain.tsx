@@ -6,12 +6,7 @@ import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
 import { MainWrapper } from '../../components/MainWrapper';
 import poo from '../../assets/images/poo.png';
-import {
-  userInfo,
-  pokemonName,
-  getPooCount,
-  removePoo,
-} from '../../utils/api/api';
+import { pokemonName, getPooCount, removePoo } from '../../utils/api/api';
 import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
 
@@ -21,20 +16,13 @@ const UserMain = () => {
     y: '50%',
   });
   const [pooset, setPooset] = useState<{ x: number; y: number }[]>([]);
-  const [user, setUser] = useState({
-    credit: 0,
-    curPokeId: 0,
-    nickName: '기본값',
-    result: '기본값',
-  });
 
   const [pokemonname, setPokemonname] = useState('');
   //const [pooCount, setPooCount] = useState(0);
 
-  const {pokemonId} = useSelector((state: RootState) => state.userinfo);
+  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const controls = useAnimation();
   const controlsPoo = useAnimation();
-
 
   //포켓몬 무빙 핸들러
   const handleDivClick = (e: any) => {
@@ -71,11 +59,9 @@ const UserMain = () => {
     setPokemonname(await pokemonName(name));
   };
 
-
   useEffect(() => {
-    if(pokemonId)
-      pokemonnameSet(pokemonId);
-  },[pokemonId]);
+    if (pokemonId) pokemonnameSet(pokemonId);
+  }, [pokemonId]);
 
   useEffect(() => {
     pooCount();
@@ -167,7 +153,7 @@ const UserMain = () => {
             ></Pokemon>
           </motion.div>
           <PokeNameWrap>
-            <PokeName>{pokemonId==0?'error':pokemonname}</PokeName>
+            <PokeName>{pokemonId == 0 ? 'error' : pokemonname}</PokeName>
           </PokeNameWrap>
           <LevelWrap>
             <Level>
