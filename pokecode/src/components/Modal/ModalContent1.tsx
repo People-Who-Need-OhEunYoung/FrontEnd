@@ -11,7 +11,6 @@ const ModalContent1 = ({ width, id }: any) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
   const switchButton = () => {
     setTimeck(timeck === 'ON' ? 'OFF' : 'ON');
   };
@@ -44,7 +43,8 @@ const ModalContent1 = ({ width, id }: any) => {
   };
 
   const gotoSolve = (id: number) => {
-    dispatch(setLimitTime(time));
+    dispatch(setLimitTime(time*60));
+
     navigate(`/problem?id=${id}`);
   };
 
@@ -170,6 +170,7 @@ const OnOffText = styled.span<{ timeck: string }>`
       transform: translateX(-15px);
     `}
 `;
+
 const TimeSelecter = styled.ul<{ timeck: string }>`
   display: none;
   background: #f0f0f0;

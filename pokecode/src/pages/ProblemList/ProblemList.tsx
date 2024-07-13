@@ -222,7 +222,6 @@ const ProblemList = () => {
                         setSelected(item.titleKo);
                         setProbId(item.problemId);
                       }}
-                      style={{}}
                     >
                       {' '}
                       {item.titleKo}

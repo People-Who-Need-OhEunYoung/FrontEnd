@@ -6,7 +6,7 @@ import ModalContent2 from './ModalContent2';
 import ModalContent3 from './ModalContent3';
 import ModalContent4 from './ModalContent4';
 import ModalContent5 from './ModalContent5';
-
+import ModalContent7 from './ModalContent7';
 /*
 
 모달 사용법 : 
@@ -68,6 +68,11 @@ const Modal = ({
             <>
               <Title>{'테스트 케이스 입력'}</Title>
               <ModalContent5 />
+            </>
+          ) :  nowcomponent === 6 ? (
+            <>
+              <Title>{text}</Title>
+              <ModalContent7 />
             </>
           ) : (
             ''

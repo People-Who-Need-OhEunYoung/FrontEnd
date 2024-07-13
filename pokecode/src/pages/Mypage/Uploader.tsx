@@ -110,7 +110,6 @@ const Uploader = () => {
           <Text>닉네임: {query} </Text>
           <Text>크레딧:</Text>
           <Text>맞은 문제 수: {solvedCount} </Text>
-          <Text>소속: </Text>
         </InfoContainer>
       </MainContainer>
       <Submit>
@@ -183,7 +182,7 @@ const MainContainer = styled.div`
 `;
 
 const InfoContainer = styled.div`
-  margin-top: 30px;
+  margin-top: 50px;
   width: 50%;
   font-size: 1.4em;
 `;

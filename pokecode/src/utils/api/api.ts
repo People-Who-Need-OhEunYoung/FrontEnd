@@ -106,7 +106,9 @@ const pokemonName = async (number: number) => {
     .then((data) => {
       console.log(data.names[2].name);
       return data.names[2].name;
-    });
+    }).catch(() =>{
+      return 'error';
+  });
 };
 
 //사용자 포켓몬 도감 등록

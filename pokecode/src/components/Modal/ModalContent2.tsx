@@ -101,7 +101,7 @@ const Person = styled.input`
   width: 80px;
   font-size: 35px;
   background: none;
-  color: white;
+  color: #000000;
 `;
 
 const PersonWrap = styled.div`

@@ -1,7 +1,18 @@
 import styled, { css } from 'styled-components';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import Modal from '../../components/Modal/Modal';
+
+type ItemType = {
+  roomId: number;
+  problemId: string;
+  problemTitle: string;
+  roomTitle: string;
+  level: number;
+  limit_num: number;
+  cur_num: number;
+  nickname: string;
+};
 
 const RoomList = () => {
   const [query, setQuery] = useState(' '); // 검색 문자열 쿼리
@@ -9,10 +20,26 @@ const RoomList = () => {
   const [pageCount, setPageCount] = useState<number>(1);
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
   const [check, setCheck] = useState('OFF');
+  const [isEnterModalOpen, setIsEnterModalOpen] = useState(false);
+  const [isMakeModalOpen, setIsMakeModalOpen] = useState(false);
+  const [roomId, setRoomId] = useState<number>(1);
+  const [selected, setSelected] = useState<string>('');
+  const [roomlist, setRoomlist] = useState<ItemType[]>([
+    {
+      roomId: 1,
+      problemId: '1000',
+      problemTitle: 'A+B',
+      roomTitle: '해결 좀 ㅎ ㅐ주세요',
+      level: 1,
+      limit_num: 3,
+      cur_num: 1,
+      nickname: 'ㅇㅇㅇ',
+    },
+  ]); // 문제 데이터를 저장할 배열
 
-  //임시 빌드 로직 제거 해도 되요 start
+  //임시 빌드 로직 제거 해도 돼요 start
   if (pageCount == null) setPageCount(1);
-  //임시 빌드 로직 제거 해도 되요 end
+  //임시 빌드 로직 제거 해도 돼요 end
 
   console.log(page);
   const switchButton = () => {
@@ -82,53 +109,52 @@ const RoomList = () => {
               </CheckSlide>
               <CheckDoc>내가 푼 문제만 보기</CheckDoc>
             </div>
-            <MakeRoomButton onClick={() => {}}>방 만들기</MakeRoomButton>
+            <MakeRoomButton onClick={() => { setIsMakeModalOpen(true); }}>방 만들기</MakeRoomButton>
           </SearchHeader>
         </SearchWrapper>
+
         <ListView>
-          <div
-            style={{
-              position: 'relative',
-              width: '100%',
-              background: 'white',
-              height: '100px',
-              color: 'black',
-            }}
-          >
-            <img
-              src="https://static.solved.ac/tier_small/5.svg"
-              height={100}
-              alt=""
-            />
-            <Link
-              to={'/room'}
-              style={{
-                height: '100px',
-                position: 'absolute',
-                fontSize: '2em',
-                paddingLeft: '20px',
-              }}
-            >
-              <span style={{ fontWeight: 'bold' }}>1000번 문제</span>
-              <br />
-              문제가 너무 어려워요~!
-            </Link>
-            <div
-              style={{
-                height: '100px',
-                position: 'absolute',
-                fontSize: '2em',
-                paddingLeft: '20px',
-                right: 0,
-                top: 0,
-              }}
-            >
-              방인원:1/4
-              <br />
-              닉네임
-            </div>
-          </div>
+          {roomlist.map((item, index) => (
+            <Item key={index}>
+              {(() => {
+                const link = `https://www.acmicpc.net/problem/${item.problemId}`;
+                const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
+                return (
+                  <ProblemComponent onClick={() => {
+                        setIsEnterModalOpen(true);
+                        setSelected(item.roomTitle);
+                        setRoomId(item.roomId);
+                      }}>
+                    <Probinfo>
+                      <TierImg src={tiersrc} style= {{marginRight:'2%'}} />
+                      <p style= {{marginRight:'5%'}}>{item.problemId}</p>
+                      <p style= {{marginRight:'8%'}}>{item.problemTitle}</p>
+                      <p>{item.roomTitle}</p>
+                    </Probinfo>
+                    
+                    <Roominfo>
+                      <p style= {{marginBottom:'10px'}}> 참여 인원: {item.cur_num} /{item.limit_num}</p>
+                      <p> 닉네임: {item.nickname} </p>
+                    </Roominfo>
+                  </ProblemComponent>
+                );
+              })()}
+            </Item>
+          ))} 
         </ListView>
+          <Modal
+            text={selected}
+            id={roomId}
+            component={6}
+            on={isEnterModalOpen}
+            event={setIsEnterModalOpen}
+          ></Modal>
+
+          <Modal
+            component={2}
+            on={isMakeModalOpen}
+            event={setIsMakeModalOpen}
+          ></Modal>
         <ButtonGroup style={{ margin: '1.5%' }}>
           {renderPageButtons()}
         </ButtonGroup>
@@ -136,6 +162,44 @@ const RoomList = () => {
     </motion.div>
   );
 };
+
+const Probinfo = styled.div`
+  position:absolute;
+  display:flex;
+  align-items: center;
+  font-size: 1.3rem;
+  width: 70%;
+`;
+
+const Roominfo = styled.div`
+  position: absolute;
+  display:flex;
+  flex-direction:column;
+  text-align:end;
+  right: 0;
+  color: #c0c0c0;
+  width: 30%;
+`;
+
+const TierImg = styled.img`
+  position: relative;
+  width: 20px;
+  margin-right: 2%;
+  padding: 6px;
+`;
+
+const ProblemComponent = styled.div`
+  display: flex;
+  margin: auto;
+  align-items: center;
+  position: relative;
+`;
+
+const Item = styled.div`
+  border: 1px solid #8d8d8d;
+  padding: 4%;
+`;
+
 
 const CheckSlide = styled.div<{ timeck: string }>`
   position: relative;
@@ -230,7 +294,6 @@ const OnOffText = styled.span<{ timeck: string }>`
 const SearchHeader = styled.div`
   display: flex;
   justify-content:center;
-
 `;
 
 const MakeRoomButton = styled.button`
