@@ -6,14 +6,14 @@ import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
 import { MainWrapper } from '../../components/MainWrapper';
 import poo from '../../assets/images/poo.png';
-import { setUserNickname, setUserCredit } from '../../store/userInfo';
-import { useDispatch } from 'react-redux';
 import {
   userInfo,
   pokemonName,
   getPooCount,
   removePoo,
 } from '../../utils/api/api';
+import { RootState } from '../../store';
+import { useSelector } from 'react-redux';
 
 const UserMain = () => {
   const [position, setPosition] = useState({
@@ -30,9 +30,10 @@ const UserMain = () => {
 
   const [pokemonname, setPokemonname] = useState('');
   //const [pooCount, setPooCount] = useState(0);
+
+  const {pokemonId} = useSelector((state: RootState) => state.userinfo);
   const controls = useAnimation();
   const controlsPoo = useAnimation();
-  const dispatch = useDispatch();
 
   const handleDivClick = (e: any) => {
     const containerRect = e.currentTarget.getBoundingClientRect();
@@ -64,21 +65,12 @@ const UserMain = () => {
     setPokemonname(await pokemonName(name));
   };
 
-  const userSet = async () => {
-    setUser(await userInfo());
-   
-  };
+  useEffect(() => {
+    if(pokemonId)
+      pokemonnameSet(pokemonId);
+  },[pokemonId]);
 
   useEffect(() => {
-    if (user) {
-      pokemonnameSet(user.curPokeId);
-      dispatch(setUserNickname(user.nickName));
-      dispatch(setUserCredit(user.credit));
-    }
-  },[user]);
-
-  useEffect(() => {
-    userSet();
     pooCount();
     const animateRandomly = async () => {
       
@@ -161,16 +153,16 @@ const UserMain = () => {
             <Pokemon
               width={'100%'}
               src={
-                user.curPokeId == 0
+                pokemonId == 0
                   ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
                   : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-                    user.curPokeId +
+                    pokemonId +
                     '.gif'
               }
             ></Pokemon>
           </motion.div>
           <PokeNameWrap>
-            <PokeName>{user.curPokeId==0?'error':pokemonname}</PokeName>
+            <PokeName>{pokemonId==0?'error':pokemonname}</PokeName>
           </PokeNameWrap>
           <LevelWrap>
             <Level>

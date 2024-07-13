@@ -5,7 +5,10 @@ import { Profile } from '../Profile';
 import Nav from '../Nav/Nav';
 import styled from 'styled-components';
 import { RootState } from '../../store/index';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { userInfo } from '../../utils/api/api';
+import { setUserCredit, setUserNickname, setPokemonId } from '../../store/userInfo';
 
 const Header = () => {
 
@@ -31,9 +34,35 @@ const Header = () => {
 
 export const Header2 = () => {
 
-  const {userNickname, credit} = useSelector((state: RootState) => state.userinfo);
+  const [user, setUser] = useState({
+    credit: 0,
+    curPokeId: 0,
+    nickName: '기본값',
+    result: '기본값',
+  });
 
-  console.log('userNickname',userNickname);
+  const {userNickname, credit} = useSelector((state: RootState) => state.userinfo);
+  const dispatch = useDispatch();
+
+  console.log('credit: ',credit);
+
+  const userSet = async () => {
+    setUser(await userInfo());
+  };
+
+  useEffect(() => {
+    if (user) {
+      dispatch(setUserNickname(user.nickName));
+      dispatch(setUserCredit(user.credit));
+      dispatch(setPokemonId(user.curPokeId));
+    }
+  },[user]);
+
+  useEffect(()=> {
+    userSet();
+  },[])
+
+  
   const navigate = useNavigate();
   const loginChecker = async () => {
     await fetch(`${import.meta.env.VITE_APP_IP}/tokenTest`, {
