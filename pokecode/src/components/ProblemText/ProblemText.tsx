@@ -13,13 +13,6 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
   const dispatch = useDispatch();
   const {startTime, elapsedTime, limitTime} = useSelector((state: RootState) => state.timer);
 
-  const SolvedTime = {
-    _id : id,
-    start_time : startTime,
-    elapsed_time: elapsedTime,
-    limit_time: limitTime,
-  }
-
   const fetchCrawlData = async () => {
     try {
       const res: ProblemDetails = await getDetails(id);
@@ -39,12 +32,10 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
   };
 
   useEffect(() => {
-
     const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`);
     let start_time = Date.now();
     dispatch(setStartTime(start_time));
     
-
     if (storedSolvedTime) {
       const solvedData = JSON.parse(storedSolvedTime);
       const updateElapsedTime = solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000);
@@ -59,6 +50,7 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
         dispatch(setElapsedTime(newElapsedTime));
         localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time, elapsed_time: newElapsedTime, limit_time: limitTime }));
       }
+
     }, 1000);
     return () => clearInterval(interval);
   }, [startTime, id]);
@@ -85,8 +77,8 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
       <Header>
         {problemDetails && (
           <HeaderTxt> 
-            <Timer>{id}번 {problemDetails.title}</Timer>
-            <Timer>{formatTime(elapsedTime)}</Timer>
+            <Title>{id}번 {problemDetails.title}</Title>
+            <Timer isTimeExceeded = {elapsedTime > limitTime} isLimit = {limitTime > 0} > {formatTime(elapsedTime)}</Timer>
             <div>
               <HeaderBtn> 코드 리뷰 요청</HeaderBtn>
               <HeaderBtn> 힌트 보기 </HeaderBtn>
@@ -173,11 +165,19 @@ const HeaderTxt = styled.div`
   justify-content: space-around;
 `;
 
-const Timer = styled.p`
+const Title = styled.p`
   margin-left: 30px;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap
+  white-space: nowrap;
+`;
+
+const Timer = styled.p<{isTimeExceeded: boolean, isLimit: boolean}>`
+  margin-left: 30px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: ${(props) => (props.isTimeExceeded && props.isLimit) ? 'red' : 'white'}; // 조건부 스타일
 `;
 
 const ProblemWrap = styled.div`
