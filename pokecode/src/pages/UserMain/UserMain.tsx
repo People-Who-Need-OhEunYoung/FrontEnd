@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
 import { MainWrapper } from '../../components/MainWrapper';
 import poo from '../../assets/images/poo.png';
+import { setUserNickname, setUserCredit } from '../../store/userInfo';
+import { useDispatch } from 'react-redux';
 import {
   userInfo,
   pokemonName,
@@ -25,10 +27,13 @@ const UserMain = () => {
     nickName: '기본값',
     result: '기본값',
   });
+
   const [pokemonname, setPokemonname] = useState('');
   //const [pooCount, setPooCount] = useState(0);
   const controls = useAnimation();
   const controlsPoo = useAnimation();
+  const dispatch = useDispatch();
+
   const handleDivClick = (e: any) => {
     const containerRect = e.currentTarget.getBoundingClientRect();
     const offsetX: any = e.clientX - containerRect.left;
@@ -59,14 +64,16 @@ const UserMain = () => {
     setPokemonname(await pokemonName(name));
   };
 
-
   const userSet = async () => {
     setUser(await userInfo());
+   
   };
 
   useEffect(() => {
-    if (user.curPokeId) {
+    if (user) {
       pokemonnameSet(user.curPokeId);
+      dispatch(setUserNickname(user.nickName));
+      dispatch(setUserCredit(user.credit));
     }
   },[user]);
 

@@ -4,8 +4,11 @@ import { motion } from 'framer-motion';
 import { Profile } from '../Profile';
 import Nav from '../Nav/Nav';
 import styled from 'styled-components';
+import { RootState } from '../../store/index';
+import { useSelector } from 'react-redux';
 
 const Header = () => {
+
   return (
     <div className="header">
       <Link className="titleLogo" to={'/'} style={{ zIndex: 100 }}>
@@ -27,6 +30,10 @@ const Header = () => {
 };
 
 export const Header2 = () => {
+
+  const {userNickname, credit} = useSelector((state: RootState) => state.userinfo);
+
+  console.log('userNickname',userNickname);
   const navigate = useNavigate();
   const loginChecker = async () => {
     await fetch(`${import.meta.env.VITE_APP_IP}/tokenTest`, {
@@ -75,7 +82,7 @@ export const Header2 = () => {
     >
       <Link
         className="titleLogo"
-        to={'/'}
+        to={'/usermain'}
         style={{
           position: 'absolute',
           zIndex: 100,
@@ -98,7 +105,7 @@ export const Header2 = () => {
         <Nav></Nav>
       </div>
       <ProfileWrap>
-        <Profile name={'알맞은 데이터'} credit={30000} />
+        <Profile name={userNickname} credit={credit} />
       </ProfileWrap>
     </motion.div>
   );
@@ -150,7 +157,7 @@ export const Header3 = () => {
     >
       <Link
         className="titleLogo"
-        to={'/'}
+        to={'/usermain'}
         style={{
           position: 'absolute',
           zIndex: 100,
