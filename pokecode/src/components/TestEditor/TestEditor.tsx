@@ -135,7 +135,7 @@ const TestEditor = ({ ...props }) => {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        Authorization: 'Bearer sk-880772ade7984d4ba70c1fb1c62da44a',
+        Authorization: `Bearer ${import.meta.env.VITE_APP_AI}`,
       },
       body: JSON.stringify({
         messages: [

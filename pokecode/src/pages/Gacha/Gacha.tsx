@@ -21,6 +21,7 @@ const Gacha = () => {
   const [gachaResult, setGachaResult] = useState(false);
   const [getPokemon, setGetPokemon] = useState(0);
   const [getpokemonName, setGetpokemonName] = useState(0);
+  const [duplication, setDuplication] = useState(false);
 
   const gachaRunning = async () => {
     const pokemonObj = await getGachaPokemon().then((res) => {
@@ -32,10 +33,15 @@ const Gacha = () => {
       return;
     }
     setTimeout(async () => {
+      if (pokemonObj.message == '중복 포켓몬') {
+        setDuplication(true);
+      } else {
+        setDuplication(false);
+      }
       setGetPokemon(pokemonObj.poke_id);
       setGetpokemonName(await pokemonName(pokemonObj.poke_id));
       setGachaResult(true);
-    }, 3000);
+    }, Math.random() * 4000 + 3000);
   };
   return (
     <motion.div
@@ -111,26 +117,15 @@ const Gacha = () => {
               textAlign: 'center',
             }}
           >
-            <span
-              style={{
-                position: 'absolute',
-                top: '10px',
-                right: '5%',
-                fontSize: '2em',
-                cursor: 'pointer',
-              }}
-              onClick={() => {
-                setGachaRun(false);
-                setGachaResult(false);
-              }}
-            >
-              X
-            </span>
-            <h1 style={{ paddingTop: '40px' }}>다음 포켓몬이 뽑혔습니다.</h1>
+            <h1 style={{ paddingTop: '20px' }}>
+              {duplication
+                ? '이미 뽑힌 포켓몬입니다'
+                : '다음 포켓몬이 뽑혔습니다'}
+            </h1>
             <img
               style={{
                 position: 'absolute',
-                top: '50%',
+                top: '40%',
                 left: '50%',
                 transform: 'translate(-50%,-50%)',
                 width: '30%',
@@ -141,7 +136,9 @@ const Gacha = () => {
                 '.gif'
               }
             />
-            <h1 style={{ position: 'absolute', bottom: '80px', width: '100%' }}>
+            <h1
+              style={{ position: 'absolute', bottom: '110px', width: '100%' }}
+            >
               {getpokemonName}
             </h1>
             <DesignedButton1
@@ -149,14 +146,36 @@ const Gacha = () => {
               style={{
                 position: 'absolute',
                 left: '0',
-                bottom: '30px',
-                width: '80%',
+                bottom: '60px',
+                width: '60%',
                 boxSizing: 'border-box',
-                margin: '0 10%',
+                margin: '0 20%',
               }}
-              onClick={() => updateMyPokemon(getPokemon)}
+              onClick={() => {
+                updateMyPokemon(getPokemon);
+                setGachaRun(false);
+                setGachaResult(false);
+              }}
             >
               현재 포켓몬으로 변경
+            </DesignedButton1>
+            <DesignedButton1
+              color="white"
+              style={{
+                position: 'absolute',
+                left: '0',
+                bottom: '10px',
+                width: '60%',
+                boxSizing: 'border-box',
+                margin: '0 20%',
+                color: 'black',
+              }}
+              onClick={() => {
+                setGachaRun(false);
+                setGachaResult(false);
+              }}
+            >
+              닫기
             </DesignedButton1>
           </MainWrapper>
         </div>
