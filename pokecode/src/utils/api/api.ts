@@ -1,4 +1,12 @@
-export { nicknameChecker, userInfo, pokemonName, getPooCount, removePoo };
+export {
+  nicknameChecker,
+  userInfo,
+  pokemonName,
+  getPooCount,
+  removePoo,
+  getGachaPokemon,
+  updateMyPokemon,
+};
 
 //닉네임 중복 검사
 const nicknameChecker = async (name: string): Promise<string> => {
@@ -100,4 +108,55 @@ const pokemonName = async (number: number) => {
     }).catch(() =>{
       return 'error';
   });
+};
+
+//사용자 포켓몬 뽑기
+const getGachaPokemon = async () => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/gambling`, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      console.log(data);
+      return data;
+    })
+    .catch((error) => {
+      return 'ERROR : ' + error;
+    });
+};
+
+//현재 포켓몬 변경
+const updateMyPokemon = async (pokId: number) => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/changeMonster`, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      pok_id: pokId,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      console.log(data);
+      console.log(pokId);
+      return data;
+    })
+    .catch((error) => {
+      return 'ERROR : ' + error;
+    });
 };

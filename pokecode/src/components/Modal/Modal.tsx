@@ -31,8 +31,13 @@ event(모달에서 자체적으로 닫기 위해 setState function)
    on={isModalOpen} event={setIsModalOpen}
 */
 
-const Modal = ({ text = '문제명', id = '', component, on = false, event }: any) => {
-
+const Modal = ({
+  text = '문제명',
+  id = '',
+  component,
+  on = false,
+  event,
+}: any) => {
   const [nowcomponent, setNowcomponent] = useState(component);
 
   return (
@@ -42,7 +47,7 @@ const Modal = ({ text = '문제명', id = '', component, on = false, event }: an
           {nowcomponent === 1 ? (
             <>
               <Title>{text}</Title>
-              <ModalContent1 id = {id}/>
+              <ModalContent1 id={id} />
             </>
           ) : nowcomponent === 2 ? (
             <>
@@ -68,7 +73,7 @@ const Modal = ({ text = '문제명', id = '', component, on = false, event }: an
             ''
           )}
           <DesignedButton1
-            color='rgba(79, 70, 229, 1)'
+            color="rgba(79, 70, 229, 1)"
             style={{ marginBottom: '40px' }}
             onClick={() => event(false)}
           >
@@ -86,7 +91,7 @@ const Background = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 9999;
+  z-index: 999999999;
   background: #46464647;
   text-align: center;
   backdrop-filter: blur(5px);
@@ -114,7 +119,6 @@ const Title = styled.p`
   overflow-wrap: break-word;
   width: 300px;
   margin: auto;
-
 `;
 
 export default Modal;

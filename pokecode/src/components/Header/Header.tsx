@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Profile } from '../Profile';
 import Nav from '../Nav/Nav';
 import styled from 'styled-components';
+
 const Header = () => {
   return (
     <div className="header">
