@@ -1,21 +1,29 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-const ModalContent1 = () => {
+const ModalContent7 = ({id, title} : any) => {
   const navigate = useNavigate();
 
   const gotoSolve = () => {
-    navigate(`/room`);
+    navigate(`/room?id=${id}&title=${title}`);
   };
 
   return (
     <div style={{ width: '400px' }}>
+      <ProblemInfo> {id}번 {title}</ProblemInfo>
       <SolveBtn onClick={() => gotoSolve()}>
         <b>리뷰방 입장</b>
       </SolveBtn>
     </div>
   );
 };
+
+const ProblemInfo = styled.p`
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #434343;
+  margin: 10%;
+`;
 
 const SolveBtn = styled.button`
   position: relative;
@@ -30,4 +38,4 @@ const SolveBtn = styled.button`
   cursor: pointer;
 `;
 
-export default ModalContent1;
+export default ModalContent7;

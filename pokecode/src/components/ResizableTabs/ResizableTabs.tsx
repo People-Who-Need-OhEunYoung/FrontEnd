@@ -8,6 +8,11 @@ import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 import { userInfo } from '../../utils/api/api';
 
+// import { RootState } from '../../store';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { setAcquireReview, setWrittenCode } from '../../store/problemSlice';
+
+
 const Container = styled.div`
   display: flex;
   align-items: center;
@@ -152,7 +157,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
               height: '80%',
             }}
           >
-            <ProblemText />
+          <ProblemText id = {id} isShowHeader = 'true'/>
           </div>
           <Home onClick={handleDivClick}>
             <motion.div

@@ -32,6 +32,7 @@ const ModalContent2 = ({ width, onOff }: any) => {
           width: width,
           padding: '30px 0 20px',
           fontWeight: 'bold',
+         
         }}
       >
         <div style={{ minHeight: '40px' }} onDoubleClick={handleDoubleClick}>
@@ -40,6 +41,7 @@ const ModalContent2 = ({ width, onOff }: any) => {
               value={title}
               onChange={handleChange}
               onBlur={handleBlur}
+              style={{padding:'10px', borderRadius:'20px'}}
               onKeyDown={(e) => {
                 if (e.keyCode === 13) handleBlur();
               }}
@@ -50,15 +52,17 @@ const ModalContent2 = ({ width, onOff }: any) => {
             <span
               style={{
                 display: 'inline-block',
-                width: '80%',
+                width: '70%',
                 wordBreak: 'break-all',
+                border: '1px solid #000000',
+                padding:'10px',
+                borderRadius:'20px'
               }}
             >
               {title == '' ? '방 제목을 입력해주세요.' : title}
             </span>
           )}
         </div>
-
         <PersonWrap>
           <span
             style={{ width: '40px', cursor: 'pointer', userSelect: 'none' }}
@@ -85,11 +89,13 @@ const ModalContent2 = ({ width, onOff }: any) => {
 };
 
 const Titleinput = styled.textarea`
-  width: 80%;
+  width: 70%;
   text-align: center;
-  background: none;
+  background: #b9e3fc2b;
   word-break: break-all;
-  border: none;
+  border: 1px solid #000000;
+  font-size: 1rem;
+  font-weight: bold;
   outline: none;
   resize: none;
   overflow: hidden;

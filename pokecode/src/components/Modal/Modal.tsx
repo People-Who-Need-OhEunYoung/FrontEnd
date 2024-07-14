@@ -32,7 +32,8 @@ event(모달에서 자체적으로 닫기 위해 setState function)
 */
 
 const Modal = ({
-  text = '문제명',
+  title = '방제목',
+  prob_title = '문제명',
   id = '',
   component,
   on = false,
@@ -46,7 +47,7 @@ const Modal = ({
         <ModalWrap>
           {nowcomponent === 1 ? (
             <>
-              <Title>{text}</Title>
+              <Title>{prob_title}</Title>
               <ModalContent1 id={id} />
             </>
           ) : nowcomponent === 2 ? (
@@ -71,8 +72,8 @@ const Modal = ({
             </>
           ) :  nowcomponent === 6 ? (
             <>
-              <Title>{text}</Title>
-              <ModalContent7 />
+              <Title>{title}</Title>
+              <ModalContent7 id = {id} title = {prob_title}/>
             </>
           ) : (
             ''
@@ -116,7 +117,7 @@ const ModalWrap = styled.div`
 `;
 
 const Title = styled.p`
-  padding: 10% 0 15%;
+  padding: 15% 0 5%;
   font-weight: bold;
   font-size: 1.6rem;
   word-wrap: break-word; /* Deprecated, use overflow-wrap instead */
