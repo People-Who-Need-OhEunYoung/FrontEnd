@@ -45,17 +45,14 @@ const TestEditor = ({ ...props }) => {
   const [isai, setIsai] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [language, setLanguage] = useState('python');
+  const [editorContent, setEditorContent] = useState('');
 
   const dispatch = useDispatch();
   const {isAcquireReview} = useSelector((state: RootState) => state.probinfo);
 
-  useEffect(()=> {
-    if (editor) {
-      const editorContent = editor.getValue();
-      dispatch(setWrittenCode(editorContent));
-      console.log(editor.getValue);
-    }
-  },[isAcquireReview]);
+  useEffect(() => {
+    dispatch(setWrittenCode(editorContent));
+  },[isAcquireReview])
 
   useEffect(() => {
     if (editorContainerRef.current) {
@@ -73,6 +70,12 @@ const TestEditor = ({ ...props }) => {
             'Ctrl-Space': 'autocomplete', // 자동 완성 키 설정
           },
         });
+
+        cmEditor.on('change', (instance) => {
+          const editedContent = instance.getValue();
+          setEditorContent(editedContent);
+        });
+
         setEditor(cmEditor);
       }
       //---------- 실시간으로 에디터 변경사항이 생기면 바로 서버에게 전송하는 로직 폴리싱 ------------//
