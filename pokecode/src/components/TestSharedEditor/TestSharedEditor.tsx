@@ -14,8 +14,8 @@ const TestSharedEditor: React.FC = () => {
   useEffect(() => {
     const ydoc = new Y.Doc();
     const provider = new WebsocketProvider(
-      'ws://52.79.197.126:44444',
-      'codemirror',
+      'wss://api.poke-code.com',
+      'codemirror1',
       ydoc
     );
 

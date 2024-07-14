@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import defaultImage from '../../assets/images/default_profile.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 export const Profile = ({ ...props }) => {
