@@ -23,10 +23,11 @@ import 'codemirror/addon/fold/foldgutter.css';
 import './TestEditor.css';
 import { DesignedButton1 } from '../DesignedButton';
 import { Modal } from '../Modal';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setWrittenCode } from '../../store/problemSlice';
+import styled from 'styled-components';
+import wordballoon from '../../assets/images/wordballoon.png';
 
 const TestEditor = ({ ...props }) => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
@@ -35,6 +36,7 @@ const TestEditor = ({ ...props }) => {
   const [aiResult, setAiResult] = useState('');
   const [sequence, setSequence] = useState<string>('');
   const [sequenceai, setSequenceai] = useState<string>('');
+  const [isModal, setIsModal] = useState(false);
   // 한글자씩 글자를 추가할 빈문자열 변수 sequence를 선언합니다.
   const [textCount, setTextCount] = useState<number>(0);
   // 현재까지 타이핑된 문자열의 위치(인덱스)를 나타내는 변수 textCount를 선언합니다.
@@ -42,7 +44,6 @@ const TestEditor = ({ ...props }) => {
   // 모든 문자열이 타이핑된 후 일시정지인지 아닌지 여부를 나타내는 변수를 선언합니다.
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isai, setIsai] = useState(false);
-  const [isModal, setIsModal] = useState(false);
   const [language, setLanguage] = useState('python');
 
   const dispatch = useDispatch();
@@ -294,6 +295,51 @@ const TestEditor = ({ ...props }) => {
         >
           {sequence}
         </pre>
+        <WordBalwrap
+          className={isModal ? '' : 'hidden'}
+          style={{
+            position: 'fixed',
+            left: 0,
+            bottom: '150px',
+            height: '300px',
+            width: '50%',
+            background: `url(${wordballoon})`,
+            backgroundSize: '100% 100%',
+            color: 'black',
+            overflow: 'auto',
+            zIndex: 999,
+            padding: '20px 4%',
+            boxSizing: 'border-box',
+            fontSize: '1.5em',
+            fontWeight: 'bold',
+          }}
+        >
+          <a
+            style={{
+              position: 'absolute',
+              right: '70px',
+              top: '0',
+              cursor: 'pointer',
+              fontSize: '2em',
+            }}
+            onClick={() => {
+              setIsModal(false);
+              setAiResult('');
+            }}
+          >
+            X
+          </a>
+          <WordBal
+            style={{
+              width: '95%',
+              whiteSpace: 'pre-wrap',
+              height: '60%',
+              overflow: 'scroll',
+            }}
+          >
+            {sequenceai}
+          </WordBal>
+        </WordBalwrap>
         <DesignedButton1
           style={{
             position: 'absolute',
@@ -398,5 +444,14 @@ const TestEditor = ({ ...props }) => {
     </>
   );
 };
-
+const WordBalwrap = styled.pre`
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+const WordBal = styled.pre`
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
 export default TestEditor;

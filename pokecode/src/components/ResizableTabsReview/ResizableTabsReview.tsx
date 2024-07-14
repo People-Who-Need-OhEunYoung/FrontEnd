@@ -4,9 +4,8 @@ import { motion, useAnimation, useDragControls } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
 import { TestSharedEditor } from '../TestSharedEditor';
 import background from '../../assets/images/background.jpg';
-// import problem1011 from '../../assets/images/1011번-Fly-me-to-the-Alpha-Centauri.png';
 import terminal from '../../assets/images/터미널.png';
-import webrtc from '../../assets/images/webrtc.png';
+
 import { DesignedButton1 } from '../DesignedButton';
 import { ProblemText } from '../ProblemText';
 import { VoiceChat } from '../VoiceChat';

@@ -7,12 +7,6 @@ import background from '../../assets/images/background3.gif';
 import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 import { userInfo } from '../../utils/api/api';
-import wordballoon from '../../assets/images/wordballoon.png';
-
-// import { RootState } from '../../store';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { setAcquireReview, setWrittenCode } from '../../store/problemSlice';
-
 
 const Container = styled.div`
   display: flex;
@@ -68,9 +62,6 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const [position, setPosition] = useState({
     x: '80%',
   });
-  const [isModal, setIsModal] = useState(false);
-  const [aiResult, setAiResult] = useState('');
-  const [sequenceai, setSequenceai] = useState<string>('');
   const [user, setUser] = useState({
     credit: 0,
     curPokeId: 0,
@@ -161,54 +152,9 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
               height: '80%',
             }}
           >
-          <ProblemText id = {id} isShowHeader = 'true'/>
+            <ProblemText id={id} isShowHeader="true" />
           </div>
           <Home onClick={handleDivClick}>
-            {/* <WordBalwrap
-              className={isModal ? '' : 'hidden'}
-              style={{
-                position: 'fixed',
-                left: 0,
-                bottom: '150px',
-                height: '300px',
-                width: '50%',
-                background: `url(${wordballoon})`,
-                backgroundSize: '100% 100%',
-                color: 'black',
-                overflow: 'auto',
-                zIndex: 999,
-                padding: '20px 4%',
-                boxSizing: 'border-box',
-                fontSize: '1.5em',
-                fontWeight: 'bold',
-              }}
-            >
-              <a
-                style={{
-                  position: 'absolute',
-                  right: '70px',
-                  top: '0',
-                  cursor: 'pointer',
-                  fontSize: '2em',
-                }}
-                onClick={() => {
-                  setIsModal(false);
-                  setAiResult('');
-                }}
-              >
-                X
-              </a>
-              <WordBal
-                style={{
-                  width: '95%',
-                  whiteSpace: 'pre-wrap',
-                  height: '60%',
-                  overflow: 'scroll',
-                }}
-              >
-                {sequenceai}
-              </WordBal>
-            </WordBalwrap> */}
             <motion.div
               animate={controls}
               style={{
@@ -260,14 +206,4 @@ const Home = styled.div`
   overflow: hidden;
 `;
 
-const WordBalwrap = styled.pre`
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-const WordBal = styled.pre`
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
 export default ResizableTabs;
