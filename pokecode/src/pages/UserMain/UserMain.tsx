@@ -6,7 +6,9 @@ import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
 import { MainWrapper } from '../../components/MainWrapper';
 import poo from '../../assets/images/poo.png';
+
 import { pokemonName, getPooCount, removePoo } from '../../utils/api/api';
+
 import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
 
@@ -59,36 +61,38 @@ const UserMain = () => {
     setPokemonname(await pokemonName(name));
   };
 
+
+  const animateRandomly = async () => {
+    while (true) {
+      // 무작위 위치로 애니메이션 시작
+      const newPosition = getRandomPosition();
+      await controls.start({
+        ...newPosition,
+        transition: { duration: 1 + Math.random() * 3 },
+      });
+
+      // 1초 동안 대기
+      await sleep(1000);
+
+      // 제자리 애니메이션 (사실상 이동이 없도록 함)
+      await controls.start({
+        x: newPosition.x,
+        y: newPosition.y,
+        transition: { duration: 1 + Math.random() * 3 },
+      });
+
+      // 다시 1초 동안 대기
+      await sleep(1000);
+    }
+    
+  };
+
   useEffect(() => {
     if (pokemonId) pokemonnameSet(pokemonId);
   }, [pokemonId]);
 
   useEffect(() => {
     pooCount();
-    const animateRandomly = async () => {
-      while (true) {
-        // 무작위 위치로 애니메이션 시작
-        const newPosition = getRandomPosition();
-        await controls.start({
-          ...newPosition,
-          transition: { duration: 1 + Math.random() * 3 },
-        });
-
-        // 1초 동안 대기
-        await sleep(1000);
-
-        // 제자리 애니메이션 (사실상 이동이 없도록 함)
-        await controls.start({
-          x: newPosition.x,
-          y: newPosition.y,
-          transition: { duration: 1 + Math.random() * 3 },
-        });
-
-        // 다시 1초 동안 대기
-        await sleep(1000);
-      }
-    };
-
     animateRandomly();
   }, [controls]);
 
@@ -99,6 +103,7 @@ const UserMain = () => {
       transition: { duration: 1 },
     });
   };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -129,6 +134,7 @@ const UserMain = () => {
               }}
             />
           ))}
+          
           <motion.div
             animate={controls}
             style={{
