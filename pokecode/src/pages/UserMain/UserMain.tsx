@@ -7,7 +7,6 @@ import art from '../../assets/images/Vector.png';
 import { MainWrapper } from '../../components/MainWrapper';
 import poo from '../../assets/images/poo.png';
 import {
-  userInfo,
   pokemonName,
   getPooCount,
   removePoo,
@@ -21,12 +20,6 @@ const UserMain = () => {
     y: '50%',
   });
   const [pooset, setPooset] = useState<{ x: number; y: number }[]>([]);
-  const [user, setUser] = useState({
-    credit: 0,
-    curPokeId: 0,
-    nickName: '기본값',
-    result: '기본값',
-  });
 
   const [pokemonname, setPokemonname] = useState('');
   //const [pooCount, setPooCount] = useState(0);
@@ -71,7 +64,31 @@ const UserMain = () => {
     setPokemonname(await pokemonName(name));
   };
 
+  const animateRandomly = async () => {
+    while (true) {
+      // 무작위 위치로 애니메이션 시작
+      const newPosition = getRandomPosition();
+      await controls.start({
+        ...newPosition,
+        transition: { duration: 1 + Math.random() * 3 },
+      });
 
+      // 1초 동안 대기
+      await sleep(1000);
+
+      // 제자리 애니메이션 (사실상 이동이 없도록 함)
+      await controls.start({
+        x: newPosition.x,
+        y: newPosition.y,
+        transition: { duration: 1 + Math.random() * 3 },
+      });
+
+      // 다시 1초 동안 대기
+      await sleep(1000);
+    }
+    
+  };
+    
   useEffect(() => {
     if(pokemonId)
       pokemonnameSet(pokemonId);
@@ -79,30 +96,6 @@ const UserMain = () => {
 
   useEffect(() => {
     pooCount();
-    const animateRandomly = async () => {
-      while (true) {
-        // 무작위 위치로 애니메이션 시작
-        const newPosition = getRandomPosition();
-        await controls.start({
-          ...newPosition,
-          transition: { duration: 1 + Math.random() * 3 },
-        });
-
-        // 1초 동안 대기
-        await sleep(1000);
-
-        // 제자리 애니메이션 (사실상 이동이 없도록 함)
-        await controls.start({
-          x: newPosition.x,
-          y: newPosition.y,
-          transition: { duration: 1 + Math.random() * 3 },
-        });
-
-        // 다시 1초 동안 대기
-        await sleep(1000);
-      }
-    };
-
     animateRandomly();
   }, [controls]);
 
@@ -113,6 +106,7 @@ const UserMain = () => {
       transition: { duration: 1 },
     });
   };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -143,6 +137,7 @@ const UserMain = () => {
               }}
             />
           ))}
+          
           <motion.div
             animate={controls}
             style={{

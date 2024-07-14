@@ -25,6 +25,9 @@ import { DesignedButton1 } from '../DesignedButton';
 import { Modal } from '../Modal';
 import wordballoon from '../../assets/images/wordballoon.png';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { setWrittenCode } from '../../store/problemSlice';
 
 const TestEditor = ({ ...props }) => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
@@ -42,6 +45,17 @@ const TestEditor = ({ ...props }) => {
   const [isai, setIsai] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [language, setLanguage] = useState('python');
+
+  const dispatch = useDispatch();
+  const {isAcquireReview} = useSelector((state: RootState) => state.probinfo);
+
+  useEffect(()=> {
+    if (editor) {
+      const editorContent = editor.getValue();
+      dispatch(setWrittenCode(editorContent));
+      console.log(editor.getValue);
+    }
+  },[isAcquireReview]);
 
   useEffect(() => {
     if (editorContainerRef.current) {
@@ -390,6 +404,7 @@ const TestEditor = ({ ...props }) => {
           }}
           color="#a62df1"
         >
+
           AI 피드백
         </DesignedButton1>
         <DesignedButton1
