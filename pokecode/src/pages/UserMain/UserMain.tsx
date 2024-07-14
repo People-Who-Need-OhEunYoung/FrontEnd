@@ -66,26 +66,30 @@ const UserMain = () => {
   useEffect(() => {
     pooCount();
     const animateRandomly = async () => {
-      while (true) {
-        // 무작위 위치로 애니메이션 시작
-        const newPosition = getRandomPosition();
-        await controls.start({
-          ...newPosition,
-          transition: { duration: 1 + Math.random() * 3 },
-        });
+      try {
+        while (true) {
+          // 무작위 위치로 애니메이션 시작
+          const newPosition = getRandomPosition();
+          await controls.start({
+            ...newPosition,
+            transition: { duration: 1 + Math.random() * 3 },
+          });
 
-        // 1초 동안 대기
-        await sleep(1000);
+          // 1초 동안 대기
+          await sleep(1000);
 
-        // 제자리 애니메이션 (사실상 이동이 없도록 함)
-        await controls.start({
-          x: newPosition.x,
-          y: newPosition.y,
-          transition: { duration: 1 + Math.random() * 3 },
-        });
+          // 제자리 애니메이션 (사실상 이동이 없도록 함)
+          await controls.start({
+            x: newPosition.x,
+            y: newPosition.y,
+            transition: { duration: 1 + Math.random() * 3 },
+          });
 
-        // 다시 1초 동안 대기
-        await sleep(1000);
+          // 다시 1초 동안 대기
+          await sleep(1000);
+        }
+      } catch (err) {
+        console.log('thisNoERROR');
       }
     };
 
