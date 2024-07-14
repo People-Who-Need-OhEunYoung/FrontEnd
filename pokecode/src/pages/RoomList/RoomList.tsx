@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Modal from '../../components/Modal/Modal';
+import { setProblemId } from '../../store/problemSlice';
 
 type ItemType = {
   roomId: number;
@@ -22,8 +23,9 @@ const RoomList = () => {
   const [check, setCheck] = useState('OFF');
   const [isEnterModalOpen, setIsEnterModalOpen] = useState(false);
   const [isMakeModalOpen, setIsMakeModalOpen] = useState(false);
-  const [roomId, setRoomId] = useState<number>(1);
-  const [selected, setSelected] = useState<string>('');
+  const [roomTitle, setRoomTitle] = useState<string>('');
+  const [problemTitle, setproblemTitle] = useState<string>('');
+  const [problemId, setproblemId] = useState<string>('');
   const [roomlist, setRoomlist] = useState<ItemType[]>([
     {
       roomId: 1,
@@ -122,8 +124,9 @@ const RoomList = () => {
                 return (
                   <ProblemComponent onClick={() => {
                         setIsEnterModalOpen(true);
-                        setSelected(item.roomTitle);
-                        setRoomId(item.roomId);
+                        setRoomTitle(item.roomTitle);
+                        setproblemId(item.problemId);
+                        setproblemTitle(item.problemTitle);
                       }}>
                     <Probinfo>
                       <TierImg src={tiersrc} style= {{marginRight:'2%'}} />
@@ -143,8 +146,9 @@ const RoomList = () => {
           ))} 
         </ListView>
           <Modal
-            text={selected}
-            id={roomId}
+            title={roomTitle}
+            prob_title={problemTitle}
+            id={problemId}
             component={6}
             on={isEnterModalOpen}
             event={setIsEnterModalOpen}

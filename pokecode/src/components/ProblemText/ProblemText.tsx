@@ -3,21 +3,21 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setElapsedTime, resetElapsedTime, setStartTime } from '../../store/timerSlice';
 import getDetails from "./getDetails";
-import { ProblemDetails } from "./index";
+import { ProblemDetails, ResizableTabsProps } from "./index";
 import { RootState } from '../../store/index';
 import { setAcquireReview } from '../../store/problemSlice';
+import Modal from '../../components/Modal/Modal';
 
-
-const ProblemText : React.FC = () => {
+const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
   const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(null);
 
   const dispatch = useDispatch();
   const {startTime, elapsedTime, limitTime} = useSelector((state: RootState) => state.timer);
-  const {problemId} = useSelector((state: RootState) => state.probinfo);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchCrawlData = async () => {
     try {
-      const res: ProblemDetails = await getDetails(problemId);
+      const res: ProblemDetails = await getDetails(id);
       return res; // 객체 형태의 데이터를 반환
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -34,7 +34,8 @@ const ProblemText : React.FC = () => {
   };
 
   useEffect(() => {
-    const storedSolvedTime = localStorage.getItem(`solvedTime-${problemId}`);
+    console.log('problemId:',id)
+    const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`);
     let start_time = Date.now();
     dispatch(setStartTime(start_time));
 
@@ -43,19 +44,19 @@ const ProblemText : React.FC = () => {
       const updateElapsedTime = solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000);
       dispatch(setElapsedTime(updateElapsedTime));
     } else {
-      localStorage.setItem(`solvedTime-${problemId}`, JSON.stringify({ _id: problemId, start_time: start_time, elapsed_time: 0, limit_time: limitTime }));
+      localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time: start_time, elapsed_time: 0, limit_time: limitTime }));
     }
 
     const interval = setInterval(() => {
       if (startTime !== null) {
         const newElapsedTime = Math.floor((Date.now() - startTime) / 1000) + elapsedTime;
         dispatch(setElapsedTime(newElapsedTime));
-        localStorage.setItem(`solvedTime-${problemId}`, JSON.stringify({ _id: problemId, start_time, elapsed_time: newElapsedTime, limit_time: limitTime }));
+        localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time, elapsed_time: newElapsedTime, limit_time: limitTime }));
       }
 
     }, 1000);
     return () => clearInterval(interval);
-  }, [startTime, problemId]);
+  }, [startTime, id]);
 
   useEffect(() => {
     fetchCrawlData().then((res)=> {
@@ -75,13 +76,13 @@ const ProblemText : React.FC = () => {
 
  return (
     <div style = {{height: '100%'}}>
-      <Header>
+      <Header isShowHeader = {isShowHeader}>
         {problemDetails && (
           <HeaderTxt> 
-            <Title>{problemId}번 {problemDetails.title}</Title>
+            <Title>{id}번 {problemDetails.title}</Title>
             <Timer istimerxceeded = {(elapsedTime > limitTime).toString()} islimit = {(limitTime > 0).toString()} > {formatTime(elapsedTime)}</Timer>
-            <div>
-              <HeaderBtn onClick={()=>dispatch(setAcquireReview(true))}> 코드 리뷰 요청</HeaderBtn>
+            <div style={{position: 'absolute', right: '3%'}}>
+              <HeaderBtn onClick={()=>{ dispatch(setAcquireReview(true)); setIsModalOpen(true); }}> 코드 리뷰 요청</HeaderBtn>
               <HeaderBtn> 힌트 보기 </HeaderBtn>
             </div>
           </HeaderTxt>
@@ -95,7 +96,6 @@ const ProblemText : React.FC = () => {
             <Hr/>
             <p style = {{margin: '10px 0'}} dangerouslySetInnerHTML={{ __html: parseDescription(problemDetails.description) }} />
           </InoutWrap>
-
           <InoutWrap>
             <TextBox>입력</TextBox>
             <Hr/>
@@ -126,10 +126,17 @@ const ProblemText : React.FC = () => {
                 </div>
               ))}
           </InoutWrap>
-          
         </ProblemWrap>
       )}
       </Wrap>
+      <Modal
+        title={''}
+        prob_title= {''}
+        id={id}
+        component={2}
+        on={isModalOpen}
+        event={setIsModalOpen}
+      ></Modal>
       
     </div>
   );
@@ -140,7 +147,7 @@ const Wrap = styled.div`
   overflow: auto;
 `;
 
-const Header = styled.div`
+const Header = styled.div<{isShowHeader: string}>`
   position: relative;
   height: 60px;
   
@@ -148,7 +155,7 @@ const Header = styled.div`
   border-bottom: 2px solid #b6b5b546;
   color: white;
   font-weight: bold;
-  
+  display: ${(props) => (props.isShowHeader == 'true') ? 'block' : 'none'};
 `;
 
 const HeaderBtn = styled.button`
@@ -156,6 +163,10 @@ const HeaderBtn = styled.button`
   border-radius: 30px;
   font-weight: bold;
   margin-left: 10px;
+  &:hover {
+    background-color: #4ea6ff;
+  }
+
 `;
 
 const HeaderTxt = styled.div`
@@ -163,18 +174,17 @@ const HeaderTxt = styled.div`
   line-height: 60px;
   font-size: 1.2rem;
   color: white;
-  justify-content: space-around;
 `;
 
 const Title = styled.p`
-  margin-left: 30px;
+  margin-left: 5%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
 
 const Timer = styled.p<{istimerxceeded: string, islimit: string}>`
-  margin-left: 30px;
+  margin-left: 5%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -228,8 +238,6 @@ const Exampletxt = styled.pre`
 const Example = styled.pre`
   width: 40%; 
   margin: 0 5% 5% 0;
-
-
 `;
 
 

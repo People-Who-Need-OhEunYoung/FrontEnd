@@ -28,3 +28,8 @@ export interface CreateProblemsResult {
   errorList: Array<{ problemData: Problem | null; error: any }>;
 }
 
+
+export interface ResizableTabsProps {
+  id: string;
+  isShowHeader: string;
+}
