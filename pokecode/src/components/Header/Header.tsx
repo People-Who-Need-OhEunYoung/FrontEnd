@@ -8,10 +8,13 @@ import { RootState } from '../../store/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { userInfo } from '../../utils/api/api';
-import { setUserCredit, setUserNickname, setPokemonId } from '../../store/userInfo';
+import {
+  setUserCredit,
+  setUserNickname,
+  setPokemonId,
+} from '../../store/userInfo';
 
 const Header = () => {
-
   return (
     <div className="header">
       <Link className="titleLogo" to={'/'} style={{ zIndex: 100 }}>
@@ -33,7 +36,6 @@ const Header = () => {
 };
 
 export const Header2 = () => {
-
   const [user, setUser] = useState({
     credit: 0,
     curPokeId: 0,
@@ -41,10 +43,12 @@ export const Header2 = () => {
     result: '기본값',
   });
 
-  const {userNickname, credit} = useSelector((state: RootState) => state.userinfo);
+  const { userNickname, credit, pokemonId } = useSelector(
+    (state: RootState) => state.userinfo
+  );
   const dispatch = useDispatch();
 
-  console.log('credit: ',credit);
+  console.log('credit: ', credit);
 
   const userSet = async () => {
     setUser(await userInfo());
@@ -56,13 +60,12 @@ export const Header2 = () => {
       dispatch(setUserCredit(user.credit));
       dispatch(setPokemonId(user.curPokeId));
     }
-  },[user]);
+  }, [user]);
 
-  useEffect(()=> {
+  useEffect(() => {
     userSet();
-  },[])
+  }, []);
 
-  
   const navigate = useNavigate();
   const loginChecker = async () => {
     await fetch(`${import.meta.env.VITE_APP_IP}/tokenTest`, {
@@ -134,13 +137,42 @@ export const Header2 = () => {
         <Nav></Nav>
       </div>
       <ProfileWrap>
-        <Profile name={userNickname} credit={credit} />
+        <Profile name={userNickname} credit={credit} pokemonId={pokemonId} />
       </ProfileWrap>
     </motion.div>
   );
 };
 
 export const Header3 = () => {
+  const [user, setUser] = useState({
+    credit: 0,
+    curPokeId: 0,
+    nickName: '기본값',
+    result: '기본값',
+  });
+
+  const { userNickname, credit, pokemonId } = useSelector(
+    (state: RootState) => state.userinfo
+  );
+  const dispatch = useDispatch();
+
+  console.log('credit: ', credit);
+
+  const userSet = async () => {
+    setUser(await userInfo());
+  };
+
+  useEffect(() => {
+    if (user) {
+      dispatch(setUserNickname(user.nickName));
+      dispatch(setUserCredit(user.credit));
+      dispatch(setPokemonId(user.curPokeId));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    userSet();
+  }, []);
   const navigate = useNavigate();
   const loginChecker = async () => {
     await fetch(`${import.meta.env.VITE_APP_IP}/tokenTest`, {
@@ -198,7 +230,7 @@ export const Header3 = () => {
         <Nav></Nav>
       </NavWrap>
       <ProfileWrap2>
-        <Profile name={'알맞은 데이터'} credit={3000000} />
+        <Profile name={userNickname} credit={credit} pokemonId={pokemonId} />
       </ProfileWrap2>
     </motion.div>
   );

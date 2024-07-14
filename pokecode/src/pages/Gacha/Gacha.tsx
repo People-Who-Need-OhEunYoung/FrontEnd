@@ -16,7 +16,6 @@ import { updateMyPokemon } from '../../utils/api/api';
 import { minusUserCredit, setPokemonId } from '../../store/userInfo';
 import { useDispatch} from 'react-redux';
 
-
 const gachaArray = [gacha1, gacha2, gacha3, gacha4, gacha5, gacha6];
 const Gacha = () => {
   const [background, setBackground] = useState(gachaArray[0]);
@@ -84,6 +83,7 @@ const Gacha = () => {
                 color="#80495C"
                 onClick={(e) => {
                   e.preventDefault();
+                  setGachaResult(false);
                   dispatch(minusUserCredit());
                   setGachaRun(true);
                   setBackground(gachaArray[Math.floor(Math.random() * 6)]);
