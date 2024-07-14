@@ -4,10 +4,11 @@ import { motion, useAnimation, useDragControls } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
 import { TestSharedEditor } from '../TestSharedEditor';
 import background from '../../assets/images/background.jpg';
-import problem1011 from '../../assets/images/1011번-Fly-me-to-the-Alpha-Centauri.png';
+// import problem1011 from '../../assets/images/1011번-Fly-me-to-the-Alpha-Centauri.png';
 import terminal from '../../assets/images/터미널.png';
 import webrtc from '../../assets/images/webrtc.png';
 import { DesignedButton1 } from '../DesignedButton';
+import { ProblemText } from '../ProblemText';
 
 const Container = styled.div`
   display: flex;
@@ -21,7 +22,7 @@ interface TabProps {
 }
 
 const Tab = styled.div<TabProps>`
-  background-color: #f0f0f0;
+  background-color: #111826;
   height: 100%;
   border-right: none;
   flex-basis: ${({ width }) => width}%;
@@ -53,7 +54,13 @@ const Resizer = styled.div`
   }
 `;
 
-const ResizableTabsReview = () => {
+
+interface ResizableTabsProps {
+  id: string;
+  title: string;
+}
+
+const ResizableTabsReview: React.FC<ResizableTabsProps> = ({id, title}) => {
   const [width, setWidth] = useState<number>(25);
   const [width1, setWidth1] = useState<number>(25);
 
@@ -74,6 +81,7 @@ const ResizableTabsReview = () => {
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
   };
+
   const handleMouseDown1 = () => {
     document.addEventListener('mousemove', handleMouseMove1);
     document.addEventListener('mouseup', handleMouseUp1);
@@ -204,7 +212,9 @@ const ResizableTabsReview = () => {
       </motion.div>
       <Container ref={containerRef}>
         <Tab width={width}>
-          <div
+          <HeaderTxt>{id}번 {title}</HeaderTxt>
+          <ProblemText id = {id} isShowHeader='false'/>
+          {/* <div
             style={{
               width: '100%',
               height: '100%',
@@ -212,7 +222,7 @@ const ResizableTabsReview = () => {
             }}
           >
             <img src={problem1011} width={'100%'} alt="" />
-          </div>
+          </div> */}
         </Tab>
         <Resizer onMouseDown={handleMouseDown} style={{ left: width + '%' }} />
         <div
@@ -268,6 +278,18 @@ const ResizableTabsReview = () => {
     </motion.div>
   );
 };
+
+const HeaderTxt = styled.p`
+  display: flex;
+  line-height: 60px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  border-bottom: 2px solid gray;
+  padding: 10px;
+  padding-left: 5%;
+`;
+
 const Home = styled.div`
   width: 100%;
   height: 100%;

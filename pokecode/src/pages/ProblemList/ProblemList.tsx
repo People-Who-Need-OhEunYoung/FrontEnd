@@ -246,7 +246,8 @@ const ProblemList = () => {
           ))}
         </ListView>
         <Modal
-          text={selected}
+          title={''}
+          prob_title={selected}
           id={problemId}
           component={1}
           on={isModalOpen}
