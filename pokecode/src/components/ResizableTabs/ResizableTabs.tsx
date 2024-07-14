@@ -7,9 +7,11 @@ import background from '../../assets/images/background3.gif';
 import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 import { userInfo } from '../../utils/api/api';
+
 // import { RootState } from '../../store';
 // import { useDispatch, useSelector } from 'react-redux';
 // import { setAcquireReview, setWrittenCode } from '../../store/problemSlice';
+
 
 const Container = styled.div`
   display: flex;
@@ -74,7 +76,6 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const controls = useAnimation();
 
- 
   const handleDivClick = (e: any) => {
     const containerRect = e.currentTarget.getBoundingClientRect();
     const offsetX: any = e.clientX - containerRect.left;
@@ -153,7 +154,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           <div
             style={{
               width: '100%',
-              height: '80%'
+              height: '80%',
             }}
           >
           <ProblemText id = {id} isShowHeader = 'true'/>

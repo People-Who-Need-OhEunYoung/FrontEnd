@@ -23,10 +23,12 @@ const RoomList = () => {
   const [check, setCheck] = useState('OFF');
   const [isEnterModalOpen, setIsEnterModalOpen] = useState(false);
   const [isMakeModalOpen, setIsMakeModalOpen] = useState(false);
+
   const [roomTitle, setRoomTitle] = useState<string>('');
   const [problemTitle, setproblemTitle] = useState<string>('');
   const [problemId, setproblemId] = useState<string>('');
   const [roomlist, setRoomlist] = useState<ItemType[]>([
+
     {
       roomId: 1,
       problemId: '1000',
@@ -111,7 +113,13 @@ const RoomList = () => {
               </CheckSlide>
               <CheckDoc>내가 푼 문제만 보기</CheckDoc>
             </div>
-            <MakeRoomButton onClick={() => { setIsMakeModalOpen(true); }}>방 만들기</MakeRoomButton>
+            <MakeRoomButton
+              onClick={() => {
+                setIsMakeModalOpen(true);
+              }}
+            >
+              방 만들기
+            </MakeRoomButton>
           </SearchHeader>
         </SearchWrapper>
 
@@ -119,7 +127,7 @@ const RoomList = () => {
           {roomlist.map((item, index) => (
             <Item key={index}>
               {(() => {
-                const link = `https://www.acmicpc.net/problem/${item.problemId}`;
+                //const link = `https://www.acmicpc.net/problem/${item.problemId}`;
                 const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
                 return (
                   <ProblemComponent onClick={() => {
@@ -128,23 +136,28 @@ const RoomList = () => {
                         setproblemId(item.problemId);
                         setproblemTitle(item.problemTitle);
                       }}>
+
                     <Probinfo>
-                      <TierImg src={tiersrc} style= {{marginRight:'2%'}} />
-                      <p style= {{marginRight:'5%'}}>{item.problemId}</p>
-                      <p style= {{marginRight:'8%'}}>{item.problemTitle}</p>
+                      <TierImg src={tiersrc} style={{ marginRight: '2%' }} />
+                      <p style={{ marginRight: '5%' }}>{item.problemId}</p>
+                      <p style={{ marginRight: '8%' }}>{item.problemTitle}</p>
                       <p>{item.roomTitle}</p>
                     </Probinfo>
-                    
+
                     <Roominfo>
-                      <p style= {{marginBottom:'10px'}}> 참여 인원: {item.cur_num} /{item.limit_num}</p>
+                      <p style={{ marginBottom: '10px' }}>
+                        {' '}
+                        참여 인원: {item.cur_num} /{item.limit_num}
+                      </p>
                       <p> 닉네임: {item.nickname} </p>
                     </Roominfo>
                   </ProblemComponent>
                 );
               })()}
             </Item>
-          ))} 
+          ))}
         </ListView>
+
           <Modal
             title={roomTitle}
             prob_title={problemTitle}
@@ -159,6 +172,7 @@ const RoomList = () => {
             on={isMakeModalOpen}
             event={setIsMakeModalOpen}
           ></Modal>
+
         <ButtonGroup style={{ margin: '1.5%' }}>
           {renderPageButtons()}
         </ButtonGroup>
@@ -168,8 +182,8 @@ const RoomList = () => {
 };
 
 const Probinfo = styled.div`
-  position:absolute;
-  display:flex;
+  position: absolute;
+  display: flex;
   align-items: center;
   font-size: 1.3rem;
   width: 70%;
@@ -177,9 +191,9 @@ const Probinfo = styled.div`
 
 const Roominfo = styled.div`
   position: absolute;
-  display:flex;
-  flex-direction:column;
-  text-align:end;
+  display: flex;
+  flex-direction: column;
+  text-align: end;
   right: 0;
   color: #c0c0c0;
   width: 30%;
@@ -203,7 +217,6 @@ const Item = styled.div`
   border: 1px solid #8d8d8d;
   padding: 4%;
 `;
-
 
 const CheckSlide = styled.div<{ timeck: string }>`
   position: relative;
@@ -297,7 +310,7 @@ const OnOffText = styled.span<{ timeck: string }>`
 
 const SearchHeader = styled.div`
   display: flex;
-  justify-content:center;
+  justify-content: center;
 `;
 
 const MakeRoomButton = styled.button`

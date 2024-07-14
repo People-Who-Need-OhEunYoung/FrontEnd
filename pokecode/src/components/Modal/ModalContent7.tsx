@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
 const ModalContent7 = ({id, title} : any) => {
