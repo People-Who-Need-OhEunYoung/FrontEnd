@@ -23,8 +23,7 @@ import 'codemirror/addon/fold/foldgutter.css';
 import './TestEditor.css';
 import { DesignedButton1 } from '../DesignedButton';
 import { Modal } from '../Modal';
-import wordballoon from '../../assets/images/wordballoon.png';
-import styled from 'styled-components';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setWrittenCode } from '../../store/problemSlice';
@@ -47,15 +46,15 @@ const TestEditor = ({ ...props }) => {
   const [language, setLanguage] = useState('python');
 
   const dispatch = useDispatch();
-  const {isAcquireReview} = useSelector((state: RootState) => state.probinfo);
+  const { isAcquireReview } = useSelector((state: RootState) => state.probinfo);
 
-  useEffect(()=> {
+  useEffect(() => {
     if (editor) {
       const editorContent = editor.getValue();
       dispatch(setWrittenCode(editorContent));
       console.log(editor.getValue);
     }
-  },[isAcquireReview]);
+  }, [isAcquireReview]);
 
   useEffect(() => {
     if (editorContainerRef.current) {
@@ -295,51 +294,6 @@ const TestEditor = ({ ...props }) => {
         >
           {sequence}
         </pre>
-        <WordBalwrap
-          className={isModal ? '' : 'hidden'}
-          style={{
-            position: 'fixed',
-            left: 0,
-            bottom: '150px',
-            height: '300px',
-            width: '50%',
-            background: `url(${wordballoon})`,
-            backgroundSize: '100% 100%',
-            color: 'black',
-            overflow: 'auto',
-            zIndex: 999,
-            padding: '20px 4%',
-            boxSizing: 'border-box',
-            fontSize: '1.5em',
-            fontWeight: 'bold',
-          }}
-        >
-          <a
-            style={{
-              position: 'absolute',
-              right: '70px',
-              top: '0',
-              cursor: 'pointer',
-              fontSize: '2em',
-            }}
-            onClick={() => {
-              setIsModal(false);
-              setAiResult('');
-            }}
-          >
-            X
-          </a>
-          <WordBal
-            style={{
-              width: '95%',
-              whiteSpace: 'pre-wrap',
-              height: '60%',
-              overflow: 'scroll',
-            }}
-          >
-            {sequenceai}
-          </WordBal>
-        </WordBalwrap>
         <DesignedButton1
           style={{
             position: 'absolute',
@@ -404,7 +358,6 @@ const TestEditor = ({ ...props }) => {
           }}
           color="#a62df1"
         >
-
           AI 피드백
         </DesignedButton1>
         <DesignedButton1
@@ -446,14 +399,4 @@ const TestEditor = ({ ...props }) => {
   );
 };
 
-const WordBalwrap = styled.pre`
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-const WordBal = styled.pre`
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
 export default TestEditor;
