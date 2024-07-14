@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
@@ -8,9 +8,21 @@ import { WebsocketProvider } from 'y-websocket';
 import { CodemirrorBinding } from 'y-codemirror';
 import * as Y from 'yjs';
 import './TestSharedEditor.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const TestSharedEditor: React.FC = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
+  const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
+  
+  const dispatch = useDispatch();
+  const {isAcquireReview, writtenCode} = useSelector((state: RootState) => state.probinfo);
+
+  useEffect(()=> {
+    console.log(writtenCode);
+  },[writtenCode]);
+
+
   useEffect(() => {
     const ydoc = new Y.Doc();
     const provider = new WebsocketProvider(
@@ -21,12 +33,16 @@ const TestSharedEditor: React.FC = () => {
 
     const yText = ydoc.getText('codemirror');
 
+    // 기본 텍스트를 설정합니다.
+    yText.insert(0, writtenCode);
+
     if (editorContainerRef.current) {
       const editor = CodeMirror(editorContainerRef.current, {
         theme: 'dracula',
         mode: 'javascript',
         lineNumbers: true,
       });
+      setEditor(editor);
 
       const binding = new CodemirrorBinding(yText, editor, provider.awareness);
       console.log(provider.awareness.clientID);

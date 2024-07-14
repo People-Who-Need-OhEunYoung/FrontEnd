@@ -9,6 +9,7 @@ import { ProblemDetails, ResizableTabsProps } from "./index";
 import { RootState } from '../../store/index';
 import { setAcquireReview } from '../../store/problemSlice';
 import Modal from '../../components/Modal/Modal';
+import { useNavigate } from 'react-router-dom';
 
 const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
   const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(null);
@@ -17,7 +18,7 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
   const {startTime, elapsedTime, limitTime} = useSelector((state: RootState) => state.timer);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { problemId } = useSelector((state: RootState) => state.probinfo);
+  const navigate = useNavigate();
 
   const fetchCrawlData = async () => {
     try {
@@ -46,8 +47,8 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
     return imgWithWidth;
   };
 
+
   useEffect(() => {
-    console.log('problemId:',id)
     const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`);
     let start_time = Date.now();
     dispatch(setStartTime(start_time));
@@ -58,7 +59,6 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
         solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000);
       dispatch(setElapsedTime(updateElapsedTime));
     } else {
-
       localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time: start_time, elapsed_time: 0, limit_time: limitTime }));
 
     }
@@ -104,8 +104,11 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
             <Title>{id}번 {problemDetails.title}</Title>
             <Timer istimerxceeded = {(elapsedTime > limitTime).toString()} islimit = {(limitTime > 0).toString()} > {formatTime(elapsedTime)}</Timer>
             <div style={{position: 'absolute', right: '3%'}}>
-              <HeaderBtn onClick={()=>{ dispatch(setAcquireReview(true)); setIsModalOpen(true); }}> 코드 리뷰 요청</HeaderBtn>
-
+              <HeaderBtn onClick={()=>{ 
+                dispatch(setAcquireReview(true)); 
+                // setIsModalOpen(true); 
+                navigate(`/room?id=${id}&title=${problemDetails.title}`);
+              }}> 코드 리뷰 요청</HeaderBtn>
               <HeaderBtn> 힌트 보기 </HeaderBtn>
             </div>
           </HeaderTxt>

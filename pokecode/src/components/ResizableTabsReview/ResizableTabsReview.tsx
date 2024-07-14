@@ -31,11 +31,11 @@ const Tab = styled.div<TabProps>`
 
 const Resizer = styled.div`
   opacity: 0;
-  width: 20px;
+  width: 10px;
   cursor: ew-resize;
-  background-color: #8f0000;
+  background-color: #00000089;
   transform: translateX(-50%);
-  height: 100px;
+  height: 100%;
   z-index: 9999;
   position: absolute;
   border-radius: 20px;
