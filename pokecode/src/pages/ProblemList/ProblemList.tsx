@@ -6,6 +6,9 @@ import upArrow from '../../assets/images/upArrow.png';
 import downArrow from '../../assets/images/downArrow.png';
 import Search from '../../assets/images/search.png';
 import Modal from '../../components/Modal/Modal';
+import { setProblemId } from '../../store/problemSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 type ItemType = {
   problemId: string;
@@ -25,7 +28,9 @@ const ProblemList = () => {
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selected, setSelected] = useState<string>('');
-  const [probId, setProbId] = useState<string>('');
+
+  const dispatch = useDispatch();
+  const {problemId} = useSelector((state: RootState) => state.probinfo);
 
   const fetchProbData = async () => {
     try {
@@ -220,7 +225,7 @@ const ProblemList = () => {
                       onClick={() => {
                         setIsModalOpen(true);
                         setSelected(item.titleKo);
-                        setProbId(item.problemId);
+                        dispatch(setProblemId(item.problemId));
                       }}
                     >
                       {' '}
@@ -242,7 +247,7 @@ const ProblemList = () => {
         </ListView>
         <Modal
           text={selected}
-          id={probId}
+          id={problemId}
           component={1}
           on={isModalOpen}
           event={setIsModalOpen}

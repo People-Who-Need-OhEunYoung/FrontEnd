@@ -3,19 +3,21 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setElapsedTime, resetElapsedTime, setStartTime } from '../../store/timerSlice';
 import getDetails from "./getDetails";
-import { ProblemDetails, ResizableTabsProps } from "./index";
+import { ProblemDetails } from "./index";
 import { RootState } from '../../store/index';
+import { setAcquireReview } from '../../store/problemSlice';
 
 
-const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
+const ProblemText : React.FC = () => {
   const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(null);
 
   const dispatch = useDispatch();
   const {startTime, elapsedTime, limitTime} = useSelector((state: RootState) => state.timer);
+  const {problemId} = useSelector((state: RootState) => state.probinfo);
 
   const fetchCrawlData = async () => {
     try {
-      const res: ProblemDetails = await getDetails(id);
+      const res: ProblemDetails = await getDetails(problemId);
       return res; // 객체 형태의 데이터를 반환
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -32,7 +34,7 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
   };
 
   useEffect(() => {
-    const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`);
+    const storedSolvedTime = localStorage.getItem(`solvedTime-${problemId}`);
     let start_time = Date.now();
     dispatch(setStartTime(start_time));
 
@@ -41,19 +43,19 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
       const updateElapsedTime = solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000);
       dispatch(setElapsedTime(updateElapsedTime));
     } else {
-      localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time: start_time, elapsed_time: 0, limit_time: limitTime }));
+      localStorage.setItem(`solvedTime-${problemId}`, JSON.stringify({ _id: problemId, start_time: start_time, elapsed_time: 0, limit_time: limitTime }));
     }
 
     const interval = setInterval(() => {
       if (startTime !== null) {
         const newElapsedTime = Math.floor((Date.now() - startTime) / 1000) + elapsedTime;
         dispatch(setElapsedTime(newElapsedTime));
-        localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time, elapsed_time: newElapsedTime, limit_time: limitTime }));
+        localStorage.setItem(`solvedTime-${problemId}`, JSON.stringify({ _id: problemId, start_time, elapsed_time: newElapsedTime, limit_time: limitTime }));
       }
 
     }, 1000);
     return () => clearInterval(interval);
-  }, [startTime, id]);
+  }, [startTime, problemId]);
 
   useEffect(() => {
     fetchCrawlData().then((res)=> {
@@ -76,10 +78,10 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
       <Header>
         {problemDetails && (
           <HeaderTxt> 
-            <Title>{id}번 {problemDetails.title}</Title>
+            <Title>{problemId}번 {problemDetails.title}</Title>
             <Timer istimerxceeded = {(elapsedTime > limitTime).toString()} islimit = {(limitTime > 0).toString()} > {formatTime(elapsedTime)}</Timer>
             <div>
-              <HeaderBtn> 코드 리뷰 요청</HeaderBtn>
+              <HeaderBtn onClick={()=>dispatch(setAcquireReview(true))}> 코드 리뷰 요청</HeaderBtn>
               <HeaderBtn> 힌트 보기 </HeaderBtn>
             </div>
           </HeaderTxt>
@@ -99,7 +101,7 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id}) => {
             <Hr/>
             <p  dangerouslySetInnerHTML={{ __html: parseDescription(problemDetails.input) }} />
           </InoutWrap>
-          
+
           <InoutWrap>
             <TextBox>출력</TextBox>
             <Hr/>

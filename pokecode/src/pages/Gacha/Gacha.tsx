@@ -13,9 +13,8 @@ import { useState } from 'react';
 import { getGachaPokemon, setGachaPokemon } from '../../utils/api/api';
 import { pokemonName } from '../../utils/api/api';
 import { updateMyPokemon } from '../../utils/api/api';
-import { minusUserCredit } from '../../store/userInfo';
-import { RootState } from '../../store';
-import { useDispatch, useSelector } from 'react-redux';
+import { minusUserCredit, setPokemonId } from '../../store/userInfo';
+import { useDispatch} from 'react-redux';
 
 const gachaArray = [gacha1, gacha2, gacha3, gacha4, gacha5, gacha6];
 const Gacha = () => {
@@ -171,6 +170,7 @@ const Gacha = () => {
               }}
               onClick={() => {
                 updateMyPokemon(getPokemon);
+                dispatch(setPokemonId(getPokemon));
                 setGachaRun(false);
                 setGachaResult(false);
               }}
