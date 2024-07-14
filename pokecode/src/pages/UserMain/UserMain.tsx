@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
-import background from '../../assets/images/background.jpg';
+import background from '../../assets/images/background2.jpg';
 import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
 import { MainWrapper } from '../../components/MainWrapper';
@@ -61,13 +61,20 @@ const UserMain = () => {
     setPokemonname(await pokemonName(name));
   };
 
-
   const animateRandomly = async () => {
     while (true) {
       // 무작위 위치로 애니메이션 시작
       const newPosition = getRandomPosition();
+
       await controls.start({
         ...newPosition,
+        transition: { duration: 1 + Math.random() * 3 },
+      });
+
+      const newNewPosition = getRandomPosition();
+
+      await controls.start({
+        ...newNewPosition,
         transition: { duration: 1 + Math.random() * 3 },
       });
 
@@ -75,16 +82,13 @@ const UserMain = () => {
       await sleep(1000);
 
       // 제자리 애니메이션 (사실상 이동이 없도록 함)
-      await controls.start({
-        x: newPosition.x,
-        y: newPosition.y,
+      controls.start({
+        ...newNewPosition,
         transition: { duration: 1 + Math.random() * 3 },
       });
-
       // 다시 1초 동안 대기
       await sleep(1000);
     }
-    
   };
 
   useEffect(() => {
@@ -134,7 +138,7 @@ const UserMain = () => {
               }}
             />
           ))}
-          
+
           <motion.div
             animate={controls}
             style={{

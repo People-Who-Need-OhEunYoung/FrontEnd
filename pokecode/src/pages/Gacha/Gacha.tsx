@@ -14,7 +14,7 @@ import { getGachaPokemon, setGachaPokemon } from '../../utils/api/api';
 import { pokemonName } from '../../utils/api/api';
 import { updateMyPokemon } from '../../utils/api/api';
 import { minusUserCredit, setPokemonId } from '../../store/userInfo';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 const gachaArray = [gacha1, gacha2, gacha3, gacha4, gacha5, gacha6];
 const Gacha = () => {
@@ -99,7 +99,12 @@ const Gacha = () => {
                 style={{ width: '400px', margin: '20px 0' }}
                 color="#80495C"
               >
-                <Link to={'/usermain'}>나가기</Link>
+                <Link
+                  style={{ display: 'inline-block', width: '100%' }}
+                  to={'/usermain'}
+                >
+                  나가기
+                </Link>
               </DesignedButton1>
             </div>
           </>
