@@ -52,7 +52,8 @@ const TestEditor = ({ ...props }) => {
 
   useEffect(() => {
     dispatch(setWrittenCode(editorContent));
-  },[isAcquireReview])
+    console.log(editorContent)
+  },[isAcquireReview, editorContent])
 
   useEffect(() => {
     if (editorContainerRef.current) {
