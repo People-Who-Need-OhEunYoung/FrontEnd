@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Modal from '../../components/Modal/Modal';
-// import { setProblemId } from '../../store/problemSlice';
+
 
 type ItemType = {
   roomId: number;
@@ -28,7 +28,6 @@ const RoomList = () => {
   const [problemTitle, setproblemTitle] = useState<string>('');
   const [problemId, setproblemId] = useState<string>('');
   const [roomlist, setRoomlist] = useState<ItemType[]>([
-
     {
       roomId: 1,
       problemId: '1000',
@@ -40,6 +39,19 @@ const RoomList = () => {
       nickname: 'ㅇㅇㅇ',
     },
   ]); // 문제 데이터를 저장할 배열
+  if (roomlist == null)
+    setRoomlist([
+      {
+        roomId: 1,
+        problemId: '1000',
+        problemTitle: 'A+B',
+        roomTitle: '해결 좀 ㅎ ㅐ주세요',
+        level: 1,
+        limit_num: 3,
+        cur_num: 1,
+        nickname: 'ㅇㅇㅇ',
+      },
+    ]);
 
   //임시 빌드 로직 제거 해도 돼요 start
   if (pageCount == null) setPageCount(1);
@@ -130,13 +142,14 @@ const RoomList = () => {
                 //const link = `https://www.acmicpc.net/problem/${item.problemId}`;
                 const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
                 return (
-                  <ProblemComponent onClick={() => {
-                        setIsEnterModalOpen(true);
-                        setRoomTitle(item.roomTitle);
-                        setproblemId(item.problemId);
-                        setproblemTitle(item.problemTitle);
-                      }}>
-
+                  <ProblemComponent
+                    onClick={() => {
+                      setIsEnterModalOpen(true);
+                      setRoomTitle(item.roomTitle);
+                      setproblemId(item.problemId);
+                      setproblemTitle(item.problemTitle);
+                    }}
+                  >
                     <Probinfo>
                       <TierImg src={tiersrc} style={{ marginRight: '2%' }} />
                       <p style={{ marginRight: '5%' }}>{item.problemId}</p>
@@ -158,20 +171,20 @@ const RoomList = () => {
           ))}
         </ListView>
 
-          <Modal
-            title={roomTitle}
-            prob_title={problemTitle}
-            id={problemId}
-            component={6}
-            on={isEnterModalOpen}
-            event={setIsEnterModalOpen}
-          ></Modal>
+        <Modal
+          title={roomTitle}
+          prob_title={problemTitle}
+          id={problemId}
+          component={6}
+          on={isEnterModalOpen}
+          event={setIsEnterModalOpen}
+        ></Modal>
 
-          <Modal
-            component={2}
-            on={isMakeModalOpen}
-            event={setIsMakeModalOpen}
-          ></Modal>
+        <Modal
+          component={2}
+          on={isMakeModalOpen}
+          event={setIsMakeModalOpen}
+        ></Modal>
 
         <ButtonGroup style={{ margin: '1.5%' }}>
           {renderPageButtons()}

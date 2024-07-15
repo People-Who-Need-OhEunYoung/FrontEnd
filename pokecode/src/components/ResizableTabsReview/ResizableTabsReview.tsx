@@ -4,11 +4,11 @@ import { motion, useAnimation, useDragControls } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
 import { TestSharedEditor } from '../TestSharedEditor';
 import background from '../../assets/images/background.jpg';
-// import problem1011 from '../../assets/images/1011번-Fly-me-to-the-Alpha-Centauri.png';
 import terminal from '../../assets/images/터미널.png';
-import webrtc from '../../assets/images/webrtc.png';
+
 import { DesignedButton1 } from '../DesignedButton';
 import { ProblemText } from '../ProblemText';
+import { VoiceChat } from '../VoiceChat';
 
 const Container = styled.div`
   display: flex;
@@ -54,13 +54,12 @@ const Resizer = styled.div`
   }
 `;
 
-
 interface ResizableTabsProps {
   id: string;
   title: string;
 }
 
-const ResizableTabsReview: React.FC<ResizableTabsProps> = ({id, title}) => {
+const ResizableTabsReview: React.FC<ResizableTabsProps> = ({ id, title }) => {
   const [width, setWidth] = useState<number>(25);
   const [width1, setWidth1] = useState<number>(25);
 
@@ -212,8 +211,10 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({id, title}) => {
       </motion.div>
       <Container ref={containerRef}>
         <Tab width={width}>
-          <HeaderTxt>{id}번 {title}</HeaderTxt>
-          <ProblemText id = {id} isShowHeader='false'/>
+          <HeaderTxt>
+            {id}번 {title}
+          </HeaderTxt>
+          <ProblemText id={id} isShowHeader="false" />
           {/* <div
             style={{
               width: '100%',
@@ -271,7 +272,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({id, title}) => {
               overflow: 'auto',
             }}
           >
-            <img src={webrtc} width={'100%'} alt="" />
+            <VoiceChat />
           </div>
         </Tab>
       </Container>

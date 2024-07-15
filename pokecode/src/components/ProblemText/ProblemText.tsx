@@ -1,21 +1,23 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { setElapsedTime, resetElapsedTime, setStartTime } from '../../store/timerSlice';
-import getDetails from "./getDetails";
-import { ProblemDetails, ResizableTabsProps } from "./index";
-
+import { setElapsedTime, setStartTime } from '../../store/timerSlice';
+import getDetails from './getDetails';
+import { ProblemDetails, ResizableTabsProps } from './index';
 import { RootState } from '../../store/index';
 import { setAcquireReview } from '../../store/problemSlice';
 import Modal from '../../components/Modal/Modal';
 import { useNavigate } from 'react-router-dom';
 
-const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
-  const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(null);
+const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
+  const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(
+    null
+  );
 
   const dispatch = useDispatch();
-  const {startTime, elapsedTime, limitTime} = useSelector((state: RootState) => state.timer);
+  const { startTime, elapsedTime, limitTime } = useSelector(
+    (state: RootState) => state.timer
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -47,7 +49,6 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
     return imgWithWidth;
   };
 
-
   useEffect(() => {
     const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`);
     let start_time = Date.now();
@@ -59,7 +60,9 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
         solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000);
       dispatch(setElapsedTime(updateElapsedTime));
     } else {
+
       localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time: start_time, elapsed_time: 0, limit_time: limitTime }));
+
     }
 
     const interval = setInterval(() => {
@@ -68,7 +71,9 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
           Math.floor((Date.now() - startTime) / 1000) + elapsedTime;
         dispatch(setElapsedTime(newElapsedTime));
 
+
         localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time, elapsed_time: newElapsedTime, limit_time: limitTime }));
+
       }
     }, 1000);
     return () => clearInterval(interval);
@@ -94,19 +99,32 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
     return `${h}:${m}:${s}`;
   };
 
- return (
-    <div style = {{height: '100%'}}>
-      <Header isShowHeader = {isShowHeader}>
+  return (
+    <div style={{ height: '100%' }}>
+      <Header isShowHeader={isShowHeader}>
         {problemDetails && (
-          <HeaderTxt> 
-            <Title>{id}번 {problemDetails.title}</Title>
-            <Timer istimerxceeded = {(elapsedTime > limitTime).toString()} islimit = {(limitTime > 0).toString()} > {formatTime(elapsedTime)}</Timer>
-            <div style={{position: 'absolute', right: '3%'}}>
-              <HeaderBtn onClick={()=>{ 
-                dispatch(setAcquireReview(true)); 
-                // setIsModalOpen(true); 
-                navigate(`/room?id=${id}&title=${problemDetails.title}`);
-              }}> 코드 리뷰 요청</HeaderBtn>
+          <HeaderTxt>
+            <Title>
+              {id}번 {problemDetails.title}
+            </Title>
+            <Timer
+              istimerxceeded={(elapsedTime > limitTime).toString()}
+              islimit={(limitTime > 0).toString()}
+            >
+              {' '}
+              {formatTime(elapsedTime)}
+            </Timer>
+            <div style={{ position: 'absolute', right: '3%' }}>
+              <HeaderBtn
+                onClick={() => {
+                  dispatch(setAcquireReview(true));
+                  // setIsModalOpen(true);
+                  navigate(`/room?id=${id}&title=${problemDetails.title}`);
+                }}
+              >
+                {' '}
+                코드 리뷰 요청
+              </HeaderBtn>
               <HeaderBtn> 힌트 보기 </HeaderBtn>
             </div>
           </HeaderTxt>
@@ -114,27 +132,38 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
       </Header>
       <Wrap>
         {problemDetails && (
+          <ProblemWrap>
+            <InoutWrap>
+              <TextBox> 문제</TextBox>
+              <Hr />
+              <p
+                style={{ margin: '10px 0' }}
+                dangerouslySetInnerHTML={{
+                  __html: parseDescription(problemDetails.description),
+                }}
+              />
+            </InoutWrap>
+            <InoutWrap>
+              <TextBox>입력</TextBox>
+              <Hr />
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: parseDescription(problemDetails.input),
+                }}
+              />
+            </InoutWrap>
 
-        <ProblemWrap>
-          <InoutWrap>
-            <TextBox> 문제</TextBox>
-            <Hr/>
-            <p style = {{margin: '10px 0'}} dangerouslySetInnerHTML={{ __html: parseDescription(problemDetails.description) }} />
-          </InoutWrap>
-          <InoutWrap>
-            <TextBox>입력</TextBox>
-            <Hr/>
-            <p  dangerouslySetInnerHTML={{ __html: parseDescription(problemDetails.input) }} />
-          </InoutWrap>
+            <InoutWrap>
+              <TextBox>출력</TextBox>
+              <Hr />
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: parseDescription(problemDetails.output),
+                }}
+              />
+            </InoutWrap>
 
-          <InoutWrap>
-            <TextBox>출력</TextBox>
-            <Hr/>
-             <p  dangerouslySetInnerHTML={{ __html: parseDescription(problemDetails.output) }} />
-          </InoutWrap>
-          
-          <InoutWrap>
-
+            <InoutWrap>
               {problemDetails.samples.map((sample, index) => (
                 <div key={index}>
                   <TextBox> 예시 {index + 1} </TextBox>
@@ -151,19 +180,18 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
                   </ExampleWrap>
                 </div>
               ))}
-          </InoutWrap>
-        </ProblemWrap>
-      )}
+            </InoutWrap>
+          </ProblemWrap>
+        )}
       </Wrap>
       <Modal
         title={''}
-        prob_title= {''}
+        prob_title={''}
         id={id}
         component={2}
         on={isModalOpen}
         event={setIsModalOpen}
       ></Modal>
-
     </div>
   );
 };
@@ -173,7 +201,7 @@ const Wrap = styled.div`
   overflow: auto;
 `;
 
-const Header = styled.div<{isShowHeader: string}>`
+const Header = styled.div<{ isShowHeader: string }>`
   position: relative;
   height: 60px;
 
@@ -181,8 +209,7 @@ const Header = styled.div<{isShowHeader: string}>`
   border-bottom: 2px solid #b6b5b546;
   color: white;
   font-weight: bold;
-  display: ${(props) => (props.isShowHeader == 'true') ? 'block' : 'none'};
-
+  display: ${(props) => (props.isShowHeader == 'true' ? 'block' : 'none')};
 `;
 
 const HeaderBtn = styled.button`
@@ -193,7 +220,6 @@ const HeaderBtn = styled.button`
   &:hover {
     background-color: #4ea6ff;
   }
-
 `;
 
 const HeaderTxt = styled.div`
@@ -210,7 +236,7 @@ const Title = styled.p`
   white-space: nowrap;
 `;
 
-const Timer = styled.p<{istimerxceeded: string, islimit: string}>`
+const Timer = styled.p<{ istimerxceeded: string; islimit: string }>`
   margin-left: 5%;
 
   overflow: hidden;

@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-
 const Nav = () => {
   return (
     <div style={cssHeadNav}>
@@ -30,7 +29,6 @@ const LinkButton = styled(Link)`
 
   &:focus {
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
-    
   }
 `;
 

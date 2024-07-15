@@ -70,10 +70,10 @@ const Modal = ({
               <Title>{'테스트 케이스 입력'}</Title>
               <ModalContent5 />
             </>
-          ) :  nowcomponent === 6 ? (
+          ) : nowcomponent === 6 ? (
             <>
               <Title>{title}</Title>
-              <ModalContent7 id = {id} title = {prob_title}/>
+              <ModalContent7 id={id} title={prob_title} />
             </>
           ) : (
             ''
@@ -117,7 +117,7 @@ const ModalWrap = styled.div`
 `;
 
 const Title = styled.p`
-  padding: 15% 0 5%;
+  padding: 50px 0 5%;
   font-weight: bold;
   font-size: 1.6rem;
   word-wrap: break-word; /* Deprecated, use overflow-wrap instead */

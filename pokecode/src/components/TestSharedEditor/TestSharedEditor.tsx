@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/theme/dracula.css';
-
 import { WebsocketProvider } from 'y-websocket';
 import { CodemirrorBinding } from 'y-codemirror';
 import * as Y from 'yjs';
@@ -13,14 +12,14 @@ import { RootState } from '../../store';
 
 const TestSharedEditor: React.FC = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
-  const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
-  
-  const {writtenCode} = useSelector((state: RootState) => state.probinfo);
 
-  useEffect(()=> {
+  const { writtenCode } = useSelector((state: RootState) => state.probinfo);
+  const { language } = useSelector((state: RootState) => state.codecaller);
+
+
+  useEffect(() => {
     console.log(writtenCode);
-  },[writtenCode]);
-
+  }, [writtenCode]);
 
   useEffect(() => {
     const ydoc = new Y.Doc();
@@ -38,11 +37,18 @@ const TestSharedEditor: React.FC = () => {
     if (editorContainerRef.current) {
       const editor = CodeMirror(editorContainerRef.current, {
         theme: 'dracula',
-        mode: 'javascript',
+        mode: language,
         lineNumbers: true,
+        spellcheck: true,
+        autocorrect: true,
+        autoCloseBrackets: true, // 자동 괄호 닫기
+        matchBrackets: true, // 괄호 매칭
+        showHint: true, // 자동 완성 힌트
+        extraKeys: {
+          'Ctrl-Space': 'autocomplete', // 자동 완성 키 설정
+        },
       });
-      
-      setEditor(editor);
+
 
       const binding = new CodemirrorBinding(yText, editor, provider.awareness);
       console.log(provider.awareness.clientID);

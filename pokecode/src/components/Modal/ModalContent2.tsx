@@ -32,7 +32,6 @@ const ModalContent2 = ({ width, onOff }: any) => {
           width: width,
           padding: '30px 0 20px',
           fontWeight: 'bold',
-         
         }}
       >
         <div style={{ minHeight: '40px' }} onDoubleClick={handleDoubleClick}>
@@ -41,7 +40,7 @@ const ModalContent2 = ({ width, onOff }: any) => {
               value={title}
               onChange={handleChange}
               onBlur={handleBlur}
-              style={{padding:'-10px 10px', borderRadius:'10px'}}
+              style={{ padding: '10px', borderRadius: '20px' }}
               onKeyDown={(e) => {
                 if (e.keyCode === 13) handleBlur();
               }}
@@ -54,7 +53,7 @@ const ModalContent2 = ({ width, onOff }: any) => {
                 display: 'inline-block',
                 width: '70%',
                 wordBreak: 'break-all',
-                padding:'10px',
+                padding: '10px',
               }}
             >
               {title == '' ? '방 제목을 입력해주세요.' : title}
@@ -79,7 +78,7 @@ const ModalContent2 = ({ width, onOff }: any) => {
         <p>최대인원은 4명 입니다.</p>
       </div>
 
-      <DesignedButton1 color = "#5d5d5d" onClick={onOff}>
+      <DesignedButton1 color="#5d5d5d" onClick={onOff}>
         방만들기
       </DesignedButton1>
     </div>
@@ -88,6 +87,7 @@ const ModalContent2 = ({ width, onOff }: any) => {
 
 const Titleinput = styled.textarea`
   width: 70%;
+  height: 21.5px;
   text-align: center;
   background: #6ebfee2b;
   word-break: break-all;
