@@ -9,7 +9,11 @@ import { setAcquireReview } from '../../store/problemSlice';
 import Modal from '../../components/Modal/Modal';
 import { useNavigate } from 'react-router-dom';
 
-const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
+const ProblemText: React.FC<ResizableTabsProps> = ({
+  id,
+  isShowHeader,
+  size = '100%',
+}) => {
   const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(
     null
   );
@@ -60,9 +64,15 @@ const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
         solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000);
       dispatch(setElapsedTime(updateElapsedTime));
     } else {
-
-      localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time: start_time, elapsed_time: 0, limit_time: limitTime }));
-
+      localStorage.setItem(
+        `solvedTime-${id}`,
+        JSON.stringify({
+          _id: id,
+          start_time: start_time,
+          elapsed_time: 0,
+          limit_time: limitTime,
+        })
+      );
     }
 
     const interval = setInterval(() => {
@@ -71,9 +81,15 @@ const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
           Math.floor((Date.now() - startTime) / 1000) + elapsedTime;
         dispatch(setElapsedTime(newElapsedTime));
 
-
-        localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time, elapsed_time: newElapsedTime, limit_time: limitTime }));
-
+        localStorage.setItem(
+          `solvedTime-${id}`,
+          JSON.stringify({
+            _id: id,
+            start_time,
+            elapsed_time: newElapsedTime,
+            limit_time: limitTime,
+          })
+        );
       }
     }, 1000);
     return () => clearInterval(interval);
@@ -100,7 +116,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
   };
 
   return (
-    <div style={{ height: '100%' }}>
+    <div style={{ height: size }}>
       <Header isShowHeader={isShowHeader}>
         {problemDetails && (
           <HeaderTxt>
@@ -197,7 +213,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
 };
 
 const Wrap = styled.div`
-  height: calc(100% - 60px);
+  height: calc(100%);
   overflow: auto;
 `;
 
