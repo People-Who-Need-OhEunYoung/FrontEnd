@@ -245,6 +245,7 @@ const ProfileWrap = styled.div`
   right: 12.5%;
   @media (max-width: 1240px) {
     right: 0%;
+    width: 105px;
   }
 `;
 const ProfileWrap2 = styled.div`

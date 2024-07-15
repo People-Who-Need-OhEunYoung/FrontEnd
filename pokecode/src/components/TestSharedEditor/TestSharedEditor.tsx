@@ -8,9 +8,19 @@ import { WebsocketProvider } from 'y-websocket';
 import { CodemirrorBinding } from 'y-codemirror';
 import * as Y from 'yjs';
 import './TestSharedEditor.css';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const TestSharedEditor: React.FC = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
+  //const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
+
+  const { writtenCode } = useSelector((state: RootState) => state.probinfo);
+
+  useEffect(() => {
+    console.log(writtenCode);
+  }, [writtenCode]);
+
   useEffect(() => {
     const ydoc = new Y.Doc();
     const provider = new WebsocketProvider(
@@ -21,12 +31,16 @@ const TestSharedEditor: React.FC = () => {
 
     const yText = ydoc.getText('codemirror');
 
+    // 기본 텍스트를 설정합니다.
+    yText.insert(0, writtenCode);
+
     if (editorContainerRef.current) {
       const editor = CodeMirror(editorContainerRef.current, {
         theme: 'dracula',
         mode: 'javascript',
         lineNumbers: true,
       });
+      //setEditor(editor);
 
       const binding = new CodemirrorBinding(yText, editor, provider.awareness);
       console.log(provider.awareness.clientID);

@@ -30,11 +30,11 @@ const Tab = styled.div<TabProps>`
 
 const Resizer = styled.div`
   opacity: 0;
-  width: 20px;
+  width: 10px;
   cursor: ew-resize;
-  background-color: #8f0000;
+  background-color: #0000006d;
   transform: translateX(-50%);
-  height: 100px;
+  height: 100%;
   z-index: 100;
   position: absolute;
   border-radius: 20px;
@@ -50,6 +50,7 @@ const Resizer = styled.div`
   -khtml-user-select: none;
   &:hover {
     opacity: 1;
+    z-index: 100;
   }
 `;
 

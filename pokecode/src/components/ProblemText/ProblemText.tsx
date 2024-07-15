@@ -9,6 +9,7 @@ import { ProblemDetails, ResizableTabsProps } from './index';
 import { RootState } from '../../store/index';
 import { setAcquireReview } from '../../store/problemSlice';
 import Modal from '../../components/Modal/Modal';
+import { useNavigate } from 'react-router-dom';
 
 const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
   const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(
@@ -20,6 +21,8 @@ const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
     (state: RootState) => state.timer
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const fetchCrawlData = async () => {
     try {
@@ -49,7 +52,6 @@ const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
   };
 
   useEffect(() => {
-    console.log('problemId:', id);
     const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`);
     let start_time = Date.now();
     dispatch(setStartTime(start_time));
@@ -130,13 +132,13 @@ const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
               <HeaderBtn
                 onClick={() => {
                   dispatch(setAcquireReview(true));
-                  setIsModalOpen(true);
+                  // setIsModalOpen(true);
+                  navigate(`/room?id=${id}&title=${problemDetails.title}`);
                 }}
               >
                 {' '}
                 코드 리뷰 요청
               </HeaderBtn>
-
               <HeaderBtn> 힌트 보기 </HeaderBtn>
             </div>
           </HeaderTxt>
