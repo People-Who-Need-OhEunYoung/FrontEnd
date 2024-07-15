@@ -60,7 +60,6 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
       dispatch(setElapsedTime(updateElapsedTime));
     } else {
       localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time: start_time, elapsed_time: 0, limit_time: limitTime }));
-
     }
 
     const interval = setInterval(() => {
@@ -70,7 +69,6 @@ const ProblemText : React.FC<ResizableTabsProps> = ({id, isShowHeader}) => {
         dispatch(setElapsedTime(newElapsedTime));
 
         localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time, elapsed_time: newElapsedTime, limit_time: limitTime }));
-
       }
     }, 1000);
     return () => clearInterval(interval);
