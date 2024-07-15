@@ -8,15 +8,14 @@ import { WebsocketProvider } from 'y-websocket';
 import { CodemirrorBinding } from 'y-codemirror';
 import * as Y from 'yjs';
 import './TestSharedEditor.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
 const TestSharedEditor: React.FC = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
   
-  const dispatch = useDispatch();
-  const {isAcquireReview, writtenCode} = useSelector((state: RootState) => state.probinfo);
+  const {writtenCode} = useSelector((state: RootState) => state.probinfo);
 
   useEffect(()=> {
     console.log(writtenCode);

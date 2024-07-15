@@ -10,6 +10,7 @@ import { setProblemId } from '../../store/problemSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
+
 type ProblemType = {
   id: string;
   level: number;
@@ -84,10 +85,10 @@ const ProblemList = () => {
   useEffect(() => {
     fetchProbData().then((res) => {
       const parsedData = res;
-      // const page_count = Math.ceil(res.count / parsedData.items.length);
+      const page_count = Math.ceil(res.count / parsedData.problem.length);
       console.log(parsedData.problem);
 
-      // setPageCount(page_count);
+      setPageCount(page_count);
       if (parsedData.problem.length > 0) {
         const itemsArray = [];
         for (let i = 0; i < parsedData.problem.length; i++) {
@@ -260,11 +261,6 @@ const TitleBtn = styled.button`
   text-align: left;
   left: 20%;
   font-size: 1.2rem;
-`;
-
-const probInfo = styled.p`
-  position: absolute;
-  
 `;
 
 const OrderButton = styled.img`

@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Modal from '../../components/Modal/Modal';
-import { setProblemId } from '../../store/problemSlice';
+// import { setProblemId } from '../../store/problemSlice';
 
 type ItemType = {
   roomId: number;
