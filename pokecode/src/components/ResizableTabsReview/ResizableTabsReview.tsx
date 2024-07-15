@@ -214,16 +214,11 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({ id, title }) => {
           <HeaderTxt>
             {id}번 {title}
           </HeaderTxt>
-          <ProblemText id={id} isShowHeader="false" />
-          {/* <div
-            style={{
-              width: '100%',
-              height: '100%',
-              overflow: 'auto',
-            }}
-          >
-            <img src={problem1011} width={'100%'} alt="" />
-          </div> */}
+          <ProblemText
+            id={id}
+            isShowHeader="false"
+            size={'calc(100% - 80px)'}
+          />
         </Tab>
         <Resizer onMouseDown={handleMouseDown} style={{ left: width + '%' }} />
         <div
@@ -281,6 +276,8 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({ id, title }) => {
 };
 
 const HeaderTxt = styled.p`
+  height: 80px;
+  box-sizing: border-box;
   display: flex;
   line-height: 60px;
   font-size: 1.5rem;
