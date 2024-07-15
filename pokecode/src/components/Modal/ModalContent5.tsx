@@ -30,8 +30,8 @@ const ModalContent5 = () => {
     setCasecount(testdata.length - 1);
   };
   return (
-    <div style={{ width: '800px' }}>
-      <div style={{ height: '400px', overflow: 'auto' }}>
+    <div style={{ width: '450px' }}>
+      <div style={{ height: '300px', overflow: 'auto' }}>
         {testdata.map((testCase: any, index: any) => (
           <TestCase
             key={index} // key prop은 각각의 컴포넌트가 고유하게 식별되도록 돕습니다.
@@ -49,14 +49,14 @@ const ModalContent5 = () => {
         }}
       >
         <DesignedButton1
-          style={{ margin: '0 10px 20px', width: '29%' }}
+          style={{ margin: '0 10px 20px', width: '35%' }}
           color="cadetblue"
           onClick={() => addTestCase()}
         >
           테스트케이스 추가
         </DesignedButton1>
         <DesignedButton1
-          style={{ margin: '0 10px 20px', width: '29%' }}
+          style={{ margin: '0 10px 20px', width: '35%' }}
           color="cadetblue"
           onClick={() => removeTestCase()}
         >

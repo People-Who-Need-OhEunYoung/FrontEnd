@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 
-const signalingServerDomain = 'wss://api.poke-code.com:8481';
+// const signalingServerDomain = 'wss://api.poke-code.com:8481';
+const signalingServerDomain = 'wss://168.126.208.153:3000';
 const pcConfig = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
 
 interface RemoteVideo {
@@ -206,7 +207,7 @@ const VoiceChat = () => {
   };
 
   const handleDisconnect = async (sender: string) => {
-    console.log('접속해제 감지');
+    console.log('접속해제 감지 : ', sender);
 
     if (peers.current[sender].video) {
       setRemoteVideos((prevVideos) =>

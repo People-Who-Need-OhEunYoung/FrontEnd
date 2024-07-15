@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { setElapsedTime, setStartTime } from '../../store/timerSlice';
 import getDetails from './getDetails';
 import { ProblemDetails, ResizableTabsProps } from './index';
-
 import { RootState } from '../../store/index';
 import { setAcquireReview } from '../../store/problemSlice';
 import Modal from '../../components/Modal/Modal';

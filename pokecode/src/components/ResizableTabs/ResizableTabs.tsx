@@ -2,11 +2,11 @@ import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, useAnimation } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
-// import { TestSharedEditor } from '../TestSharedEditor';
 import background from '../../assets/images/background3.gif';
 import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 import { userInfo } from '../../utils/api/api';
+import { CodeAIWardBalloon } from '../CodeAIButton';
 
 const Container = styled.div`
   display: flex;
@@ -146,7 +146,6 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
     >
       <Container ref={containerRef}>
         <Tab width={width}>
-          {/* <ProblemHeader/> */}
           <div
             style={{
               width: '100%',
@@ -155,7 +154,8 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           >
             <ProblemText id={id} isShowHeader="true" />
           </div>
-          <Home onClick={handleDivClick}>
+          <Home style={{ position: 'relative' }} onClick={handleDivClick}>
+            <CodeAIWardBalloon />
             <motion.div
               animate={controls}
               style={{
@@ -185,7 +185,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           }}
         >
           <div style={{ background: 'green', width: '100%', height: '100%' }}>
-            <TestEditor id={id} />
+            <TestEditor />
           </div>
         </div>
       </Container>

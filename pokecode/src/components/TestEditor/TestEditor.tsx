@@ -21,36 +21,43 @@ import 'codemirror/addon/fold/brace-fold';
 import 'codemirror/addon/fold/comment-fold';
 import 'codemirror/addon/fold/foldgutter.css';
 import './TestEditor.css';
-import { DesignedButton1 } from '../DesignedButton';
-import { Modal } from '../Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setWrittenCode } from '../../store/problemSlice';
-import styled from 'styled-components';
-import wordballoon from '../../assets/images/wordballoon.png';
 
-const TestEditor = ({ ...props }) => {
+const TestEditor = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
+  // ------- 타이핑 출력 start ---------
+  // 텍스트 결과 셋팅용
   const [testcaseResult, setTestcaseResult] = useState('');
-  const [aiResult, setAiResult] = useState('');
-  const [sequence, setSequence] = useState<string>('');
-  const [sequenceai, setSequenceai] = useState<string>('');
-  const [isModal, setIsModal] = useState(false);
   // 한글자씩 글자를 추가할 빈문자열 변수 sequence를 선언합니다.
-  const [textCount, setTextCount] = useState<number>(0);
+  const [sequence, setSequence] = useState<string>('');
   // 현재까지 타이핑된 문자열의 위치(인덱스)를 나타내는 변수 textCount를 선언합니다.
-  const [isTypingPaused, setIsTypingPaused] = useState<boolean>(false);
+  const [textCount, setTextCount] = useState<number>(0);
   // 모든 문자열이 타이핑된 후 일시정지인지 아닌지 여부를 나타내는 변수를 선언합니다.
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isai, setIsai] = useState(false);
-  const [language, setLanguage] = useState('python');
+  const [isTypingPaused, setIsTypingPaused] = useState<boolean>(false);
+  // ------- 타이핑 출력 end ---------
   const [editorContent, setEditorContent] = useState('');
-
-  const dispatch = useDispatch();
   const { isAcquireReview } = useSelector((state: RootState) => state.probinfo);
+  const { returnCall, language } = useSelector(
+    (state: RootState) => state.codecaller
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    if (editor != null) editor.setOption('mode', language);
+  }, [language]);
+
+  useEffect(() => {
+    // PDG 테스트 케이스 리턴 메세지를 받도록 수정
+    setSequence('');
+    setTextCount(0);
+    setTestcaseResult(returnCall);
+  }, [returnCall]);
+
+  useEffect(() => {
+    // KHS 코드 리뷰방으로 이동을 위해 dispatch 작업
     dispatch(setWrittenCode(editorContent));
     console.log(editorContent);
   }, [isAcquireReview, editorContent]);
@@ -98,184 +105,34 @@ const TestEditor = ({ ...props }) => {
       //   //editor.off('change', handleChange.current);  // 이벤트 리스너를 제거할 때 핸들러 함수를 함께 제공
       // };
     }
-    if (!isai) {
-      const typingInterval = setInterval(() => {
-        if (isTypingPaused) {
-          clearInterval(typingInterval);
-        }
 
-        if (textCount >= testcaseResult.length) {
-          //text length 초과 시 undefind가 출력되는 것을 방지
-          setIsTypingPaused(true);
-          return;
-        }
-
-        const nextChar = testcaseResult[textCount];
-        setSequence((prevSequence) => prevSequence + nextChar);
-
-        if (nextChar === '\n') {
-          setTextCount((prevCount) => prevCount + 1);
-        } else {
-          setTextCount((prevCount) => prevCount + 1);
-        }
-      }, 30); // 설정한 초만큼 일정한 간격마다 실행된다
-
-      return () => clearInterval(typingInterval); //컴포넌트가 마운트 해제되거나, 재렌더링 될 때마다 setInterval를 정리하는 함수를 반환함.
-    } else {
-      const typingInterval = setInterval(() => {
-        if (isTypingPaused) {
-          clearInterval(typingInterval);
-        }
-
-        if (textCount >= aiResult.length) {
-          //text length 초과 시 undefind가 출력되는 것을 방지
-          setIsTypingPaused(true);
-          return;
-        }
-
-        const nextChar = aiResult[textCount];
-        setSequenceai((prevSequence) => prevSequence + nextChar);
-
-        if (nextChar === '\n') {
-          setTextCount((prevCount) => prevCount + 1);
-        } else {
-          setTextCount((prevCount) => prevCount + 1);
-        }
-      }, 20); // 설정한 초만큼 일정한 간격마다 실행된다
-
-      return () => clearInterval(typingInterval); //컴포넌트가 마운트 해제되거나, 재렌더링 될 때마다 setInterval를 정리하는 함수를 반환함.
-    }
-  }, [testcaseResult, textCount, isTypingPaused, aiResult]);
-
-  async function callApi(problemNumber: string, codedata: string) {
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: `Bearer ${import.meta.env.VITE_APP_AI}`,
-      },
-      body: JSON.stringify({
-        messages: [
-          {
-            content: 'You are a helpful assistant',
-            role: 'system',
-          },
-          {
-            content: `${codedata}\n백준 ${problemNumber}번 문제에 대한 코드인데, 코드는 제외하고 정답여부 체크해서 반드시 5줄 안으로 구체적인 피드백 부탁해`,
-            role: 'user',
-          },
-        ],
-        model: 'deepseek-coder',
-        frequency_penalty: 0,
-        max_tokens: 2048,
-        presence_penalty: 0,
-        stop: null,
-        stream: true,
-        temperature: 1,
-        top_p: 1,
-        logprobs: false,
-        top_logprobs: null,
-      }),
-    };
-
-    try {
-      const response: any = await fetch(
-        'https://api.deepseek.com/chat/completions',
-        options
-      );
-      setSequenceai('');
-      setTextCount(0);
-      setAiResult('');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let result = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-          break;
-        }
-
-        const parts = decoder
-          .decode(value, { stream: true })
-          .split('data: ')
-          .filter((part) => part.trim() !== '')
-          .map((item) => {
-            try {
-              return JSON.parse(item).choices[0].delta.content;
-            } catch (error: any) {
-              console.log('Error parsing JSON:', error.message);
-              console.log('Invalid JSON part:', item);
-              return ''; // 파싱 실패 시 빈 문자열 반환
-            }
-          })
-          .join('');
-        console.log(parts);
-        result += parts;
-        setAiResult(result);
+    const typingInterval = setInterval(() => {
+      if (isTypingPaused) {
+        clearInterval(typingInterval);
       }
 
-      console.log('Response has ended.'); // 응답 종료 로그
-      console.log(result); // 전체 응답 결과
-      return result;
-    } catch (error) {
-      console.error('Error in response:', error); // 에러 처리
-      return '에러가 발생했습니다 : ' + error;
-    }
-  }
-  const handleSubmit = async () => {
-    setSequence('');
-    setTextCount(0);
-    setIsai(false);
-    if (editor) {
-      const editorContent = editor.getValue();
-      try {
-        const response = await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          body: JSON.stringify({ code: editorContent, bojNumber: props.id }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        setTestcaseResult(data.data);
-        console.log(data);
-      } catch (error) {
-        console.error('제출과정 에러 발생', error);
+      if (textCount >= testcaseResult.length) {
+        //text length 초과 시 undefind가 출력되는 것을 방지
+        setIsTypingPaused(true);
+        return;
       }
-    }
-  };
 
-  //프론트 AI 피드백 호출
-  const handleAI = async () => {
-    setIsModal(true);
-    setSequenceai('');
-    setTextCount(0);
-    setIsai(true);
-    setAiResult('로딩중.....');
-    if (editor) {
-      const editorContent = editor.getValue();
-      try {
-        await callApi(props.id, editorContent);
-      } catch (error) {
-        console.error('제출과정 에러 발생', error);
+      const nextChar = testcaseResult[textCount];
+      setSequence((prevSequence) => prevSequence + nextChar);
+
+      if (nextChar === '\n') {
+        setTextCount((prevCount) => prevCount + 1);
+      } else {
+        setTextCount((prevCount) => prevCount + 1);
       }
-    }
-  };
+    }, 30); // 설정한 초만큼 일정한 간격마다 실행된다
+
+    return () => clearInterval(typingInterval); //컴포넌트가 마운트 해제되거나, 재렌더링 될 때마다 setInterval를 정리하는 함수를 반환함.
+    //텍스트결과, 컨텐츠, 타이핑 정지 여부 등의 변화로 타이핑 효과 연출
+  }, [testcaseResult, textCount, isTypingPaused, returnCall]);
 
   return (
     <>
-      <Modal component={5} on={isModalOpen} event={setIsModalOpen}></Modal>
       <div
         style={{ height: '80%' }}
         ref={editorContainerRef}
@@ -299,163 +156,9 @@ const TestEditor = ({ ...props }) => {
         >
           {sequence}
         </pre>
-        <WordBalwrap
-          className={isModal ? '' : 'hidden'}
-          style={{
-            position: 'fixed',
-            left: 0,
-            bottom: '150px',
-            height: '300px',
-            width: '50%',
-            background: `url(${wordballoon})`,
-            backgroundSize: '100% 100%',
-            color: 'black',
-            overflow: 'auto',
-            zIndex: 999,
-            padding: '20px 4%',
-            boxSizing: 'border-box',
-            fontSize: '1.5em',
-            fontWeight: 'bold',
-          }}
-        >
-          <a
-            style={{
-              position: 'absolute',
-              right: '70px',
-              top: '0',
-              cursor: 'pointer',
-              fontSize: '2em',
-            }}
-            onClick={() => {
-              setIsModal(false);
-              setAiResult('');
-            }}
-          >
-            X
-          </a>
-          <WordBal
-            style={{
-              width: '95%',
-              whiteSpace: 'pre-wrap',
-              height: '60%',
-              overflow: 'scroll',
-            }}
-          >
-            {sequenceai}
-          </WordBal>
-        </WordBalwrap>
-        <DesignedButton1
-          style={{
-            position: 'absolute',
-            left: '10px',
-            margin: '0',
-            width: '190px',
-            bottom: '-55px',
-            fontSize: '1em',
-            zIndex: 999999,
-          }}
-          onClick={() => {
-            console.log(isModalOpen);
-            setIsModalOpen(true);
-          }}
-          color="#a62df1"
-        >
-          테스트케이스 추가
-        </DesignedButton1>
-        <DesignedButton1
-          style={{
-            position: 'absolute',
-            margin: '0',
-            width: '190px',
-            fontSize: '1em',
-            bottom: '-55px',
-            marginRight: '10px',
-            right: '600px',
-            zIndex: 999999,
-          }}
-          color="#a62df1"
-        >
-          <label htmlFor="language">언어 : </label>
-          <select
-            id="language"
-            style={{ background: '#a62df1', border: 'none', color: 'white' }}
-            onChange={(e: any) => {
-              if (editor != null) editor.setOption('mode', e.target.value);
-              setLanguage(e.target.value);
-            }}
-            value={language}
-          >
-            <option value="javascript">JavaScript</option>
-            <option value="text/x-java">Java</option>
-            <option value="python">Python</option>
-            <option value="text/x-csrc">C</option>
-            <option value="text/x-c++src">C++</option>
-            <option value="text/x-csharp">C#</option>
-          </select>
-        </DesignedButton1>
-        <DesignedButton1
-          className="submit-button"
-          onClick={handleAI}
-          style={{
-            position: 'absolute',
-            margin: '0',
-            width: '190px',
-            fontSize: '1em',
-            bottom: '-55px',
-            marginRight: '10px',
-            right: '400px',
-            zIndex: 999999,
-          }}
-          color="#a62df1"
-        >
-          AI 피드백
-        </DesignedButton1>
-        <DesignedButton1
-          className="submit-button"
-          onClick={handleSubmit}
-          style={{
-            position: 'absolute',
-            margin: '0',
-            width: '190px',
-            fontSize: '1em',
-            bottom: '-55px',
-            marginRight: '10px',
-            right: '200px',
-            zIndex: 999999,
-          }}
-          color="#a62df1"
-        >
-          테스트케이스 실행
-        </DesignedButton1>
-        <DesignedButton1
-          className="submit-button"
-          onClick={handleSubmit}
-          style={{
-            position: 'absolute',
-            margin: '0',
-            width: '190px',
-            fontSize: '1em',
-            bottom: '-55px',
-            marginRight: '10px',
-            right: '0',
-            zIndex: 999999,
-          }}
-          color="#a62df1"
-        >
-          제출하기
-        </DesignedButton1>
       </div>
     </>
   );
 };
-const WordBalwrap = styled.pre`
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-const WordBal = styled.pre`
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
+
 export default TestEditor;
