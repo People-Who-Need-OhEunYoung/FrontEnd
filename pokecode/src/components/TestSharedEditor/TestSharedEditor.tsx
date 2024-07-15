@@ -42,6 +42,7 @@ const TestSharedEditor: React.FC = () => {
         mode: 'javascript',
         lineNumbers: true,
       });
+      
       setEditor(editor);
 
       const binding = new CodemirrorBinding(yText, editor, provider.awareness);
