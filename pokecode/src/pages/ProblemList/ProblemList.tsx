@@ -10,14 +10,6 @@ import { setProblemId } from '../../store/problemSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
-// type ItemType = {
-//   problemId: string;
-//   titleKo: string;
-//   level: number;
-//   acceptedUserCount: number;
-//   averageTries: number;
-// };
-
 type ProblemType = {
   id: string;
   level: number;
