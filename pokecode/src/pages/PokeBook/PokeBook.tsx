@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { MainWrapper } from '../../components/MainWrapper';
 import { showPokemonBook } from '../../utils/api/api';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import background from '../../assets/images/background2.jpg';
@@ -20,10 +20,11 @@ const PokeBook = () => {
   const [gatchPokemons, setGatchPpokemons] = useState<PokemonType[]>([]);
   const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const [curPokeId, setCurPokeId] = useState<number>(pokemonId);
+  const [selectedPokemon, setSelectedPokemon] = useState<boolean>(true);
   const [visibleList, setVisibleList] = useState<string>('all_list'); 
   const [page, setPage] = useState<number>(1);
-  const [pageCount, setPageCount] = useState<number>(1);
-  const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
+  const pokemonGifRef = useRef<HTMLImageElement>(null);
+
   const itemsPerPage = 50;
 
   const fetchPokeBook = async () => {
@@ -63,6 +64,15 @@ const PokeBook = () => {
     setCurPokeId(pokemonId)
   },[pokemonId]);
 
+  const setFilter = () => {
+    if (pokemonGifRef.current) {
+      if (!selectedPokemon) {
+        pokemonGifRef.current.style.filter = 'brightness(0.01)';
+      } else {
+        pokemonGifRef.current.style.filter = '';
+      }
+    }
+  }
 
   useEffect(() => {
     fetchPokeBook().then((res) => {
@@ -92,13 +102,13 @@ const PokeBook = () => {
     <MainWrapper>
       <PokeMonView>
         <PokemonGif
+          ref={pokemonGifRef}
           src={
-            curPokeId == 0
-              ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
-              : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
+            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
                 curPokeId +
                 '.gif'
           }
+          onLoad={() => {setFilter()}}
         ></PokemonGif>
       </PokeMonView>
       <ListWrap>
@@ -109,17 +119,18 @@ const PokeBook = () => {
         <ListView>
           {visibleList === 'all_list' && 
               displayedItems.map((item, index) => (
-              <Item key={index} onClick={() => {setCurPokeId(item.poke_id)}}>
+              <Item key={index} onClick={() => {setCurPokeId(item.poke_id); setSelectedPokemon(item.poke_Lv !== 0)}}>
                 {(() => {
                   return (
                     <div>
                       <div>
-                        <Pokemon
+                        <Pokemon 
                           src={
                             item.poke_Lv === 0
                               ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
                               : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${item.poke_id}.svg`
                           }
+
                         />
                       </div>
                       <div>
