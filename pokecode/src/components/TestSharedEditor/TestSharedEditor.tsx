@@ -12,8 +12,10 @@ import { RootState } from '../../store';
 
 const TestSharedEditor: React.FC = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
+
   const { writtenCode } = useSelector((state: RootState) => state.probinfo);
   const { language } = useSelector((state: RootState) => state.codecaller);
+
 
   useEffect(() => {
     console.log(writtenCode);
@@ -46,7 +48,7 @@ const TestSharedEditor: React.FC = () => {
           'Ctrl-Space': 'autocomplete', // 자동 완성 키 설정
         },
       });
-      //setEditor(editor);
+
 
       const binding = new CodemirrorBinding(yText, editor, provider.awareness);
       console.log(provider.awareness.clientID);
