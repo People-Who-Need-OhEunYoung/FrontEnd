@@ -1,72 +1,98 @@
-import React, { useEffect, useRef } from 'react';
-import CodeMirror from 'codemirror';
+import { useEffect, useRef, useState } from 'react';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/theme/dracula.css';
-import { WebsocketProvider } from 'y-websocket';
-import { CodemirrorBinding } from 'y-codemirror';
-import * as Y from 'yjs';
+// 임시 주석 처리
+// import * as Y from 'yjs';
+// import { CodemirrorBinding } from 'y-codemirror';
+// import { WebsocketProvider } from 'y-websocket';
+// import CodeMirror from 'codemirror';
 import './TestSharedEditor.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+// YJS 재 테스트
+import * as Y from 'yjs';
+import { CodemirrorBinding } from 'y-codemirror';
+import { WebrtcProvider } from 'y-webrtc';
+import CodeMirror from 'codemirror';
 
-const TestSharedEditor: React.FC = () => {
+const TestSharedEditor = ({ editorRoom = 'notice' }) => {
+  const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
   const editorContainerRef = useRef<HTMLDivElement>(null);
-
   const { writtenCode } = useSelector((state: RootState) => state.probinfo);
   const { language } = useSelector((state: RootState) => state.codecaller);
-
-
-  useEffect(() => {
-    console.log(writtenCode);
-  }, [writtenCode]);
+  const { userNickname } = useSelector((state: RootState) => state.userinfo);
 
   useEffect(() => {
-    const ydoc = new Y.Doc();
-    const provider = new WebsocketProvider(
-      'wss://api.poke-code.com',
-      'codemirror1',
-      ydoc
-    );
+    document.body.onload = addElement;
+    function addElement() {
+      // create a new div element
+      let newDiv = document.createElement('div');
+      // and give it some content
+      setTimeout(() => {
+        let newContent = document.createTextNode(editorRoom + userNickname);
+        // add the text node to the newly created div
+        newDiv.appendChild(newContent);
+      }, 1000);
 
-    const yText = ydoc.getText('codemirror');
+      // add the newly created element and its content into the DOM
+      var currentDiv = document.getElementById('div1');
+      document.body.insertBefore(newDiv, currentDiv);
+    }
+  });
 
-    // 기본 텍스트를 설정합니다.
-    yText.insert(0, writtenCode);
+  useEffect(() => {
+    if (editor != null) editor.setOption('mode', language);
+  }, [language]);
 
+  useEffect(() => {
     if (editorContainerRef.current) {
-      const editor = CodeMirror(editorContainerRef.current, {
-        theme: 'dracula',
-        mode: language,
-        lineNumbers: true,
-        spellcheck: true,
-        autocorrect: true,
-        autoCloseBrackets: true, // 자동 괄호 닫기
-        matchBrackets: true, // 괄호 매칭
-        showHint: true, // 자동 완성 힌트
-        extraKeys: {
-          'Ctrl-Space': 'autocomplete', // 자동 완성 키 설정
-        },
-      });
+      if (editor == null) {
+        const ydoc = new Y.Doc();
+        const provider = new WebrtcProvider('wss://api.poke-code.com', ydoc);
+        setTimeout(() => {
+          provider.awareness.setLocalStateField('user', {
+            color: 'white',
+            name: userNickname,
+          });
+        }, 5000);
 
+        const yText = ydoc.getText('codemirror');
 
-      const binding = new CodemirrorBinding(yText, editor, provider.awareness);
-      console.log(provider.awareness.clientID);
-      // 사용자 ID를 표시하는 로직 추가
-      //   if (userIdRef.current) {
-      //     userIdRef.current.innerText = `User ID: ${provider.awareness.clientID}`;
-      //   }
+        // 기본 텍스트를 설정합니다.
+        yText.insert(0, writtenCode);
+        const seteditor = CodeMirror(editorContainerRef.current, {
+          theme: 'dracula',
+          mode: language,
+          lineNumbers: true,
+          spellcheck: true,
+          autocorrect: true,
+          autoCloseBrackets: true, // 자동 괄호 닫기
+          matchBrackets: true, // 괄호 매칭
+          showHint: true, // 자동 완성 힌트
+          extraKeys: {
+            'Ctrl-Space': 'autocomplete', // 자동 완성 키 설정
+          },
+        });
+        setEditor(seteditor);
 
-      return () => {
-        binding.destroy();
-        provider.disconnect();
-      };
+        const binding = new CodemirrorBinding(
+          yText,
+          seteditor,
+          provider.awareness
+        );
+        console.log(provider.awareness.clientID);
+
+        return () => {
+          binding.destroy();
+          provider.disconnect();
+        };
+      }
     }
   }, []);
 
   return (
     <>
-      {/* <div ref={userIdRef} className="user-id"></div>{' '} */}
       <div ref={editorContainerRef} className="editor-container"></div>
     </>
   );

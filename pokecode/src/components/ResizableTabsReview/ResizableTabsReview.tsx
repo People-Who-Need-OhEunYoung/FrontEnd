@@ -5,10 +5,11 @@ import { Pokemon } from '../../pages/UserMain/UserMain';
 import { TestSharedEditor } from '../TestSharedEditor';
 import background from '../../assets/images/background.jpg';
 import terminal from '../../assets/images/터미널.png';
-
 import { DesignedButton1 } from '../DesignedButton';
 import { ProblemText } from '../ProblemText';
 import { VoiceChat } from '../VoiceChat';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const Container = styled.div`
   display: flex;
@@ -54,15 +55,16 @@ const Resizer = styled.div`
   }
 `;
 
-interface ResizableTabsProps {
-  id: string;
-  title: string;
-}
+// interface ResizableTabsProps {
+//   id: string;
+//   title: string;
+//   editorRoom: string;
+// }
 
-const ResizableTabsReview: React.FC<ResizableTabsProps> = ({ id, title }) => {
+const ResizableTabsReview = ({ id, title, editorRoom = '1000' }: any) => {
   const [width, setWidth] = useState<number>(25);
   const [width1, setWidth1] = useState<number>(25);
-
+  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const dragControls = useDragControls();
@@ -135,7 +137,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({ id, title }) => {
           width: '5vw',
           zIndex: 9999,
           bottom: '30%',
-          right: 100,
+          right: 175,
           transform: 'translateX(0px) translateY(0px) translateZ(0px)',
           transition: '0.1s',
         }}
@@ -143,70 +145,11 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({ id, title }) => {
       >
         <Pokemon
           width={'100%'}
-          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/136.gif"
-        ></Pokemon>
-      </motion.div>
-      <motion.div
-        drag
-        dragControls={dragControls}
-        animate={animationControls} // 애니메이션 컨트롤 적용
-        style={{
-          position: 'fixed',
-          display: 'inline-block',
-          width: '4vw',
-          zIndex: 9999,
-          bottom: '30%',
-          right: 150,
-          transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-          transition: '0.1s',
-        }}
-        className="pokemon"
-      >
-        <Pokemon
-          width={'100%'}
-          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/133.gif"
-        ></Pokemon>
-      </motion.div>
-      <motion.div
-        drag
-        dragControls={dragControls}
-        animate={animationControls} // 애니메이션 컨트롤 적용
-        style={{
-          position: 'fixed',
-          display: 'inline-block',
-          width: '4vw',
-          zIndex: 9999,
-          bottom: '30%',
-          right: 200,
-          transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-          transition: '0.1s',
-        }}
-        className="pokemon"
-      >
-        <Pokemon
-          width={'100%'}
-          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/134.gif"
-        ></Pokemon>
-      </motion.div>
-      <motion.div
-        drag
-        dragControls={dragControls}
-        animate={animationControls} // 애니메이션 컨트롤 적용
-        style={{
-          position: 'fixed',
-          display: 'inline-block',
-          width: '6vw',
-          zIndex: 9999,
-          bottom: '30%',
-          right: 250,
-          transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-          transition: '0.1s',
-        }}
-        className="pokemon"
-      >
-        <Pokemon
-          width={'100%'}
-          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/149.gif"
+          src={
+            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
+            pokemonId +
+            '.gif'
+          }
         ></Pokemon>
       </motion.div>
       <Container ref={containerRef}>
@@ -214,16 +157,11 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({ id, title }) => {
           <HeaderTxt>
             {id}번 {title}
           </HeaderTxt>
-          <ProblemText id={id} isShowHeader="false" />
-          {/* <div
-            style={{
-              width: '100%',
-              height: '100%',
-              overflow: 'auto',
-            }}
-          >
-            <img src={problem1011} width={'100%'} alt="" />
-          </div> */}
+          <ProblemText
+            id={id}
+            isShowHeader="false"
+            size={'calc(100% - 80px)'}
+          />
         </Tab>
         <Resizer onMouseDown={handleMouseDown} style={{ left: width + '%' }} />
         <div
@@ -234,7 +172,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({ id, title }) => {
           }}
         >
           <div style={{ background: 'green', width: '100%', height: '80%' }}>
-            <TestSharedEditor />
+            <TestSharedEditor editorRoom={editorRoom} />
           </div>
           <div
             style={{
@@ -281,6 +219,8 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({ id, title }) => {
 };
 
 const HeaderTxt = styled.p`
+  height: 80px;
+  box-sizing: border-box;
   display: flex;
   line-height: 60px;
   font-size: 1.5rem;

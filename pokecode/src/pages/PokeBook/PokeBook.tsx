@@ -205,7 +205,7 @@ const PokeBook = () => {
 
 const PokemonName = styled.div`
   position: absolute;
-  background-color: #000000;
+  background-color: #333449;
   font-size: 1.7rem;
   font-weight: bold;
   width: 50%;
@@ -226,19 +226,12 @@ const BookText = styled.div`
 const PageButton = styled.button<{ active: boolean }>`
   width: 30px;
   margin-right: 10px;
-  background-color: ${({ active }) => (active ? '#338983' : 'transparent')};
+  background-color: ${({ active }) => (active ? '#BA94B4' : 'transparent')};
   color: white;
   border-radius: 10px;
   font-size: 1rem;
   border: none;
 
-  &:hover {
-    background-color: #4ea7ff52;
-  }
-
-  &:active {
-    background-color: #4ea7ff52;
-  }
 
 `;
 
@@ -263,8 +256,8 @@ const SelectBtn = styled.button<{ active: boolean }>`
   line-height: 1.75;
   text-transform: uppercase;
   transition: background-color 0.3s;
-  background-color: ${({ active }) => (active ? '#D8ECEA' : '#338983')};
-  color:  ${({ active }) => (active ? '#338983' : 'white')};
+  background-color: ${({ active }) => (active ? '#333449' : '#5C536D')};
+  color:  ${({ active }) => (active ? 'white' : 'white')};
 `;
 
 
@@ -292,9 +285,8 @@ const Item = styled.button`
   box-sizing: border-box;
   display: flex;
   justify-content: center;
-  border: 3px solid #338983;
   margin: 7%;
-  /* background-color: #33898373; */
+  background-color: #ffffff;
   border-radius: 10px;
   cursor: pointer;
 `;
@@ -307,7 +299,7 @@ const ListWrap = styled.div`
 `;
 
 const ListView = styled.div`
-  background-color: #D8ECEA;
+  background-color: #333449;
   height: 87%;
   overflow-y: auto;
   font-size: 1.2rem;

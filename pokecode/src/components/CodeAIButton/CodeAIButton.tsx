@@ -1,15 +1,12 @@
 import { DesignedButton1 } from '../DesignedButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { setWordBalloon } from '../../store/codeCallerReducer';
-import { setReturnAiCall } from '../../store/codeCallerReducer';
-import { useEffect, useState } from 'react';
+import { setWordBalloon, setReturnAiCall } from '../../store/codeCallerReducer';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const CodeAIButton = () => {
   const { writtenCode } = useSelector((state: RootState) => state.probinfo);
-  const [abortController, setAbortController] =
-    useState<AbortController | null>();
   const dispatch = useDispatch();
   const location = useLocation();
 
@@ -17,17 +14,17 @@ const CodeAIButton = () => {
   const searchParams = new URLSearchParams(location.search);
   const id = searchParams.get('id') || '';
 
+  let controller = new AbortController();
+  let signal = controller.signal;
+
   // 프론트 AI 피드백 호출
   const handleAI = async () => {
-    handleCancel();
+    controller = new AbortController();
+    signal = controller.signal;
     dispatch(setReturnAiCall('로딩중....'));
     const editorContent = writtenCode;
-
-    const controller = new AbortController();
-    setAbortController(controller);
-
     try {
-      await callApi(id, editorContent, controller.signal);
+      await callApi(id, editorContent, signal);
     } catch (error) {
       console.error('AI 요청 과정 에러 발생 : ', error);
     }
@@ -84,10 +81,13 @@ const CodeAIButton = () => {
 
       while (true) {
         const { done, value } = await reader.read();
+        if (signal.aborted) {
+          console.log('Request aborted by user');
+          break;
+        }
         if (done) {
           break;
         }
-
         const parts = decoder
           .decode(value, { stream: true })
           .split('data: ')
@@ -111,35 +111,29 @@ const CodeAIButton = () => {
       console.log(result); // 전체 응답 결과
 
       return result;
-    } catch (error) {
-      console.log('AI 에러가 발생했습니다 : ', error); // 에러 처리
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        console.log('Fetch aborted');
+      } else {
+        console.error('AI 에러가 발생했습니다 : ', error); // 에러 처리
+      }
       return 'AI 에러가 발생했습니다 : ' + error;
     }
   }
 
   const handleCancel = () => {
-    if (abortController) {
-      abortController.abort();
-      setAbortController(null);
-    }
+    controller.abort();
+    console.log('can cancle-------------------');
   };
 
   useEffect(() => {
-    // Function to handle cleanup
-    return () => {
-      dispatch(setWordBalloon(false));
-    };
-  }, [location]);
+    // 라우터 변경 시 요청 취소
+    dispatch(setWordBalloon(false));
 
-  useEffect(() => {
-    // Function to handle cleanup
-    const cleanup = () => {
-      if (abortController) {
-        abortController.abort();
-        setAbortController(null);
-      }
+    // 컴포넌트 언마운트 시 요청 취소
+    return () => {
+      handleCancel();
     };
-    return cleanup;
   }, [location]);
 
   return (

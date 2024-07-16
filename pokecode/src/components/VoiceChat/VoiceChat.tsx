@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 
-// const signalingServerDomain = 'wss://api.poke-code.com:8481';
-const signalingServerDomain = 'wss://168.126.208.153:3000';
+const signalingServerDomain = 'wss://api.poke-code.com:8481';
+//const signalingServerDomain = 'wss://3.38.59.126:3000';
 const pcConfig = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
 
 interface RemoteVideo {
@@ -46,7 +46,6 @@ const VoiceChat = () => {
 
       ws.current.onmessage = async (message) => {
         const data = JSON.parse(message.data);
-
         switch (data.type) {
           case 'id':
             myId = data.id;
@@ -220,7 +219,7 @@ const VoiceChat = () => {
   return (
     <div className="App">
       <h1>WebRTC Multi-Peer Video Communication</h1>
-      <video ref={localVideoRef} autoPlay muted className="local-video" />
+      <audio ref={localVideoRef} autoPlay muted className="local-video" />
       <br />
       <input ref={roomIdElem} placeholder="방번호" />
       <input ref={userIdElem} placeholder="사용자 아이디" />
@@ -229,7 +228,7 @@ const VoiceChat = () => {
       {remoteVideos.map((video, index) => (
         <div key={index}>
           <h3>{video.peerId}</h3>
-          <video
+          <audio
             ref={(elem) => {
               if (elem) {
                 elem.srcObject = video.stream;

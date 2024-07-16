@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setElapsedTime, resetElapsedTime, setStartTime } from '../../store/timerSlice';
+import {
+  setElapsedTime,
+  resetElapsedTime,
+  setStartTime,
+} from '../../store/timerSlice';
 import getDetails from './getDetails';
 import { ProblemDetails, ResizableTabsProps } from './index';
 import { RootState } from '../../store/index';
@@ -9,7 +13,11 @@ import { setAcquireReview } from '../../store/problemSlice';
 import Modal from '../../components/Modal/Modal';
 import { useNavigate } from 'react-router-dom';
 
-const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
+const ProblemText: React.FC<ResizableTabsProps> = ({
+  id,
+  isShowHeader,
+  size = '100%',
+}) => {
   const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(
     null
   );
@@ -50,25 +58,47 @@ const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
   };
 
   useEffect(() => {
+    dispatch(setStartTime(Date.now()));
+  },[])
+
+  useEffect(() => {
     const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`);
-    let start_time = Date.now();
-    dispatch(setStartTime(start_time));
+    let start_time = Date.now(); //시작 시간 설정
 
     if (storedSolvedTime) {
+      //저장된 시간이 있을 경우
       const solvedData = JSON.parse(storedSolvedTime);
       const updateElapsedTime =
         solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000);
       dispatch(setElapsedTime(updateElapsedTime));
+
     } else {
-      localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time: start_time, elapsed_time: 0, limit_time: limitTime }));
+      localStorage.setItem(
+        `solvedTime-${id}`,
+        JSON.stringify({
+          _id: id,
+          start_time: start_time,
+          elapsed_time: 0,
+          limit_time: limitTime,
+        })
+      );
     }
 
     const interval = setInterval(() => {
       if (startTime !== null) {
         const newElapsedTime =
-          Math.floor((Date.now() - startTime) / 1000) + elapsedTime;
+          Math.floor((Date.now() - start_time) / 1000) + elapsedTime;
         dispatch(setElapsedTime(newElapsedTime));
-        localStorage.setItem(`solvedTime-${id}`, JSON.stringify({ _id: id, start_time, elapsed_time: newElapsedTime, limit_time: limitTime }));
+
+        localStorage.setItem(
+          `solvedTime-${id}`,
+          JSON.stringify({
+            _id: id,
+            start_time,
+            elapsed_time: newElapsedTime,
+            limit_time: limitTime,
+          })
+        );
       }
     }, 1000);
     return () => clearInterval(interval);
@@ -95,7 +125,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
   };
 
   return (
-    <div style={{ height: '100%' }}>
+    <div style={{ height: size }}>
       <Header isShowHeader={isShowHeader}>
         {problemDetails && (
           <HeaderTxt>
@@ -108,11 +138,16 @@ const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
             >
               {formatTime(elapsedTime)}
             </Timer>
-            <HeaderBtn style={{height: '40%', margin:'15px'}} 
-            onClick = {() => {
-              dispatch(resetElapsedTime());
-              localStorage.removeItem(`solvedTime-${id}`);
-            }}> 초기화</HeaderBtn>
+            <HeaderBtn
+              style={{ height: '40%', margin: '15px' }}
+              onClick={() => {
+                dispatch(resetElapsedTime());
+                localStorage.removeItem(`solvedTime-${id}`);
+              }}
+            >
+              {' '}
+              초기화
+            </HeaderBtn>
             <div style={{ position: 'absolute', right: '3%' }}>
               <HeaderBtn
                 onClick={() => {
@@ -195,7 +230,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({ id, isShowHeader }) => {
 };
 
 const Wrap = styled.div`
-  height: calc(100% - 60px);
+  height: calc(100%);
   overflow: auto;
 `;
 
