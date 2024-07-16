@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Modal from '../../components/Modal/Modal';
+import { showRoomList } from '../../utils/api/api';
 
 
 type ItemType = {
@@ -57,7 +58,22 @@ const RoomList = () => {
   if (pageCount == null) setPageCount(1);
   //임시 빌드 로직 제거 해도 돼요 end
 
-  console.log(page);
+  const fetchProbData = async () => {
+    try {
+      const res = await showRoomList();
+      console.log(res);
+      return res;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(()=> {
+    fetchProbData().then((res) => {
+      console.log(res);
+    })
+  },[])
+
   const switchButton = () => {
     setCheck(check === 'ON' ? 'OFF' : 'ON');
   };
