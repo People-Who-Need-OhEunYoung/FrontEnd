@@ -193,12 +193,6 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   );
 };
 
-// const ProblemHeader = styled.div`
-//   width: 100%;
-//   height: 10%;
-//   background-color: black;
-// `;
-
 const Home = styled.div`
   width: 100%;
   height: 20%;
