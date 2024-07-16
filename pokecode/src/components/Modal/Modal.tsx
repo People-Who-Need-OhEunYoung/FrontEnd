@@ -40,12 +40,14 @@ const Modal = ({
   event,
 }: any) => {
   const [nowcomponent, setNowcomponent] = useState(component);
-  const[reset, setReset] = useState(false);
+  const [reset, setReset] = useState(false);
 
   const handleClose = () => {
     event(false);
     setReset(true); // Trigger the reset
-    setTimeout(() => setReset(false), 0); // Reset the state back to false immediately after
+    setTimeout(() => {
+      setReset(false);
+    }, 0); // Reset the state back to false immediately after
   };
 
   return (

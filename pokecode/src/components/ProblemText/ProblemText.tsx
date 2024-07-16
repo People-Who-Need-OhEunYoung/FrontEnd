@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setElapsedTime, resetElapsedTime, setStartTime } from '../../store/timerSlice';
+import {
+  setElapsedTime,
+  resetElapsedTime,
+  setStartTime,
+} from '../../store/timerSlice';
 import getDetails from './getDetails';
 import { ProblemDetails, ResizableTabsProps } from './index';
 import { RootState } from '../../store/index';
@@ -54,17 +58,21 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
   };
 
   useEffect(() => {
+    dispatch(setStartTime(Date.now()));
+  },[])
+
+  useEffect(() => {
     const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`);
-    let start_time = Date.now();
-    dispatch(setStartTime(start_time));
+    let start_time = Date.now(); //시작 시간 설정
 
     if (storedSolvedTime) {
+      //저장된 시간이 있을 경우
       const solvedData = JSON.parse(storedSolvedTime);
       const updateElapsedTime =
         solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000);
       dispatch(setElapsedTime(updateElapsedTime));
-    } else {
 
+    } else {
       localStorage.setItem(
         `solvedTime-${id}`,
         JSON.stringify({
@@ -74,13 +82,12 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
           limit_time: limitTime,
         })
       );
-
     }
 
     const interval = setInterval(() => {
       if (startTime !== null) {
         const newElapsedTime =
-          Math.floor((Date.now() - startTime) / 1000) + elapsedTime;
+          Math.floor((Date.now() - start_time) / 1000) + elapsedTime;
         dispatch(setElapsedTime(newElapsedTime));
 
         localStorage.setItem(
@@ -92,7 +99,6 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
             limit_time: limitTime,
           })
         );
-
       }
     }, 1000);
     return () => clearInterval(interval);
@@ -132,11 +138,16 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
             >
               {formatTime(elapsedTime)}
             </Timer>
-            <HeaderBtn style={{height: '40%', margin:'15px'}} 
-            onClick = {() => {
-              dispatch(resetElapsedTime());
-              localStorage.removeItem(`solvedTime-${id}`);
-            }}> 초기화</HeaderBtn>
+            <HeaderBtn
+              style={{ height: '40%', margin: '15px' }}
+              onClick={() => {
+                dispatch(resetElapsedTime());
+                localStorage.removeItem(`solvedTime-${id}`);
+              }}
+            >
+              {' '}
+              초기화
+            </HeaderBtn>
             <div style={{ position: 'absolute', right: '3%' }}>
               <HeaderBtn
                 onClick={() => {

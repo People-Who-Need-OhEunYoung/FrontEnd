@@ -16,10 +16,19 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
   const [isEditing, setIsEditing] = useState(false);
   const [problems, setProblems] = useState<ProblemType[]>([]); // 문제 데이터를 저장할 배열
 
+  // const options = [
+  //   { value: 'apple', label: 'Apple' },
+  //   { value: 'apricot', label: 'Apricot' },
+  //   { value: 'mango', label: 'Mango' },
+  //   { value: 'mangosteens', label: 'Mangosteens' },
+  //   { value: 'avocado', label: 'Avocado' },
+  //   { value: 'avocado', label: 'Avocado' },
+  // ];
+
   const fetchProbData = async () => {
     try {
       const res = await problemSearch(query, 'id', 1, 'asc');
-      console.log(res);
+      // console.log(res);
       return res;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -27,14 +36,13 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
   };
 
   useEffect(() => {
-    console.log('reset: ', reset);
     if (reset) {
       console.log('reset: ', reset);
       setTitle('');
       setQuery('');
       setPerson(2);
       setIsEditing(false);
-      setProblems([]);
+      console.log('title:', title);
     }
   }, [reset]);
 
@@ -45,15 +53,16 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
         const itemsArray = [];
         for (let i = 0; i < parsedData.length; i++) {
           const item = parsedData[i];
-          console.log('item:', item);
+          // console.log('item:', item);
           itemsArray.push(item);
         }
         setProblems(itemsArray); // items 상태 업데이트
+        console.log('reset: ', reset);
       } else {
         setProblems([]);
       }
     });
-  }, []);
+  }, [query]);
 
   const handleDoubleClick = () => {
     setIsEditing(true);
@@ -96,6 +105,16 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
           fontWeight: 'bold',
         }}
       >
+        <Select
+          options={problems}
+          styles={customStyles}
+          placeholder="문제 검색"
+          isSearchable
+          getOptionLabel={(option) => option.title} // 라벨을 지정
+          getOptionValue={(option) => option.id} // 값을 지정
+          //onInputChange={(value) => setQuery(value)}
+        />
+
         <div style={{ minHeight: '40px' }} onDoubleClick={handleDoubleClick}>
           {isEditing ? (
             <Titleinput
@@ -111,10 +130,12 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
             />
           ) : (
             <Titleinput
+              value={title}
               style={{
                 display: 'inline-block',
                 wordBreak: 'break-all',
                 padding: '10px',
+                cursor: 'pointer',
               }}
               rows={1}
               placeholder="방 제목을 입력해주세요"
@@ -123,14 +144,6 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
             </Titleinput>
           )}
         </div>
-        <Select
-          options={problems}
-          styles={customStyles}
-          placeholder="문제 검색"
-          isSearchable
-          getOptionLabel={(option) => option.title} // 라벨을 지정
-          getOptionValue={(option) => option.id} // 값을 지정
-        />
         <PersonWrap>
           <span
             style={{ width: '40px', cursor: 'pointer', userSelect: 'none' }}

@@ -49,7 +49,7 @@ const RoomList = () => {
   const fetchRoomData = async () => {
     try {
       const res = await showRoomList();
-      console.log(res);
+      // console.log(res);
       return res;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -76,14 +76,14 @@ const RoomList = () => {
     fetchRoomData().then((res) => {
       const parsedData = res;
       const page_count = Math.ceil(res.count / parsedData.reviews.length);
-      console.log(parsedData.problem);
+      // console.log(parsedData.problem);
 
       setPageCount(page_count);
       if (parsedData.reviews.length > 0) {
         const itemsArray = [];
         for (let i = 0; i < parsedData.reviews.length; i++) {
           const item = parsedData.reviews[i];
-          console.log('item:', item);
+          // console.log('item:', item);
           itemsArray.push(item);
         }
         setRoomlist(itemsArray); // items 상태 업데이트
