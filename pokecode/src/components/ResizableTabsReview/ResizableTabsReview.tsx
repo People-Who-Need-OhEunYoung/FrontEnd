@@ -57,9 +57,14 @@ const Resizer = styled.div`
 interface ResizableTabsProps {
   id: string;
   title: string;
+  editorRoom: string;
 }
 
-const ResizableTabsReview: React.FC<ResizableTabsProps> = ({ id, title }) => {
+const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
+  id,
+  title,
+  editorRoom = '1000',
+}) => {
   const [width, setWidth] = useState<number>(25);
   const [width1, setWidth1] = useState<number>(25);
 
@@ -229,7 +234,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({ id, title }) => {
           }}
         >
           <div style={{ background: 'green', width: '100%', height: '80%' }}>
-            <TestSharedEditor />
+            <TestSharedEditor editorRoom={editorRoom} />
           </div>
           <div
             style={{
