@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
@@ -10,12 +10,15 @@ import './TestSharedEditor.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
-const TestSharedEditor: React.FC = () => {
+const TestSharedEditor = ({ editorRoom = 'notice' }) => {
+  const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
   const editorContainerRef = useRef<HTMLDivElement>(null);
-
   const { writtenCode } = useSelector((state: RootState) => state.probinfo);
   const { language } = useSelector((state: RootState) => state.codecaller);
 
+  useEffect(() => {
+    if (editor != null) editor.setOption('mode', language);
+  }, [language]);
 
   useEffect(() => {
     console.log(writtenCode);
@@ -25,7 +28,7 @@ const TestSharedEditor: React.FC = () => {
     const ydoc = new Y.Doc();
     const provider = new WebsocketProvider(
       'wss://api.poke-code.com',
-      'codemirror1',
+      editorRoom,
       ydoc
     );
 
@@ -49,14 +52,13 @@ const TestSharedEditor: React.FC = () => {
         },
       });
 
-
       const binding = new CodemirrorBinding(yText, editor, provider.awareness);
       console.log(provider.awareness.clientID);
       // 사용자 ID를 표시하는 로직 추가
       //   if (userIdRef.current) {
       //     userIdRef.current.innerText = `User ID: ${provider.awareness.clientID}`;
       //   }
-
+      setEditor(editor);
       return () => {
         binding.destroy();
         provider.disconnect();
