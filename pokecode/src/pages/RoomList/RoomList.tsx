@@ -28,18 +28,7 @@ const RoomList = () => {
   const [roomTitle, setRoomTitle] = useState<string>('');
   const [problemTitle, setproblemTitle] = useState<string>('');
   const [problemId, setproblemId] = useState<string>('');
-  const [roomlist, setRoomlist] = useState<ItemType[]>([
-    {
-      roomId: 1,
-      problemId: '1000',
-      problemTitle: 'A+B',
-      roomTitle: '해결 좀 ㅎ ㅐ주세요',
-      level: 1,
-      limit_num: 3,
-      cur_num: 1,
-      nickname: 'ㅇㅇㅇ',
-    },
-  ]); // 문제 데이터를 저장할 배열
+  const [roomlist, setRoomlist] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
   if (roomlist == null)
     setRoomlist([
       {
@@ -216,6 +205,7 @@ const Probinfo = styled.div`
   align-items: center;
   font-size: 1.3rem;
   width: 70%;
+  cursor: pointer;
 `;
 
 const Roominfo = styled.div`
@@ -352,6 +342,7 @@ const MakeRoomButton = styled.button`
   font-weight: bold;
   border: none;
   margin-left: 2%;
+  cursor: pointer;
 
   &:hover {
     box-shadow: 0 0 5px 3px rgba(255, 255, 255, 0.267);
@@ -372,11 +363,11 @@ const PageButton = styled.button`
   border: none;
 
   &:hover {
-    background-color: #4ea7ff52;
+    background-color: #BA94B4;
   }
 
   &:active {
-    background-color: #4ea7ff52;
+    background-color: #BA94B4;
   }
 `;
 

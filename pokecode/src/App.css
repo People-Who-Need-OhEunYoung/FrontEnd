@@ -32,16 +32,16 @@ input {
 ::-webkit-scrollbar-thumb {
   height: 20%;
   /* 스크롤바의 길이 */
-  background: #4ea7ff52;
+  background: #298984;
   /* 스크롤바의 색상 */
   border: 2px solid #4188ce56;
   /* 스크롤바 막대 테두리 설정  */
-  border-radius: 12px 12px 12px 12px;
+  /* border-radius: 12px 12px 12px 12px; */
 }
 
 /* 스크롤바 트랙 꾸미기 */
 ::-webkit-scrollbar-track {
-  background: rgba(20, 111, 238, 0.247);
+  background: #F6F9FF;
   /*스크롤바 뒷 배경 색상*/
 }
 

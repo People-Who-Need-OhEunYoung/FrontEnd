@@ -263,7 +263,7 @@ const showPokemonBook = async () => {
 //코드리뷰방 목록 가져오기
 const showRoomList = async () => {
   return await fetch(`${import.meta.env.VITE_APP_IP}/reviewList`, {
-    method: 'POST',
+    method: 'GET',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       'Content-Type': 'application/json',

@@ -212,7 +212,7 @@ const ProblemList = () => {
                 return (
                   <ProblemComponent>
                     <TierImg src={tiersrc} />
-                    <a href={link} style={{ width: '16%' }}>
+                    <a href={link} >
                       {item.id}
                     </a>
                     <TitleBtn
@@ -261,6 +261,7 @@ const TitleBtn = styled.button`
   text-align: left;
   left: 20%;
   font-size: 1.2rem;
+  cursor: pointer;
 `;
 
 const OrderButton = styled.img`
@@ -293,6 +294,7 @@ const ProblemComponent = styled.div`
   margin: auto;
   align-items: center;
   position: relative;
+  cursor: pointer;
 `;
 
 const ListView = styled.div`
@@ -355,6 +357,7 @@ const Inputsearch = styled.input`
 const Item = styled.div`
   border-bottom: 1px solid #8d8d8d;
   padding: 15px;
+  cursor: pointer;
 `;
 
 const ButtonGroup = styled.div`
