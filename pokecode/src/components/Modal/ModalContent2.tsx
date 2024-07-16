@@ -16,14 +16,14 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
   const [isEditing, setIsEditing] = useState(false);
   const [problems, setProblems] = useState<ProblemType[]>([]); // 문제 데이터를 저장할 배열
 
-  const options = [
-    { value: 'apple', label: 'Apple' },
-    { value: 'apricot', label: 'Apricot' },
-    { value: 'mango', label: 'Mango' },
-    { value: 'mangosteens', label: 'Mangosteens' },
-    { value: 'avocado', label: 'Avocado' },
-    { value: 'avocado', label: 'Avocado' },
-  ];
+  // const options = [
+  //   { value: 'apple', label: 'Apple' },
+  //   { value: 'apricot', label: 'Apricot' },
+  //   { value: 'mango', label: 'Mango' },
+  //   { value: 'mangosteens', label: 'Mangosteens' },
+  //   { value: 'avocado', label: 'Avocado' },
+  //   { value: 'avocado', label: 'Avocado' },
+  // ];
 
   const fetchProbData = async () => {
     try {
@@ -42,7 +42,6 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
       setQuery('');
       setPerson(2);
       setIsEditing(false);
-      setProblems([]);
       console.log('title:', title);
     }
   }, [reset]);
@@ -108,9 +107,11 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
       >
         <Select
           options={problems}
-          //styles={customStyles}
+          styles={customStyles}
           placeholder="문제 검색"
-          //isSearchable
+          isSearchable
+          getOptionLabel={(option) => option.title} // 라벨을 지정
+          getOptionValue={(option) => option.id} // 값을 지정
           //onInputChange={(value) => setQuery(value)}
         />
 
