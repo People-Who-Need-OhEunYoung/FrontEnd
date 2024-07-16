@@ -13,7 +13,7 @@ type ItemType = {
   level: number;
   limit_num: number;
   cur_num: number;
-  nickname: string;
+  master: string;
 };
 
 const RoomList = () => {
@@ -39,7 +39,7 @@ const RoomList = () => {
         level: 1,
         limit_num: 3,
         cur_num: 1,
-        nickname: 'ㅇㅇㅇ',
+        master: 'ㅇㅇㅇ',
       },
     ]);
 
@@ -59,8 +59,23 @@ const RoomList = () => {
 
   useEffect(()=> {
     fetchProbData().then((res) => {
-      console.log(res);
-    })
+      const parsedData = res;
+      const page_count = Math.ceil(res.count / parsedData.reviews.length);
+      console.log(parsedData.problem);
+
+      setPageCount(page_count);
+      if (parsedData.reviews.length > 0) {
+        const itemsArray = [];
+        for (let i = 0; i < parsedData.reviews.length; i++) {
+          const item = parsedData.reviews[i];
+          console.log('item:',item);
+          itemsArray.push(item);
+        }
+        setRoomlist(itemsArray); // items 상태 업데이트
+      } else {
+        setRoomlist([]);
+      }
+    });
   },[])
 
   const switchButton = () => {
@@ -167,7 +182,7 @@ const RoomList = () => {
                         {' '}
                         참여 인원: {item.cur_num} /{item.limit_num}
                       </p>
-                      <p> 닉네임: {item.nickname} </p>
+                      <p> 닉네임: {item.master} </p>
                     </Roominfo>
                   </ProblemComponent>
                 );
@@ -203,8 +218,8 @@ const Probinfo = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
-  font-size: 1.3rem;
-  width: 70%;
+  font-size: 1.2rem;
+  width: 100%;
   cursor: pointer;
 `;
 
@@ -221,8 +236,7 @@ const Roominfo = styled.div`
 const TierImg = styled.img`
   position: relative;
   width: 20px;
-  margin-right: 2%;
-  padding: 6px;
+
 `;
 
 const ProblemComponent = styled.div`
