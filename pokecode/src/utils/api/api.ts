@@ -10,6 +10,7 @@ export {
   problemSearch,
   showPokemonBook,
   showRoomList,
+  createRoom,
 };
 
 //닉네임 중복 검사
@@ -276,6 +277,40 @@ const showRoomList = async () => {
       return res.json();
     })
     .then((data) => {
+      console.log(data);
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return 'ERROR : ' + error;
+    });
+};
+
+//코드리뷰방 목록 가져오기
+const createRoom = async (title: string, no: string, tier: number, problem_title: string, limit: number): Promise<any> => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/createReview`, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      reviewTitle: title,
+      problemNo: no,
+      problemTier: tier,
+      problemTitle: problem_title,
+      maxPerson: limit,
+    }),
+    
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      console.log(data);
       return data;
     })
     .catch((error) => {

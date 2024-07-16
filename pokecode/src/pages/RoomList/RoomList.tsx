@@ -2,7 +2,11 @@ import styled, { css } from 'styled-components';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Modal from '../../components/Modal/Modal';
+
+import { createRoom, showRoomList } from '../../utils/api/api';
+
 import { showRoomList } from '../../utils/api/api';
+
 
 type ItemType = {
   roomId: number;
@@ -12,7 +16,7 @@ type ItemType = {
   level: number;
   limit_num: number;
   cur_num: number;
-  nickname: string;
+  master: string;
 };
 
 const RoomList = () => {
@@ -40,7 +44,7 @@ const RoomList = () => {
         level: 1,
         limit_num: 3,
         cur_num: 1,
-        nickname: 'ㅇㅇㅇ',
+        master: 'ㅇㅇㅇ',
       },
     ]);
 
@@ -48,7 +52,7 @@ const RoomList = () => {
   if (pageCount == null) setPageCount(1);
   //임시 빌드 로직 제거 해도 돼요 end
 
-  const fetchProbData = async () => {
+  const fetchRoomData = async () => {
     try {
       const res = await showRoomList();
       console.log(res);
@@ -58,10 +62,41 @@ const RoomList = () => {
     }
   };
 
+
+  const sendRoomData = async (Room: ItemType) => {
+    try {
+      const res = await createRoom(
+        Room.roomTitle,
+        Room.problemId,
+        Room.level,
+        Room.problemTitle,
+        Room.limit_num
+      );
+      console.log('sendRoomData: ', res);
+      return res;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
   useEffect(() => {
-    fetchProbData().then((res) => {
-      console.log(res);
-    });
+    fetchRoomData().then((res) => {
+      const parsedData = res;
+      const page_count = Math.ceil(res.count / parsedData.reviews.length);
+      console.log(parsedData.problem);
+
+      setPageCount(page_count);
+      if (parsedData.reviews.length > 0) {
+        const itemsArray = [];
+        for (let i = 0; i < parsedData.reviews.length; i++) {
+          const item = parsedData.reviews[i];
+          console.log('item:', item);
+          itemsArray.push(item);
+        }
+        setRoomlist(itemsArray); // items 상태 업데이트
+      } else {
+        setRoomlist([]);
+      }
   }, []);
 
   const switchButton = () => {
@@ -140,7 +175,15 @@ const RoomList = () => {
             </MakeRoomButton>
           </SearchHeader>
         </SearchWrapper>
-
+        <Listheader>
+          <h4 style={{ width: '12%' }}>#</h4>
+          <h4 style={{ width: '15%' }}> 문제 제목 </h4>
+          <h4 style={{ width: '30%' }}> 방 이름 </h4>
+          <h4 style={{ width: '45%', textAlign: 'end', marginRight: '5%' }}>
+            {' '}
+            방 정보{' '}
+          </h4>
+        </Listheader>
         <ListView>
           {roomlist.map((item, index) => (
             <Item key={index}>
@@ -157,10 +200,12 @@ const RoomList = () => {
                     }}
                   >
                     <Probinfo>
-                      <TierImg src={tiersrc} style={{ marginRight: '2%' }} />
-                      <p style={{ marginRight: '5%' }}>{item.problemId}</p>
-                      <p style={{ marginRight: '8%' }}>{item.problemTitle}</p>
-                      <p>{item.roomTitle}</p>
+                      <TierImg src={tiersrc} style={{ marginRight: '1%' }} />
+                      <p style={{ width: '11%' }}>{item.problemId}</p>
+                      <p style={{ width: '22%' }}>{item.problemTitle}</p>
+                      <p style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>
+                        {item.roomTitle}
+                      </p>
                     </Probinfo>
 
                     <Roominfo>
@@ -168,7 +213,7 @@ const RoomList = () => {
                         {' '}
                         참여 인원: {item.cur_num} /{item.limit_num}
                       </p>
-                      <p> 닉네임: {item.nickname} </p>
+                      <p> 닉네임: {item.master} </p>
                     </Roominfo>
                   </ProblemComponent>
                 );
@@ -200,12 +245,20 @@ const RoomList = () => {
   );
 };
 
+const Listheader = styled.div`
+  width: 75%;
+  display: flex;
+  margin: auto;
+  padding: 0 10px;
+  text-align: center;
+`;
+
 const Probinfo = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
-  font-size: 1.3rem;
-  width: 70%;
+  font-size: 1.1rem;
+  width: 100%;
   cursor: pointer;
 `;
 
@@ -222,8 +275,6 @@ const Roominfo = styled.div`
 const TierImg = styled.img`
   position: relative;
   width: 20px;
-  margin-right: 2%;
-  padding: 6px;
 `;
 
 const ProblemComponent = styled.div`
@@ -234,8 +285,12 @@ const ProblemComponent = styled.div`
 `;
 
 const Item = styled.div`
-  border: 1px solid #8d8d8d;
-  padding: 4%;
+  padding: 4% 2%;
+  background-color: #333449;
+  background-color: #1e293b;
+  border: 1.2px solid #4f678e;
+  margin: 10px;
+  border-radius: 10px;
 `;
 
 const CheckSlide = styled.div<{ timeck: string }>`
@@ -336,9 +391,9 @@ const SearchHeader = styled.div`
 const MakeRoomButton = styled.button`
   width: 10%;
   padding: 5px;
-  background-color: #4152b3;
-  color: #e6e6e6;
-  border-radius: 20px;
+  background-color: #6366f1;
+  color: #ffffff;
+  border-radius: 10px;
   font-size: 1.1rem;
   font-weight: bold;
   border: none;
@@ -346,7 +401,7 @@ const MakeRoomButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    box-shadow: 0 0 5px 3px rgba(255, 255, 255, 0.267);
+    background-color: #8284f5;
   }
 
   &:active {
@@ -373,9 +428,9 @@ const PageButton = styled.button`
 `;
 
 const ListView = styled.div`
-  background-color: #ffffff1d;
+  //background-color: #ffffff1d;
   width: 75%;
-  height: 70%;
+  height: 61%;
   overflow-y: auto;
   margin: auto;
   /* align-items: stretch;

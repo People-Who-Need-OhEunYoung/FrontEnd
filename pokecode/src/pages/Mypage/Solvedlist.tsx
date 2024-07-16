@@ -14,7 +14,6 @@ const Solvedlist = () => {
   const [query, setQuery] = useState(''); // 사용자 검색 쿼리
   const [userData, setUserData] = useState(''); // API로부터 받은 데이터
   const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
-  const [visibleList, setVisibleList] = useState<string>('list1'); // Manage which list is visible
   const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -57,7 +56,6 @@ const Solvedlist = () => {
     return buttons;
   };
 
-
   useEffect(() => {
     setQuery('ejrrl6931');
     if(query != '') {
@@ -81,56 +79,11 @@ const Solvedlist = () => {
   return (
     <Wrap>
       <ButtonGroup>
-        <SelectBtn onClick={() => setVisibleList('list1')}>Top 100 </SelectBtn>
-        <SelectBtn onClick={() => setVisibleList('list2')}>
-          내가 해결한 문제{' '}
-        </SelectBtn>
-        <SelectBtn onClick={() => setVisibleList('list3')}>List 3</SelectBtn>
+        <SelectBtn>문제별 획득한 크레딧</SelectBtn>
       </ButtonGroup>
       <hr style={{ marginBottom: '12px' }}></hr>
       <ListView>
-        <Tiergrid>
-          {visibleList === 'list1' &&
-            items.map((item, index) => (
-              <div style={{ position: 'relative' }} key={index}>
-                {(() => {
-                  const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
-                  const link = `https://www.acmicpc.net/problem/${item.problemId}`;
-                  return (
-                    <a href={link}>
-                      <TierImg src={tiersrc} />
-                      <ProblemId>
-                        {item.problemId}번 {item.titleKo}
-                      </ProblemId>
-                    </a>
-                  );
-                })()}
-              </div>
-            ))}
-        </Tiergrid>
-        {visibleList === 'list2' &&
-          problems.map((item, index) => (
-            <Item key={index}>
-              {(() => {
-                const link = `https://www.acmicpc.net/problem/${item.problemId}`;
-                const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
-                return (
-                  <ProblemList>
-                    <TierImg src={tiersrc} />
-                    <a href={link} style={{ width: '20%' }}>
-                      {' '}
-                      {item.problemId}
-                    </a>
-                    <a href={link} style={{ width: '60%' }}>
-                      {' '}
-                      {item.titleKo}
-                    </a>
-                  </ProblemList>
-                );
-              })()}
-            </Item>
-          ))}
-        {visibleList === 'list3' && <div>문제 별 획득한 크레딧 확인 페이지</div>}
+        {<div>문제 별 획득한 크레딧 확인 페이지</div>}
       </ListView>
       {renderPageButtons()}
     </Wrap>
@@ -185,10 +138,10 @@ const ListView = styled.div`
 //   font-size: 1.2rem;
 // `;
 
-const Item = styled.div`
-  border-bottom: 1px solid #eee;
-  padding: 10px;
-`;
+// const Item = styled.div`
+//   border-bottom: 1px solid #eee;
+//   padding: 10px;
+// `;
 
 const ButtonGroup = styled.div`
   border-radius: 10px;
@@ -208,56 +161,23 @@ const SelectBtn = styled.button`
   text-transform: uppercase;
   transition: background-color 0.3s;
   margin: 7px;
-
-  &:hover {
-    background-color: #4ea7ff52;
-  }
-
-  &:active {
-    background-color: #4ea7ff52;
-  }
-
-  &:focus {
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
-  }
 `;
 
-const TierImg = styled.img`
-  position: relative;
+// const TierImg = styled.img`
+//   position: relative;
 
-  width: 15px;
-  margin-right: 3%;
+//   width: 15px;
+//   margin-right: 3%;
 
-  cursor: pointer;
+//   cursor: pointer;
 
-  &:hover + span {
-    display: block;
-  }
-`;
+//   &:hover + span {
+//     display: block;
+//   }
+// `;
 
-const ProblemList = styled.div`
-  display: flex;
-`;
+// const ProblemList = styled.div`
+//   display: flex;
+// `;
 
-const ProblemId = styled.span`
-  position: absolute;
-  top: 100%;
-  width: 130px;
-  left: -65px;
-  background-color: #000000;
-  color: #ffffff;
-  padding: 5px;
-  border-radius: 5px;
-  display: none;
-  transition: opacity 0.3s;
-  z-index: 100;
-  text-align: center;
-`;
-
-const Tiergrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 25px;
-  margin: auto;
-`;
 export default Solvedlist;

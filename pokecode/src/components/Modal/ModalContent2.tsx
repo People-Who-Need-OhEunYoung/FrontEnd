@@ -1,10 +1,59 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { DesignedButton1 } from '../DesignedButton';
-const ModalContent2 = ({ width, onOff }: any) => {
+import Select from 'react-select';
+import { problemSearch } from '../../utils/api/api';
+
+type ProblemType = {
+  id: string;
+  title: string;
+};
+
+const ModalContent2 = ({ width, onOff, reset }: any) => {
   const [title, setTitle] = useState('');
+  const [query, setQuery] = useState('');
   const [person, setPerson] = useState(2);
   const [isEditing, setIsEditing] = useState(false);
+  const [problems, setProblems] = useState<ProblemType[]>([]); // 문제 데이터를 저장할 배열
+
+  const fetchProbData = async () => {
+    try {
+      const res = await problemSearch(query, 'id', 1, 'asc');
+      console.log(res);
+      return res;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    console.log('reset: ', reset);
+    if (reset) {
+      console.log('reset: ', reset);
+      setTitle('');
+      setQuery('');
+      setPerson(2);
+      setIsEditing(false);
+      setProblems([]);
+    }
+  }, [reset]);
+
+  useEffect(() => {
+    fetchProbData().then((res) => {
+      const parsedData = res.problem;
+      if (parsedData.length > 0) {
+        const itemsArray = [];
+        for (let i = 0; i < parsedData.length; i++) {
+          const item = parsedData[i];
+          console.log('item:', item);
+          itemsArray.push(item);
+        }
+        setProblems(itemsArray); // items 상태 업데이트
+      } else {
+        setProblems([]);
+      }
+    });
+  }, []);
 
   const handleDoubleClick = () => {
     setIsEditing(true);
@@ -21,8 +70,21 @@ const ModalContent2 = ({ width, onOff }: any) => {
   const personPlus = () => {
     if (person < 4) setPerson(person + 1);
   };
+
   const personMinus = () => {
     if (person > 2) setPerson(person - 1);
+  };
+
+  const customStyles = {
+    container: (provided: any) => ({
+      ...provided,
+      width: '70%', // 부모 요소의 너비를 100%로 설정
+      margin: 'auto',
+    }),
+    control: (provided: any) => ({
+      ...provided,
+      width: '100%', // Select 컴포넌트의 너비를 설정
+    }),
   };
 
   return (
@@ -40,26 +102,35 @@ const ModalContent2 = ({ width, onOff }: any) => {
               value={title}
               onChange={handleChange}
               onBlur={handleBlur}
-              style={{ padding: '10px', borderRadius: '20px' }}
+              style={{ padding: '10px' }}
               onKeyDown={(e) => {
                 if (e.keyCode === 13) handleBlur();
               }}
+              rows={1}
               autoFocus
-              placeholder="방 제목을 입력해주세요"
             />
           ) : (
-            <span
+            <Titleinput
               style={{
                 display: 'inline-block',
-                width: '70%',
                 wordBreak: 'break-all',
                 padding: '10px',
               }}
+              rows={1}
+              placeholder="방 제목을 입력해주세요"
             >
-              {title == '' ? '방 제목을 입력해주세요.' : title}
-            </span>
+              {/* {title == '' ? '방 제목을 입력해주세요.' : title} */}
+            </Titleinput>
           )}
         </div>
+        <Select
+          options={problems}
+          styles={customStyles}
+          placeholder="문제 검색"
+          isSearchable
+          getOptionLabel={(option) => option.title} // 라벨을 지정
+          getOptionValue={(option) => option.id} // 값을 지정
+        />
         <PersonWrap>
           <span
             style={{ width: '40px', cursor: 'pointer', userSelect: 'none' }}
@@ -86,8 +157,9 @@ const ModalContent2 = ({ width, onOff }: any) => {
 };
 
 const Titleinput = styled.textarea`
-  width: 70%;
-  height: 21.5px;
+  width: 65%;
+  height: auto;
+  min-height: 11.5px; /* 최소 높이를 설정 */
   text-align: center;
   background: #6ebfee2b;
   word-break: break-all;

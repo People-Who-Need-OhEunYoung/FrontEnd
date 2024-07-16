@@ -40,6 +40,13 @@ const Modal = ({
   event,
 }: any) => {
   const [nowcomponent, setNowcomponent] = useState(component);
+  const[reset, setReset] = useState(false);
+
+  const handleClose = () => {
+    event(false);
+    setReset(true); // Trigger the reset
+    setTimeout(() => setReset(false), 0); // Reset the state back to false immediately after
+  };
 
   return (
     <>
@@ -53,7 +60,7 @@ const Modal = ({
           ) : nowcomponent === 2 ? (
             <>
               <Title>{'리뷰방 만들기'}</Title>
-              <ModalContent2 />
+              <ModalContent2 reset={reset} />
             </>
           ) : nowcomponent === 3 ? (
             <>
@@ -81,7 +88,7 @@ const Modal = ({
           <DesignedButton1
             color="rgba(79, 70, 229, 1)"
             style={{ marginBottom: '40px' }}
-            onClick={() => event(false)}
+            onClick={handleClose}
           >
             <b>닫기</b>
           </DesignedButton1>

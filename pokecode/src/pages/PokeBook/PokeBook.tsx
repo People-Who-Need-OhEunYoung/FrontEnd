@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { MainWrapper } from '../../components/MainWrapper';
-import { showPokemonBook } from '../../utils/api/api';
+import { showPokemonBook, pokemonName } from '../../utils/api/api';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -10,7 +10,6 @@ type PokemonType = {
   poke_id: number;
   poke_Lv: number;
   poke_Exp: number;
-  
 };
 
 
@@ -24,6 +23,8 @@ const PokeBook = () => {
   const [visibleList, setVisibleList] = useState<string>('all_list'); 
   const [page, setPage] = useState<number>(1);
   const pokemonGifRef = useRef<HTMLImageElement>(null);
+  const [activeButton, setActiveButton] = useState<string>('all_list');
+  const [pokemonname, setPokemonname] = useState('');
 
   const itemsPerPage = 50;
 
@@ -58,18 +59,30 @@ const PokeBook = () => {
     return items.slice(start, end);
   };
 
+  const pokemonnameSet = async (name: number) => {
+    if(name === 0){
+      setPokemonname('???');
+    }else {
+      setPokemonname(await pokemonName(name));
+    }
+  };
+
   const displayedItems = visibleList === 'all_list' ? getPagedItems(allPokemons, page) : getPagedItems(gatchPokemons, page);
 
-  useEffect(()=> {
-    setCurPokeId(pokemonId)
+  useEffect( ()=> {
+    setCurPokeId(pokemonId);
+    //pokemonnameSet(pokemonId);
+    //console.log(pokemonname);
   },[pokemonId]);
 
   const setFilter = () => {
     if (pokemonGifRef.current) {
       if (!selectedPokemon) {
         pokemonGifRef.current.style.filter = 'brightness(0.01)';
+        pokemonnameSet(0);
       } else {
         pokemonGifRef.current.style.filter = '';
+        pokemonnameSet(curPokeId);
       }
     }
   }
@@ -110,11 +123,12 @@ const PokeBook = () => {
           }
           onLoad={() => {setFilter()}}
         ></PokemonGif>
+        <PokemonName>  {curPokeId}. {pokemonname} </PokemonName>
       </PokeMonView>
       <ListWrap>
         <ButtonGroup>
-          <SelectBtn onClick={() => setVisibleList('all_list')}> 전체 </SelectBtn>
-          <SelectBtn onClick={() => setVisibleList('gatcha_list')}> 획득한 포켓몬 </SelectBtn>
+          <SelectBtn active={activeButton === 'all_list'} onClick={() => {setVisibleList('all_list');  setActiveButton('all_list');}}> 전체 </SelectBtn>
+          <SelectBtn active={activeButton === 'gatcha_list'} onClick={() => {setVisibleList('gatcha_list');  setActiveButton('gatcha_list');}}> 획득한 포켓몬 </SelectBtn>
         </ButtonGroup>
         <ListView>
           {visibleList === 'all_list' && 
@@ -122,40 +136,42 @@ const PokeBook = () => {
               <Item key={index} onClick={() => {setCurPokeId(item.poke_id); setSelectedPokemon(item.poke_Lv !== 0)}}>
                 {(() => {
                   return (
-                    <div>
+                    <BookText>
                       <div>
+                        <p  style={{padding:'20px 0'}}>
+                          No. {item.poke_id}
+                        </p>
                         <Pokemon 
                           src={
                             item.poke_Lv === 0
                               ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
                               : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${item.poke_id}.svg`
                           }
-
                         />
                       </div>
                       <div>
-                        <p  style={{padding:'10px', color: 'white'}}>
-                          No. {item.poke_id}
-                        </p>
-                        <p  style={{padding:'10px', color: 'white'}}>
+                        <p >
                           Level: {item.poke_Lv}
                         </p>
-                        <p  style={{padding:'10px', color: 'white'}}>
+                        <p>
                           Exp: {item.poke_Exp}
                         </p>
                       </div>
-                    </div>
+                    </BookText>
                   );
                 })()}
               </Item>
             ))}
             {visibleList === 'gatcha_list' && 
               gatchPokemons.map((item, index) => (
-              <Item key={index} onClick={() => {setCurPokeId(item.poke_id)}}>
+              <Item key={index} onClick={() => {setCurPokeId(item.poke_id); setSelectedPokemon(true)}}>
                 {(() => {
                   return (
-                    <div>
+                    <BookText>
                       <div>
+                        <p  style={{padding:'10px'}}>
+                          No. {item.poke_id}
+                        </p>
                         <Pokemon
                           src={
                             item.poke_Lv === 0
@@ -165,88 +181,89 @@ const PokeBook = () => {
                         />
                       </div>
                       <div>
-                        <p  style={{padding:'10px', color: 'white'}}>
-                          No. {item.poke_id}
-                        </p>
-                        <p  style={{padding:'10px', color: 'white'}}>
+                        <p>
                           Level: {item.poke_Lv}
                         </p>
-                        <p  style={{padding:'10px', color: 'white'}}>
+                        <p>
                           Exp: {item.poke_Exp}
                         </p>
                       </div>
-                    </div>
+                    </BookText>
                   );
                 })()}
               </Item>
             ))}
         </ListView>
-        <ButtonGroup style={{ margin: '1.5%' }}>
+        <PageBtnGroup>
           {renderPageButtons()}
-        </ButtonGroup>
+        </PageBtnGroup>
       </ListWrap>
        
     </MainWrapper>
   );
 }
 
+const PokemonName = styled.div`
+  position: absolute;
+  background-color: #333449;
+  font-size: 1.7rem;
+  font-weight: bold;
+  width: 50%;
+  height: 8%;
+  text-align: center;
+  line-height: 1.6;
+  border-radius: 20px;
+  left: 25%;
+  bottom: 5%;
+`;
+
+const BookText = styled.div`
+  color: #1e504d;
+  font-size: 1rem;
+  font-weight: bold;
+`;
 
 const PageButton = styled.button<{ active: boolean }>`
   width: 30px;
   margin-right: 10px;
-  background-color: ${({ active }) => (active ? '#4ea7ff' : 'transparent')};
+  background-color: ${({ active }) => (active ? '#BA94B4' : 'transparent')};
   color: white;
   border-radius: 10px;
   font-size: 1rem;
   border: none;
 
-  &:hover {
-    background-color: #4ea7ff52;
-  }
 
-  &:active {
-    background-color: #4ea7ff52;
-  }
 `;
 
 const ButtonGroup = styled.div`
   border-radius: 10px;
 `;
 
-const SelectBtn = styled.button`
-  color: white;
-  background-color: transparent;
-  padding: 4px 10px;
+const PageBtnGroup = styled.div`
+  margin: 1.5%;
+  position: absolute;
+  left: 10%;
+`;
+
+const SelectBtn = styled.button<{ active: boolean }>`
+  padding: 1px 50px;
   border: none;
-  border-radius: 15px;
+  border-radius: 15px 15px 0 0;
   outline: none;
   cursor: pointer;
   font-size: 1.2rem;
-  font-weight: 500;
+  font-weight: bold;
   line-height: 1.75;
   text-transform: uppercase;
   transition: background-color 0.3s;
-  margin: 7px;
-
-  &:hover {
-    background-color: #4ea7ff52;
-  }
-
-  &:active {
-    background-color: #4ea7ff52;
-  }
-
-  &:focus {
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
-  }
+  background-color: ${({ active }) => (active ? '#333449' : '#5C536D')};
+  color:  ${({ active }) => (active ? 'white' : 'white')};
 `;
 
 
 const PokeMonView = styled.div`
-  width: 40%;
-  height: 80%;
-  display: flex;
-  justify-content: center; 
+  width: 30%;
+  height: 70%;
   text-align: center;
   box-sizing: border-box;
   border-radius: 30px 20px;
@@ -254,10 +271,13 @@ const PokeMonView = styled.div`
   background-size: cover;
   overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const PokemonGif = styled.img`
-  transform: scale(0.3)
+  transform: scale(0.5);
 `;
 
 const Item = styled.button`
@@ -265,27 +285,27 @@ const Item = styled.button`
   box-sizing: border-box;
   display: flex;
   justify-content: center;
-  align-items: center;
-  border: 2px solid white;
-  margin: 5%;
-  background-color:transparent;
+  margin: 7%;
+  background-color: #ffffff;
   border-radius: 10px;
+  cursor: pointer;
 `;
 
 const ListWrap = styled.div`
   width: 50%;
-  height: 90%;
-
+  height: 80%;
+  margin-left: 10px;
+  position: relative;
 `;
 
 const ListView = styled.div`
-  background-color: #c2c2c21d;
-  height: 86%;
+  background-color: #333449;
+  height: 87%;
   overflow-y: auto;
   font-size: 1.2rem;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-auto-rows: 300px;
+  grid-auto-rows: 260px;
 `;
 
 export const Pokemon = styled.img`
@@ -301,6 +321,7 @@ export const Pokemon = styled.img`
   //transform: scale(1.6);
   /* border: 2px solid white; */
   width: 40px;
+  margin-top: 20%;
 `;
 
 export default PokeBook;

@@ -224,10 +224,10 @@ const ProblemList = () => {
                     >
                       {item.title}
                     </TitleBtn>
-                    <p style={{ position: 'absolute', right: '32%' ,textAlign: 'center' }}>
+                    <p style={{ position: 'absolute', right: '30%' ,textAlign: 'end' }}>
                       {item.solved}
                     </p>
-                    <p style={{ position: 'absolute', right: '10%' ,textAlign: 'center'}}>
+                    <p style={{ position: 'absolute', right: '8%' ,textAlign: 'end'}}>
                       {item.average_try.toFixed(3)}
                     </p>
                   </ProblemComponent>
