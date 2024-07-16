@@ -1,4 +1,6 @@
 import { useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const signalingServerDomain = 'wss://api.poke-code.com:8481';
 //const signalingServerDomain = 'wss://3.38.59.126:3000';
@@ -9,7 +11,7 @@ interface RemoteVideo {
   stream: MediaStream;
 }
 
-const VoiceChat = () => {
+const VoiceChat = ({ room = 1000 }) => {
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const [remoteVideos, setRemoteVideos] = useState<RemoteVideo[]>([]);
   const localStream = useRef<MediaStream | null>(null);
@@ -21,24 +23,26 @@ const VoiceChat = () => {
       iceCandidates: RTCIceCandidate[];
     };
   }>({});
+  const { userNickname } = useSelector((state: RootState) => state.userinfo);
+
   let myId: string | null = null;
 
-  const roomIdElem = useRef<HTMLInputElement>(null);
-  const userIdElem = useRef<HTMLInputElement>(null);
+  const roomIdElem = room;
+  const userIdElem = userNickname;
 
   const startWebRTC = async () => {
     try {
       localStream.current = await navigator.mediaDevices.getUserMedia({
         audio: true,
-        video: true,
+        video: false,
       });
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = localStream.current;
       }
 
-      const roomId = roomIdElem.current?.value;
+      const roomId = roomIdElem;
       console.log('들어갈 방번호:', roomId);
-      const userId = userIdElem.current?.value;
+      const userId = userIdElem;
       console.log('들어갈 방번호:', userId);
       const signalingServerUrl = `${signalingServerDomain}?roomId=${roomId}&userId=${userId}`;
 
@@ -218,11 +222,8 @@ const VoiceChat = () => {
 
   return (
     <div className="App">
-      <h1>WebRTC Multi-Peer Video Communication</h1>
       <audio ref={localVideoRef} autoPlay muted className="local-video" />
       <br />
-      <input ref={roomIdElem} placeholder="방번호" />
-      <input ref={userIdElem} placeholder="사용자 아이디" />
       <button onClick={startWebRTC}>들어가기</button>
       <button onClick={quit}>나가기</button>
       {remoteVideos.map((video, index) => (
