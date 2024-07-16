@@ -122,10 +122,8 @@ const CodeAIButton = () => {
   }
 
   const handleCancel = () => {
-    if (controller) {
-      controller.abort();
-      console.log('can cancle-------------------');
-    }
+    controller.abort();
+    console.log('can cancle-------------------');
   };
 
   useEffect(() => {

@@ -2,7 +2,11 @@ import styled, { css } from 'styled-components';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Modal from '../../components/Modal/Modal';
+
 import { createRoom, showRoomList } from '../../utils/api/api';
+
+import { showRoomList } from '../../utils/api/api';
+
 
 type ItemType = {
   roomId: number;
@@ -28,6 +32,8 @@ const RoomList = () => {
   const [problemTitle, setproblemTitle] = useState<string>('');
   const [problemId, setproblemId] = useState<string>('');
   const [roomlist, setRoomlist] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
+
+  console.log(page);
   if (roomlist == null)
     setRoomlist([
       {
@@ -55,6 +61,7 @@ const RoomList = () => {
       console.error('Error fetching data:', error);
     }
   };
+
 
   const sendRoomData = async (Room: ItemType) => {
     try {
@@ -90,7 +97,6 @@ const RoomList = () => {
       } else {
         setRoomlist([]);
       }
-    });
   }, []);
 
   const switchButton = () => {
