@@ -5,9 +5,6 @@ import Modal from '../../components/Modal/Modal';
 
 import { createRoom, showRoomList } from '../../utils/api/api';
 
-import { showRoomList } from '../../utils/api/api';
-
-
 type ItemType = {
   roomId: number;
   problemId: string;
@@ -62,7 +59,6 @@ const RoomList = () => {
     }
   };
 
-
   const sendRoomData = async (Room: ItemType) => {
     try {
       const res = await createRoom(
@@ -97,6 +93,7 @@ const RoomList = () => {
       } else {
         setRoomlist([]);
       }
+    });
   }, []);
 
   const switchButton = () => {

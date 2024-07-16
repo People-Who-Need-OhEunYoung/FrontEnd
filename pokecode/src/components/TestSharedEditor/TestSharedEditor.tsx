@@ -24,21 +24,20 @@ const TestSharedEditor = ({ editorRoom = 'notice' }) => {
   const { userNickname } = useSelector((state: RootState) => state.userinfo);
 
   useEffect(() => {
-    document.body.onload = addElement;
-    function addElement() {
-      // create a new div element
-      let newDiv = document.createElement('div');
-      // and give it some content
-      setTimeout(() => {
-        let newContent = document.createTextNode(editorRoom + userNickname);
-        // add the text node to the newly created div
-        newDiv.appendChild(newContent);
-      }, 1000);
-
-      // add the newly created element and its content into the DOM
-      var currentDiv = document.getElementById('div1');
-      document.body.insertBefore(newDiv, currentDiv);
-    }
+    // document.body.onload = addElement;
+    // function addElement() {
+    //   // create a new div element
+    //   let newDiv = document.createElement('div');
+    //   // and give it some content
+    //   setTimeout(() => {
+    //     let newContent = document.createTextNode(editorRoom + userNickname);
+    //     // add the text node to the newly created div
+    //     newDiv.appendChild(newContent);
+    //   }, 1000);
+    //   // add the newly created element and its content into the DOM
+    //   var currentDiv = document.getElementById('div1');
+    //   document.body.insertBefore(newDiv, currentDiv);
+    // }
   });
 
   useEffect(() => {

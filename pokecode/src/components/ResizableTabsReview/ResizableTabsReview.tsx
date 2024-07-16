@@ -157,11 +157,11 @@ const ResizableTabsReview = ({ id, title, editorRoom = '1000' }: any) => {
           <HeaderTxt>
             {id}번 {title}
           </HeaderTxt>
-          <ProblemText
+          {/* <ProblemText
             id={id}
             isShowHeader="false"
             size={'calc(100% - 80px)'}
-          />
+          /> */}
         </Tab>
         <Resizer onMouseDown={handleMouseDown} style={{ left: width + '%' }} />
         <div
