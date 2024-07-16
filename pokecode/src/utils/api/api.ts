@@ -9,6 +9,7 @@ export {
   setGachaPokemon,
   problemSearch,
   showPokemonBook,
+  showRoomList,
 };
 
 //닉네임 중복 검사
@@ -259,4 +260,26 @@ const showPokemonBook = async () => {
     });
 };
 
-
+//코드리뷰방 목록 가져오기
+const showRoomList = async () => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/reviewList`, {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    }
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return 'ERROR : ' + error;
+    });
+};
