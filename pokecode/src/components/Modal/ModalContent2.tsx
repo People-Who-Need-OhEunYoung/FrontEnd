@@ -41,7 +41,7 @@ const ModalContent2 = ({ width, onOff }: any) => {
         setProblems([]);
       }
     });
-  }, [query]);
+  }, []);
 
   const handleDoubleClick = () => {
     setIsEditing(true);
@@ -84,14 +84,14 @@ const ModalContent2 = ({ width, onOff }: any) => {
           fontWeight: 'bold',
         }}
       >
-        <Select
+        {/* <Select
           options={problems}
           styles={customStyles}
           placeholder="문제 검색"
           isSearchable
           getOptionLabel={(option) => option.title} // 라벨을 지정
           getOptionValue={(option) => option.id} // 값을 지정
-        />
+        /> */}
         <div style={{ minHeight: '40px' }} onDoubleClick={handleDoubleClick}>
           {isEditing ? (
             <Titleinput
