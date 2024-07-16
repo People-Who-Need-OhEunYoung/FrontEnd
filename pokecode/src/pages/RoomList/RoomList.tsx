@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import Modal from '../../components/Modal/Modal';
 import { showRoomList } from '../../utils/api/api';
 
-
 type ItemType = {
   roomId: number;
   problemId: string;
@@ -29,6 +28,8 @@ const RoomList = () => {
   const [problemTitle, setproblemTitle] = useState<string>('');
   const [problemId, setproblemId] = useState<string>('');
   const [roomlist, setRoomlist] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
+
+  console.log(page);
   if (roomlist == null)
     setRoomlist([
       {
@@ -57,11 +58,11 @@ const RoomList = () => {
     }
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     fetchProbData().then((res) => {
       console.log(res);
-    })
-  },[])
+    });
+  }, []);
 
   const switchButton = () => {
     setCheck(check === 'ON' ? 'OFF' : 'ON');
@@ -363,11 +364,11 @@ const PageButton = styled.button`
   border: none;
 
   &:hover {
-    background-color: #BA94B4;
+    background-color: #ba94b4;
   }
 
   &:active {
-    background-color: #BA94B4;
+    background-color: #ba94b4;
   }
 `;
 
