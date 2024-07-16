@@ -24,6 +24,7 @@ import './TestEditor.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setWrittenCode } from '../../store/problemSlice';
+import { setReturnCall } from '../../store/codeCallerReducer';
 
 const TestEditor = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
@@ -64,7 +65,7 @@ const TestEditor = () => {
 
   useEffect(() => {
     if (editorContainerRef.current) {
-      if (editor == null) {
+      if (editor == null && returnCall == '') {
         const cmEditor = CodeMirror(editorContainerRef.current, {
           theme: 'dracula',
           mode: language,
@@ -130,6 +131,13 @@ const TestEditor = () => {
     return () => clearInterval(typingInterval); //컴포넌트가 마운트 해제되거나, 재렌더링 될 때마다 setInterval를 정리하는 함수를 반환함.
     //텍스트결과, 컨텐츠, 타이핑 정지 여부 등의 변화로 타이핑 효과 연출
   }, [testcaseResult, textCount, isTypingPaused, returnCall]);
+
+  useEffect(() => {
+    dispatch(setReturnCall(''));
+    setSequence('');
+    setTextCount(0);
+    setTestcaseResult(returnCall);
+  }, [dispatch]);
 
   return (
     <>
