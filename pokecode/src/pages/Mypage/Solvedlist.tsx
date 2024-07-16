@@ -56,7 +56,6 @@ const Solvedlist = () => {
     return buttons;
   };
 
-
   useEffect(() => {
     setQuery('ejrrl6931');
     if(query != '') {
