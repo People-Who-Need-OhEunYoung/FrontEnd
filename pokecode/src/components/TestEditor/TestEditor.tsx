@@ -24,8 +24,7 @@ import './TestEditor.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setWrittenCode } from '../../store/problemSlice';
-import { setReturnCall, setTypingPause } from '../../store/codeCallerReducer';
-import { P } from '../../pages/Login/Login.style';
+import { setReturnCall } from '../../store/codeCallerReducer';
 
 const TestEditor = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);

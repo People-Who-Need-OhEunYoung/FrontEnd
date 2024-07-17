@@ -10,12 +10,17 @@ export interface ProblemDetails {
   samples: Array<{ input: string; output: string }>;
 }
 
+export interface TestCases {
+  input_case: string;
+  output_case: string;
+}
 
 export interface ProblemState {
   problemId: string;
   writtenCode: string;
   isAcquireReview: boolean;
   problemDetails?: ProblemDetails;  // Optional로 정의
+  TestCases?: TestCases[];
 }
 
 //초기상태 설정
@@ -24,6 +29,7 @@ const initialState: ProblemState = {
   writtenCode: '',
   isAcquireReview: false,
   problemDetails: undefined,
+  TestCases: undefined,
 };
 
 const ProblemSlice = createSlice({
@@ -43,8 +49,11 @@ const ProblemSlice = createSlice({
     setProblemDetail(state, action: PayloadAction<ProblemDetails>) {
       state.problemDetails = action.payload;
     },
+    setTestCases(state, action: PayloadAction<TestCases[]>) {
+      state.TestCases = action.payload;
+    },
   },
 });
 
-export const {setProblemId, setWrittenCode, setAcquireReview, setProblemDetail} = ProblemSlice.actions;
+export const {setProblemId, setWrittenCode, setAcquireReview, setProblemDetail, setTestCases} = ProblemSlice.actions;
 export default ProblemSlice.reducer;

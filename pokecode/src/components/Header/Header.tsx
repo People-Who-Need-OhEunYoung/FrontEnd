@@ -48,7 +48,7 @@ export const Header2 = () => {
   );
   const dispatch = useDispatch();
 
-  console.log('credit: ', credit);
+  // console.log('credit: ', credit);
 
   const userSet = async () => {
     setUser(await userInfo());
