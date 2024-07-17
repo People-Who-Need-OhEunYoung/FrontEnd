@@ -45,7 +45,9 @@ const Modal = ({
   const handleClose = () => {
     event(false);
     setReset(true); // Trigger the reset
-    setTimeout(() => setReset(false), 0); // Reset the state back to false immediately after
+    setTimeout(() => {
+      setReset(false);
+    }, 0); // Reset the state back to false immediately after
   };
 
   return (

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { DesignedButton1 } from '../DesignedButton';
-// import Select from 'react-select';
+import Select from 'react-select';
 import { problemSearch } from '../../utils/api/api';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -24,7 +24,7 @@ const ModalContent2 = ({ width, reset }: any) => {
   const fetchProbData = async () => {
     try {
       const res = await problemSearch(query, 'id', 1, 'asc');
-      console.log(res);
+      // console.log(res);
       return res;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -37,14 +37,13 @@ const ModalContent2 = ({ width, reset }: any) => {
   }, []);
 
   useEffect(() => {
-    console.log('reset: ', reset);
     if (reset) {
       console.log('reset: ', reset);
       setTitle('');
       setQuery('');
       setPerson(2);
       setIsEditing(false);
-      setProblems([]);
+      console.log('title:', title);
     }
   }, [reset]);
 
@@ -55,15 +54,16 @@ const ModalContent2 = ({ width, reset }: any) => {
         const itemsArray = [];
         for (let i = 0; i < parsedData.length; i++) {
           const item = parsedData[i];
-          console.log('item:', item);
+          // console.log('item:', item);
           itemsArray.push(item);
         }
         setProblems(itemsArray); // items 상태 업데이트
+        console.log('reset: ', reset);
       } else {
         setProblems([]);
       }
     });
-  }, []);
+  }, [query]);
 
   const handleDoubleClick = () => {
     setIsEditing(true);
@@ -83,6 +83,30 @@ const ModalContent2 = ({ width, reset }: any) => {
 
   const personMinus = () => {
     if (person > 2) setPerson(person - 1);
+  };
+
+  const selecthandleChange = (selectedOption: any) => {
+    // 선택된 옵션을 처리합니다. selectedOption 객체가 전달됩니다.
+    console.log(selectedOption); // 전체 선택된 객체를 로그로 확인
+
+    if (selectedOption) {
+      console.log('Selected problem ID: ', selectedOption.id); // 올바른 속성 접근
+      console.log('Selected problem title: ', selectedOption.title); // 올바른 속성 접근
+    }
+  };
+
+  const customStyles = {
+    container: (provided: any) => ({
+      ...provided,
+      width: '70%', // 부모 요소의 너비를 100%로 설정
+      margin: 'auto',
+      padding: '10px',
+      cursor: 'pointer',
+    }),
+    control: (provided: any) => ({
+      ...provided,
+      width: '100%', // Select 컴포넌트의 너비를 설정
+    }),
   };
   //우현코드 start
   const createRoom = async () => {
@@ -112,18 +136,6 @@ const ModalContent2 = ({ width, reset }: any) => {
   };
   // 우현코드 end
 
-  // const customStyles = {
-  //   container: (provided: any) => ({
-  //     ...provided,
-  //     width: '70%', // 부모 요소의 너비를 100%로 설정
-  //     margin: 'auto',
-  //   }),
-  //   control: (provided: any) => ({
-  //     ...provided,
-  //     width: '100%', // Select 컴포넌트의 너비를 설정
-  //   }),
-  // };
-
   return (
     <div style={{ width: '400px' }}>
       <div
@@ -133,6 +145,15 @@ const ModalContent2 = ({ width, reset }: any) => {
           fontWeight: 'bold',
         }}
       >
+        <Select
+          options={problems}
+          styles={customStyles}
+          placeholder="문제 검색"
+          getOptionLabel={(option) => option.title} // 라벨을 지정
+          getOptionValue={(option) => option.id} // 값을 지정
+          onChange={selecthandleChange}
+        />
+
         <div style={{ minHeight: '40px' }} onDoubleClick={handleDoubleClick}>
           {isEditing ? (
             <Titleinput
@@ -148,26 +169,21 @@ const ModalContent2 = ({ width, reset }: any) => {
             />
           ) : (
             <Titleinput
+              value={title}
               style={{
                 display: 'inline-block',
                 wordBreak: 'break-all',
                 padding: '10px',
+                cursor: 'pointer',
               }}
               rows={1}
               placeholder="방 제목을 입력해주세요"
+              readOnly
             >
               {/* {title == '' ? '방 제목을 입력해주세요.' : title} */}
             </Titleinput>
           )}
         </div>
-        {/* <Select
-          options={problems}
-          styles={customStyles}
-          placeholder="문제 검색"
-          isSearchable
-          getOptionLabel={(option) => option.title} // 라벨을 지정
-          getOptionValue={(option) => option.id} // 값을 지정
-        /> */}
         <PersonWrap>
           <span
             style={{ width: '40px', cursor: 'pointer', userSelect: 'none' }}

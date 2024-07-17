@@ -58,12 +58,15 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
   };
 
   useEffect(() => {
-    const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`);
-    let start_time = Date.now();
+    dispatch(setStartTime(Date.now()));
+  }, []);
 
-    dispatch(setStartTime(start_time));
+  useEffect(() => {
+    const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`);
+    let start_time = Date.now(); //시작 시간 설정
 
     if (storedSolvedTime) {
+      //저장된 시간이 있을 경우
       const solvedData = JSON.parse(storedSolvedTime);
       const updateElapsedTime =
         solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000);
@@ -83,7 +86,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
     const interval = setInterval(() => {
       if (startTime !== null) {
         const newElapsedTime =
-          Math.floor((Date.now() - startTime) / 1000) + elapsedTime;
+          Math.floor((Date.now() - start_time) / 1000) + elapsedTime;
         dispatch(setElapsedTime(newElapsedTime));
 
         localStorage.setItem(
