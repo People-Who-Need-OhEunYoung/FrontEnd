@@ -1,10 +1,15 @@
 import styled from 'styled-components';
 import { MainWrapper } from '../../components/MainWrapper';
-import { showPokemonBook, pokemonName } from '../../utils/api/api';
+import { showPokemonBook, pokemonName, updateMyPokemon } from '../../utils/api/api';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import background from '../../assets/images/background2.jpg';
+
+import { useDispatch } from 'react-redux';
+import { setPokemonId } from '../../store/userInfo';
+
+// const dispatch = useDispatch();
 
 type PokemonType = {
   poke_id: number;
@@ -14,19 +19,26 @@ type PokemonType = {
 
 
 const PokeBook = () => {
-  
+  const dispatch = useDispatch();
   const [allPokemons, setAllPokemons] = useState<PokemonType[]>([]);
   const [gatchPokemons, setGatchPpokemons] = useState<PokemonType[]>([]);
   const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const [curPokeId, setCurPokeId] = useState<number>(pokemonId);
   const [selectedPokemon, setSelectedPokemon] = useState<boolean>(true);
-  const [visibleList, setVisibleList] = useState<string>('all_list'); 
+  const [visibleList, setVisibleList] = useState<string>('all_list');
   const [page, setPage] = useState<number>(1);
   const pokemonGifRef = useRef<HTMLImageElement>(null);
   const [activeButton, setActiveButton] = useState<string>('all_list');
   const [pokemonname, setPokemonname] = useState('');
 
   const itemsPerPage = 50;
+
+  const handleUpdate = async(poke_id:number) => {
+    let 결과 = await updateMyPokemon(poke_id)
+    if(결과.result == 'success'){
+      dispatch(setPokemonId(poke_id))
+    }
+  }
 
   const fetchPokeBook = async () => {
     try {
@@ -37,7 +49,7 @@ const PokeBook = () => {
     }
   };
 
-   const renderPageButtons = () => {
+  const renderPageButtons = () => {
     const totalItems = visibleList === 'all_list' ? allPokemons.length : gatchPokemons.length;
     const pageCount = Math.ceil(totalItems / itemsPerPage);
     const buttons = [];
@@ -60,20 +72,20 @@ const PokeBook = () => {
   };
 
   const pokemonnameSet = async (name: number) => {
-    if(name === 0){
+    if (name === 0) {
       setPokemonname('???');
-    }else {
+    } else {
       setPokemonname(await pokemonName(name));
     }
   };
 
   const displayedItems = visibleList === 'all_list' ? getPagedItems(allPokemons, page) : getPagedItems(gatchPokemons, page);
 
-  useEffect( ()=> {
+  useEffect(() => {
     setCurPokeId(pokemonId);
     //pokemonnameSet(pokemonId);
     //console.log(pokemonname);
-  },[pokemonId]);
+  }, [pokemonId]);
 
   const setFilter = () => {
     if (pokemonGifRef.current) {
@@ -99,17 +111,17 @@ const PokeBook = () => {
         const GatchaPokemon = []
         for (let i = 0; i < ParseData.length; i++) {
           const item = ParseData[i];
-          defaultPokemon[item.poke_id-1] = item; // ID를 인덱스에 맞게 설정
+          defaultPokemon[item.poke_id - 1] = item; // ID를 인덱스에 맞게 설정
           GatchaPokemon.push(item);
         }
-        setAllPokemons(defaultPokemon); 
+        setAllPokemons(defaultPokemon);
         setGatchPpokemons(GatchaPokemon);
       } else {
         setAllPokemons([]);
         setGatchPpokemons([]);
       }
     });
-  },[])
+  }, [])
 
   return (
     <MainWrapper>
@@ -118,30 +130,30 @@ const PokeBook = () => {
           ref={pokemonGifRef}
           src={
             'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-                curPokeId +
-                '.gif'
+            curPokeId +
+            '.gif'
           }
-          onLoad={() => {setFilter()}}
+          onLoad={() => { setFilter() }}
         ></PokemonGif>
         <PokemonName>  {curPokeId}. {pokemonname} </PokemonName>
       </PokeMonView>
       <ListWrap>
         <ButtonGroup>
-          <SelectBtn active={activeButton === 'all_list'} onClick={() => {setVisibleList('all_list');  setActiveButton('all_list');}}> 전체 </SelectBtn>
-          <SelectBtn active={activeButton === 'gatcha_list'} onClick={() => {setVisibleList('gatcha_list');  setActiveButton('gatcha_list');}}> 획득한 포켓몬 </SelectBtn>
+          <SelectBtn active={activeButton === 'all_list'} onClick={() => { setVisibleList('all_list'); setActiveButton('all_list'); }}> 전체 </SelectBtn>
+          <SelectBtn active={activeButton === 'gatcha_list'} onClick={() => { setVisibleList('gatcha_list'); setActiveButton('gatcha_list'); }}> 획득한 포켓몬 </SelectBtn>
         </ButtonGroup>
         <ListView>
-          {visibleList === 'all_list' && 
-              displayedItems.map((item, index) => (
-              <Item key={index} onClick={() => {setCurPokeId(item.poke_id); setSelectedPokemon(item.poke_Lv !== 0)}}>
+          {visibleList === 'all_list' &&
+            displayedItems.map((item, index) => (
+              <Item key={index} onClick={() => { setCurPokeId(item.poke_id); setSelectedPokemon(item.poke_Lv !== 0); handleUpdate(item.poke_id) }}>
                 {(() => {
                   return (
                     <BookText>
                       <div>
-                        <p  style={{padding:'20px 0'}}>
+                        <p style={{ padding: '20px 0' }}>
                           No. {item.poke_id}
                         </p>
-                        <Pokemon 
+                        <Pokemon
                           src={
                             item.poke_Lv === 0
                               ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
@@ -162,14 +174,14 @@ const PokeBook = () => {
                 })()}
               </Item>
             ))}
-            {visibleList === 'gatcha_list' && 
-              gatchPokemons.map((item, index) => (
-              <Item key={index} onClick={() => {setCurPokeId(item.poke_id); setSelectedPokemon(true)}}>
+          {visibleList === 'gatcha_list' &&
+            gatchPokemons.map((item, index) => (
+              <Item key={index} onClick={() => { setCurPokeId(item.poke_id); setSelectedPokemon(true); handleUpdate(item.poke_id)}}>
                 {(() => {
                   return (
                     <BookText>
                       <div>
-                        <p  style={{padding:'10px'}}>
+                        <p style={{ padding: '10px' }}>
                           No. {item.poke_id}
                         </p>
                         <Pokemon
@@ -198,7 +210,7 @@ const PokeBook = () => {
           {renderPageButtons()}
         </PageBtnGroup>
       </ListWrap>
-       
+
     </MainWrapper>
   );
 }
