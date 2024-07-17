@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setReturnCall } from '../../store/codeCallerReducer';
 import { SubmitCode } from '../../utils/api/api';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const CodeSubmitButton = () => {
   const { writtenCode } = useSelector((state: RootState) => state.probinfo);
@@ -29,7 +29,6 @@ const CodeSubmitButton = () => {
       console.error('Error fetching data:', error);
     }
   };
-
 
   return (
     <>

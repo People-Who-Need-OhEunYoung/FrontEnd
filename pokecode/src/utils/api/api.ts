@@ -215,7 +215,6 @@ const updateMyPokemon = async (pokId: number) => {
     });
 };
 
-
 //문제 검색
 function problemSearch(
   title: string,
@@ -338,7 +337,6 @@ const createRoom = async (
     });
 };
 
-
 //코드 제출하기
 const SubmitCode = async (editorContent: string, id: string): Promise<any> => {
   return await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
@@ -348,9 +346,47 @@ const SubmitCode = async (editorContent: string, id: string): Promise<any> => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      code: editorContent, bojNumber: id 
+      code: editorContent,
+      bojNumber: id,
     }),
-    
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.statusText}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      console.log('data : ', data);
+      return data;
+    })
+    .catch((error) => {
+      console.log('error : ', error);
+      return 'ERROR : ' + error;
+    });
+};
+
+interface TestCase {
+  input_case: string;
+  output_case: string;
+}
+
+const RunCode = async (
+  editorContent: string,
+  id: string,
+  testCases: TestCase[]
+): Promise<any> => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      code: editorContent,
+      bojNumber: id,
+      testCase: testCases,
+    }),
   })
     .then((res) => {
       if (!res.ok) {
@@ -367,39 +403,3 @@ const SubmitCode = async (editorContent: string, id: string): Promise<any> => {
       return 'ERROR : ' + error;
     });
 };
-
-interface TestCase {
-  input_case: string;
-  output_case: string;
-}
-
-const RunCode = async (editorContent: string, id: string, testCases: TestCase[]): Promise<any> => {
-
-  return await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
-    method: 'POST',
-    headers: {
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify( {
-      code: editorContent,
-      bojNumber: id,
-      testCase: testCases
-    }),
-  })
-  .then((res) => {
-    if (!res.ok) {
-      throw new Error(`HTTP error! Status: ${res.statusText}`);
-    }
-    return res.json();
-  })
-  .then((data) => {
-    console.log(data);
-    return data;
-  })
-  .catch((error) => {
-    console.log(error);
-    return 'ERROR : ' + error;
-  });
-};
-
