@@ -1,4 +1,7 @@
 import { useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import styled from 'styled-components';
 
 const signalingServerDomain = 'wss://api.poke-code.com:8481';
 //const signalingServerDomain = 'wss://3.38.59.126:3000';
@@ -9,7 +12,7 @@ interface RemoteVideo {
   stream: MediaStream;
 }
 
-const VoiceChat = () => {
+const VoiceChat = ({ room = 1000 }) => {
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const [remoteVideos, setRemoteVideos] = useState<RemoteVideo[]>([]);
   const localStream = useRef<MediaStream | null>(null);
@@ -21,24 +24,27 @@ const VoiceChat = () => {
       iceCandidates: RTCIceCandidate[];
     };
   }>({});
+  const { userNickname } = useSelector((state: RootState) => state.userinfo);
+  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
+
   let myId: string | null = null;
 
-  const roomIdElem = useRef<HTMLInputElement>(null);
-  const userIdElem = useRef<HTMLInputElement>(null);
+  const roomIdElem = room;
+  const userIdElem = userNickname;
 
   const startWebRTC = async () => {
     try {
       localStream.current = await navigator.mediaDevices.getUserMedia({
         audio: true,
-        video: true,
+        video: false,
       });
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = localStream.current;
       }
 
-      const roomId = roomIdElem.current?.value;
+      const roomId = roomIdElem;
       console.log('들어갈 방번호:', roomId);
-      const userId = userIdElem.current?.value;
+      const userId = userIdElem;
       console.log('들어갈 방번호:', userId);
       const signalingServerUrl = `${signalingServerDomain}?roomId=${roomId}&userId=${userId}`;
 
@@ -217,30 +223,132 @@ const VoiceChat = () => {
   };
 
   return (
-    <div className="App">
-      <h1>WebRTC Multi-Peer Video Communication</h1>
-      <audio ref={localVideoRef} autoPlay muted className="local-video" />
-      <br />
-      <input ref={roomIdElem} placeholder="방번호" />
-      <input ref={userIdElem} placeholder="사용자 아이디" />
-      <button onClick={startWebRTC}>들어가기</button>
-      <button onClick={quit}>나가기</button>
-      {remoteVideos.map((video, index) => (
-        <div key={index}>
-          <h3>{video.peerId}</h3>
-          <audio
-            ref={(elem) => {
-              if (elem) {
-                elem.srcObject = video.stream;
-              }
-            }}
-            controls
-            autoPlay
+    <>
+      <AudioWrap className="">
+        <div style={{ display: 'flex' }}>
+          <img
+            style={{ background: 'white', borderRadius: '50%' }}
+            width={'50'}
+            height={'50'}
+            src={
+              'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/' +
+              pokemonId +
+              '.svg'
+            }
+            alt=""
           />
+          <p
+            style={{
+              width: '180px',
+              height: '50px',
+              margin: '0 0 0 10px',
+              lineHeight: '50px',
+              color: 'white',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {userNickname}
+          </p>
+          <audio ref={localVideoRef} autoPlay className="local-video" />
+          <button
+            onClick={startWebRTC}
+            style={{ padding: '0 3px', cursor: 'pointer' }}
+          >
+            <svg
+              style={{ width: '30px' }}
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+            >
+              <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" />
+            </svg>
+          </button>
+          <button
+            onClick={quit}
+            style={{ margin: '0 10px', cursor: 'pointer' }}
+          >
+            <svg
+              style={{ width: '37px' }}
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 640 512"
+            >
+              <path d="M228.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C76.1 30.2 64 46 64 64c0 107.4 37.8 206 100.8 283.1L9.2 469.1c-10.4 8.2-12.3 23.3-4.1 33.7s23.3 12.3 33.7 4.1l592-464c10.4-8.2 12.3-23.3 4.1-33.7s-23.3-12.3-33.7-4.1L253 278c-17.8-21.5-32.9-45.2-45-70.7L257.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96zm96.8 319l-91.3 72C310.7 476 407.1 512 512 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L368.7 368c-15-7.1-29.3-15.2-43-24.3z" />
+            </svg>
+          </button>
         </div>
+      </AudioWrap>
+      {remoteVideos.map((video, index) => (
+        <AudioWrap className="">
+          <div key={index} style={{ display: 'flex' }}>
+            <img
+              style={{ background: 'white', borderRadius: '50%' }}
+              width={'50'}
+              height={'50'}
+              src={
+                'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/' +
+                pokemonId +
+                '.svg'
+              }
+              alt=""
+            />
+            <p
+              style={{
+                width: '180px',
+                height: '50px',
+                margin: '0 0 0 10px',
+                lineHeight: '50px',
+                color: 'white',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {video.peerId}
+            </p>
+            <audio
+              ref={(elem) => {
+                if (elem) {
+                  elem.srcObject = video.stream;
+                }
+              }}
+              autoPlay
+            />
+            <button
+              onClick={startWebRTC}
+              style={{ padding: '0 3px', cursor: 'pointer' }}
+            >
+              <svg
+                style={{ width: '30px' }}
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+              >
+                <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" />
+              </svg>
+            </button>
+            <button
+              onClick={quit}
+              style={{ margin: '0 10px', cursor: 'pointer' }}
+            >
+              <svg
+                style={{ width: '37px' }}
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 640 512"
+              >
+                <path d="M228.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C76.1 30.2 64 46 64 64c0 107.4 37.8 206 100.8 283.1L9.2 469.1c-10.4 8.2-12.3 23.3-4.1 33.7s23.3 12.3 33.7 4.1l592-464c10.4-8.2 12.3-23.3 4.1-33.7s-23.3-12.3-33.7-4.1L253 278c-17.8-21.5-32.9-45.2-45-70.7L257.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96zm96.8 319l-91.3 72C310.7 476 407.1 512 512 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L368.7 368c-15-7.1-29.3-15.2-43-24.3z" />
+              </svg>
+            </button>
+          </div>
+        </AudioWrap>
       ))}
-    </div>
+      ;
+    </>
   );
 };
+
+const AudioWrap = styled.div`
+  width: 100%;
+  height: 50px;
+`;
 
 export default VoiceChat;

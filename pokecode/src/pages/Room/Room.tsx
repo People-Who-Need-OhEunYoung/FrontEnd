@@ -6,7 +6,7 @@ const Room = () => {
   const id = searchParams.get('id') || '';
   const title = searchParams.get('title') || '';
 
-  return <ResizableTabsReview id = {id} title = {title}/>;
+  return <ResizableTabsReview id={id} title={title} editorRoom={''} />;
 };
 
 export default Room;

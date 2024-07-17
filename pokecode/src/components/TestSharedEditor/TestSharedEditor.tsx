@@ -2,62 +2,64 @@ import { useEffect, useRef, useState } from 'react';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/theme/dracula.css';
-// 임시 주석 처리
-// import * as Y from 'yjs';
-// import { CodemirrorBinding } from 'y-codemirror';
-// import { WebsocketProvider } from 'y-websocket';
-// import CodeMirror from 'codemirror';
+import * as Y from 'yjs';
+import { CodemirrorBinding } from 'y-codemirror';
+import { WebsocketProvider } from 'y-websocket';
+import CodeMirror from 'codemirror';
 import './TestSharedEditor.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-// YJS 재 테스트
-import * as Y from 'yjs';
-import { CodemirrorBinding } from 'y-codemirror';
-import { WebrtcProvider } from 'y-webrtc';
-import CodeMirror from 'codemirror';
+import { userInfo } from '../../utils/api/api';
 
 const TestSharedEditor = ({ editorRoom = 'notice' }) => {
   const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const { writtenCode } = useSelector((state: RootState) => state.probinfo);
   const { language } = useSelector((state: RootState) => state.codecaller);
-  const { userNickname } = useSelector((state: RootState) => state.userinfo);
 
-  useEffect(() => {
-    document.body.onload = addElement;
-    function addElement() {
-      // create a new div element
-      let newDiv = document.createElement('div');
-      // and give it some content
-      setTimeout(() => {
-        let newContent = document.createTextNode(editorRoom + userNickname);
-        // add the text node to the newly created div
-        newDiv.appendChild(newContent);
-      }, 1000);
+  //우현변수start
+  const roomId = localStorage.getItem('roomId');
+  //우현변수end
 
-      // add the newly created element and its content into the DOM
-      var currentDiv = document.getElementById('div1');
-      document.body.insertBefore(newDiv, currentDiv);
-    }
-  });
+  console.log(editorRoom);
+
+  const element = document.querySelector('.remote-caret');
+  if (element) {
+    (element as HTMLElement).style.background =
+      'url(https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/119.gif)';
+    (element as HTMLElement).style.backgroundSize = 'contain';
+  }
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (editor != null) editor.setOption('mode', language);
   }, [language]);
 
   useEffect(() => {
+    //우현코드s
+    if (!roomId) {
+      console.error('roomId가 존재하지 않음');
+      return;
+    }
+    //우현코드e
     if (editorContainerRef.current) {
       if (editor == null) {
         const ydoc = new Y.Doc();
-        const provider = new WebrtcProvider('wss://api.poke-code.com', ydoc);
-        setTimeout(() => {
+        const provider = new WebsocketProvider(
+          'wss://api.poke-code.com:3333/room/?roomId=${roomId}',
+          `codemirror_${roomId}`,
+          ydoc
+        );
+        userInfo().then((res) => {
+          console.log(res.nickName);
           provider.awareness.setLocalStateField('user', {
             color: 'white',
-            name: userNickname,
+            name: res.nickName,
           });
-        }, 5000);
+        });
 
-        const yText = ydoc.getText('codemirror');
+        const yText = ydoc.getText(`codemirror_${roomId}`);
 
         // 기본 텍스트를 설정합니다.
         yText.insert(0, writtenCode);
@@ -90,7 +92,6 @@ const TestSharedEditor = ({ editorRoom = 'notice' }) => {
       }
     }
   }, []);
-
   return (
     <>
       <div ref={editorContainerRef} className="editor-container"></div>

@@ -5,7 +5,7 @@ const Problem = () => {
   const searchParams = new URLSearchParams(location.search);
   const id = searchParams.get('id') || '';
 
-  return <ResizableTabs  id={id} />;
+  return <ResizableTabs id={id} />;
 };
 
 export default Problem;

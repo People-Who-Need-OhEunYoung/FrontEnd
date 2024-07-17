@@ -25,7 +25,6 @@ const Tab = styled.div<TabProps>`
   border-right: none;
   flex-basis: ${({ width }) => width}%;
   z-index: 100;
-  //box-shadow: rgba(156, 156, 156, 0.5) 3px 3px 10px inset;
 `;
 
 const Resizer = styled.div`
@@ -152,9 +151,9 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
               height: '80%',
             }}
           >
-            <ProblemText id={id} isShowHeader="true" size="100%" />
+            <ProblemText id={id} isShowHeader="true" size="90%" />
           </div>
-          <Home style={{ position: 'relative' }} onClick={handleDivClick}>
+          <Home style={{ position: 'relative'}} onClick={handleDivClick}>
             <CodeAIWardBalloon />
             <motion.div
               animate={controls}
