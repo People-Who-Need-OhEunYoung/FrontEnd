@@ -64,9 +64,7 @@ const TestEditor = () => {
     console.log(editorContent);
   }, [isAcquireReview, editorContent]);
 
-  console.log('1--------------------------------' + isTypingPaused);
   useEffect(() => {
-    console.log('2--------------------------------' + isTypingPaused);
     if (editorContainerRef.current) {
       if (editor == null && returnCall == '') {
         const cmEditor = CodeMirror(editorContainerRef.current, {

@@ -9,14 +9,14 @@ import {
 import getDetails from './getDetails';
 import { ProblemDetails, ResizableTabsProps } from './index';
 import { RootState } from '../../store/index';
-import { setAcquireReview } from '../../store/problemSlice';
+import { setAcquireReview, setProblemDetail } from '../../store/problemSlice';
 import Modal from '../../components/Modal/Modal';
 import { useNavigate } from 'react-router-dom';
 
 const ProblemText: React.FC<ResizableTabsProps> = ({
   id,
-  isShowHeader = 'true',
-  size = '100%',
+  isshowheader,
+  size,
 }) => {
   const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(
     null
@@ -107,9 +107,10 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
     fetchCrawlData().then((res) => {
       if (res) {
         setProblemDetails(res);
+        dispatch(setProblemDetail(res));
       }
     });
-  }, []);
+  }, [dispatch]);
 
   // 경과 시간을 시:분:초 형식으로 변환
   const formatTime = (seconds: number) => {
@@ -125,7 +126,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
 
   return (
     <div style={{ height: size }}>
-      <Header isShowHeader={isShowHeader}>
+      <Header isShowHeader={isshowheader}>
         {problemDetails && (
           <HeaderTxt>
             <Title>

@@ -18,7 +18,6 @@ const CodeTestCaseButton = () => {
           top: '23px',
         }}
         onClick={() => {
-          console.log(isModalOpen);
           setIsModalOpen(true);
         }}
         color="#a62df1"

@@ -373,6 +373,7 @@ interface TestCase {
   output_case: string;
 }
 
+//테스트케이스 실행하기
 const RunCode = async (editorContent: string, id: string, testCases: TestCase[]): Promise<any> => {
 
   return await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
