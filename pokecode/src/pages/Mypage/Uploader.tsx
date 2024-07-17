@@ -1,128 +1,115 @@
-import React, { useState, useRef, ChangeEvent, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import defaultImage from '../../assets/images/default_profile.png';
-import { useNavigate } from 'react-router-dom';
-import { userSearch } from '../../utils/api/solvedAc';
 import { RootState } from '../../store/index';
 import { useSelector } from 'react-redux';
-
-type ImageState = {
-  image_file: File | null;
-  preview_URL: string;
-};
+import { SetNickName } from '../../utils/api/api';
 
 const Uploader = () => {
-  const [image, setImage] = useState<ImageState>({
-    image_file: null,
-    preview_URL: defaultImage,
-  });
-
   const [buttonText, setButtonText] = useState<string>('수정하기');
-  const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editedNickname, setEditedNickname] = useState<string>('');
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const query = 'ejrrl6931'
-  //const [query, setQuery] = useState('jade0179'); // 사용자 검색 쿼리
-  const [userData, setUserData] = useState(''); // API로부터 받은 데이터
-  // const [page, setPage] = useState(1); // 페이지 번호, 초기값 1
-  const [solvedCount, setsolvedCount] = useState(0); // 페이지 번호, 초기값 0
-  const [tierImg, settierImg] = useState('');
+  const { userNickname, credit, pokemonId } = useSelector(
+    (state: RootState) => state.userinfo
+  );
 
-  const {userNickname, credit} = useSelector((state: RootState) => state.userinfo);
-
-  //빌드를 위해 임시 셋
-  useEffect(() => {
-    userSearch(query)
-      .then((res) => {
-        setUserData(JSON.stringify(res)); // 받아온 데이터를 state에 저장
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error); // 에러 처리
-      });
-
-    if (userData) {
-      const parsedData = JSON.parse(userData);
-      if (parsedData.count > 0) {
-        setsolvedCount(parsedData.items[0].solvedCount);
-        const tiersrc = `https://static.solved.ac/tier_small/${parsedData.items[0].tier}.svg`;
-        settierImg(tiersrc);
-        console.log('solvedCount:', solvedCount);
-      }
-    }
-  }, [userData, query]);
-
-  const previewImage = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const file = e.target.files && e.target.files[0];
-    if (file) {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        setImage({
-          image_file: file,
-          preview_URL: fileReader.result as string,
-        });
-      };
+  const sendNewNickName = async (nickname: string) => {
+    try {
+      const res = await SetNickName(nickname);
+      console.log(res);
+      //alert('수정이 완료되었습니다.'); // 사용자에게 피드백 제공
+      window.location.reload();
+      return res;
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
   };
-
-  // const deleteImage = () => {
-  //   setImage({
-  //     image_file: null,
-  //     preview_URL: defaultImage,
-  //   });
-  //   if (inputRef.current) {
-  //     inputRef.current.value = '';
-  //   }
-  // };
 
   const handleButtonClick = () => {
-    setButtonText((prevText) =>
-      prevText === '수정하기' ? '변경하기' : '수정하기'
-    );
-    if (inputRef.current) {
-      inputRef.current.value = '';
+    if (!isEditing) {
+      // 현재 편집 모드가 아니면 편집 모드로 진입
+      setIsEditing(true);
+      setButtonText('변경하기');
+      setEditedNickname(userNickname); // 초기 입력 값 설정
+    } else {
+      // 현재 편집 모드이면 저장하고 편집 모드 종료
+      setIsEditing(false);
+      setButtonText('수정하기');
+      sendNewNickName(editedNickname);
+      console.log('Updated Nickname:', editedNickname); // 입력된 닉네임 로깅
     }
   };
 
-  const goToMain = () => {
-    navigate('/usermain');
+  const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedNickname(event.target.value);
   };
 
   return (
     <Uploaderwrapper>
-      <input
-        type="file"
-        accept="image/*"
-        onChange={previewImage}
-        onClick={(e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
-          const target = e.target as HTMLInputElement;
-          target.value = '';
-        }}
-        ref={inputRef}
-        style={{ display: 'none' }}
-      />
       <MainContainer>
-        <UploadImageContainer>
-          <TierImg src={tierImg} />
-          <Image src={image.preview_URL} alt="Preview" />
-          <Button onClick={() => inputRef.current?.click()}>
-            이미지 업로드
-          </Button>
-        </UploadImageContainer>
+        <Image>
+          <img
+            style={{
+              width: '100%',
+              height: '100%',
+              boxSizing: 'border-box',
+              padding: '15px',
+            }}
+            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemonId}.svg`}
+            alt="Preview"
+          />
+        </Image>
         <InfoContainer>
-          <Text>닉네임: {userNickname} </Text>
-          <Text>크레딧: {credit}</Text>
-          <Text>맞은 문제 수: {solvedCount} </Text>
+          {isEditing ? (
+            <Text>
+              닉네임:
+              <Input
+                ref={inputRef}
+                value={editedNickname}
+                onChange={handleNicknameChange}
+                autoFocus // 입력 필드에 자동으로 포커스
+              />
+            </Text>
+          ) : (
+            <Text>닉네임: {userNickname}</Text>
+          )}
+          <Text>보유 크레딧: {credit}</Text>
+          <Text>맞은 문제 수: </Text>
         </InfoContainer>
+        <ButtonGroup>
+          <Button
+            onClick={() => {
+              handleButtonClick();
+            }}
+          >
+            {buttonText}
+          </Button>
+        </ButtonGroup>
       </MainContainer>
-      <Submit>
-        <SubmitBtn onClick={handleButtonClick}>{buttonText}</SubmitBtn>
-        <SubmitBtn onClick={goToMain}>메인으로</SubmitBtn>
-      </Submit>
     </Uploaderwrapper>
   );
 };
+
+const Input = styled.input`
+  background-color: #ffffff2b;
+  color: #ffffff;
+  text-align: left;
+  font-size: 1rem;
+  min-height: 11.5px; /* 최소 높이를 설정 */
+  border:none;
+  width: 50%;
+  margin: 0 10px;
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  right: 10px;
+  bottom: -25%;
+`;
 
 const Uploaderwrapper = styled.div`
   height: 75%;
@@ -130,51 +117,38 @@ const Uploaderwrapper = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: transparent;
-  border: 2px solid white; /* 2px 두께의 흰색 실선 테두리 */
+  background-color: #6366f1;
   color: #ffffff;
   padding: 4px 35px;
-  border-radius: 20px;
+  border-radius: 10px;
   outline: none;
   cursor: pointer;
   font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.5;
-  text-transform: uppercase;
+  border: none;
+
   transition: background-color 0.3s;
-  margin: 10px;
+  margin: 5px;
 
   &:hover {
-    background-color: #4ea6ff;
+    background-color: #7f81f7;
   }
 
   &:active {
-    background-color: #389ae6;
-  }
-
-  &:focus {
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
+    background-color: #7f81f7;
   }
 `;
 
-const Image = styled.img`
+const Image = styled.div`
   width: 140px;
   height: 140px;
   object-fit: cover; // 이미지 비율을 유지하면서 요소에 완벽히 맞도록 조정
   border-radius: 50%; // 이미지를 원형으로 만듬
-  margin: 10px;
+  margin: 5%;
+  margin-left: 10%;
   box-shadow: 0px 1px 22px #ffffff7d;
   //border: 2px,solid, white;
-`;
-
-const UploadImageContainer = styled.section`
-  position: relative; // 내가 짱이다. (내 안에 있는 absolute들을 통치하겠다.)
-  display: inline-block;
-  flex-direction: column; // 세로 방향으로 정렬
-  width: 40%;
-  text-align: center;
-  justify-content: center; // 세로 방향 중앙 정렬
-  margin: 25px 50px;
 `;
 
 const MainContainer = styled.div`
@@ -182,63 +156,17 @@ const MainContainer = styled.div`
   background-color: #31313888;
   border-radius: 20px;
   margin-left: 10%;
-  justify-content: center;
+  position: relative;
+  align-items: center;
 `;
 
-const InfoContainer = styled.div`
-  margin-top: 50px;
-  width: 50%;
-  font-size: 1.4em;
-`;
+const InfoContainer = styled.div``;
 
 const Text = styled.p`
   margin: 20px 40px;
   color: #ffffff;
   text-align: left;
-  font-size: 1rem;
-`;
-
-const Submit = styled.div`
-  display: flex; // 자식 요소를 옆으로 나란히 배치
-  justify-content: center;
-  margin-top: 40%;
-`;
-
-const SubmitBtn = styled.button`
-  background-color: transparent;
-  color: #ffffff;
-  padding: 4px 70px;
-  border: 2px solid white; /* 2px 두께의 흰색 실선 테두리 */
-  border-radius: 15px;
-  outline: none;
-  cursor: pointer;
-  font-size: 1 rem;
-  font-weight: 500;
-  line-height: 1.75;
-  text-transform: uppercase;
-  transition: background-color 0.3s;
-  margin: 7px;
-
-  &:hover {
-    background-color: #4ea7ff52;
-    box-shadow: 0px 1px 22px #ffffff7d;
-  }
-
-  &:active {
-    background-color: #4ea7ff52;
-  }
-
-  &:focus {
-    //box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
-  }
-`;
-
-const TierImg = styled.img`
-  position: absolute; //나는 부모에게 빌붙겠다.
-  left: 50%;
-  bottom: 50px;
-  transform: translateX(-50%);
-  width: 30px;
+  font-size: 1em;
 `;
 
 export default Uploader;
