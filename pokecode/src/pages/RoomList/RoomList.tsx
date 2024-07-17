@@ -56,21 +56,6 @@ const RoomList = () => {
     }
   };
 
-  const sendRoomData = async (Room: ItemType) => {
-    try {
-      const res = await createRoom(
-        Room.roomTitle,
-        Room.problemId,
-        Room.level,
-        Room.problemTitle,
-        Room.limit_num
-      );
-      console.log('sendRoomData: ', res);
-      return res;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
 
   useEffect(() => {
     fetchRoomData().then((res) => {
