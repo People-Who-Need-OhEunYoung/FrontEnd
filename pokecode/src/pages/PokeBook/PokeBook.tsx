@@ -14,7 +14,7 @@ type PokemonType = {
 
 
 const PokeBook = () => {
-  
+
   const [allPokemons, setAllPokemons] = useState<PokemonType[]>([]);
   const [gatchPokemons, setGatchPpokemons] = useState<PokemonType[]>([]);
   const { pokemonId } = useSelector((state: RootState) => state.userinfo);
@@ -37,7 +37,7 @@ const PokeBook = () => {
     }
   };
 
-   const renderPageButtons = () => {
+  const renderPageButtons = () => {
     const totalItems = visibleList === 'all_list' ? allPokemons.length : gatchPokemons.length;
     const pageCount = Math.ceil(totalItems / itemsPerPage);
     const buttons = [];
@@ -96,7 +96,7 @@ const PokeBook = () => {
           poke_Lv: 0,
           poke_Exp: 0,
         }));
-        const GatchaPokemon = []
+        const GatchaPokemon = [];
         for (let i = 0; i < ParseData.length; i++) {
           const item = ParseData[i];
           defaultPokemon[item.poke_id-1] = item; // ID를 인덱스에 맞게 설정
@@ -231,8 +231,6 @@ const PageButton = styled.button<{ active: boolean }>`
   border-radius: 10px;
   font-size: 1rem;
   border: none;
-
-
 `;
 
 const ButtonGroup = styled.div`

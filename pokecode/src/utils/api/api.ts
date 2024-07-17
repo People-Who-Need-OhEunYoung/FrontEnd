@@ -212,6 +212,7 @@ const updateMyPokemon = async (pokId: number) => {
     });
 };
 
+
 //문제 검색
 function problemSearch(title: string, sort: string, page: number, order: string): Promise<any> {
   return fetch(`${import.meta.env.VITE_APP_IP}/problemList?query=${title}&direction=${order}&page=${page}&sort=${sort}`, {

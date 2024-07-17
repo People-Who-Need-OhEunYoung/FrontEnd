@@ -152,9 +152,9 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
               height: '80%',
             }}
           >
-            <ProblemText id={id} isShowHeader="true" size="100%" />
+            <ProblemText id={id} isShowHeader="true" size="90%" />
           </div>
-          <Home style={{ position: 'relative' }} onClick={handleDivClick}>
+          <Home style={{ position: 'relative'}} onClick={handleDivClick}>
             <CodeAIWardBalloon />
             <motion.div
               animate={controls}

@@ -7,6 +7,7 @@ import { createRoom, problemSearch } from '../../utils/api/api';
 type ProblemType = {
   id: string;
   title: string;
+  level: number;
 };
 
 type RoomType = {
@@ -23,6 +24,7 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
   const [person, setPerson] = useState(2);
   const [isEditing, setIsEditing] = useState(false);
   const [problems, setProblems] = useState<ProblemType[]>([]); // 문제 데이터를 저장할 배열
+  const [selectedProblem, setSelectedProblem] = useState<ProblemType | null>( null );
 
   const fetchProbData = async () => {
     try {
@@ -103,8 +105,8 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
     console.log(selectedOption); // 전체 선택된 객체를 로그로 확인
 
     if (selectedOption) {
-      console.log('Selected problem ID: ', selectedOption.id); // 올바른 속성 접근
-      console.log('Selected problem title: ', selectedOption.title); // 올바른 속성 접근
+      console.log('Selected problem ID: ', selectedOption.id); 
+      console.log('Selected problem title: ', selectedOption.title); 
     }
   };
 
