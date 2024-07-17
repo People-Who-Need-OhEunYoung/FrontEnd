@@ -13,10 +13,13 @@ let testdata = [
     outdata: '1',
   },
 ];
+
+
+
 const ModalContent5 = () => {
   const [casecount, setCasecount] = useState<number>(testdata.length);
-  console.log(casecount);
-  console.log(casecount);
+  // const [testCase, setTestCase];
+
   const addTestCase = () => {
     testdata.push({
       caseno: (testdata.length + 1).toString(),
@@ -25,6 +28,7 @@ const ModalContent5 = () => {
     });
     setCasecount(testdata.length + 1);
   };
+
   const removeTestCase = () => {
     testdata.pop();
     setCasecount(testdata.length - 1);

@@ -9,6 +9,7 @@ import axios from 'axios';
 type ProblemType = {
   id: string;
   title: string;
+  level: number;
 };
 
 const ModalContent2 = ({ width, reset }: any) => {
@@ -17,6 +18,7 @@ const ModalContent2 = ({ width, reset }: any) => {
   const [person, setPerson] = useState(2);
   const [isEditing, setIsEditing] = useState(false);
   const [problems, setProblems] = useState<ProblemType[]>([]); // 문제 데이터를 저장할 배열
+  const [selectedProblem, setSelectedProblem] = useState<ProblemType | null>( null );
 
   //우현코드 start
   const navigate = useNavigate();
@@ -90,8 +92,8 @@ const ModalContent2 = ({ width, reset }: any) => {
     console.log(selectedOption); // 전체 선택된 객체를 로그로 확인
 
     if (selectedOption) {
-      console.log('Selected problem ID: ', selectedOption.id); // 올바른 속성 접근
-      console.log('Selected problem title: ', selectedOption.title); // 올바른 속성 접근
+      console.log('Selected problem ID: ', selectedOption.id); 
+      console.log('Selected problem title: ', selectedOption.title); 
     }
   };
 
