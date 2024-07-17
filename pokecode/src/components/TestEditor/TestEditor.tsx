@@ -24,7 +24,8 @@ import './TestEditor.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setWrittenCode } from '../../store/problemSlice';
-import { setReturnCall } from '../../store/codeCallerReducer';
+import { setReturnCall, setTypingPause } from '../../store/codeCallerReducer';
+import { P } from '../../pages/Login/Login.style';
 
 const TestEditor = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
@@ -63,7 +64,9 @@ const TestEditor = () => {
     console.log(editorContent);
   }, [isAcquireReview, editorContent]);
 
+  console.log('1--------------------------------' + isTypingPaused);
   useEffect(() => {
+    console.log('2--------------------------------' + isTypingPaused);
     if (editorContainerRef.current) {
       if (editor == null && returnCall == '') {
         const cmEditor = CodeMirror(editorContainerRef.current, {
@@ -106,7 +109,6 @@ const TestEditor = () => {
       //   //editor.off('change', handleChange.current);  // 이벤트 리스너를 제거할 때 핸들러 함수를 함께 제공
       // };
     }
-
     const typingInterval = setInterval(() => {
       if (isTypingPaused) {
         clearInterval(typingInterval);
@@ -115,6 +117,7 @@ const TestEditor = () => {
       if (textCount >= testcaseResult.length) {
         //text length 초과 시 undefind가 출력되는 것을 방지
         setIsTypingPaused(true);
+        console.log(isTypingPaused);
         return;
       }
 

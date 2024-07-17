@@ -8,6 +8,7 @@ export interface CodeCallerState {
   language: string;
   textEditor: string;
   wordBalloon: boolean;
+  typingPause: boolean;
 }
 
 //초기상태 설정
@@ -17,6 +18,7 @@ const initialState: CodeCallerState = {
   language: 'python',
   textEditor: '',
   wordBalloon: false,
+  typingPause: false,
 };
 
 const CodeCallerSlice = createSlice({
@@ -38,6 +40,9 @@ const CodeCallerSlice = createSlice({
     setWordBalloon(state, action: PayloadAction<boolean>) {
       state.wordBalloon = action.payload;
     },
+    setTypingPause(state, action:PayloadAction<boolean>) {
+      state.typingPause = action.payload;
+    },
   },
 });
 
@@ -47,5 +52,6 @@ export const {
   setLanguage,
   setTextEditor,
   setWordBalloon,
+  setTypingPause,
 } = CodeCallerSlice.actions;
 export default CodeCallerSlice.reducer;
