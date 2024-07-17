@@ -46,6 +46,8 @@ const RoomList = () => {
   if (pageCount == null) setPageCount(1);
   //임시 빌드 로직 제거 해도 돼요 end
 
+  console.log(page);
+
   const fetchRoomData = async () => {
     try {
       const res = await showRoomList();
@@ -71,6 +73,8 @@ const RoomList = () => {
       console.error('Error fetching data:', error);
     }
   };
+
+  console.log(sendRoomData);
 
   useEffect(() => {
     fetchRoomData().then((res) => {

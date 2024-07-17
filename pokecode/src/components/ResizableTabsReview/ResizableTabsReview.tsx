@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import { motion, useAnimation, useDragControls } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
 import { TestSharedEditor } from '../TestSharedEditor';
-import background from '../../assets/images/background.jpg';
-import terminal from '../../assets/images/터미널.png';
 import { DesignedButton1 } from '../DesignedButton';
 import { ProblemText } from '../ProblemText';
-import { VoiceChat } from '../VoiceChat';
-import { useSelector } from 'react-redux';
+// import { VoiceChat } from '../VoiceChat';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import ChatRoom from './ChatRoom';
+import VoiceChatOV from './VoiceChatOV';
+import { setRoomId, setUsername } from '../../store/roomdataSlice';
 
 const Container = styled.div`
   display: flex;
@@ -55,20 +56,36 @@ const Resizer = styled.div`
   }
 `;
 
-// interface ResizableTabsProps {
-//   id: string;
-//   title: string;
-//   editorRoom: string;
-// }
+interface ResizableTabsProps {
+  id: string;
+  title: string;
+  editorRoom: string;
+}
 
-const ResizableTabsReview = ({ id, title, editorRoom = '1000' }: any) => {
+const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
+  id,
+  title,
+  editorRoom = '1000',
+}: any) => {
   const [width, setWidth] = useState<number>(25);
   const [width1, setWidth1] = useState<number>(25);
   const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
+  const dispatch = useDispatch();
+
   const dragControls = useDragControls();
   const animationControls = useAnimation();
+
+  const setIdData = localStorage.getItem('username');
+  const setRoomIdData = localStorage.getItem('roomId');
+
+  if (setIdData != null) {
+    dispatch(setUsername(setIdData));
+  }
+  if (setRoomIdData != null) {
+    dispatch(setRoomId(setRoomIdData));
+  }
 
   const handleDragEnd = () => {
     animationControls.start({
@@ -157,11 +174,11 @@ const ResizableTabsReview = ({ id, title, editorRoom = '1000' }: any) => {
           <HeaderTxt>
             {id}번 {title}
           </HeaderTxt>
-          {/* <ProblemText
+          <ProblemText
             id={id}
             isShowHeader="false"
             size={'calc(100% - 80px)'}
-          /> */}
+          />
         </Tab>
         <Resizer onMouseDown={handleMouseDown} style={{ left: width + '%' }} />
         <div
@@ -179,10 +196,10 @@ const ResizableTabsReview = ({ id, title, editorRoom = '1000' }: any) => {
               background: 'yellow',
               width: '100%',
               height: '20%',
-              overflow: 'hidden',
+              overflow: 'auto',
             }}
           >
-            <img src={terminal} width={'100%'} />{' '}
+            <ChatRoom />
           </div>
         </div>
         <Resizer
@@ -210,7 +227,8 @@ const ResizableTabsReview = ({ id, title, editorRoom = '1000' }: any) => {
               overflow: 'auto',
             }}
           >
-            <VoiceChat />
+            <VoiceChatOV />
+            {/* <VoiceChat /> */}
           </div>
         </Tab>
       </Container>
@@ -235,7 +253,6 @@ const Home = styled.div`
   width: 100%;
   height: 100%;
   margin: 0 auto;
-  background: url(${background});
   overflow: hidden;
 `;
 export default ResizableTabsReview;

@@ -1,21 +1,26 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { DesignedButton1 } from '../DesignedButton';
-import Select from 'react-select';
+// import Select from 'react-select';
 import { problemSearch } from '../../utils/api/api';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 type ProblemType = {
   id: string;
   title: string;
 };
 
-const ModalContent2 = ({ width, onOff, reset }: any) => {
+const ModalContent2 = ({ width, reset }: any) => {
   const [title, setTitle] = useState('');
   const [query, setQuery] = useState('');
   const [person, setPerson] = useState(2);
   const [isEditing, setIsEditing] = useState(false);
   const [problems, setProblems] = useState<ProblemType[]>([]); // 문제 데이터를 저장할 배열
 
+  //우현코드 start
+  const navigate = useNavigate();
+  //우현코드 end
   const fetchProbData = async () => {
     try {
       const res = await problemSearch(query, 'id', 1, 'asc');
@@ -25,6 +30,11 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
       console.error('Error fetching data:', error);
     }
   };
+
+  useEffect(() => {
+    //빌드를 위해 임시 콘솔 처리
+    console.log(problems);
+  }, []);
 
   useEffect(() => {
     console.log('reset: ', reset);
@@ -74,18 +84,45 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
   const personMinus = () => {
     if (person > 2) setPerson(person - 1);
   };
+  //우현코드 start
+  const createRoom = async () => {
+    const userId = localStorage.getItem('loginuserid');
 
-  const customStyles = {
-    container: (provided: any) => ({
-      ...provided,
-      width: '70%', // 부모 요소의 너비를 100%로 설정
-      margin: 'auto',
-    }),
-    control: (provided: any) => ({
-      ...provided,
-      width: '100%', // Select 컴포넌트의 너비를 설정
-    }),
+    if (!userId) {
+      alert('사용자 정보가 없습니다. 재로그인 바랍니다.');
+      return;
+    }
+
+    try {
+      const { data } = await axios.post(
+        'https://api.poke-code.com:3334/create-room-with-user',
+        {
+          username: userId,
+        }
+      );
+      localStorage.setItem('username', userId);
+      localStorage.setItem('roomId', data.roomId);
+
+      alert('성공적으로 방이 생성되었습니다.');
+      navigate(`/room?roomid=${data.roomId}`);
+    } catch (error) {
+      console.error('Error creating room:', error);
+      alert('Failed to create room.');
+    }
   };
+  // 우현코드 end
+
+  // const customStyles = {
+  //   container: (provided: any) => ({
+  //     ...provided,
+  //     width: '70%', // 부모 요소의 너비를 100%로 설정
+  //     margin: 'auto',
+  //   }),
+  //   control: (provided: any) => ({
+  //     ...provided,
+  //     width: '100%', // Select 컴포넌트의 너비를 설정
+  //   }),
+  // };
 
   return (
     <div style={{ width: '400px' }}>
@@ -123,14 +160,14 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
             </Titleinput>
           )}
         </div>
-        <Select
+        {/* <Select
           options={problems}
           styles={customStyles}
           placeholder="문제 검색"
           isSearchable
           getOptionLabel={(option) => option.title} // 라벨을 지정
           getOptionValue={(option) => option.id} // 값을 지정
-        />
+        /> */}
         <PersonWrap>
           <span
             style={{ width: '40px', cursor: 'pointer', userSelect: 'none' }}
@@ -149,7 +186,12 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
         <p>최대인원은 4명 입니다.</p>
       </div>
 
-      <DesignedButton1 color="#5d5d5d" onClick={onOff}>
+      <DesignedButton1
+        color="#5d5d5d"
+        onClick={() => {
+          createRoom();
+        }}
+      >
         방만들기
       </DesignedButton1>
     </div>

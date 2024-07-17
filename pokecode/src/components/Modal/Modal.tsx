@@ -40,7 +40,7 @@ const Modal = ({
   event,
 }: any) => {
   const [nowcomponent, setNowcomponent] = useState(component);
-  const[reset, setReset] = useState(false);
+  const [reset, setReset] = useState(false);
 
   const handleClose = () => {
     event(false);
