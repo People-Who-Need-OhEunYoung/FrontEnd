@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { DesignedButton1 } from '../DesignedButton';
 import Select from 'react-select';
-import { createRoom, problemSearch } from '../../utils/api/api';
+import { problemSearch } from '../../utils/api/api';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 type ProblemType = {
   id: string;
@@ -10,15 +12,7 @@ type ProblemType = {
   level: number;
 };
 
-type RoomType = {
-  problemId: string;
-  problemTitle: string;
-  roomTitle: string;
-  level: number;
-  limit_num: number;
-};
-
-const ModalContent2 = ({ width, onOff, reset }: any) => {
+const ModalContent2 = ({ width, reset }: any) => {
   const [title, setTitle] = useState('');
   const [query, setQuery] = useState('');
   const [person, setPerson] = useState(2);
@@ -26,6 +20,9 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
   const [problems, setProblems] = useState<ProblemType[]>([]); // 문제 데이터를 저장할 배열
   const [selectedProblem, setSelectedProblem] = useState<ProblemType | null>( null );
 
+  //우현코드 start
+  const navigate = useNavigate();
+  //우현코드 end
   const fetchProbData = async () => {
     try {
       const res = await problemSearch(query, 'id', 1, 'asc');
@@ -35,6 +32,11 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
       console.error('Error fetching data:', error);
     }
   };
+
+  useEffect(() => {
+    //빌드를 위해 임시 콘솔 처리
+    console.log(problems);
+  }, []);
 
   useEffect(() => {
     if (reset) {
@@ -85,21 +87,6 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
     if (person > 2) setPerson(person - 1);
   };
 
-  const sendRoomData = async (Room: RoomType) => {
-    try {
-      const res = await createRoom(
-        Room.roomTitle,
-        Room.problemId,
-        Room.level,
-        Room.problemTitle,
-        Room.limit_num
-      );
-      return res;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
   const selecthandleChange = (selectedOption: any) => {
     // 선택된 옵션을 처리합니다. selectedOption 객체가 전달됩니다.
     console.log(selectedOption); // 전체 선택된 객체를 로그로 확인
@@ -123,6 +110,33 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
       width: '100%', // Select 컴포넌트의 너비를 설정
     }),
   };
+  //우현코드 start
+  const createRoom = async () => {
+    const userId = localStorage.getItem('loginuserid');
+
+    if (!userId) {
+      alert('사용자 정보가 없습니다. 재로그인 바랍니다.');
+      return;
+    }
+
+    try {
+      const { data } = await axios.post(
+        'https://api.poke-code.com:3334/create-room-with-user',
+        {
+          username: userId,
+        }
+      );
+      localStorage.setItem('username', userId);
+      localStorage.setItem('roomId', data.roomId);
+
+      alert('성공적으로 방이 생성되었습니다.');
+      navigate(`/room?roomid=${data.roomId}`);
+    } catch (error) {
+      console.error('Error creating room:', error);
+      alert('Failed to create room.');
+    }
+  };
+  // 우현코드 end
 
   return (
     <div style={{ width: '400px' }}>
@@ -190,7 +204,12 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
         <p>최대인원은 4명 입니다.</p>
       </div>
 
-      <DesignedButton1 color="#5d5d5d" onClick={onOff}>
+      <DesignedButton1
+        color="#5d5d5d"
+        onClick={() => {
+          createRoom();
+        }}
+      >
         방만들기
       </DesignedButton1>
     </div>

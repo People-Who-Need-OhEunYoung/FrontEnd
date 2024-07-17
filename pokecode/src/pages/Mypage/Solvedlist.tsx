@@ -18,18 +18,19 @@ const Solvedlist = () => {
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
 
+  console.log(items);
+
   const fetchUserData = async () => {
     try {
       const res = await getTop100(query);
       setUserData(JSON.stringify(res));
-
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
   const fetchCrawlData = async () => {
-     try {
+    try {
       const res = await crawlUserprob(query, page);
       const $ = cheerio.load(res);
       const nextData: any = $('#__NEXT_DATA__').html();
@@ -58,11 +59,11 @@ const Solvedlist = () => {
 
   useEffect(() => {
     setQuery('ejrrl6931');
-    if(query != '') {
+    if (query != '') {
       fetchUserData();
       fetchCrawlData();
     }
-    
+
     if (userData) {
       const parsedData = JSON.parse(userData);
       if (parsedData.count > 0) {
@@ -82,14 +83,11 @@ const Solvedlist = () => {
         <SelectBtn>문제별 획득한 크레딧</SelectBtn>
       </ButtonGroup>
       <hr style={{ marginBottom: '12px' }}></hr>
-      <ListView>
-        {<div>문제 별 획득한 크레딧 확인 페이지</div>}
-      </ListView>
+      <ListView>{<div>문제 별 획득한 크레딧 확인 페이지</div>}</ListView>
       {renderPageButtons()}
     </Wrap>
   );
 };
-
 
 const PageButton = styled.button`
   width: 30px;

@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 const ProblemText: React.FC<ResizableTabsProps> = ({
   id,
-  isShowHeader,
+  isShowHeader = 'true',
   size = '100%',
 }) => {
   const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(
@@ -59,7 +59,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
 
   useEffect(() => {
     dispatch(setStartTime(Date.now()));
-  },[])
+  }, []);
 
   useEffect(() => {
     const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`);
@@ -71,7 +71,6 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
       const updateElapsedTime =
         solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000);
       dispatch(setElapsedTime(updateElapsedTime));
-
     } else {
       localStorage.setItem(
         `solvedTime-${id}`,
@@ -145,7 +144,6 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
                 localStorage.removeItem(`solvedTime-${id}`);
               }}
             >
-              {' '}
               초기화
             </HeaderBtn>
             <div style={{ position: 'absolute', right: '3%' }}>
