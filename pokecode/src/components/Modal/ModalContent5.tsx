@@ -1,47 +1,60 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DesignedButton1 } from '../DesignedButton';
 import TestCase from './TestCase';
-let testdata = [
-  {
-    caseno: '1',
-    indata: '1',
-    outdata: '1',
-  },
-  {
-    caseno: '2',
-    indata: '1',
-    outdata: '1',
-  },
-];
+import { RootState } from '../../store';
+import { useSelector } from 'react-redux';
 
-
+type TestDataType = {
+  input: string;
+  output: string;
+};
 
 const ModalContent5 = () => {
-  const [casecount, setCasecount] = useState<number>(testdata.length);
-  // const [testCase, setTestCase];
+  const [testCase, setTestCase] = useState<TestDataType[]>([
+    {
+      input: '1',
+      output: '1',
+    },
+  ]); // 테스트케이스 데이터를 저장할 배열
+
+  const problemDetails = useSelector(
+    (state: RootState) => state.probinfo.problemDetails
+  );
 
   const addTestCase = () => {
-    testdata.push({
-      caseno: (testdata.length + 1).toString(),
-      indata: '',
-      outdata: '',
-    });
-    setCasecount(testdata.length + 1);
+    const newTestCase = {
+      input: '',
+      output: '',
+    };
+    setTestCase([...testCase, newTestCase]);
   };
 
   const removeTestCase = () => {
-    testdata.pop();
-    setCasecount(testdata.length - 1);
+    if (testCase.length > 0) {
+      setTestCase(testCase.slice(0, testCase.length - 1)); // 마지막 요소를 제외하고 새 배열을 생성
+    }
   };
+
+  useEffect(() => {
+    if (problemDetails?.samples) {
+      // problemDetails에서 samples가 있을 경우에만 실행
+      const formattedSamples = problemDetails.samples.map((sample) => ({
+        input: sample.input.trim(),
+        output: sample.output.trim(),
+      }));
+      setTestCase(formattedSamples); // testCase 상태를 업데이트
+    }
+  }, [problemDetails]);
+
   return (
     <div style={{ width: '450px' }}>
       <div style={{ height: '300px', overflow: 'auto' }}>
-        {testdata.map((testCase: any, index: any) => (
+        {testCase.map((testdata: any, index: any) => (
           <TestCase
             key={index} // key prop은 각각의 컴포넌트가 고유하게 식별되도록 돕습니다.
-            caseno={testCase.caseno}
-            inputdata={testCase.indata}
-            outputdata={testCase.outdata}
+            caseno={index + 1}
+            inputdata={testdata.input_case}
+            outputdata={testdata.output_case}
           />
         ))}
       </div>

@@ -29,6 +29,6 @@ export interface CreateProblemsResult {
 
 export interface ResizableTabsProps {
   id: string;
-  isShowHeader: string;
+  isshowheader: string;
   size: string;
 }
