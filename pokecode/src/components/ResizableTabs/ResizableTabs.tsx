@@ -2,11 +2,12 @@ import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, useAnimation } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
-// import { TestSharedEditor } from '../TestSharedEditor';
 import background from '../../assets/images/background3.gif';
 import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 import { userInfo } from '../../utils/api/api';
+import { CodeAIWardBalloon } from '../CodeAIButton';
+
 const Container = styled.div`
   display: flex;
   align-items: center;
@@ -24,16 +25,15 @@ const Tab = styled.div<TabProps>`
   border-right: none;
   flex-basis: ${({ width }) => width}%;
   z-index: 100;
-  //box-shadow: rgba(156, 156, 156, 0.5) 3px 3px 10px inset;
 `;
 
 const Resizer = styled.div`
   opacity: 0;
-  width: 20px;
+  width: 10px;
   cursor: ew-resize;
-  background-color: #8f0000;
+  background-color: #0000006d;
   transform: translateX(-50%);
-  height: 100px;
+  height: 100%;
   z-index: 100;
   position: absolute;
   border-radius: 20px;
@@ -49,6 +49,7 @@ const Resizer = styled.div`
   -khtml-user-select: none;
   &:hover {
     opacity: 1;
+    z-index: 100;
   }
 `;
 
@@ -69,6 +70,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   });
   const containerRef = useRef<HTMLDivElement | null>(null);
   const controls = useAnimation();
+
   const handleDivClick = (e: any) => {
     const containerRect = e.currentTarget.getBoundingClientRect();
     const offsetX: any = e.clientX - containerRect.left;
@@ -104,6 +106,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const userSet = async () => {
     setUser(await userInfo());
   };
+
   useEffect(() => {
     userSet();
     const animateRandomly = async () => {
@@ -142,16 +145,16 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
     >
       <Container ref={containerRef}>
         <Tab width={width}>
-          {/* <ProblemHeader/> */}
           <div
             style={{
               width: '100%',
-              height: '80%'
+              height: '80%',
             }}
           >
-            <ProblemText id={id} />
+            <ProblemText id={id} isShowHeader="true" size="90%" />
           </div>
-          <Home onClick={handleDivClick}>
+          <Home style={{ position: 'relative'}} onClick={handleDivClick}>
+            <CodeAIWardBalloon />
             <motion.div
               animate={controls}
               style={{
@@ -181,19 +184,13 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           }}
         >
           <div style={{ background: 'green', width: '100%', height: '100%' }}>
-            <TestEditor id={id} />
+            <TestEditor />
           </div>
         </div>
       </Container>
     </motion.div>
   );
 };
-
-// const ProblemHeader = styled.div`
-//   width: 100%;
-//   height: 10%;
-//   background-color: black;
-// `;
 
 const Home = styled.div`
   width: 100%;

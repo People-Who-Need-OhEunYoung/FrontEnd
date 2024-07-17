@@ -1,3 +1,9 @@
+import { CodeAIButton } from '../CodeAIButton';
+import { CodeLanguageButton } from '../CodeLanguageButton';
+import { CodeRunButton } from '../CodeRunButton';
+import CodeSubmitButton from '../CodeSubmitButton/CodeSubmitButton';
+import { CodeTestCaseButton } from '../CodeTestCaseButton';
+
 const Footer = () => {
   return (
     <footer
@@ -24,7 +30,13 @@ export const Footer1 = () => {
           lineHeight: '80px',
           textAlign: 'right',
         }}
-      ></div>
+      >
+        <CodeTestCaseButton />
+        <CodeAIButton />
+        <CodeLanguageButton />
+        <CodeRunButton />
+        <CodeSubmitButton />
+      </div>
     </footer>
   );
 };

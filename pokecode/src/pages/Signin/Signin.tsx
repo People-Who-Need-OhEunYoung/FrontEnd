@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { userChecker } from '../../utils/api/solvedAc';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { nicknameChecker } from '../../utils/api/api';
+import { getGachaPokemon, nicknameChecker } from '../../utils/api/api';
 
 const Signin = () => {
   const [baekjoonid, setBaekjoonid] = useState('');
@@ -44,6 +44,7 @@ const Signin = () => {
         id: params.id,
         pw: params.pw,
         nickName: params.nickName,
+        pok_id: params.pokId,
       }),
     })
       .then((res) => {
@@ -70,7 +71,7 @@ const Signin = () => {
         throw error;
       });
   };
-  const signinRun = () => {
+  const signinRun = async () => {
     if (password != passwordck) {
       alert('패스워드 재확인 바랍니다');
       return;
@@ -83,7 +84,14 @@ const Signin = () => {
       alert('닉네임을 재확인 바랍니다');
       return;
     }
-    signinChecker({ id: baekjoonid, pw: password, nickName: nickname });
+    await getGachaPokemon().then((pokid: number) => {
+      signinChecker({
+        id: baekjoonid,
+        pw: password,
+        nickName: nickname,
+        pokId: pokid,
+      });
+    });
   };
   return (
     <motion.div

@@ -14,10 +14,10 @@ import { Modal } from './components/Modal';
 import { Gacha } from './pages/Gacha';
 import { RoomList } from './pages/RoomList';
 import { Room } from './pages/Room';
+import { PokeBook } from './pages/PokeBook';
 import { ProblemList } from './pages/ProblemList';
 import { Provider } from 'react-redux';
 import store from './store';
-
 function App() {
   return (
     <Provider store={store}>
@@ -131,6 +131,16 @@ function App() {
                   <>
                     <Header2 />
                     <Modal />
+                    <Footer />
+                  </>
+                }
+              />
+              <Route
+                path="/book"
+                element={
+                  <>
+                    <Header2 />
+                    <PokeBook />
                     <Footer />
                   </>
                 }

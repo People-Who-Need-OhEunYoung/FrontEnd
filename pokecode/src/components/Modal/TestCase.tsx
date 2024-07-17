@@ -27,27 +27,27 @@ export default function TestCase({ caseno, inputdata, outputdata }: any) {
         textAlign: 'left',
       }}
     >
-      <div style={{ fontWeight: 'bold', padding: '0 0 10px' }}>
+      <div style={{ fontWeight: 'bold', padding: '0 0 10px', height: '40px' }}>
         테스트케이스{caseno}
       </div>
-      <div style={{ textAlign: 'left' }}>
+      <div style={{ textAlign: 'left', height: '50px' }}>
         <label htmlFor={'indata' + caseno}>입력</label>
       </div>
       <div>
         <textarea
-          style={{ width: '100%', overflow: 'hidden' }}
+          style={{ width: '100%', overflow: 'hidden', resize: 'none' }}
           id={'indata' + caseno}
           name={'indata' + caseno}
           value={inputValue}
           onChange={handleInputChange}
         />
       </div>
-      <div style={{ textAlign: 'left' }}>
+      <div style={{ textAlign: 'left', height: '50px' }}>
         <label htmlFor={'outdata' + caseno}>출력</label>
       </div>
       <div>
         <textarea
-          style={{ width: '100%', marginBottom: '20px' }}
+          style={{ width: '100%', marginBottom: '20px', resize: 'none' }}
           id={'outdata' + caseno}
           name={'outdata' + caseno}
           value={outputValue}

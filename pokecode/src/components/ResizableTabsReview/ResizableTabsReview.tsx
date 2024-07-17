@@ -3,11 +3,14 @@ import styled from 'styled-components';
 import { motion, useAnimation, useDragControls } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
 import { TestSharedEditor } from '../TestSharedEditor';
-import background from '../../assets/images/background.jpg';
-import problem1011 from '../../assets/images/1011번-Fly-me-to-the-Alpha-Centauri.png';
-import terminal from '../../assets/images/터미널.png';
-import webrtc from '../../assets/images/webrtc.png';
 import { DesignedButton1 } from '../DesignedButton';
+import { ProblemText } from '../ProblemText';
+// import { VoiceChat } from '../VoiceChat';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import ChatRoom from './ChatRoom';
+import VoiceChatOV from './VoiceChatOV';
+import { setRoomId, setUsername } from '../../store/roomdataSlice';
 
 const Container = styled.div`
   display: flex;
@@ -21,7 +24,7 @@ interface TabProps {
 }
 
 const Tab = styled.div<TabProps>`
-  background-color: #f0f0f0;
+  background-color: #111826;
   height: 100%;
   border-right: none;
   flex-basis: ${({ width }) => width}%;
@@ -30,11 +33,11 @@ const Tab = styled.div<TabProps>`
 
 const Resizer = styled.div`
   opacity: 0;
-  width: 20px;
+  width: 10px;
   cursor: ew-resize;
-  background-color: #8f0000;
+  background-color: #00000089;
   transform: translateX(-50%);
-  height: 100px;
+  height: 100%;
   z-index: 9999;
   position: absolute;
   border-radius: 20px;
@@ -53,14 +56,36 @@ const Resizer = styled.div`
   }
 `;
 
-const ResizableTabsReview = () => {
+interface ResizableTabsProps {
+  id: string;
+  title: string;
+  editorRoom: string;
+}
+
+const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
+  id,
+  title,
+  editorRoom = '1000',
+}: any) => {
   const [width, setWidth] = useState<number>(25);
   const [width1, setWidth1] = useState<number>(25);
-
+  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const dispatch = useDispatch();
 
   const dragControls = useDragControls();
   const animationControls = useAnimation();
+
+  const setIdData = localStorage.getItem('username');
+  const setRoomIdData = localStorage.getItem('roomId');
+
+  if (setIdData != null) {
+    dispatch(setUsername(setIdData));
+  }
+  if (setRoomIdData != null) {
+    dispatch(setRoomId(setRoomIdData));
+  }
 
   const handleDragEnd = () => {
     animationControls.start({
@@ -74,6 +99,7 @@ const ResizableTabsReview = () => {
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
   };
+
   const handleMouseDown1 = () => {
     document.addEventListener('mousemove', handleMouseMove1);
     document.addEventListener('mouseup', handleMouseUp1);
@@ -128,7 +154,7 @@ const ResizableTabsReview = () => {
           width: '5vw',
           zIndex: 9999,
           bottom: '30%',
-          right: 100,
+          right: 175,
           transform: 'translateX(0px) translateY(0px) translateZ(0px)',
           transition: '0.1s',
         }}
@@ -136,83 +162,23 @@ const ResizableTabsReview = () => {
       >
         <Pokemon
           width={'100%'}
-          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/136.gif"
-        ></Pokemon>
-      </motion.div>
-      <motion.div
-        drag
-        dragControls={dragControls}
-        animate={animationControls} // 애니메이션 컨트롤 적용
-        style={{
-          position: 'fixed',
-          display: 'inline-block',
-          width: '4vw',
-          zIndex: 9999,
-          bottom: '30%',
-          right: 150,
-          transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-          transition: '0.1s',
-        }}
-        className="pokemon"
-      >
-        <Pokemon
-          width={'100%'}
-          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/133.gif"
-        ></Pokemon>
-      </motion.div>
-      <motion.div
-        drag
-        dragControls={dragControls}
-        animate={animationControls} // 애니메이션 컨트롤 적용
-        style={{
-          position: 'fixed',
-          display: 'inline-block',
-          width: '4vw',
-          zIndex: 9999,
-          bottom: '30%',
-          right: 200,
-          transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-          transition: '0.1s',
-        }}
-        className="pokemon"
-      >
-        <Pokemon
-          width={'100%'}
-          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/134.gif"
-        ></Pokemon>
-      </motion.div>
-      <motion.div
-        drag
-        dragControls={dragControls}
-        animate={animationControls} // 애니메이션 컨트롤 적용
-        style={{
-          position: 'fixed',
-          display: 'inline-block',
-          width: '6vw',
-          zIndex: 9999,
-          bottom: '30%',
-          right: 250,
-          transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-          transition: '0.1s',
-        }}
-        className="pokemon"
-      >
-        <Pokemon
-          width={'100%'}
-          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/149.gif"
+          src={
+            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
+            pokemonId +
+            '.gif'
+          }
         ></Pokemon>
       </motion.div>
       <Container ref={containerRef}>
         <Tab width={width}>
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              overflow: 'auto',
-            }}
-          >
-            <img src={problem1011} width={'100%'} alt="" />
-          </div>
+          <HeaderTxt>
+            {id}번 {title}
+          </HeaderTxt>
+          <ProblemText
+            id={id}
+            isShowHeader="false"
+            size={'calc(100% - 80px)'}
+          />
         </Tab>
         <Resizer onMouseDown={handleMouseDown} style={{ left: width + '%' }} />
         <div
@@ -223,17 +189,17 @@ const ResizableTabsReview = () => {
           }}
         >
           <div style={{ background: 'green', width: '100%', height: '80%' }}>
-            <TestSharedEditor />
+            <TestSharedEditor editorRoom={editorRoom} />
           </div>
           <div
             style={{
               background: 'yellow',
               width: '100%',
               height: '20%',
-              overflow: 'hidden',
+              overflow: 'auto',
             }}
           >
-            <img src={terminal} width={'100%'} />{' '}
+            <ChatRoom />
           </div>
         </div>
         <Resizer
@@ -261,18 +227,32 @@ const ResizableTabsReview = () => {
               overflow: 'auto',
             }}
           >
-            <img src={webrtc} width={'100%'} alt="" />
+            <VoiceChatOV />
+            {/* <VoiceChat /> */}
           </div>
         </Tab>
       </Container>
     </motion.div>
   );
 };
+
+const HeaderTxt = styled.p`
+  height: 80px;
+  box-sizing: border-box;
+  display: flex;
+  line-height: 60px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  border-bottom: 2px solid gray;
+  padding: 10px;
+  padding-left: 5%;
+`;
+
 const Home = styled.div`
   width: 100%;
   height: 100%;
   margin: 0 auto;
-  background: url(${background});
   overflow: hidden;
 `;
 export default ResizableTabsReview;

@@ -1,19 +1,24 @@
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setLimitTime } from '../../store/timerSlice';
 
 const ModalContent1 = ({ width, id }: any) => {
   const [timeck, setTimeck] = useState('OFF');
   const [time, setTime] = useState<number>(0);
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const switchButton = () => {
     setTimeck(timeck === 'ON' ? 'OFF' : 'ON');
   };
+
   const timeUp = () => {
     setTime(time - 0 + 10);
   };
+
   const timeDown = () => {
     if (time >= 10) {
       setTime(time - 10);
@@ -38,6 +43,8 @@ const ModalContent1 = ({ width, id }: any) => {
   };
 
   const gotoSolve = (id: number) => {
+    dispatch(setLimitTime(time*60));
+
     navigate(`/problem?id=${id}`);
   };
 
@@ -163,6 +170,7 @@ const OnOffText = styled.span<{ timeck: string }>`
       transform: translateX(-15px);
     `}
 `;
+
 const TimeSelecter = styled.ul<{ timeck: string }>`
   display: none;
   background: #f0f0f0;
@@ -185,8 +193,10 @@ const Time = styled.input`
   text-align: center;
   background: none;
   border: none;
+  font-weight: bold;
+  font-size:1.2rem;
   width: 40px;
-  color: white;
+  color: #000000;
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
     appearance: none;

@@ -1,23 +1,26 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { probSearch } from '../../utils/api/solvedAc';
+import { problemSearch } from '../../utils/api/api';
 import upArrow from '../../assets/images/upArrow.png';
 import downArrow from '../../assets/images/downArrow.png';
 import Search from '../../assets/images/search.png';
 import Modal from '../../components/Modal/Modal';
+import { setProblemId } from '../../store/problemSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
-type ItemType = {
-  problemId: string;
-  titleKo: string;
+type ProblemType = {
+  id: string;
   level: number;
-  acceptedUserCount: number;
-  averageTries: number;
+  title: string;
+  solved: number;
+  average_try: number;
 };
 
 const ProblemList = () => {
-  const [query, setQuery] = useState(' '); // 검색 문자열 쿼리
-  const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
+  const [query, setQuery] = useState(''); // 검색 문자열 쿼리
+  const [problems, setProblems] = useState<ProblemType[]>([]); // 문제 데이터를 저장할 배열
   const [sort, setSort] = useState<string>('id');
   const [page, setPage] = useState<number>(1);
   const [order, setOrder] = useState<string>('asc');
@@ -25,11 +28,14 @@ const ProblemList = () => {
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selected, setSelected] = useState<string>('');
-  const [probId, setProbId] = useState<string>('');
+
+  const dispatch = useDispatch();
+  const { problemId } = useSelector((state: RootState) => state.probinfo);
 
   const fetchProbData = async () => {
     try {
-      const res = await probSearch(query, sort, page, order);
+      const res = await problemSearch(query, sort, page, order);
+      console.log(res);
       return res;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -78,18 +84,18 @@ const ProblemList = () => {
   useEffect(() => {
     fetchProbData().then((res) => {
       const parsedData = res;
-      const page_count = Math.ceil(res.count / parsedData.items.length);
-      console.log(res);
+      const page_count = Math.ceil(res.count / parsedData.problem.length);
+      console.log(parsedData.problem);
 
       setPageCount(page_count);
-      if (parsedData.count > 0) {
+      if (parsedData.problem.length > 0) {
         const itemsArray = [];
-        for (let i = 0; i < parsedData.items.length; i++) {
-          const item = parsedData.items[i];
+        for (let i = 0; i < parsedData.problem.length; i++) {
+          const item = parsedData.problem[i];
+          // console.log('item:',item);
           itemsArray.push(item);
         }
         setProblems(itemsArray); // items 상태 업데이트
-        console.log('items: ', problems);
       } else {
         setProblems([]);
       }
@@ -171,13 +177,6 @@ const ProblemList = () => {
               평균 시도
             </SelectBtn>
             <SelectBtn
-              onClick={() => {
-                handleSortClick('random');
-              }}
-            >
-              랜덤
-            </SelectBtn>
-            <SelectBtn
               style={{
                 fontSize: '1.5rem',
                 fontFamily: 'math',
@@ -207,33 +206,38 @@ const ProblemList = () => {
           {problems.map((item, index) => (
             <Item key={index}>
               {(() => {
-                const link = `https://www.acmicpc.net/problem/${item.problemId}`;
+                const link = `https://www.acmicpc.net/problem/${item.id}`;
                 const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
                 return (
                   <ProblemComponent>
                     <TierImg src={tiersrc} />
-                    <a href={link} style={{ width: '16%' }}>
-                      {' '}
-                      {item.problemId}
-                    </a>
+                    <a href={link}>{item.id}</a>
                     <TitleBtn
                       onClick={() => {
                         setIsModalOpen(true);
-                        setSelected(item.titleKo);
-                        setProbId(item.problemId);
+                        setSelected(item.title);
+                        dispatch(setProblemId(item.id));
                       }}
-                      style={{}}
                     >
-                      {' '}
-                      {item.titleKo}
+                      {item.title}
                     </TitleBtn>
-                    <p style={{ width: '52%', textAlign: 'end' }}>
-                      {' '}
-                      {item.acceptedUserCount}
+                    <p
+                      style={{
+                        position: 'absolute',
+                        right: '30%',
+                        textAlign: 'end',
+                      }}
+                    >
+                      {item.solved}
                     </p>
-                    <p style={{ width: '21.5%', textAlign: 'end' }}>
-                      {' '}
-                      {item.averageTries}
+                    <p
+                      style={{
+                        position: 'absolute',
+                        right: '8%',
+                        textAlign: 'end',
+                      }}
+                    >
+                      {item.average_try.toFixed(3)}
                     </p>
                   </ProblemComponent>
                 );
@@ -242,8 +246,9 @@ const ProblemList = () => {
           ))}
         </ListView>
         <Modal
-          text={selected}
-          id={probId}
+          title={''}
+          prob_title={selected}
+          id={problemId}
           component={1}
           on={isModalOpen}
           event={setIsModalOpen}
@@ -264,6 +269,8 @@ const TitleBtn = styled.button`
   width: 60%;
   text-align: left;
   left: 20%;
+  font-size: 1.2rem;
+  cursor: pointer;
 `;
 
 const OrderButton = styled.img`
@@ -296,6 +303,7 @@ const ProblemComponent = styled.div`
   margin: auto;
   align-items: center;
   position: relative;
+  cursor: pointer;
 `;
 
 const ListView = styled.div`
@@ -304,6 +312,7 @@ const ListView = styled.div`
   height: 62%;
   overflow-y: auto;
   margin: auto;
+  font-size: 1.2rem;
   /* align-items: stretch;
   flex-direction: column; */
 `;
@@ -342,7 +351,7 @@ const MainWrapper = styled.div`
 
 const TierImg = styled.img`
   position: relative;
-  width: 15px;
+  width: 20px;
   margin-right: 2%;
 `;
 
@@ -356,7 +365,8 @@ const Inputsearch = styled.input`
 
 const Item = styled.div`
   border-bottom: 1px solid #8d8d8d;
-  padding: 10px;
+  padding: 15px;
+  cursor: pointer;
 `;
 
 const ButtonGroup = styled.div`

@@ -6,7 +6,7 @@ import ModalContent2 from './ModalContent2';
 import ModalContent3 from './ModalContent3';
 import ModalContent4 from './ModalContent4';
 import ModalContent5 from './ModalContent5';
-
+import ModalContent7 from './ModalContent7';
 /*
 
 모달 사용법 : 
@@ -31,9 +31,24 @@ event(모달에서 자체적으로 닫기 위해 setState function)
    on={isModalOpen} event={setIsModalOpen}
 */
 
-const Modal = ({ text = '문제명', id = '', component, on = false, event }: any) => {
-
+const Modal = ({
+  title = '방제목',
+  prob_title = '문제명',
+  id = '',
+  component,
+  on = false,
+  event,
+}: any) => {
   const [nowcomponent, setNowcomponent] = useState(component);
+  const [reset, setReset] = useState(false);
+
+  const handleClose = () => {
+    event(false);
+    setReset(true); // Trigger the reset
+    setTimeout(() => {
+      setReset(false);
+    }, 0); // Reset the state back to false immediately after
+  };
 
   return (
     <>
@@ -41,13 +56,13 @@ const Modal = ({ text = '문제명', id = '', component, on = false, event }: an
         <ModalWrap>
           {nowcomponent === 1 ? (
             <>
-              <Title>{text}</Title>
-              <ModalContent1 id = {id}/>
+              <Title>{prob_title}</Title>
+              <ModalContent1 id={id} />
             </>
           ) : nowcomponent === 2 ? (
             <>
               <Title>{'리뷰방 만들기'}</Title>
-              <ModalContent2 />
+              <ModalContent2 reset={reset} />
             </>
           ) : nowcomponent === 3 ? (
             <>
@@ -64,13 +79,18 @@ const Modal = ({ text = '문제명', id = '', component, on = false, event }: an
               <Title>{'테스트 케이스 입력'}</Title>
               <ModalContent5 />
             </>
+          ) : nowcomponent === 6 ? (
+            <>
+              <Title>{title}</Title>
+              <ModalContent7 id={id} title={prob_title} />
+            </>
           ) : (
             ''
           )}
           <DesignedButton1
-            color='rgba(79, 70, 229, 1)'
+            color="rgba(79, 70, 229, 1)"
             style={{ marginBottom: '40px' }}
-            onClick={() => event(false)}
+            onClick={handleClose}
           >
             <b>닫기</b>
           </DesignedButton1>
@@ -86,7 +106,7 @@ const Background = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 9999;
+  z-index: 999999999;
   background: #46464647;
   text-align: center;
   backdrop-filter: blur(5px);
@@ -97,7 +117,7 @@ const ModalWrap = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
-  color: #272727;
+  color: #111826;
   transform: translate(-50%, -50%);
   background: #ffffff;
   border-radius: 10px;
@@ -106,7 +126,7 @@ const ModalWrap = styled.div`
 `;
 
 const Title = styled.p`
-  padding: 10% 0 15%;
+  padding: 50px 0 5%;
   font-weight: bold;
   font-size: 1.6rem;
   word-wrap: break-word; /* Deprecated, use overflow-wrap instead */
@@ -114,7 +134,6 @@ const Title = styled.p`
   overflow-wrap: break-word;
   width: 300px;
   margin: auto;
-
 `;
 
 export default Modal;

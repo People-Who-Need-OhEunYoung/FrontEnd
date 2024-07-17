@@ -1,6 +1,5 @@
 export { default as ProblemText } from './ProblemText';
 
-
 export interface SampleInOutPut {
   input: string;
   output: string;
@@ -26,4 +25,10 @@ export interface CreateProblemsResult {
   success: number;
   fail: number;
   errorList: Array<{ problemData: Problem | null; error: any }>;
+}
+
+export interface ResizableTabsProps {
+  id: string;
+  isShowHeader: string;
+  size: string;
 }

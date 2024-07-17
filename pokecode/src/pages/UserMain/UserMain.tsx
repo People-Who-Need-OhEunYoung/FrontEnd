@@ -1,17 +1,16 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
-import background from '../../assets/images/background.jpg';
+import background from '../../assets/images/background2.jpg';
 import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
 import { MainWrapper } from '../../components/MainWrapper';
 import poo from '../../assets/images/poo.png';
-import {
-  userInfo,
-  pokemonName,
-  getPooCount,
-  removePoo,
-} from '../../utils/api/api';
+
+import { pokemonName, getPooCount, removePoo } from '../../utils/api/api';
+
+import { RootState } from '../../store';
+import { useSelector } from 'react-redux';
 
 const UserMain = () => {
   const [position, setPosition] = useState({
@@ -19,21 +18,24 @@ const UserMain = () => {
     y: '50%',
   });
   const [pooset, setPooset] = useState<{ x: number; y: number }[]>([]);
-  const [user, setUser] = useState({
-    credit: 0,
-    curPokeId: 0,
-    nickName: '기본값',
-    result: '기본값',
-  });
+
   const [pokemonname, setPokemonname] = useState('');
   //const [pooCount, setPooCount] = useState(0);
+
+  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const controls = useAnimation();
   const controlsPoo = useAnimation();
+
+  //포켓몬 무빙 핸들러
   const handleDivClick = (e: any) => {
     const containerRect = e.currentTarget.getBoundingClientRect();
     const offsetX: any = e.clientX - containerRect.left;
     const offsetY: any = e.clientY - containerRect.top;
-
+    controls.start({
+      x: 0,
+      y: 0,
+      transition: { duration: 1 + Math.random() * 3 },
+    });
     setPosition({ x: offsetX, y: offsetY });
   };
   const getRandomPosition = () => ({
@@ -55,41 +57,48 @@ const UserMain = () => {
     });
   };
 
-  const userSet = async () => {
-    setUser(await userInfo());
-  };
   const pokemonnameSet = async (name: number) => {
     setPokemonname(await pokemonName(name));
   };
-  pokemonnameSet(user.curPokeId);
+
+  const animateRandomly = async () => {
+    while (true) {
+      // 무작위 위치로 애니메이션 시작
+      const newPosition = getRandomPosition();
+
+      await controls.start({
+        ...newPosition,
+        transition: { duration: 1 + Math.random() * 3 },
+      });
+
+      const newNewPosition = getRandomPosition();
+
+      await controls.start({
+        ...newNewPosition,
+        transition: { duration: 1 + Math.random() * 3 },
+      });
+
+      // 1초 동안 대기
+      await sleep(1000);
+
+      // 제자리 애니메이션 (사실상 이동이 없도록 함)
+      controls.start({
+        ...newNewPosition,
+        transition: { duration: 1 + Math.random() * 3 },
+      });
+      // 다시 1초 동안 대기
+      await sleep(1000);
+    }
+  };
+
   useEffect(() => {
-    userSet();
+    if (pokemonId) pokemonnameSet(pokemonId);
+  }, [pokemonId]);
+
+  useEffect(() => {
     pooCount();
-    const animateRandomly = async () => {
-      while (true) {
-        // 무작위 위치로 애니메이션 시작
-        const newPosition = getRandomPosition();
-        await controls.start({
-          ...newPosition,
-          transition: { duration: 1 + Math.random() * 3 },
-        });
-
-        // 1초 동안 대기
-        await sleep(1000);
-
-        // 제자리 애니메이션 (사실상 이동이 없도록 함)
-        await controls.start({
-          x: newPosition.x,
-          y: newPosition.y,
-          transition: { duration: 1 + Math.random() * 3 },
-        });
-
-        // 다시 1초 동안 대기
-        await sleep(1000);
-      }
-    };
     animateRandomly();
-  }, [controls, pokemonname]);
+  }, [controls]);
 
   const handlePooClick = () => {
     controlsPoo.start({
@@ -98,6 +107,7 @@ const UserMain = () => {
       transition: { duration: 1 },
     });
   };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -128,32 +138,32 @@ const UserMain = () => {
               }}
             />
           ))}
+
           <motion.div
             animate={controls}
             style={{
               position: 'absolute',
-              transform: 'translate(50%, 50%)',
+              transform: 'translateX(0px) translateY(0px) translateZ(0px)',
               top: position.y,
               left: position.x,
               display: 'inline-block',
-              width: '15%',
               transition: '1s',
             }}
             className="pokemon"
           >
             <Pokemon
-              width={'100%'}
+              style={{ transform: 'scale(2.5)' }}
               src={
-                user.curPokeId == 0
+                pokemonId == 0
                   ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
                   : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-                    user.curPokeId +
+                    pokemonId +
                     '.gif'
               }
             ></Pokemon>
           </motion.div>
           <PokeNameWrap>
-            <PokeName>{pokemonname}</PokeName>
+            <PokeName>{pokemonId == 0 ? 'error' : pokemonname}</PokeName>
           </PokeNameWrap>
           <LevelWrap>
             <Level>

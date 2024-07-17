@@ -1,7 +1,19 @@
 import styled, { css } from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import Modal from '../../components/Modal/Modal';
+import { createRoom, showRoomList } from '../../utils/api/api';
+
+type ItemType = {
+  roomId: number;
+  problemId: string;
+  problemTitle: string;
+  roomTitle: string;
+  level: number;
+  limit_num: number;
+  cur_num: number;
+  master: string;
+};
 
 const RoomList = () => {
   const [query, setQuery] = useState(' '); // 검색 문자열 쿼리
@@ -9,12 +21,64 @@ const RoomList = () => {
   const [pageCount, setPageCount] = useState<number>(1);
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
   const [check, setCheck] = useState('OFF');
+  const [isEnterModalOpen, setIsEnterModalOpen] = useState(false);
+  const [isMakeModalOpen, setIsMakeModalOpen] = useState(false);
 
-  //임시 빌드 로직 제거 해도 되요 start
+  const [roomTitle, setRoomTitle] = useState<string>('');
+  const [problemTitle, setproblemTitle] = useState<string>('');
+  const [problemId, setproblemId] = useState<string>('');
+  const [roomlist, setRoomlist] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
+  if (roomlist == null)
+    setRoomlist([
+      {
+        roomId: 1,
+        problemId: '1000',
+        problemTitle: 'A+B',
+        roomTitle: '해결 좀 ㅎ ㅐ주세요',
+        level: 1,
+        limit_num: 3,
+        cur_num: 1,
+        master: 'ㅇㅇㅇ',
+      },
+    ]);
+
+  //임시 빌드 로직 제거 해도 돼요 start
   if (pageCount == null) setPageCount(1);
-  //임시 빌드 로직 제거 해도 되요 end
+  //임시 빌드 로직 제거 해도 돼요 end
 
   console.log(page);
+
+  const fetchRoomData = async () => {
+    try {
+      const res = await showRoomList();
+      // console.log(res);
+      return res;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRoomData().then((res) => {
+      const parsedData = res;
+      const page_count = Math.ceil(res.count / parsedData.reviews.length);
+      // console.log(parsedData.problem);
+
+      setPageCount(page_count);
+      if (parsedData.reviews.length > 0) {
+        const itemsArray = [];
+        for (let i = 0; i < parsedData.reviews.length; i++) {
+          const item = parsedData.reviews[i];
+          // console.log('item:', item);
+          itemsArray.push(item);
+        }
+        setRoomlist(itemsArray); // items 상태 업데이트
+      } else {
+        setRoomlist([]);
+      }
+    });
+  }, []);
+
   const switchButton = () => {
     setCheck(check === 'ON' ? 'OFF' : 'ON');
   };
@@ -82,53 +146,77 @@ const RoomList = () => {
               </CheckSlide>
               <CheckDoc>내가 푼 문제만 보기</CheckDoc>
             </div>
-            <MakeRoomButton onClick={() => {}}>방 만들기</MakeRoomButton>
+            <MakeRoomButton
+              onClick={() => {
+                setIsMakeModalOpen(true);
+              }}
+            >
+              방 만들기
+            </MakeRoomButton>
           </SearchHeader>
         </SearchWrapper>
+        <Listheader>
+          <h4 style={{ width: '12%' }}>#</h4>
+          <h4 style={{ width: '15%' }}> 문제 제목 </h4>
+          <h4 style={{ width: '30%' }}> 방 이름 </h4>
+          <h4 style={{ width: '45%', textAlign: 'end', marginRight: '5%' }}>
+            {' '}
+            방 정보{' '}
+          </h4>
+        </Listheader>
         <ListView>
-          <div
-            style={{
-              position: 'relative',
-              width: '100%',
-              background: 'white',
-              height: '100px',
-              color: 'black',
-            }}
-          >
-            <img
-              src="https://static.solved.ac/tier_small/5.svg"
-              height={100}
-              alt=""
-            />
-            <Link
-              to={'/room'}
-              style={{
-                height: '100px',
-                position: 'absolute',
-                fontSize: '2em',
-                paddingLeft: '20px',
-              }}
-            >
-              <span style={{ fontWeight: 'bold' }}>1000번 문제</span>
-              <br />
-              문제가 너무 어려워요~!
-            </Link>
-            <div
-              style={{
-                height: '100px',
-                position: 'absolute',
-                fontSize: '2em',
-                paddingLeft: '20px',
-                right: 0,
-                top: 0,
-              }}
-            >
-              방인원:1/4
-              <br />
-              닉네임
-            </div>
-          </div>
+          {roomlist.map((item, index) => (
+            <Item key={index}>
+              {(() => {
+                //const link = `https://www.acmicpc.net/problem/${item.problemId}`;
+                const tiersrc = `https://static.solved.ac/tier_small/${item.level}.svg`;
+                return (
+                  <ProblemComponent
+                    onClick={() => {
+                      setIsEnterModalOpen(true);
+                      setRoomTitle(item.roomTitle);
+                      setproblemId(item.problemId);
+                      setproblemTitle(item.problemTitle);
+                    }}
+                  >
+                    <Probinfo>
+                      <TierImg src={tiersrc} style={{ marginRight: '1%' }} />
+                      <p style={{ width: '11%' }}>{item.problemId}</p>
+                      <p style={{ width: '22%' }}>{item.problemTitle}</p>
+                      <p style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>
+                        {item.roomTitle}
+                      </p>
+                    </Probinfo>
+
+                    <Roominfo>
+                      <p style={{ marginBottom: '10px' }}>
+                        {' '}
+                        참여 인원: {item.cur_num} /{item.limit_num}
+                      </p>
+                      <p> 닉네임: {item.master} </p>
+                    </Roominfo>
+                  </ProblemComponent>
+                );
+              })()}
+            </Item>
+          ))}
         </ListView>
+
+        <Modal
+          title={roomTitle}
+          prob_title={problemTitle}
+          id={problemId}
+          component={6}
+          on={isEnterModalOpen}
+          event={setIsEnterModalOpen}
+        ></Modal>
+
+        <Modal
+          component={2}
+          on={isMakeModalOpen}
+          event={setIsMakeModalOpen}
+        ></Modal>
+
         <ButtonGroup style={{ margin: '1.5%' }}>
           {renderPageButtons()}
         </ButtonGroup>
@@ -136,6 +224,54 @@ const RoomList = () => {
     </motion.div>
   );
 };
+
+const Listheader = styled.div`
+  width: 75%;
+  display: flex;
+  margin: auto;
+  padding: 0 10px;
+  text-align: center;
+`;
+
+const Probinfo = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  width: 100%;
+  cursor: pointer;
+`;
+
+const Roominfo = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  text-align: end;
+  right: 0;
+  color: #c0c0c0;
+  width: 30%;
+`;
+
+const TierImg = styled.img`
+  position: relative;
+  width: 20px;
+`;
+
+const ProblemComponent = styled.div`
+  display: flex;
+  margin: auto;
+  align-items: center;
+  position: relative;
+`;
+
+const Item = styled.div`
+  padding: 4% 2%;
+  background-color: #333449;
+  background-color: #1e293b;
+  border: 1.2px solid #4f678e;
+  margin: 10px;
+  border-radius: 10px;
+`;
 
 const CheckSlide = styled.div<{ timeck: string }>`
   position: relative;
@@ -229,23 +365,23 @@ const OnOffText = styled.span<{ timeck: string }>`
 
 const SearchHeader = styled.div`
   display: flex;
-  justify-content:center;
-
+  justify-content: center;
 `;
 
 const MakeRoomButton = styled.button`
   width: 10%;
   padding: 5px;
-  background-color: #4152b3;
-  color: #e6e6e6;
-  border-radius: 20px;
+  background-color: #6366f1;
+  color: #ffffff;
+  border-radius: 10px;
   font-size: 1.1rem;
   font-weight: bold;
   border: none;
   margin-left: 2%;
+  cursor: pointer;
 
   &:hover {
-    box-shadow: 0 0 5px 3px rgba(255, 255, 255, 0.267);
+    background-color: #8284f5;
   }
 
   &:active {
@@ -263,18 +399,18 @@ const PageButton = styled.button`
   border: none;
 
   &:hover {
-    background-color: #4ea7ff52;
+    background-color: #ba94b4;
   }
 
   &:active {
-    background-color: #4ea7ff52;
+    background-color: #ba94b4;
   }
 `;
 
 const ListView = styled.div`
-  background-color: #ffffff1d;
+  //background-color: #ffffff1d;
   width: 75%;
-  height: 70%;
+  height: 61%;
   overflow-y: auto;
   margin: auto;
   /* align-items: stretch;
