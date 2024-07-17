@@ -110,9 +110,10 @@ const pokemonName = async (number: number) => {
     .then((data) => {
       console.log(data.names[2].name);
       return data.names[2].name;
-    }).catch(() =>{
+    })
+    .catch(() => {
       return 'error';
-  });
+    });
 };
 
 //사용자 포켓몬 도감 등록 및 크래딧 차감
@@ -213,14 +214,24 @@ const updateMyPokemon = async (pokId: number) => {
 };
 
 //문제 검색
-function problemSearch(title: string, sort: string, page: number, order: string): Promise<any> {
-  return fetch(`${import.meta.env.VITE_APP_IP}/problemList?query=${title}&direction=${order}&page=${page}&sort=${sort}`, {
-    method: 'GET',
-    headers: {
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
-      'Content-Type': 'application/json',
-    },
-  })
+function problemSearch(
+  title: string,
+  sort: string,
+  page: number,
+  order: string
+): Promise<any> {
+  return fetch(
+    `${
+      import.meta.env.VITE_APP_IP
+    }/problemList?query=${title}&direction=${order}&page=${page}&sort=${sort}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+        'Content-Type': 'application/json',
+      },
+    }
+  )
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
@@ -244,7 +255,7 @@ const showPokemonBook = async () => {
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       'Content-Type': 'application/json',
-    }
+    },
   })
     .then((res) => {
       if (!res.ok) {
@@ -268,7 +279,7 @@ const showRoomList = async () => {
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       'Content-Type': 'application/json',
-    }
+    },
   })
     .then((res) => {
       if (!res.ok) {
@@ -287,7 +298,13 @@ const showRoomList = async () => {
 };
 
 //코드리뷰방 목록 가져오기
-const createRoom = async (title: string, no: string, tier: number, problem_title: string, limit: number): Promise<any> => {
+const createRoom = async (
+  title: string,
+  no: string,
+  tier: number,
+  problem_title: string,
+  limit: number
+): Promise<any> => {
   return await fetch(`${import.meta.env.VITE_APP_IP}/createReview`, {
     method: 'POST',
     headers: {
@@ -301,7 +318,6 @@ const createRoom = async (title: string, no: string, tier: number, problem_title
       problemTitle: problem_title,
       maxPerson: limit,
     }),
-    
   })
     .then((res) => {
       if (!res.ok) {

@@ -3,6 +3,7 @@ import timerReducer from './timerSlice';
 import userinfoReducer from './userInfo';
 import problemReducer from './problemSlice';
 import codeCallerReducer from './codeCallerReducer';
+import roomdataSlice from './roomdataSlice';
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     userinfo: userinfoReducer,
     probinfo: problemReducer,
     codecaller: codeCallerReducer,
+    roomdata: roomdataSlice,
   },
 });
 
