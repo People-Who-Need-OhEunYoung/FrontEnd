@@ -32,3 +32,8 @@ export interface ResizableTabsProps {
   isshowheader: string;
   size: string;
 }
+
+export interface TimeDetails {
+  elapsed_time: number;
+  limit_time: number;
+}
