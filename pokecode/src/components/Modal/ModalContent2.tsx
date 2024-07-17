@@ -2,11 +2,19 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { DesignedButton1 } from '../DesignedButton';
 import Select from 'react-select';
-import { problemSearch } from '../../utils/api/api';
+import { createRoom, problemSearch } from '../../utils/api/api';
 
 type ProblemType = {
   id: string;
   title: string;
+};
+
+type RoomType = {
+  problemId: string;
+  problemTitle: string;
+  roomTitle: string;
+  level: number;
+  limit_num: number;
 };
 
 const ModalContent2 = ({ width, onOff, reset }: any) => {
@@ -15,15 +23,6 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
   const [person, setPerson] = useState(2);
   const [isEditing, setIsEditing] = useState(false);
   const [problems, setProblems] = useState<ProblemType[]>([]); // 문제 데이터를 저장할 배열
-
-  // const options = [
-  //   { value: 'apple', label: 'Apple' },
-  //   { value: 'apricot', label: 'Apricot' },
-  //   { value: 'mango', label: 'Mango' },
-  //   { value: 'mangosteens', label: 'Mangosteens' },
-  //   { value: 'avocado', label: 'Avocado' },
-  //   { value: 'avocado', label: 'Avocado' },
-  // ];
 
   const fetchProbData = async () => {
     try {
@@ -84,11 +83,38 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
     if (person > 2) setPerson(person - 1);
   };
 
+  const sendRoomData = async (Room: RoomType) => {
+    try {
+      const res = await createRoom(
+        Room.roomTitle,
+        Room.problemId,
+        Room.level,
+        Room.problemTitle,
+        Room.limit_num
+      );
+      return res;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const selecthandleChange = (selectedOption: any) => {
+    // 선택된 옵션을 처리합니다. selectedOption 객체가 전달됩니다.
+    console.log(selectedOption); // 전체 선택된 객체를 로그로 확인
+
+    if (selectedOption) {
+      console.log('Selected problem ID: ', selectedOption.id); // 올바른 속성 접근
+      console.log('Selected problem title: ', selectedOption.title); // 올바른 속성 접근
+    }
+  };
+
   const customStyles = {
     container: (provided: any) => ({
       ...provided,
       width: '70%', // 부모 요소의 너비를 100%로 설정
       margin: 'auto',
+      padding: '10px',
+      cursor: 'pointer',
     }),
     control: (provided: any) => ({
       ...provided,
@@ -109,10 +135,9 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
           options={problems}
           styles={customStyles}
           placeholder="문제 검색"
-          isSearchable
           getOptionLabel={(option) => option.title} // 라벨을 지정
           getOptionValue={(option) => option.id} // 값을 지정
-          //onInputChange={(value) => setQuery(value)}
+          onChange={selecthandleChange}
         />
 
         <div style={{ minHeight: '40px' }} onDoubleClick={handleDoubleClick}>
@@ -139,6 +164,7 @@ const ModalContent2 = ({ width, onOff, reset }: any) => {
               }}
               rows={1}
               placeholder="방 제목을 입력해주세요"
+              readOnly
             >
               {/* {title == '' ? '방 제목을 입력해주세요.' : title} */}
             </Titleinput>
