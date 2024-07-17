@@ -2,6 +2,7 @@ import { DesignedButton1 } from '../DesignedButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setReturnCall } from '../../store/codeCallerReducer';
+import { useEffect } from 'react';
 
 const CodeRunButton = () => {
   const { writtenCode, TestCases } = useSelector(
@@ -20,6 +21,12 @@ const CodeRunButton = () => {
   const handleInit = () => {
     dispatch(setReturnCall(''));
   };
+
+  useEffect(() => {
+    console.log('TestCases', TestCases);
+    console.log('elapsedTime', elapsedTime);
+    console.log('limitTime', limitTime);
+  }, [TestCases]);
 
   const handleSubmit = async () => {
     const editorContent = writtenCode;

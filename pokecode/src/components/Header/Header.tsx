@@ -156,7 +156,7 @@ export const Header3 = () => {
   );
   const dispatch = useDispatch();
 
-  console.log('credit: ', credit);
+  // console.log('credit: ', credit);
 
   const userSet = async () => {
     setUser(await userInfo());
@@ -186,11 +186,11 @@ export const Header3 = () => {
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
-        console.log(res);
+        // console.log(res);
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         if (data.result == 'success') {
         } else {
           confirm('세션이 만료되었습니다. 현재화면을 유지하시겠습니까?')

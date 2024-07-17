@@ -60,7 +60,7 @@ const TestEditor = () => {
   useEffect(() => {
     // KHS 코드 리뷰방으로 이동을 위해 dispatch 작업
     dispatch(setWrittenCode(editorContent));
-    console.log(editorContent);
+    // console.log(editorContent);
   }, [isAcquireReview, editorContent]);
 
   useEffect(() => {
@@ -114,7 +114,7 @@ const TestEditor = () => {
       if (textCount >= testcaseResult.length) {
         //text length 초과 시 undefind가 출력되는 것을 방지
         setIsTypingPaused(true);
-        console.log(isTypingPaused);
+        // console.log(isTypingPaused);
         return;
       }
 

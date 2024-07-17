@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { DesignedButton1 } from '../DesignedButton';
 import TestCase from './TestCase';
 import { RootState } from '../../store';
@@ -33,30 +33,40 @@ const ModalContent5 = () => {
     }
   };
 
-  const handleInputChange = ({ index, newValue }: any) => {
-    const updatedTestCases = testCase.map((test, idx) => {
-      if (idx === index - 1) {
-        // index가 1부터 시작하므로 -1 해줍니다.
-        return { ...test, input_case: newValue };
-      }
-      return test;
-    });
-    console.log('updatedTestCases', updatedTestCases);
-    setTestCase(updatedTestCases);
+  const handleInputChange = (
+    index: number,
+    e: ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const newValue = e.target.value;
+    setTestCase((prevTestCases) =>
+      prevTestCases.map((test, idx) => {
+        if (idx === index - 1) {
+          // index가 1부터 시작하므로 -1 해줍니다.
+          return { ...test, input_case: newValue };
+        }
+        return test;
+      })
+    );
   };
 
-  const handleOutputChange = ({ index, newValue }: any) => {
-    const updatedTestCases = testCase.map((test, idx) => {
-      if (idx === index - 1) {
-        return { ...test, output_case: newValue };
-      }
-      return test;
-    });
-    setTestCase(updatedTestCases);
+  const handleOutputChange = (
+    index: number,
+    e: ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const newValue = e.target.value;
+    setTestCase((prevTestCases) =>
+      prevTestCases.map((test, idx) => {
+        if (idx === index - 1) {
+          return { ...test, output_case: newValue };
+        }
+        return test;
+      })
+    );
   };
 
   useEffect(() => {
     console.log('testCase: ', testCase);
+    dispatch(setTestCases(testCase));
   }, [testCase]);
 
   useEffect(() => {
@@ -66,7 +76,6 @@ const ModalContent5 = () => {
         input_case: sample.input,
         output_case: sample.output,
       }));
-      console.log(formattedSamples);
       setTestCase(formattedSamples); // testCase 상태를 업데이트
     }
   }, [problemDetails?.samples]);
@@ -81,8 +90,8 @@ const ModalContent5 = () => {
               caseno={index + 1}
               inputdata={testdata.input_case}
               outputdata={testdata.output_case}
-              onInputChange={handleInputChange}
-              onOutputChange={handleOutputChange}
+              onInputChange={(e: any) => handleInputChange(index + 1, e)}
+              onOutputChange={(e: any) => handleOutputChange(index + 1, e)}
             />
           ))}
       </div>

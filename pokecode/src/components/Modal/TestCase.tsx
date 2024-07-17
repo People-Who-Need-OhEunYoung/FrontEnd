@@ -12,19 +12,6 @@ export default function TestCase({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const outputRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(e.target.value);
-    autoResizeTextarea(e.target);
-    onInputChange(caseno, e.target.value);
-    console.log(e.target.value);
-  };
-
-  const handleOutputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setOutputValue(e.target.value);
-    autoResizeTextarea(e.target);
-    onOutputChange(caseno, e.target.value);
-  };
-
   const autoResizeTextarea = (textarea: HTMLTextAreaElement) => {
     textarea.style.height = 'auto'; // 기존 높이를 초기화
     textarea.style.height = `${textarea.scrollHeight}px`; // 새로운 높이를 scrollHeight로 설정
@@ -70,7 +57,10 @@ export default function TestCase({
           id={'indata' + caseno}
           name={'indata' + caseno}
           value={inputValue}
-          onChange={handleInputChange}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+            onInputChange(e);
+          }}
         />
       </div>
       <div style={{ textAlign: 'left', height: '50px' }}>
@@ -89,7 +79,10 @@ export default function TestCase({
           id={'outdata' + caseno}
           name={'outdata' + caseno}
           value={outputValue}
-          onChange={handleOutputChange}
+          onChange={(e) => {
+            setOutputValue(e.target.value);
+            onOutputChange(e);
+          }}
         />
       </div>
     </div>
