@@ -7,6 +7,9 @@ import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 import { userInfo } from '../../utils/api/api';
 import { CodeAIWardBalloon } from '../CodeAIButton';
+import VoiceChatOV from '../ResizableTabsReview/VoiceChatOV';
+import ChatRoom from '../ResizableTabsReview/ChatRoom';
+import { Terminal } from '../Terminal';
 
 const Container = styled.div`
   display: flex;
@@ -23,6 +26,7 @@ const Tab = styled.div<TabProps>`
   background-color: #171a25;
   height: 100%;
   border-right: none;
+  /* min-width: 550px; */
   flex-basis: ${({ width }) => width}%;
   z-index: 100;
 `;
@@ -58,9 +62,10 @@ interface ResizableTabsProps {
 }
 
 const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
-  const [width, setWidth] = useState<number>(50);
+  const [width, setWidth] = useState<number>(30);
+  const [width1, setWidth1] = useState<number>(30);
   const [position, setPosition] = useState({
-    x: '80%',
+    x: '50%',
   });
   const [user, setUser] = useState({
     credit: 0,
@@ -77,15 +82,15 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
 
     setPosition({ x: offsetX });
   };
-  const getRandomPosition = () => ({
-    x: Math.random() - Math.random() * 200,
-  });
 
   const handleMouseDown = () => {
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
   };
-
+  const handleMouseDown1 = () => {
+    document.addEventListener('mousemove', handleMouseMove1);
+    document.addEventListener('mouseup', handleMouseUp1);
+  };
   const handleMouseMove = (e: MouseEvent) => {
     if (containerRef.current) {
       const containerWidth = containerRef.current.getBoundingClientRect().width;
@@ -96,47 +101,33 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
       setWidth(newWidth);
     }
   };
+  const handleMouseMove1 = (e: MouseEvent) => {
+    if (containerRef.current) {
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const containerWidth = containerRect.width;
+      const newWidth =
+        ((containerRect.right - e.clientX) / containerWidth) * 100;
+      setWidth1(newWidth);
+    }
+  };
 
   const handleMouseUp = () => {
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
   };
+  const handleMouseUp1 = () => {
+    document.removeEventListener('mousemove', handleMouseMove1);
+    document.removeEventListener('mouseup', handleMouseUp1);
+  };
 
-  const sleep = (ms: any) => new Promise((resolve) => setTimeout(resolve, ms));
   const userSet = async () => {
     setUser(await userInfo());
   };
 
   useEffect(() => {
     userSet();
-    const animateRandomly = async () => {
-      try {
-        while (true) {
-          // 무작위 위치로 애니메이션 시작
-          const newPosition = getRandomPosition();
-          await controls.start({
-            ...newPosition,
-            transition: { duration: 1 + Math.random() * 3 },
-          });
-
-          // 1초 동안 대기
-          await sleep(1000);
-
-          // 제자리 애니메이션 (사실상 이동이 없도록 함)
-          await controls.start({
-            x: newPosition.x,
-            transition: { duration: 1 + Math.random() * 3 },
-          });
-
-          // 다시 1초 동안 대기
-          await sleep(1000);
-        }
-      } catch {
-        console.log('화면이동 감지');
-      }
-    };
-    animateRandomly();
   }, [controls]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -152,47 +143,20 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           <div
             style={{
               width: '100%',
-              height: '80%',
+              height: '100%',
             }}
           >
             <ProblemText id={id} isshowheader="true" size="90%" />
           </div>
-          <Home style={{ position: 'relative' }} onClick={handleDivClick}>
-            <CodeAIWardBalloon
-              width="50%"
-              left="0"
-              fontSize="1.5em"
-              padding="20px 4%"
-              right="70px"
-              bottom="150px"
-              position="fixed"
-            />
-
-            <motion.div
-              animate={controls}
-              style={{
-                position: 'relative',
-                transform: 'translate(50%, 50%)',
-                top: '30%',
-                left: position.x,
-                display: 'inline-block',
-                width: '4vw',
-                transition: '1s',
-              }}
-              className="pokemon"
-            >
-              <Pokemon
-                width={'100%'}
-                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${user.curPokeId}.gif`}
-              ></Pokemon>
-            </motion.div>
-          </Home>
         </Tab>
-        <Resizer onMouseDown={handleMouseDown} style={{ left: width + '%' }} />
+        <Resizer
+          onMouseDown={handleMouseDown}
+          style={{ left: width + '%', zIndex: '500' }}
+        />
         <div
           style={{
             background: 'blue',
-            width: 100 - width + '%',
+            width: 100 - width - width1 + '%',
             height: '100%',
           }}
         >
@@ -200,6 +164,57 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
             <TestEditor />
           </div>
         </div>
+        <Resizer
+          onMouseDown={handleMouseDown1}
+          style={{ left: 100 - width1 + '%' }}
+        />
+        <Tab width={width1}>
+          <div
+            style={{
+              background: '#5F6275',
+              width: '100%',
+              height: '80%',
+              overflow: 'auto',
+            }}
+          >
+            <Home style={{ position: 'relative' }} onClick={handleDivClick}>
+              <CodeAIWardBalloon
+                position="absolute"
+                width="100%"
+                left="0"
+                fontSize="1em"
+                padding="20px 50px"
+                right="50px"
+                bottom="140px"
+              />
+              <motion.div
+                animate={controls}
+                style={{
+                  position: 'relative',
+                  transform: 'translateX(-50%)',
+                  top: '80%',
+                  left: position.x,
+                  display: 'inline-block',
+                  transition: '1s',
+                }}
+                className="pokemon"
+              >
+                <Pokemon
+                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${user.curPokeId}.gif`}
+                ></Pokemon>
+              </motion.div>
+            </Home>
+          </div>
+          <div
+            style={{
+              width: '100%',
+              height: '20%',
+              overflow: 'auto',
+            }}
+          >
+            <Terminal />
+          </div>
+        </Tab>
       </Container>
     </motion.div>
   );
@@ -207,10 +222,11 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
 
 const Home = styled.div`
   width: 100%;
-  height: 20%;
+  height: 100%;
   margin: 0 auto;
-  background: url(${background});
+  background: url(${background}) no-repeat;
   overflow: hidden;
+  background-size: cover;
 `;
 
 export default ResizableTabs;

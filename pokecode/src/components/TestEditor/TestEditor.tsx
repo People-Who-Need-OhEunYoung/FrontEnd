@@ -24,38 +24,19 @@ import './TestEditor.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setWrittenCode } from '../../store/problemSlice';
-import { setReturnCall } from '../../store/codeCallerReducer';
 
 const TestEditor = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
-  // ------- 타이핑 출력 start ---------
-  // 텍스트 결과 셋팅용
-  const [testcaseResult, setTestcaseResult] = useState('');
-  // 한글자씩 글자를 추가할 빈문자열 변수 sequence를 선언합니다.
-  const [sequence, setSequence] = useState<string>('');
-  // 현재까지 타이핑된 문자열의 위치(인덱스)를 나타내는 변수 textCount를 선언합니다.
-  const [textCount, setTextCount] = useState<number>(0);
-  // 모든 문자열이 타이핑된 후 일시정지인지 아닌지 여부를 나타내는 변수를 선언합니다.
-  const [isTypingPaused, setIsTypingPaused] = useState<boolean>(false);
-  // ------- 타이핑 출력 end ---------
+
   const [editorContent, setEditorContent] = useState('');
   const { isAcquireReview } = useSelector((state: RootState) => state.probinfo);
-  const { returnCall, language } = useSelector(
-    (state: RootState) => state.codecaller
-  );
+  const { language } = useSelector((state: RootState) => state.codecaller);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (editor != null) editor.setOption('mode', language);
   }, [language]);
-
-  useEffect(() => {
-    // PDG 테스트 케이스 리턴 메세지를 받도록 수정
-    setSequence('');
-    setTextCount(0);
-    setTestcaseResult(returnCall);
-  }, [returnCall]);
 
   useEffect(() => {
     // KHS 코드 리뷰방으로 이동을 위해 dispatch 작업
@@ -65,7 +46,7 @@ const TestEditor = () => {
 
   useEffect(() => {
     if (editorContainerRef.current) {
-      if (editor == null && returnCall == '') {
+      if (editor == null) {
         const cmEditor = CodeMirror(editorContainerRef.current, {
           theme: 'dracula',
           mode: language,
@@ -87,84 +68,16 @@ const TestEditor = () => {
 
         setEditor(cmEditor);
       }
-      //---------- 실시간으로 에디터 변경사항이 생기면 바로 서버에게 전송하는 로직 폴리싱 ------------//
-      // const handleChange = useRef((instance: any, changeObj: any) => {
-      //   const editedContent = instance.getValue();
-      //   // Fetch를 사용하여 서버로 변경된 내용 전송
-      //   fetch('/problem/editor-content', {
-      //     method: 'POST',
-      //     headers: { 'Content-Type': 'application/json' },
-      //     body: JSON.stringify({ content: editedContent })
-      //   })
-      //   .then(response => response.json())
-      //   .then(data => console.log('Data sent successfully', data))
-      //   .catch(error => console.error('Error sending data:', error));
-      // });
-      //  // CodeMirror 에디터에 Change 이벤트 리스너를 추가, 해당 리스너는 에디터 내용이 변경될 때마다 호출
-      //  editor.on('change', handleChange.current);
-      // return () => {
-      //   //editor.off('change', handleChange.current);  // 이벤트 리스너를 제거할 때 핸들러 함수를 함께 제공
-      // };
     }
-    const typingInterval = setInterval(() => {
-      if (isTypingPaused) {
-        clearInterval(typingInterval);
-      }
-
-      if (textCount >= testcaseResult.length) {
-        //text length 초과 시 undefind가 출력되는 것을 방지
-        setIsTypingPaused(true);
-        // console.log(isTypingPaused);
-        return;
-      }
-
-      const nextChar = testcaseResult[textCount];
-      setSequence((prevSequence) => prevSequence + nextChar);
-
-      if (nextChar === '\n') {
-        setTextCount((prevCount) => prevCount + 1);
-      } else {
-        setTextCount((prevCount) => prevCount + 1);
-      }
-    }, 30); // 설정한 초만큼 일정한 간격마다 실행된다
-
-    return () => clearInterval(typingInterval); //컴포넌트가 마운트 해제되거나, 재렌더링 될 때마다 setInterval를 정리하는 함수를 반환함.
-    //텍스트결과, 컨텐츠, 타이핑 정지 여부 등의 변화로 타이핑 효과 연출
-  }, [testcaseResult, textCount, isTypingPaused, returnCall]);
-
-  useEffect(() => {
-    dispatch(setReturnCall(''));
-    setSequence('');
-    setTextCount(0);
-    setTestcaseResult(returnCall);
-  }, [dispatch]);
+  }, []);
 
   return (
     <>
       <div
-        style={{ height: '80%' }}
+        style={{ height: '100%' }}
         ref={editorContainerRef}
         className="editor-container"
       ></div>
-      <div
-        style={{
-          background: 'yellow',
-          width: '100%',
-          height: '20%',
-          overflow: 'hidden',
-        }}
-      >
-        <pre
-          style={{
-            height: '100%',
-            background: '#000',
-            color: 'white',
-            overflow: 'auto',
-          }}
-        >
-          {sequence}
-        </pre>
-      </div>
     </>
   );
 };
