@@ -5,12 +5,15 @@ import { setReturnCall } from '../../store/codeCallerReducer';
 import { useEffect } from 'react';
 
 const CodeRunButton = () => {
+
   const { writtenCode, TestCases } = useSelector(
     (state: RootState) => state.probinfo
   );
+
   const { elapsedTime, limitTime } = useSelector(
     (state: RootState) => state.timer
   );
+
 
   const dispatch = useDispatch();
 
@@ -22,11 +25,12 @@ const CodeRunButton = () => {
     dispatch(setReturnCall(''));
   };
 
-  useEffect(() => {
-    console.log('TestCases', TestCases);
-    console.log('elapsedTime', elapsedTime);
-    console.log('limitTime', limitTime);
-  }, [TestCases]);
+
+  // useEffect(() => {
+  //   console.log('TestCases', TestCases);
+  //   console.log('elapsedTime', elapsedTime);
+  //   console.log('limitTime', limitTime);
+  // }, [TestCases]);
 
   const handleSubmit = async () => {
     const editorContent = writtenCode;
@@ -41,8 +45,10 @@ const CodeRunButton = () => {
           code: editorContent,
           bojNumber: id,
           elapsed_time: elapsedTime,
+
           limit_time: limitTime,
           testCase: TestCases,
+
         }),
       });
 

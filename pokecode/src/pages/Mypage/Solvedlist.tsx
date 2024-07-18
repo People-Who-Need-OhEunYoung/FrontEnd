@@ -19,12 +19,11 @@ const Solvedlist = () => {
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
 
-  console.log(items);
-
   const fetchUserData = async () => {
     try {
       const res = await getTop100(query);
       setUserData(JSON.stringify(res));
+      return res;
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -59,6 +58,7 @@ const Solvedlist = () => {
   };
 
   useEffect(() => {
+
     setQuery('ejrrl6931');
     if (query != '') {
       fetchUserData();
@@ -78,6 +78,7 @@ const Solvedlist = () => {
     }
     // const result = getResolvedProblems;
     // console.log("문제쿼리 결과:", result);
+
   }, [userData, query, problems]);
 
   return (

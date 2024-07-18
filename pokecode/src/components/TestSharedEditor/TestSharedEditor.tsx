@@ -7,16 +7,18 @@ import { CodemirrorBinding } from 'y-codemirror';
 import { WebsocketProvider } from 'y-websocket';
 import CodeMirror from 'codemirror';
 import './TestSharedEditor.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { userInfo } from '../../utils/api/api';
+import { setWrittenCode } from '../../store/problemSlice';
 
 const TestSharedEditor = ({ editorRoom = 'notice' }) => {
   const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
+  const [editorContent, setEditorContent] = useState('');
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const { writtenCode } = useSelector((state: RootState) => state.probinfo);
   const { language } = useSelector((state: RootState) => state.codecaller);
-
+  const dispatch = useDispatch();
   //우현변수start
   const roomId = localStorage.getItem('roomId');
   //우현변수end
@@ -30,7 +32,10 @@ const TestSharedEditor = ({ editorRoom = 'notice' }) => {
     (element as HTMLElement).style.backgroundSize = 'contain';
   }
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // KHS 코드 리뷰방으로 이동을 위해 dispatch 작업
+    dispatch(setWrittenCode(editorContent));
+  }, [editorContent]);
 
   useEffect(() => {
     if (editor != null) editor.setOption('mode', language);
@@ -76,6 +81,12 @@ const TestSharedEditor = ({ editorRoom = 'notice' }) => {
             'Ctrl-Space': 'autocomplete', // 자동 완성 키 설정
           },
         });
+
+        seteditor.on('change', (instance) => {
+          const editedContent = instance.getValue();
+          setEditorContent(editedContent);
+        });
+
         setEditor(seteditor);
 
         const binding = new CodemirrorBinding(

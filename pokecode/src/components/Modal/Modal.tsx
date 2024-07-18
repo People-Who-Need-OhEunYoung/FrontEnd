@@ -67,7 +67,7 @@ const Modal = ({
           ) : nowcomponent === 3 ? (
             <>
               <Title>{'축하합니다!'}</Title>
-              <ModalContent3 />
+              <ModalContent3 onoff={event} />
             </>
           ) : nowcomponent === 4 ? (
             <>
