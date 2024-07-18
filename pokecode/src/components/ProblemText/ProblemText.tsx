@@ -316,7 +316,7 @@ const InoutWrap = styled.div`
 const Hr = styled.hr`
   border-color: #55e79e;
   margin: 10px 0 10px 0;
-  width: 6%;
+  width: 45px;
 `;
 
 const TextBox = styled.span`
