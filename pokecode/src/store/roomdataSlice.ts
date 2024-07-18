@@ -5,12 +5,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface RoomdataState {
   username: string | null;
   roomId: string | null;
+  userArray: any;
 }
 
 //초기상태 설정
 const initialState: RoomdataState = {
   username: '',
   roomId: '',
+  userArray: {},
 };
 
 const roomdataSlice = createSlice({

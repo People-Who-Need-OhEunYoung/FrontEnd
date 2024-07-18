@@ -1,6 +1,5 @@
-import { DesignedButton1 } from '../DesignedButton';
-import { Link } from 'react-router-dom';
 import ReactConfetti from 'react-confetti';
+import { CodeAIButton } from '../CodeAIButton';
 const ModalContent3 = ({
   onOff,
   poketmon = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/133.gif',
@@ -14,9 +13,9 @@ const ModalContent3 = ({
         numberOfPieces={100}
         colors={['#e85454', '#ff9eec', 'yellow']}
       />
-      <DesignedButton1 color="cadetblue" onClick={onOff}>
-        <Link to={'/modal'}>AI 코드 피드백 확인</Link>
-      </DesignedButton1>
+      <div onClick={() => onOff(false)}>
+        <CodeAIButton></CodeAIButton>
+      </div>
     </div>
   );
 };
