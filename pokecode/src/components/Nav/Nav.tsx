@@ -11,7 +11,7 @@ const Nav = () => {
 };
 
 const cssHeadNav = {
-  padding: '25px 0',
+  padding: '15px 0',
   width: '100%',
   height: '50px',
   lineHeight: '50px',

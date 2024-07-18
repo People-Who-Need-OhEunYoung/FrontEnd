@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { getTop100 } from '../../utils/api/solvedAc';
-import { crawlUserprob } from '../../utils/api/solvedAc';
-import cheerio from 'cheerio';
+// import { getTop100 } from '../../utils/api/solvedAc';
+// import { crawlUserprob } from '../../utils/api/solvedAc';
+// import cheerio from 'cheerio';
 
 type ItemType = {
   problemId: number;
@@ -11,38 +11,39 @@ type ItemType = {
 };
 
 const Solvedlist = () => {
-  const [query, setQuery] = useState(''); // 사용자 검색 쿼리
-  const [userData, setUserData] = useState(''); // API로부터 받은 데이터
-  const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
-  const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
+  const [query] = useState(''); // 사용자 검색 쿼리
+  const [userData] = useState(''); // API로부터 받은 데이터
+  const [items] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
+  const [problems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
   const [page, setPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
+  const [totalPages] = useState<number>(0);
+  console.log(page);
+  console.log(items);
+  // const fetchUserData = async () => {
+  //   try {
+  //     const res = await getTop100(query);
+  //     setUserData(JSON.stringify(res));
+  //     return res;
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   }
+  // };
 
-  const fetchUserData = async () => {
-    try {
-      const res = await getTop100(query);
-      setUserData(JSON.stringify(res));
-      return res;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+  // const fetchCrawlData = async () => {
+  //   try {
+  //     const res = await crawlUserprob(query, page);
+  //     const $ = cheerio.load(res);
+  //     const nextData: any = $('#__NEXT_DATA__').html();
+  //     const parsedData = JSON.parse(nextData);
+  //     const solvedProblems: ItemType[] =
+  //       parsedData.props.pageProps.problems.items; // Adjust this part according to the actual data structure.
 
-  const fetchCrawlData = async () => {
-    try {
-      const res = await crawlUserprob(query, page);
-      const $ = cheerio.load(res);
-      const nextData: any = $('#__NEXT_DATA__').html();
-      const parsedData = JSON.parse(nextData);
-      const solvedProblems: ItemType[] =
-        parsedData.props.pageProps.problems.items; // Adjust this part according to the actual data structure.
-
-      setProblems(solvedProblems);
-      setTotalPages(parsedData.props.pageProps.problems.totalPages); // Adjust this part according to the actual data structure.
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+  //     setProblems(solvedProblems);
+  //     setTotalPages(parsedData.props.pageProps.problems.totalPages); // Adjust this part according to the actual data structure.
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   }
+  // };
 
   const renderPageButtons = () => {
     const buttons = [];
@@ -62,7 +63,6 @@ const Solvedlist = () => {
     //   fetchUserData();
     //   fetchCrawlData();
     // }
-
     // if (userData) {
     //   const parsedData = JSON.parse(userData);
     //   if (parsedData.count > 0) {

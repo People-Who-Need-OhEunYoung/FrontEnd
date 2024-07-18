@@ -29,7 +29,7 @@ const Main = ({ event }: any) => {
 const Div = styled.div`
   color: white;
   text-align: center;
-  height: calc(100vh - 180px);
+  height: calc(100vh - 160px);
   transition: 1s;
 `;
 const ButtonDiv = styled.div`

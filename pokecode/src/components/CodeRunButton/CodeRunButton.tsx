@@ -2,10 +2,8 @@ import { DesignedButton1 } from '../DesignedButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setReturnCall } from '../../store/codeCallerReducer';
-import { useEffect } from 'react';
 
 const CodeRunButton = () => {
-
   const { writtenCode, TestCases } = useSelector(
     (state: RootState) => state.probinfo
   );
@@ -13,7 +11,6 @@ const CodeRunButton = () => {
   const { elapsedTime, limitTime } = useSelector(
     (state: RootState) => state.timer
   );
-
 
   const dispatch = useDispatch();
 
@@ -24,7 +21,6 @@ const CodeRunButton = () => {
   const handleInit = () => {
     dispatch(setReturnCall(''));
   };
-
 
   // useEffect(() => {
   //   console.log('TestCases', TestCases);
@@ -48,7 +44,6 @@ const CodeRunButton = () => {
 
           limit_time: limitTime,
           testCase: TestCases,
-
         }),
       });
 

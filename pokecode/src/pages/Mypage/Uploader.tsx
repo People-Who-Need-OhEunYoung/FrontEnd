@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { RootState } from '../../store/index';
 import { useSelector } from 'react-redux';
@@ -97,7 +97,7 @@ const Input = styled.input`
   text-align: left;
   font-size: 1rem;
   min-height: 11.5px; /* 최소 높이를 설정 */
-  border:none;
+  border: none;
   width: 50%;
   margin: 0 10px;
 `;

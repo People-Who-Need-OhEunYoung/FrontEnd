@@ -14,7 +14,7 @@ export {
   SubmitCode,
   RunCode,
   SetTime,
-  SetNickName
+  SetNickName,
 };
 
 //닉네임 중복 검사
@@ -371,12 +371,14 @@ const SubmitCode = async (editorContent: string, id: string): Promise<any> => {
 interface TestCase {
   input_case: string;
   output_case: string;
-};
-
+}
 
 //테스트케이스 실행하기
-const RunCode = async (editorContent: string, id: string, testCases: TestCase[]): Promise<any> => {
-
+const RunCode = async (
+  editorContent: string,
+  id: string,
+  testCases: TestCase[]
+): Promise<any> => {
   return await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
     method: 'POST',
     headers: {
@@ -387,7 +389,7 @@ const RunCode = async (editorContent: string, id: string, testCases: TestCase[])
       code: editorContent,
       bojNumber: id,
       testCase: testCases,
-      elapsed_time: elapsedTime,
+      elapsed_time: '',
     }),
   })
     .then((res) => {
@@ -406,60 +408,62 @@ const RunCode = async (editorContent: string, id: string, testCases: TestCase[])
     });
 };
 
-
-const SetTime  = async (elapsedTime: number, limitTime: number, problemId: string): Promise<any> => {
+const SetTime = async (
+  elapsedTime: number,
+  limitTime: number,
+  problemId: string
+): Promise<any> => {
   return await fetch(`${import.meta.env.VITE_APP_IP}/setTime`, {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify( {
+    body: JSON.stringify({
       elapsed_time: elapsedTime,
       limit_time: limitTime,
       problem_id: problemId,
     }),
   })
-  .then((res) => {
-    if (!res.ok) {
-      throw new Error(`HTTP error! Status: ${res.statusText}`);
-    }
-    return res.json();
-  })
-  .then((data) => {
-    console.log(data);
-    return data;
-  })
-  .catch((error) => {
-    console.log(error);
-    return 'ERROR : ' + error;
-  });
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.statusText}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      console.log(data);
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return 'ERROR : ' + error;
+    });
 };
 
-
-const SetNickName  = async (nickName: string): Promise<any> => {
+const SetNickName = async (nickName: string): Promise<any> => {
   return await fetch(`${import.meta.env.VITE_APP_IP}/changeNickName`, {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify( {
+    body: JSON.stringify({
       nickName: nickName,
     }),
   })
-  .then((res) => {
-    if (!res.ok) {
-      throw new Error(`HTTP error! Status: ${res.statusText}`);
-    }
-    return res.json();
-  })
-  .then((data) => {
-    console.log(data);
-    return data;
-  })
-  .catch((error) => {
-    console.log(error);
-    return 'ERROR : ' + error;
-  });
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.statusText}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      console.log(data);
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return 'ERROR : ' + error;
+    });
 };

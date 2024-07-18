@@ -1,9 +1,9 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   color: white;
   text-align: center;
-  height: calc(100vh - 180px);
+  height: calc(100vh - 160px);
   transition: 1s;
   opacity: 0;
 `;

@@ -57,7 +57,7 @@ const Gacha = () => {
       }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
+      style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
       <MainWrapper style={{ background: '#FFBBD3', flexDirection: 'column' }}>
         <h1 style={{ color: '#80495C', fontWeight: 'bold', fontSize: '3em' }}>

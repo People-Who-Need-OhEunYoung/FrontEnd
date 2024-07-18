@@ -7,7 +7,7 @@ const Modal = styled.div`
   justify-content: center;
   align-items: center; // 자식 요소들을 세로 방향으로 중앙 정렬
   width: 75%;
-  height: calc(100vh - 180px);
+  height: calc(100vh - 160px);
   margin: 0 auto;
   color: #ffffff;
   background: #111826;
