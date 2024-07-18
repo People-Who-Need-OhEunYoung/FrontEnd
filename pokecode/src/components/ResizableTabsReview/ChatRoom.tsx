@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef, ChangeEvent, KeyboardEvent } from 'react';
 import io, { Socket } from 'socket.io-client';
-import { useNavigate } from 'react-router-dom';
 
 interface Message {
   username: any;
@@ -15,14 +14,36 @@ const ChatRoom: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
+  const [first, setFirst] = useState(false);
   const socketRef = useRef<Socket | null>(null);
-  const navigate = useNavigate();
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const savedUsername: string | null = localStorage.getItem('username');
   const savedRoomId: string | null = localStorage.getItem('roomId');
 
   console.log('1---------------------------------' + savedUsername);
   console.log('2---------------------------------' + savedRoomId);
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      sendMessage();
+    }
+  };
+  useEffect(() => {
+    setMessage('[notice]' + savedUsername + '님이 입장했습니다.');
+    setFirst(true);
+    sendMessage();
+  }, [first]);
 
   useEffect(() => {
     if (!savedUsername || !savedRoomId) {
@@ -90,6 +111,13 @@ const ChatRoom: React.FC = () => {
   const leaveRoom = () => {
     const socket = socketRef.current;
     if (socket) {
+      const leaveMessage = `[notice]${savedUsername}님이 퇴장했습니다.`;
+      socket.emit('SEND_MESSAGE', {
+        roomId: savedRoomId,
+        username: savedUsername,
+        message: leaveMessage,
+      });
+
       console.log(`Leaving room ${savedRoomId}`);
       socket.emit('DISCONNECT_FROM_ROOM', { savedRoomId, savedUsername }); // Request server to remove user info
       socket.off();
@@ -98,46 +126,149 @@ const ChatRoom: React.FC = () => {
       setMessage('');
       localStorage.removeItem('username');
       localStorage.removeItem('roomId');
-      navigate('roomlist');
     }
   };
 
   return (
-    <>
-      <h2>너의 이름은 {savedUsername}</h2>
+    <div style={{ overflow: 'hidden', height: '100%' }}>
+      {/* <h2>너의 이름은 {savedUsername}</h2>
       <h2>방 ID: {savedRoomId}</h2>
       <h2>
-        방에 접속중인 사람 개수: <b>{users.length}</b>
+      방에 접속중인 사람 개수: <b>{users.length}</b>
       </h2>
-      <button onClick={leaveRoom}>나가기</button>
-      <div>
-        <div
-          style={{
-            height: '300px',
-            overflowY: 'scroll',
-            border: '1px solid black',
-          }}
-        >
-          {messages.map((msg, index) => (
-            <div key={index}>
-              <strong>{msg.username}: </strong>
-              {msg.message}
+      <button onClick={leaveRoom}>나가기</button> */}
+
+      <h2
+        style={{
+          height: '8%',
+          textAlign: 'center',
+          color: 'white',
+          lineHeight: '55px',
+        }}
+      >
+        방에 접속중인 인원: <b>{users.length}</b>
+      </h2>
+      <div
+        style={{
+          overflowY: 'scroll',
+          height: '82%',
+        }}
+      >
+        {messages.map((msg, index) =>
+          msg.message.includes('[notice]') ? (
+            <h2
+              key={index}
+              style={{
+                background: 'white',
+                textAlign: 'center',
+                borderRadius: '10px',
+                boxSizing: 'border-box',
+                margin: '10px',
+                padding: '10px',
+              }}
+            >
+              {msg.message.replace('[notice]', '')}
+            </h2>
+          ) : msg.username == savedUsername ? (
+            <div style={{ textAlign: 'right' }}>
+              <strong
+                style={{
+                  display: 'inline-block',
+                  background: 'white',
+                  padding: '5px',
+                  borderRadius: '5px',
+                  margin: '3px 10px',
+                }}
+              >
+                {msg.username}
+              </strong>
+              <br />
+              <pre
+                style={{
+                  boxSizing: 'border-box',
+                  padding: '10px',
+                  background: 'white',
+                  display: 'inline-block',
+                  borderRadius: '5px',
+                  margin: '0 10px',
+                  maxWidth: '300px',
+                  whiteSpace: 'break-spaces',
+                  wordBreak: 'break-all',
+                }}
+                key={index}
+              >
+                {msg.message}
+              </pre>
             </div>
-          ))}
-        </div>
-        <input
-          type="text"
+          ) : (
+            <div>
+              <strong
+                style={{
+                  display: 'inline-block',
+                  background: 'white',
+                  padding: '5px',
+                  borderRadius: '5px',
+                  margin: '3px 10px',
+                }}
+              >
+                {msg.username}
+              </strong>
+              <br />
+              <pre
+                style={{
+                  boxSizing: 'border-box',
+                  padding: '10px',
+                  background: 'white',
+                  display: 'inline-block',
+                  borderRadius: '5px',
+                  margin: '10px',
+                  maxWidth: '300px',
+                  whiteSpace: 'break-spaces',
+                  wordBreak: 'break-all',
+                }}
+                key={index}
+              >
+                {msg.message}
+              </pre>
+            </div>
+          )
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+      <div style={{ height: '10%' }}>
+        <textarea
           value={message}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
             setMessage(e.target.value)
           }
-          onKeyPress={(e: KeyboardEvent<HTMLInputElement>) =>
-            e.key === 'Enter' && sendMessage()
-          }
+          onKeyDown={handleKeyDown}
+          placeholder="메시지를 입력하세요..."
+          rows={2}
+          style={{
+            height: '100%',
+            width: '80%',
+            margin: '0',
+            border: '1px solid #ccc',
+            padding: '10px',
+            borderRadius: '5px',
+            boxSizing: 'border-box',
+            resize: 'none',
+          }}
         />
-        <button onClick={sendMessage}>보내기</button>
+        <button
+          style={{
+            height: '100%',
+            width: '20%',
+            margin: '0',
+            border: 'none',
+            float: 'right',
+          }}
+          onClick={sendMessage}
+        >
+          보내기
+        </button>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -374,7 +374,8 @@ interface TestCase {
 const RunCode = async (
   editorContent: string,
   id: string,
-  testCases: TestCase[]
+  testCases: TestCase[],
+  elapsedTime: number
 ): Promise<any> => {
   return await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
     method: 'POST',
@@ -386,6 +387,7 @@ const RunCode = async (
       code: editorContent,
       bojNumber: id,
       testCase: testCases,
+      elapsed_time: elapsedTime,
     }),
   })
     .then((res) => {

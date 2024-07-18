@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Modal from '../../components/Modal/Modal';
-import { createRoom, showRoomList } from '../../utils/api/api';
+import { showRoomList } from '../../utils/api/api';
 
 type ItemType = {
   roomId: number;

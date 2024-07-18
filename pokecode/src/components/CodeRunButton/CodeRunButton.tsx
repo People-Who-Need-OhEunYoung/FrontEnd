@@ -5,6 +5,7 @@ import { setReturnCall } from '../../store/codeCallerReducer';
 
 const CodeRunButton = () => {
   const { writtenCode } = useSelector((state: RootState) => state.probinfo);
+  const { elapsedTime } = useSelector((state: RootState) => state.timer);
 
   const dispatch = useDispatch();
 
@@ -15,7 +16,7 @@ const CodeRunButton = () => {
   const handleInit = () => {
     dispatch(setReturnCall(''));
   };
-  
+
   const handleSubmit = async () => {
     const editorContent = writtenCode;
     try {
@@ -25,7 +26,11 @@ const CodeRunButton = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify({ code: editorContent, bojNumber: id }),
+        body: JSON.stringify({
+          code: editorContent,
+          bojNumber: id,
+          elapsed_time: elapsedTime,
+        }),
       });
 
       if (!response.ok) {

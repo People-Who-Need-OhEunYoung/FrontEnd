@@ -110,25 +110,29 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   useEffect(() => {
     userSet();
     const animateRandomly = async () => {
-      while (true) {
-        // 무작위 위치로 애니메이션 시작
-        const newPosition = getRandomPosition();
-        await controls.start({
-          ...newPosition,
-          transition: { duration: 1 + Math.random() * 3 },
-        });
+      try {
+        while (true) {
+          // 무작위 위치로 애니메이션 시작
+          const newPosition = getRandomPosition();
+          await controls.start({
+            ...newPosition,
+            transition: { duration: 1 + Math.random() * 3 },
+          });
 
-        // 1초 동안 대기
-        await sleep(1000);
+          // 1초 동안 대기
+          await sleep(1000);
 
-        // 제자리 애니메이션 (사실상 이동이 없도록 함)
-        await controls.start({
-          x: newPosition.x,
-          transition: { duration: 1 + Math.random() * 3 },
-        });
+          // 제자리 애니메이션 (사실상 이동이 없도록 함)
+          await controls.start({
+            x: newPosition.x,
+            transition: { duration: 1 + Math.random() * 3 },
+          });
 
-        // 다시 1초 동안 대기
-        await sleep(1000);
+          // 다시 1초 동안 대기
+          await sleep(1000);
+        }
+      } catch {
+        console.log('화면이동 감지');
       }
     };
     animateRandomly();
@@ -153,8 +157,16 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           >
             <ProblemText id={id} isShowHeader="true" size="90%" />
           </div>
-          <Home style={{ position: 'relative'}} onClick={handleDivClick}>
-            <CodeAIWardBalloon />
+          <Home style={{ position: 'relative' }} onClick={handleDivClick}>
+            <CodeAIWardBalloon
+              width="50%"
+              left="0"
+              fontSize="1.5em"
+              padding="20px 4%"
+              right="70px"
+              bottom="150px"
+              position="fixed"
+            />
             <motion.div
               animate={controls}
               style={{
