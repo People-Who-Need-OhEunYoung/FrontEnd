@@ -15,6 +15,7 @@ import { pokemonName } from '../../utils/api/api';
 import { updateMyPokemon } from '../../utils/api/api';
 import { minusUserCredit, setPokemonId } from '../../store/userInfo';
 import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
 
 const gachaArray = [gacha1, gacha2, gacha3, gacha4, gacha5, gacha6];
 const Gacha = () => {
@@ -70,7 +71,7 @@ const Gacha = () => {
             borderRadius: '50% 50% 50% 0',
           }}
         >
-          <img src={garchimg} width={'100%'} />
+          <GachaImg src={garchimg} width={'100%'} />
         </div>
 
         {isDisabled ? (
@@ -206,5 +207,20 @@ const Gacha = () => {
     </motion.div>
   );
 };
+
+
+const GachaImg = styled.img`
+  width: 100%;
+
+  /* &:after {
+    box-shadow: 
+    inset 0 0 20px #fff,
+    inset 0 0 20px #fff,
+    inset 0 0 20px #fff,
+    inset 0 0 20px #fff;
+  } 
+   */
+
+`;
 
 export default Gacha;

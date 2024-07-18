@@ -7,6 +7,7 @@
 input::placeholder {
   color: white;
 }
+
 /* Chrome, Firefox, Opera, Safari 10.1+ */
 input {
   outline: none;
@@ -36,7 +37,7 @@ input {
 ::-webkit-scrollbar-thumb {
   height: 20%;
   /* 스크롤바의 길이 */
-  background: #33347d;
+  background: #38BDF8;
   /* 스크롤바 막대 테두리 설정  */
   /* border-radius: 12px 12px 12px 12px; */
 }
