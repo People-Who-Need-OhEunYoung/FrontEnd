@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { getTop100 } from '../../utils/api/solvedAc';
 import { crawlUserprob } from '../../utils/api/solvedAc';
 import cheerio from 'cheerio';
+// import { getResolvedProblems } from '../../utils/api/api';
 
 type ItemType = {
   problemId: number;
@@ -75,6 +76,8 @@ const Solvedlist = () => {
         setItems(itemsArray); // items 상태 업데이트
       }
     }
+    // const result = getResolvedProblems;
+    // console.log("문제쿼리 결과:", result);
   }, [userData, query, problems]);
 
   return (

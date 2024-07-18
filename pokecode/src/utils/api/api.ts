@@ -13,6 +13,7 @@ export {
   createRoom,
   SubmitCode,
   RunCode,
+  // getResolvedProblems
 };
 
 //닉네임 중복 검사
@@ -404,3 +405,26 @@ const RunCode = async (editorContent: string, id: string, testCases: TestCase[])
   });
 };
 
+// //푼 문제 정보 가져오기
+// const getResolvedProblems = async () => {
+//   return await fetch(`${import.meta.env.VITE_APP_IP}/resolvedProblems`, {
+//     method: 'GET',
+//     headers: {
+//       Authorization: 'Bearer ' + localStorage.getItem('token'),
+//       'Content-Type': 'application/json',
+//     },
+//   })
+//     .then((res) => {
+//       if (!res.ok) {
+//         throw new Error(`HTTP error! Status: ${res.status}`);
+//       }
+//       return res.json();
+//     })
+//     .then((data) => {
+//       return data;
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//       return 'ERROR : ' + error;
+//     });
+// };
