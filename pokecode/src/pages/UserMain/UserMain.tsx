@@ -62,32 +62,36 @@ const UserMain = () => {
   };
 
   const animateRandomly = async () => {
-    while (true) {
-      // 무작위 위치로 애니메이션 시작
-      const newPosition = getRandomPosition();
+    try {
+      while (true) {
+        // 무작위 위치로 애니메이션 시작
+        const newPosition = getRandomPosition();
 
-      await controls.start({
-        ...newPosition,
-        transition: { duration: 1 + Math.random() * 3 },
-      });
+        await controls.start({
+          ...newPosition,
+          transition: { duration: 1 + Math.random() * 3 },
+        });
 
-      const newNewPosition = getRandomPosition();
+        const newNewPosition = getRandomPosition();
 
-      await controls.start({
-        ...newNewPosition,
-        transition: { duration: 1 + Math.random() * 3 },
-      });
+        await controls.start({
+          ...newNewPosition,
+          transition: { duration: 1 + Math.random() * 3 },
+        });
 
-      // 1초 동안 대기
-      await sleep(1000);
+        // 1초 동안 대기
+        await sleep(1000);
 
-      // 제자리 애니메이션 (사실상 이동이 없도록 함)
-      controls.start({
-        ...newNewPosition,
-        transition: { duration: 1 + Math.random() * 3 },
-      });
-      // 다시 1초 동안 대기
-      await sleep(1000);
+        // 제자리 애니메이션 (사실상 이동이 없도록 함)
+        controls.start({
+          ...newNewPosition,
+          transition: { duration: 1 + Math.random() * 3 },
+        });
+        // 다시 1초 동안 대기
+        await sleep(1000);
+      }
+    } catch {
+      console.log('화면이동 감지');
     }
   };
 

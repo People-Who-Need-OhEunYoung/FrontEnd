@@ -30,7 +30,6 @@ const CodeSubmitButton = () => {
     }
   };
 
-
   return (
     <>
       <Modal

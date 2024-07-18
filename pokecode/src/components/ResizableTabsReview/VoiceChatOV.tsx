@@ -107,8 +107,8 @@ const VoiceChatOV: React.FC = () => {
       setPublisher(null);
       setUsers((prevUsers) => prevUsers.filter((u) => u.username !== username));
       setIsMuted(false);
-      setIsJoined(false);
     }
+    setIsJoined(false);
   };
 
   const toggleMute = () => {
@@ -120,22 +120,102 @@ const VoiceChatOV: React.FC = () => {
   };
 
   return (
-    <div className="VoiceChat">
-      <h1>오픈비두</h1>
-      <button onClick={joinSession}>음성채팅 참여하기</button>
-      {session && <button onClick={leaveSession}>음성채팅 나가기</button>}
-      <div id="audio-container"></div>
-      {publisher && (
-        <button onClick={toggleMute}>{isMuted ? 'Unmute' : 'Mute'}</button>
-      )}
-      <h3>참여 중인 사용자:</h3>
-      <ul>
-        {users.map((user) => (
-          <li key={user.socketId}>
-            {user.username} {user.isMuted ? '(Muted)' : ''}
-          </li>
-        ))}
-      </ul>
+    <div className="VoiceChat" style={{ position: 'relative', height: '100%' }}>
+      <div style={{ height: 'calc(100% - 80px)', overflowY: 'auto' }}>
+        <div id="audio-container" style={{ display: 'none' }}></div>
+        <h3 style={{ color: 'white' }}>참여 중인 사용자:</h3>
+        <ul style={{ color: 'white' }}>
+          {users.map((user) => (
+            <li key={user.socketId}>
+              {user.username} {user.isMuted ? '(Muted)' : ''}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            textAlign: 'center',
+            width: '100%',
+            display: 'inline-block',
+          }}
+        >
+          {publisher && (
+            <button
+              style={{
+                display: 'inline-block',
+                background: '#5F6275',
+                color: 'white',
+                fontSize: '1.2em',
+                fontWeight: 'bold',
+                position: 'relative',
+                height: '40px',
+                right: 0,
+                width: '100%',
+              }}
+              onClick={toggleMute}
+            >
+              {isMuted ? 'Unmute' : 'Mute'}
+            </button>
+          )}
+          {isJoined ? (
+            session && (
+              <button
+                onClick={leaveSession}
+                style={{
+                  display: 'inline-block',
+                  background: '#5F6275',
+                  color: 'white',
+                  fontSize: '1.2em',
+                  fontWeight: 'bold',
+                  position: 'relative',
+                  height: '40px',
+                  right: 0,
+                  width: '100%',
+                }}
+              >
+                음성채팅종료
+                <svg
+                  style={{ width: '37px' }}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 640 512"
+                  fill="white"
+                >
+                  <path d="M228.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C76.1 30.2 64 46 64 64c0 107.4 37.8 206 100.8 283.1L9.2 469.1c-10.4 8.2-12.3 23.3-4.1 33.7s23.3 12.3 33.7 4.1l592-464c10.4-8.2 12.3-23.3 4.1-33.7s-23.3-12.3-33.7-4.1L253 278c-17.8-21.5-32.9-45.2-45-70.7L257.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96zm96.8 319l-91.3 72C310.7 476 407.1 512 512 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L368.7 368c-15-7.1-29.3-15.2-43-24.3z" />
+                </svg>
+              </button>
+            )
+          ) : (
+            <button
+              onClick={joinSession}
+              style={{
+                display: 'inline-block',
+                background: '#5F6275',
+                color: 'white',
+                fontSize: '1.2em',
+                fontWeight: 'bold',
+                position: 'relative',
+                height: '40px',
+                right: 0,
+                width: '100%',
+              }}
+            >
+              음성채팅참여
+              <svg
+                style={{ width: '30px' }}
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+                fill="white"
+              >
+                <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" />
+              </svg>
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
