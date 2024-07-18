@@ -7,6 +7,8 @@ import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 import { userInfo } from '../../utils/api/api';
 import { CodeAIWardBalloon } from '../CodeAIButton';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const Container = styled.div`
   display: flex;
@@ -62,12 +64,9 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const [position, setPosition] = useState({
     x: '80%',
   });
-  const [user, setUser] = useState({
-    credit: 0,
-    curPokeId: 0,
-    nickName: '기본값',
-    result: '기본값',
-  });
+  const { pokemonId } = useSelector(
+    (state: RootState) => state.userinfo
+  );
   const containerRef = useRef<HTMLDivElement | null>(null);
   const controls = useAnimation();
 
@@ -103,12 +102,8 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   };
 
   const sleep = (ms: any) => new Promise((resolve) => setTimeout(resolve, ms));
-  const userSet = async () => {
-    setUser(await userInfo());
-  };
 
   useEffect(() => {
-    userSet();
     const animateRandomly = async () => {
       try {
         while (true) {
@@ -137,6 +132,8 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
     };
     animateRandomly();
   }, [controls]);
+
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -184,7 +181,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
             >
               <Pokemon
                 width={'100%'}
-                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${user.curPokeId}.gif`}
+                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemonId}.gif`}
               ></Pokemon>
             </motion.div>
           </Home>

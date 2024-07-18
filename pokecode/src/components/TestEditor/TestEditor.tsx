@@ -60,7 +60,7 @@ const TestEditor = () => {
   useEffect(() => {
     // KHS 코드 리뷰방으로 이동을 위해 dispatch 작업
     dispatch(setWrittenCode(editorContent));
-    // console.log(editorContent);
+    console.log(editorContent);
   }, [isAcquireReview, editorContent]);
 
   useEffect(() => {
@@ -87,6 +87,7 @@ const TestEditor = () => {
 
         setEditor(cmEditor);
       }
+
       //---------- 실시간으로 에디터 변경사항이 생기면 바로 서버에게 전송하는 로직 폴리싱 ------------//
       // const handleChange = useRef((instance: any, changeObj: any) => {
       //   const editedContent = instance.getValue();
@@ -106,6 +107,34 @@ const TestEditor = () => {
       //   //editor.off('change', handleChange.current);  // 이벤트 리스너를 제거할 때 핸들러 함수를 함께 제공
       // };
     }
+
+    // const typingInterval = setInterval(() => {
+    //   if (isTypingPaused) {
+    //     clearInterval(typingInterval);
+    //   }
+
+    //   if (textCount >= testcaseResult.length) {
+    //     //text length 초과 시 undefind가 출력되는 것을 방지
+    //     setIsTypingPaused(true);
+    //     console.log(isTypingPaused);
+    //     return;
+    //   }
+
+    //   const nextChar = testcaseResult[textCount];
+    //   setSequence((prevSequence) => prevSequence + nextChar);
+
+    //   if (nextChar === '\n') {
+    //     setTextCount((prevCount) => prevCount + 1);
+    //   } else {
+    //     setTextCount((prevCount) => prevCount + 1);
+    //   }
+    // }, 30); // 설정한 초만큼 일정한 간격마다 실행된다
+
+    // return () => clearInterval(typingInterval); //컴포넌트가 마운트 해제되거나, 재렌더링 될 때마다 setInterval를 정리하는 함수를 반환함.
+    // //텍스트결과, 컨텐츠, 타이핑 정지 여부 등의 변화로 타이핑 효과 연출
+  }, [ returnCall]);
+
+  useEffect(() => {
     const typingInterval = setInterval(() => {
       if (isTypingPaused) {
         clearInterval(typingInterval);
@@ -114,7 +143,7 @@ const TestEditor = () => {
       if (textCount >= testcaseResult.length) {
         //text length 초과 시 undefind가 출력되는 것을 방지
         setIsTypingPaused(true);
-        // console.log(isTypingPaused);
+        console.log(isTypingPaused);
         return;
       }
 
@@ -127,10 +156,7 @@ const TestEditor = () => {
         setTextCount((prevCount) => prevCount + 1);
       }
     }, 30); // 설정한 초만큼 일정한 간격마다 실행된다
-
-    return () => clearInterval(typingInterval); //컴포넌트가 마운트 해제되거나, 재렌더링 될 때마다 setInterval를 정리하는 함수를 반환함.
-    //텍스트결과, 컨텐츠, 타이핑 정지 여부 등의 변화로 타이핑 효과 연출
-  }, [testcaseResult, textCount, isTypingPaused, returnCall]);
+  }, [testcaseResult, textCount, isTypingPaused]);
 
   useEffect(() => {
     dispatch(setReturnCall(''));
