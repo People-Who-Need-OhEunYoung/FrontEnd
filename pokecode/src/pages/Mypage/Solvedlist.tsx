@@ -19,8 +19,14 @@ const Solvedlist = () => {
 
   //const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
 
+
   // const [page, setPage] = useState<number>(1);
   // const [totalPages] = useState<number>(0);
+
+  const [page, setPage] = useState<number>(1);
+  const [totalPages] = useState<number>(0);
+  console.log(page);
+
 
   // const fetchUserData = async () => {
   //   try {
