@@ -2,7 +2,6 @@ import { DesignedButton1 } from '../DesignedButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setReturnCall } from '../../store/codeCallerReducer';
-import { useEffect } from 'react';
 
 const CodeRunButton = () => {
 
@@ -45,7 +44,6 @@ const CodeRunButton = () => {
           code: editorContent,
           bojNumber: id,
           elapsed_time: elapsedTime,
-
           limit_time: limitTime,
           testCase: TestCases,
 

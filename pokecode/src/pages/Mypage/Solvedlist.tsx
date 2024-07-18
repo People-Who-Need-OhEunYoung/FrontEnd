@@ -15,23 +15,71 @@ interface Problem {
 
 const Solvedlist = () => {
   const [userData, setUserData] = useState(''); // API로부터 받은 데이터
+
   const [problems, setProblems] = useState<Problem[]>([]); // 문제 데이터를 저장할 배열
+  //const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
+  const fetchUserData = async () => {
+    try {
+      const res = await getTop100(query);
+      setUserData(JSON.stringify(res));
+      return res;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
+  const fetchCrawlData = async () => {
+    try {
+      const res = await crawlUserprob(query, page);
+      const $ = cheerio.load(res);
+      const nextData: any = $('#__NEXT_DATA__').html();
+      const parsedData = JSON.parse(nextData);
+      const solvedProblems: ItemType[] =
+        parsedData.props.pageProps.problems.items; // Adjust this part according to the actual data structure.
 
+      setProblems(solvedProblems);
+      setTotalPages(parsedData.props.pageProps.problems.totalPages); // Adjust this part according to the actual data structure.
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const renderPageButtons = () => {
+    const buttons = [];
+    for (let i = 1; i <= totalPages; i++) {
+      buttons.push(
+        <PageButton key={i} onClick={() => setPage(i)}>
+          {i}
+        </PageButton>
+      );
+    }
+    return buttons;
+  };
 
 
   useEffect(() => {
-
-
     const fetchResolvedProblems = async () => {
       const promiseResult = await getResolvedProblems();
       console.log("문제쿼리 결과:", promiseResult);
       if (promiseResult.result == 'success') {
         console.log("푼 문제:", promiseResult.resolvedProblems);
         setProblems(promiseResult.resolvedProblems)
-      }
-    }
+
+//     if (userData) {
+//       const parsedData = JSON.parse(userData);
+//       if (parsedData.count > 0) {
+//         const itemsArray = [];
+//         for (let i = 0; i < parsedData.items.length; i++) {
+//           const item = parsedData.items[i];
+//           itemsArray.push(item);
+//         }
+//         //setItems(itemsArray); // items 상태 업데이트
+
+//       }
+//     }
 
     fetchResolvedProblems()
 
