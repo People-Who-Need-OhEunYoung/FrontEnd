@@ -15,14 +15,13 @@ interface Problem {
 
 const Solvedlist = () => {
   const [userData, setUserData] = useState(''); // API로부터 받은 데이터
-
   const [problems, setProblems] = useState<Problem[]>([]); // 문제 데이터를 저장할 배열
+
   //const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
 
-  const [page, setPage] = useState<number>(1);
-  const [totalPages] = useState<number>(0);
-  console.log(page);
-  console.log(items);
+  // const [page, setPage] = useState<number>(1);
+  // const [totalPages] = useState<number>(0);
+
   // const fetchUserData = async () => {
   //   try {
   //     const res = await getTop100(query);
@@ -48,18 +47,18 @@ const Solvedlist = () => {
   //     console.error('Error fetching data:', error);
   //   }
   // };
-
-  const renderPageButtons = () => {
-    const buttons = [];
-    for (let i = 1; i <= totalPages; i++) {
-      buttons.push(
-        <PageButton key={i} onClick={() => setPage(i)}>
-          {i}
-        </PageButton>
-      );
-    }
-    return buttons;
-  };
+ 
+  // const renderPageButtons = () => {
+  //   const buttons = [];
+  //   for (let i = 1; i <= totalPages; i++) {
+  //     buttons.push(
+  //       <PageButton key={i} onClick={() => setPage(i)}>
+  //         {i}
+  //       </PageButton>
+  //     );
+  //   }
+  //   return buttons;
+  // };
 
 
   useEffect(() => {
@@ -71,24 +70,12 @@ const Solvedlist = () => {
         console.log("푼 문제:", promiseResult.resolvedProblems);
         setProblems(promiseResult.resolvedProblems)
 
-//     if (userData) {
-//       const parsedData = JSON.parse(userData);
-//       if (parsedData.count > 0) {
-//         const itemsArray = [];
-//         for (let i = 0; i < parsedData.items.length; i++) {
-//           const item = parsedData.items[i];
-//           itemsArray.push(item);
-//         }
-//         //setItems(itemsArray); // items 상태 업데이트
-
       }
     }
-
+    
     fetchResolvedProblems()
 
-
   }, [userData]);
-
 
   return (
     <Wrap>
@@ -98,11 +85,13 @@ const Solvedlist = () => {
       <hr style={{ marginBottom: '12px' }}></hr>
       <ListView>
         {problems.length > 0 ? (
-          problems.map(problem => (
+          problems.map((problem) => (
             <div>
               <ProblemBox>
                 <div>제목:{problem.problem_title}</div>
                 <div>얻은 크레딧:{problem.get_credit}</div>
+                <div>획득날짜:{problem.resolved_date}</div>
+                <div>경과시간:{problem.elapsed_time}</div>
               </ProblemBox>
             </div>
           ))
@@ -110,7 +99,6 @@ const Solvedlist = () => {
           <div>아직 푼 문제가 없습니다</div>
         )}
       </ListView>
-
     </Wrap>
   );
 };

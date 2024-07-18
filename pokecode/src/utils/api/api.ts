@@ -63,7 +63,6 @@ const userInfo = async () => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
       return data;
     })
     .catch((error) => {
@@ -86,7 +85,6 @@ const getPooCount = async () => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
       return data;
     })
     .catch((error) => {
@@ -113,7 +111,6 @@ const pokemonName = async (number: number) => {
       return res.json();
     })
     .then((data) => {
-      console.log(data.names[2].name);
       return data.names[2].name;
     })
     .catch(() => {
@@ -165,7 +162,6 @@ const getGachaPokemon: Function = async () => {
       return res.json();
     })
     .then(async (data) => {
-      console.log(data);
       return await fetch(data.chain.species.url, {
         method: 'GET',
       })
@@ -208,8 +204,6 @@ const updateMyPokemon = async (pokId: number) => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
-      console.log(pokId);
       return data;
     })
     .catch((error) => {
@@ -269,6 +263,7 @@ const showPokemonBook = async () => {
       return res.json();
     })
     .then((data) => {
+      console.log(data);
       return data;
     })
     .catch((error) => {
@@ -293,7 +288,6 @@ const showRoomList = async () => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
       return data;
     })
     .catch((error) => {
@@ -488,7 +482,6 @@ const SetNickName  = async (nickName: string): Promise<any> => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
       return data;
     })
     .catch((error) => {
