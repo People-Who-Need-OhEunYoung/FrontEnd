@@ -97,7 +97,7 @@ const Input = styled.input`
   text-align: left;
   font-size: 1rem;
   min-height: 11.5px; /* 최소 높이를 설정 */
-  border:none;
+  border: none;
   width: 50%;
   margin: 0 10px;
 `;

@@ -144,7 +144,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
       }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
+      style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
       <motion.div
         drag

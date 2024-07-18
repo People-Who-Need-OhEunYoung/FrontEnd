@@ -10,7 +10,6 @@ import { setProblemId } from '../../store/problemSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
-
 type ProblemType = {
   id: string;
   level: number;
@@ -31,7 +30,7 @@ const ProblemList = () => {
   const [selected, setSelected] = useState<string>('');
 
   const dispatch = useDispatch();
-  const {problemId} = useSelector((state: RootState) => state.probinfo);
+  const { problemId } = useSelector((state: RootState) => state.probinfo);
 
   const fetchProbData = async () => {
     try {
@@ -111,7 +110,7 @@ const ProblemList = () => {
       }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
+      style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
       <MainWrapper>
         <SearchWrapper>
@@ -212,9 +211,7 @@ const ProblemList = () => {
                 return (
                   <ProblemComponent>
                     <TierImg src={tiersrc} />
-                    <a href={link} >
-                      {item.id}
-                    </a>
+                    <a href={link}>{item.id}</a>
                     <TitleBtn
                       onClick={() => {
                         setIsModalOpen(true);
@@ -224,10 +221,22 @@ const ProblemList = () => {
                     >
                       {item.title}
                     </TitleBtn>
-                    <p style={{ position: 'absolute', right: '30%' ,textAlign: 'end' }}>
+                    <p
+                      style={{
+                        position: 'absolute',
+                        right: '30%',
+                        textAlign: 'end',
+                      }}
+                    >
                       {item.solved}
                     </p>
-                    <p style={{ position: 'absolute', right: '8%' ,textAlign: 'end'}}>
+                    <p
+                      style={{
+                        position: 'absolute',
+                        right: '8%',
+                        textAlign: 'end',
+                      }}
+                    >
                       {item.average_try.toFixed(3)}
                     </p>
                   </ProblemComponent>
