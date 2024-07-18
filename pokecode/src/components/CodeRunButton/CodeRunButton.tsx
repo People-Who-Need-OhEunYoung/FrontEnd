@@ -41,7 +41,6 @@ const CodeRunButton = () => {
           code: editorContent,
           bojNumber: id,
           elapsed_time: elapsedTime,
-
           limit_time: limitTime,
           testCase: TestCases,
         }),

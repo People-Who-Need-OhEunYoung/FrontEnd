@@ -13,6 +13,7 @@ export {
   createRoom,
   SubmitCode,
   RunCode,
+  getResolvedProblems,
   SetTime,
   SetNickName,
 };
@@ -389,7 +390,8 @@ const RunCode = async (
       code: editorContent,
       bojNumber: id,
       testCase: testCases,
-      elapsed_time: '',
+      elapsed_time: 0,
+
     }),
   })
     .then((res) => {
@@ -441,7 +443,34 @@ const SetTime = async (
     });
 };
 
-const SetNickName = async (nickName: string): Promise<any> => {
+
+
+//푼 문제 정보 가져오기
+const getResolvedProblems = async () => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/resolvedProblems`, {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return 'ERROR : ' + error;
+    });
+};
+
+
+const SetNickName  = async (nickName: string): Promise<any> => {
   return await fetch(`${import.meta.env.VITE_APP_IP}/changeNickName`, {
     method: 'POST',
     headers: {
@@ -467,3 +496,4 @@ const SetNickName = async (nickName: string): Promise<any> => {
       return 'ERROR : ' + error;
     });
 };
+
