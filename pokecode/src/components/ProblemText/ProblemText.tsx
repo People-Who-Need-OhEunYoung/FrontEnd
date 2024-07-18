@@ -7,16 +7,17 @@ import {
   setStartTime,
 } from '../../store/timerSlice';
 import getDetails from './getDetails';
-import { ProblemDetails, ResizableTabsProps } from './index';
+import { ProblemDetails, ResizableTabsProps, TimeDetails } from './index';
 import { RootState } from '../../store/index';
-import { setAcquireReview } from '../../store/problemSlice';
+import { setAcquireReview, setProblemDetail } from '../../store/problemSlice';
 import Modal from '../../components/Modal/Modal';
 import { useNavigate } from 'react-router-dom';
+import { SetTime } from '../../utils/api/api';
 
 const ProblemText: React.FC<ResizableTabsProps> = ({
   id,
-  isShowHeader = 'true',
-  size = '100%',
+  isshowheader,
+  size,
 }) => {
   const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(
     null
@@ -37,6 +38,21 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
     } catch (error) {
       console.error('Error fetching data:', error);
       return null; // 에러 발생 시 null 반환
+    }
+  };
+
+  const SendTimeData = async (
+    elapsedTime: number,
+    limitTime: number,
+    id: string
+  ) => {
+    try {
+      const res: TimeDetails = await SetTime(elapsedTime, limitTime, id);
+      console.log(elapsedTime, limitTime, id);
+      console.log('SendTimeData', res);
+      return res; // 객체 형태의 데이터를 반환
+    } catch (error) {
+      return null;
     }
   };
 
@@ -62,16 +78,17 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
   }, []);
 
   useEffect(() => {
-    const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`);
+    const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`); //localstorage에서 저장된 데이터 가져오기
     let start_time = Date.now(); //시작 시간 설정
 
     if (storedSolvedTime) {
       //저장된 시간이 있을 경우
       const solvedData = JSON.parse(storedSolvedTime);
       const updateElapsedTime =
-        solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000);
+        solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000); //localstorage에 저장된 경과시간 + 현재 경과시간 = 새로운 경과시간
       dispatch(setElapsedTime(updateElapsedTime));
     } else {
+      //저장된 시간이 없을 경우
       localStorage.setItem(
         `solvedTime-${id}`,
         JSON.stringify({
@@ -83,6 +100,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
       );
     }
 
+    console.log('elapsedTime', elapsedTime);
     const interval = setInterval(() => {
       if (startTime !== null) {
         const newElapsedTime =
@@ -100,16 +118,20 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
         );
       }
     }, 1000);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      SendTimeData(elapsedTime, limitTime, id);
+    };
   }, [startTime, id]);
 
   useEffect(() => {
     fetchCrawlData().then((res) => {
       if (res) {
         setProblemDetails(res);
+        dispatch(setProblemDetail(res));
       }
     });
-  }, []);
+  }, [dispatch]);
 
   // 경과 시간을 시:분:초 형식으로 변환
   const formatTime = (seconds: number) => {
@@ -125,7 +147,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
 
   return (
     <div style={{ height: size }}>
-      <Header isShowHeader={isShowHeader}>
+      <Header isShowHeader={isshowheader}>
         {problemDetails && (
           <HeaderTxt>
             <Title>

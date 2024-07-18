@@ -33,6 +33,8 @@ function userSearch(name: string): Promise<any> {
       throw error; // 오류를 다시 throw하여 호출자에게 전파
     });
 }
+
+
 async function userChecker(name: string): Promise<string> {
   try {
     const response = await fetch(

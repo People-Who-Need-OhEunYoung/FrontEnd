@@ -18,12 +18,11 @@ const Solvedlist = () => {
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
 
-  console.log(items);
-
   const fetchUserData = async () => {
     try {
       const res = await getTop100(query);
       setUserData(JSON.stringify(res));
+      return res;
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -58,23 +57,23 @@ const Solvedlist = () => {
   };
 
   useEffect(() => {
-    setQuery('ejrrl6931');
-    if (query != '') {
-      fetchUserData();
-      fetchCrawlData();
-    }
+    // setQuery('ejrrl6931');
+    // if (query != '') {
+    //   fetchUserData();
+    //   fetchCrawlData();
+    // }
 
-    if (userData) {
-      const parsedData = JSON.parse(userData);
-      if (parsedData.count > 0) {
-        const itemsArray = [];
-        for (let i = 0; i < parsedData.items.length; i++) {
-          const item = parsedData.items[i];
-          itemsArray.push(item);
-        }
-        setItems(itemsArray); // items 상태 업데이트
-      }
-    }
+    // if (userData) {
+    //   const parsedData = JSON.parse(userData);
+    //   if (parsedData.count > 0) {
+    //     const itemsArray = [];
+    //     for (let i = 0; i < parsedData.items.length; i++) {
+    //       const item = parsedData.items[i];
+    //       itemsArray.push(item);
+    //     }
+    //     setItems(itemsArray); // items 상태 업데이트
+    //   }
+    // }
   }, [userData, query, problems]);
 
   return (

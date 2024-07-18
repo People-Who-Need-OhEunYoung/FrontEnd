@@ -187,7 +187,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           </HeaderTxt>
           <ProblemText
             id={id}
-            isShowHeader="false"
+            isshowheader="false"
             size={'calc(100% - 80px)'}
           />
         </Tab>

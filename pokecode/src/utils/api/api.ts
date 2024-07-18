@@ -13,6 +13,8 @@ export {
   createRoom,
   SubmitCode,
   RunCode,
+  SetTime,
+  SetNickName
 };
 
 //닉네임 중복 검사
@@ -369,14 +371,12 @@ const SubmitCode = async (editorContent: string, id: string): Promise<any> => {
 interface TestCase {
   input_case: string;
   output_case: string;
-}
+};
 
-const RunCode = async (
-  editorContent: string,
-  id: string,
-  testCases: TestCase[],
-  elapsedTime: number
-): Promise<any> => {
+
+//테스트케이스 실행하기
+const RunCode = async (editorContent: string, id: string, testCases: TestCase[]): Promise<any> => {
+
   return await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
     method: 'POST',
     headers: {
@@ -404,4 +404,62 @@ const RunCode = async (
       console.log(error);
       return 'ERROR : ' + error;
     });
+};
+
+
+const SetTime  = async (elapsedTime: number, limitTime: number, problemId: string): Promise<any> => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/setTime`, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify( {
+      elapsed_time: elapsedTime,
+      limit_time: limitTime,
+      problem_id: problemId,
+    }),
+  })
+  .then((res) => {
+    if (!res.ok) {
+      throw new Error(`HTTP error! Status: ${res.statusText}`);
+    }
+    return res.json();
+  })
+  .then((data) => {
+    console.log(data);
+    return data;
+  })
+  .catch((error) => {
+    console.log(error);
+    return 'ERROR : ' + error;
+  });
+};
+
+
+const SetNickName  = async (nickName: string): Promise<any> => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/changeNickName`, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify( {
+      nickName: nickName,
+    }),
+  })
+  .then((res) => {
+    if (!res.ok) {
+      throw new Error(`HTTP error! Status: ${res.statusText}`);
+    }
+    return res.json();
+  })
+  .then((data) => {
+    console.log(data);
+    return data;
+  })
+  .catch((error) => {
+    console.log(error);
+    return 'ERROR : ' + error;
+  });
 };

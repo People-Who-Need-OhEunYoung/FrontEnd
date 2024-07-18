@@ -1,23 +1,35 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-export default function TestCase({ caseno, inputdata, outputdata }: any) {
-  const [inputValue, setInputValue] = useState(inputdata);
-  const [outputValue, setOutputValue] = useState(outputdata);
+export default function TestCase({
+  caseno,
+  inputdata,
+  outputdata,
+  onInputChange,
+  onOutputChange,
+}: any) {
+  const [inputValue, setInputValue] = useState<string>(inputdata);
+  const [outputValue, setOutputValue] = useState<string>(outputdata);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const outputRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(e.target.value);
-    autoResizeTextarea(e.target);
-  };
-
-  const handleOutputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setOutputValue(e.target.value);
-    autoResizeTextarea(e.target);
-  };
-
-  const autoResizeTextarea = (textarea: any) => {
+  const autoResizeTextarea = (textarea: HTMLTextAreaElement) => {
     textarea.style.height = 'auto'; // 기존 높이를 초기화
-    textarea.style.height = textarea.scrollHeight + 'px'; // 새로운 높이를 scrollHeight로 설정
+    textarea.style.height = `${textarea.scrollHeight}px`; // 새로운 높이를 scrollHeight로 설정
   };
+
+  useEffect(() => {
+    setInputValue(inputdata);
+    setOutputValue(outputdata);
+  }, [inputdata, outputdata]);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      autoResizeTextarea(inputRef.current);
+    }
+    if (outputRef.current) {
+      autoResizeTextarea(outputRef.current);
+    }
+  }, [inputValue, outputValue]);
 
   return (
     <div
@@ -35,11 +47,20 @@ export default function TestCase({ caseno, inputdata, outputdata }: any) {
       </div>
       <div>
         <textarea
-          style={{ width: '100%', overflow: 'hidden', resize: 'none' }}
+          ref={inputRef}
+          style={{
+            width: '100%',
+            minHeight: '100px',
+            overflow: 'hidden',
+            resize: 'none',
+          }}
           id={'indata' + caseno}
           name={'indata' + caseno}
           value={inputValue}
-          onChange={handleInputChange}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+            onInputChange(e);
+          }}
         />
       </div>
       <div style={{ textAlign: 'left', height: '50px' }}>
@@ -47,11 +68,21 @@ export default function TestCase({ caseno, inputdata, outputdata }: any) {
       </div>
       <div>
         <textarea
-          style={{ width: '100%', marginBottom: '20px', resize: 'none' }}
+          ref={outputRef}
+          style={{
+            width: '100%',
+            minHeight: '50px',
+            marginBottom: '20px',
+            overflow: 'hidden',
+            resize: 'none',
+          }}
           id={'outdata' + caseno}
           name={'outdata' + caseno}
           value={outputValue}
-          onChange={handleOutputChange}
+          onChange={(e) => {
+            setOutputValue(e.target.value);
+            onOutputChange(e);
+          }}
         />
       </div>
     </div>
