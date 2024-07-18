@@ -2,7 +2,7 @@ import { DesignedButton1 } from '../DesignedButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setWordBalloon, setReturnAiCall } from '../../store/codeCallerReducer';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const CodeAIButton = () => {
@@ -15,13 +15,14 @@ const CodeAIButton = () => {
   const searchParams = new URLSearchParams(location.search);
   const id = searchParams.get('id') || '';
 
-  let controller = new AbortController();
-  let signal = controller.signal;
+  // let controller = new AbortController();
+  // let signal = controller.signal;
+  const controllerRef = useRef<AbortController | null>(null);
 
   // 프론트 AI 피드백 호출
   const handleAI = async () => {
-    controller = new AbortController();
-    signal = controller.signal;
+    controllerRef.current = new AbortController();
+    const signal = controllerRef.current.signal;
     dispatch(setReturnAiCall('로딩중....'));
     const editorContent = writtenCode;
     try {
@@ -50,12 +51,8 @@ const CodeAIButton = () => {
             role: 'system',
           },
           {
-            content: `${codedata}\n백준 ${problemNumber}번 문제에 대한 코드인데, 
-            만약 작성한 코드가 없다면 "작성되지 않은 코드입니다" 라는 문구를 출력해주고, 
-            작성된 코드가 있다면 해당 코드의 실행 결과가 정답일 경우, 긍정적인 피드백과 함께 문제 풀이의 핵심 부분을 설명하고,
-            정답이 아닐 경우, 어느 부분을 고치면 좋을지 구체적이면서 길지 않은 피드백을 해줘. 피드백은 문어체로 해주고 코드를 직접적으로 알려주지마.
-            그리고 "가독성 및 기타 피드백은 제외"하고 논리적인 오류에 대한 피드백만 줘. "작성된 코드가 있으므로, 해당 코드에 대한 피드백을 제공하겠습니다." 라는 
-            말은 제외해줘.
+            content: `백준 ${problemNumber}번 문제를 풀고있고, ${codedata}\n 위의 코드가 지금 현재 내 코드야
+            이 문제를 푸는데 내 코드에 문법적이나 논리적인 오류가 있으면 5줄 이내로 짧게 설명해줘
              `,
             role: 'user',
           },
@@ -66,7 +63,7 @@ const CodeAIButton = () => {
         presence_penalty: 0,
         stop: null,
         stream: true,
-        temperature: 1,
+        temperature: 0,
         top_p: 1,
         logprobs: false,
         top_logprobs: null,
@@ -88,6 +85,7 @@ const CodeAIButton = () => {
 
       while (true) {
         const { done, value } = await reader.read();
+        console.log('시그널:', signal.aborted);
         if (signal.aborted) {
           console.log('Request aborted by user');
           break;
@@ -214,7 +212,9 @@ const CodeAIButton = () => {
   // }
 
   const handleCancel = () => {
-    controller.abort();
+    if(controllerRef.current !== null){
+    controllerRef.current.abort();
+  }
     console.log('can cancle-------------------');
   };
 
@@ -243,6 +243,7 @@ const CodeAIButton = () => {
   // }, [id, writtenCode, wordBalloon]); // 의존성 배열 설정
 
   return (
+    <div>
     <DesignedButton1
       className="submit-button"
       onClick={() => {
@@ -261,6 +262,11 @@ const CodeAIButton = () => {
     >
       AI 피드백
     </DesignedButton1>
+    <button
+    onClick={()=>{handleCancel()}}>
+    피드백중지  
+    </button>
+    </div>
   );
 };
 export default CodeAIButton;

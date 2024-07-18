@@ -22,7 +22,7 @@ const Solvedlist = () => {
   const [page, setPage] = useState<number>(1);
   const [totalPages] = useState<number>(0);
   console.log(page);
-  console.log(items);
+
   // const fetchUserData = async () => {
   //   try {
   //     const res = await getTop100(query);
