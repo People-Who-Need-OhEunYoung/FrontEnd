@@ -78,8 +78,8 @@ const Solvedlist = () => {
 //         }
 //         //setItems(itemsArray); // items 상태 업데이트
 
-//       }
-//     }
+      }
+    }
 
     fetchResolvedProblems()
 
