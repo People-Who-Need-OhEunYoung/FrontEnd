@@ -1,10 +1,12 @@
 import ReactConfetti from 'react-confetti';
 import { CodeAIButton } from '../CodeAIButton';
+import { DesignedButton1 } from '../DesignedButton';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { Link } from 'react-router-dom';
 
 
-const ModalContent3 = () => {
+const ModalContent3 = ({onOff}: any) => {
   const { pokemonId } = useSelector(
     (state: RootState) => state.userinfo
   );

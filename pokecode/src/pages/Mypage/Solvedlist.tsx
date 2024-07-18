@@ -14,7 +14,7 @@ type ItemType = {
 const Solvedlist = () => {
   const [query, setQuery] = useState(''); // 사용자 검색 쿼리
   const [userData, setUserData] = useState(''); // API로부터 받은 데이터
-  const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
+  //const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
   const [problems, setProblems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -73,7 +73,7 @@ const Solvedlist = () => {
           const item = parsedData.items[i];
           itemsArray.push(item);
         }
-        setItems(itemsArray); // items 상태 업데이트
+        //setItems(itemsArray); // items 상태 업데이트
       }
     }
     // const result = getResolvedProblems;

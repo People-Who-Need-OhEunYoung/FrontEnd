@@ -391,7 +391,6 @@ const RunCode = async (editorContent: string, id: string, testCases: TestCase[])
       code: editorContent,
       bojNumber: id,
       testCase: testCases,
-      elapsed_time: elapsedTime,
     }),
   })
     .then((res) => {
