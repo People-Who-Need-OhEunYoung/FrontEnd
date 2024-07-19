@@ -36,35 +36,21 @@ const Header = () => {
 };
 
 export const Header2 = () => {
-  const [user, setUser] = useState({
-    credit: 0,
-    curPokeId: 0,
-    nickName: '기본값',
-    result: '기본값',
-  });
-
   const { userNickname, credit, pokemonId } = useSelector(
     (state: RootState) => state.userinfo
   );
   const dispatch = useDispatch();
 
-  // console.log('credit: ', credit);
-
   const userSet = async () => {
-    setUser(await userInfo());
+    let user = await userInfo();
+    dispatch(setUserNickname(user.nickName));
+    dispatch(setUserCredit(user.credit));
+    dispatch(setPokemonId(user.curPokeId));
   };
 
   useEffect(() => {
-    if (user) {
-      dispatch(setUserNickname(user.nickName));
-      dispatch(setUserCredit(user.credit));
-      dispatch(setPokemonId(user.curPokeId));
-    }
-  }, [user]);
-
-  useEffect(() => {
     userSet();
-  }, []);
+  }, [userNickname, credit, pokemonId]);
 
   const navigate = useNavigate();
   const loginChecker = async () => {

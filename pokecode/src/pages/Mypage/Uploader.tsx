@@ -1,9 +1,9 @@
-import { useState, useRef} from 'react';
+import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { RootState } from '../../store/index';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SetNickName } from '../../utils/api/api';
-
+import { setUserNickname } from '../../store/userInfo';
 const Uploader = () => {
   const [buttonText, setButtonText] = useState<string>('수정하기');
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -13,38 +13,37 @@ const Uploader = () => {
   const { userNickname, credit, pokemonId } = useSelector(
     (state: RootState) => state.userinfo
   );
-
+  const dispatch = useDispatch();
   const sendNewNickName = async (nickname: string) => {
     try {
       const res = await SetNickName(nickname);
       console.log(res);
-      //alert('수정이 완료되었습니다.'); // 사용자에게 피드백 제공
-      window.location.reload();
+      if (res.result == 'fail') {
+        return res.result;
+      }
       return res;
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
-
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     if (!isEditing) {
-      // 현재 편집 모드가 아니면 편집 모드로 진입
       setIsEditing(true);
       setButtonText('변경하기');
-      setEditedNickname(userNickname); // 초기 입력 값 설정
     } else {
       // 현재 편집 모드이면 저장하고 편집 모드 종료
+      if ((await sendNewNickName(editedNickname)) == 'fail') {
+        alert('중복된 닉네임 입니다'); // 사용자에게 피드백 제공
+        return;
+      }
       setIsEditing(false);
       setButtonText('수정하기');
-      sendNewNickName(editedNickname);
-      console.log('Updated Nickname:', editedNickname); // 입력된 닉네임 로깅
+      dispatch(setUserNickname(editedNickname));
     }
   };
-
   const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditedNickname(event.target.value);
   };
-
   return (
     <Uploaderwrapper>
       <MainContainer>
@@ -68,7 +67,7 @@ const Uploader = () => {
                 ref={inputRef}
                 value={editedNickname}
                 onChange={handleNicknameChange}
-                autoFocus // 입력 필드에 자동으로 포커스
+                autoFocus
               />
             </Text>
           ) : (
