@@ -7,7 +7,12 @@ import art from '../../assets/images/Vector.png';
 import { MainWrapper } from '../../components/MainWrapper';
 import poo from '../../assets/images/poo.png';
 
-import { pokemonName, getPooCount, removePoo } from '../../utils/api/api';
+import {
+  pokemonName,
+  getPooCount,
+  removePoo,
+  showPokemonBook,
+} from '../../utils/api/api';
 
 import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
@@ -17,10 +22,11 @@ const UserMain = () => {
     x: '50%',
     y: '50%',
   });
+
   const [pooset, setPooset] = useState<{ x: number; y: number }[]>([]);
 
   const [pokemonname, setPokemonname] = useState('');
-  //const [pooCount, setPooCount] = useState(0);
+  const [pokemonExp, setPokemonExp] = useState(0);
 
   const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const controls = useAnimation();
@@ -38,6 +44,7 @@ const UserMain = () => {
     });
     setPosition({ x: offsetX, y: offsetY });
   };
+
   const getRandomPosition = () => ({
     x: Math.random() - Math.random() * 200,
     y: Math.random() - Math.random() * 200,
@@ -94,6 +101,28 @@ const UserMain = () => {
       console.log('화면이동 감지');
     }
   };
+
+  const fetchPokeBook = async () => {
+    try {
+      const res = await showPokemonBook();
+      const foundPokemon = res.book.find(
+        (poke: any) => poke.poke_id === pokemonId
+      );
+      if (foundPokemon) {
+        console.log(foundPokemon.poke_Exp);
+        setPokemonExp(foundPokemon.poke_Exp);
+      }
+      return res;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPokeBook().then((res) => {
+      console.log(res);
+    });
+  }, []);
 
   useEffect(() => {
     if (pokemonId) pokemonnameSet(pokemonId);
@@ -171,10 +200,10 @@ const UserMain = () => {
           </PokeNameWrap>
           <LevelWrap>
             <Level>
-              LV 15
+              LV {Math.floor(pokemonExp / 100) + 1}
               <br />
               <StyledBase>
-                <StyledRange />
+                <StyledRange setprogress={pokemonExp % 100} />
               </StyledBase>
             </Level>
           </LevelWrap>
@@ -359,8 +388,8 @@ const StyledBase = styled.div`
   margin-left: 15%;
 `;
 
-const StyledRange = styled.div`
-  width: 50%;
+const StyledRange = styled.div<{ setprogress: number }>`
+  width: ${(props) => `${props.setprogress}%`};
   height: 10px;
   border-radius: 10px;
   background: linear-gradient(to right, #ffacfc, #b76cfd);

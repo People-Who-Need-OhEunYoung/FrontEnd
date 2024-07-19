@@ -151,9 +151,7 @@ const PokeBook = () => {
                   return (
                     <BookText>
                       <div>
-                        <p style={{ padding: '20px 0' }}>
-                          No. {item.poke_id}
-                        </p>
+                        <p style={{ padding: '20px 0' }}>No. {item.poke_id}</p>
                         <Pokemon
                           src={
                             item.poke_Lv === 0
@@ -163,12 +161,16 @@ const PokeBook = () => {
                         />
                       </div>
                       <div>
-                        <p >
-                          Level: {item.poke_Lv}
-                        </p>
-                        <p>
-                          Exp: {item.poke_Exp}
-                        </p>
+                        {item.poke_Lv > 0 ? (
+                          <p>Level: {item.poke_Lv}</p>
+                        ) : (
+                          <p> ??? </p>
+                        )}
+                        {item.poke_Lv > 0 ? (
+                          <p>Exp: {item.poke_Exp}</p>
+                        ) : (
+                          <p> </p>
+                        )}
                       </div>
                     </BookText>
                   );
@@ -211,27 +213,27 @@ const PokeBook = () => {
           {renderPageButtons()}
         </PageBtnGroup>
       </ListWrap>
-
     </MainWrapper>
   );
 }
 
 const PokemonName = styled.div`
   position: absolute;
-  background-color: #333449;
-  font-size: 1.7rem;
+  background-color: #1e293b;
+  font-size: 1.4rem;
   font-weight: bold;
   width: 50%;
   height: 8%;
   text-align: center;
-  line-height: 1.6;
-  border-radius: 20px;
+  line-height: 1.8;
+  border-radius: 10px;
   left: 25%;
+  color: #cbd5e1;
   bottom: 5%;
 `;
 
 const BookText = styled.div`
-  color: #1e504d;
+  color: #cbd5e1;
   font-size: 1rem;
   font-weight: bold;
 `;
@@ -239,8 +241,8 @@ const BookText = styled.div`
 const PageButton = styled.button<{ active: boolean }>`
   width: 30px;
   margin-right: 10px;
-  background-color: ${({ active }) => (active ? '#BA94B4' : 'transparent')};
-  color: white;
+  background-color: ${({ active }) => (active ? '#38bff873' : 'transparent')};
+  color: #cbd5e1;
   border-radius: 10px;
   font-size: 1rem;
   border: none;
@@ -257,18 +259,19 @@ const PageBtnGroup = styled.div`
 `;
 
 const SelectBtn = styled.button<{ active: boolean }>`
-  padding: 1px 50px;
+  padding: 5px 50px;
   border: none;
-  border-radius: 15px 15px 0 0;
   outline: none;
   cursor: pointer;
-  font-size: 1.2rem;
-  font-weight: bold;
+  font-size: 1.1rem;
   line-height: 1.75;
   text-transform: uppercase;
   transition: background-color 0.3s;
-  background-color: ${({ active }) => (active ? '#333449' : '#5C536D')};
-  color:  ${({ active }) => (active ? 'white' : 'white')};
+  background-color: #1e293b;
+  border-bottom: ${({ active }) =>
+    active ? '2px solid #38BDF8' : '2px solid #1E293B'};
+  background-color: ${({ active }) => (active ? '#1E293B' : '#38455a9b')};
+  color: ${({ active }) => (active ? '#38BDF8' : '#8ea5af')};
 `;
 
 
@@ -297,7 +300,8 @@ const Item = styled.button`
   display: flex;
   justify-content: center;
   margin: 7%;
-  background-color: #ffffff;
+  background-color: #97b1db2b;
+  border: none;
   border-radius: 10px;
   cursor: pointer;
 `;
@@ -310,7 +314,7 @@ const ListWrap = styled.div`
 `;
 
 const ListView = styled.div`
-  background-color: #333449;
+  background-color: #1e293b;
   height: 87%;
   overflow-y: auto;
   font-size: 1.2rem;
