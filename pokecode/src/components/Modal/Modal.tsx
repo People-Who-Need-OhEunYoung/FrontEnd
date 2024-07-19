@@ -68,12 +68,15 @@ const Modal = ({
           ) : nowcomponent === 3 ? (
             <>
               <Title>{'축하합니다!'}</Title>
-              <ModalContent3 onoff={event} />
+              <ModalContent3 handleClose={handleClose} />
             </>
           ) : nowcomponent === 4 ? (
             <>
               <Title>{'다시 도전해보세요'}</Title>
-              <ModalContent4 event={setNowcomponent} />
+              <ModalContent4
+                event={setNowcomponent}
+                handleClose={handleClose}
+              />
             </>
           ) : nowcomponent === 5 ? (
             <>
@@ -91,7 +94,10 @@ const Modal = ({
           <DesignedButton1
             color="rgba(79, 70, 229, 1)"
             style={{ marginBottom: '40px' }}
-            onClick={handleClose}
+            onClick={() => {
+              handleClose();
+              setNowcomponent(component);
+            }}
           >
             <b>닫기</b>
           </DesignedButton1>
