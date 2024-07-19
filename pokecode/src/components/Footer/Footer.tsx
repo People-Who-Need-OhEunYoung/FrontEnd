@@ -21,6 +21,7 @@ export const Footer1 = () => {
       style={{
         height: '80px',
         position: 'relative',
+        background: '#111826',
       }}
     >
       <div

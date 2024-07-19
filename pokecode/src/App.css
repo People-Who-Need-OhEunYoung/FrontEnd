@@ -33,9 +33,9 @@ input {
 ::-webkit-scrollbar-thumb {
   height: 20%;
   /* 스크롤바의 길이 */
-  background: #38BDF8;
+  background: #324056;
   /* 스크롤바 막대 테두리 설정  */
-  /* border-radius: 12px 12px 12px 12px; */
+  border-radius: 5px;
 }
 
 /* 스크롤바 트랙 꾸미기 */

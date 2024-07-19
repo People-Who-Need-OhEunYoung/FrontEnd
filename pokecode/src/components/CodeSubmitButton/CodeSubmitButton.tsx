@@ -54,7 +54,6 @@ const CodeSubmitButton = () => {
           fontSize: '1em',
           marginRight: '10px',
         }}
-        color="#a62df1"
       >
         제출하기
       </DesignedButton1>

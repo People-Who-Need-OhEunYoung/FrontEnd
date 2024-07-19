@@ -394,11 +394,14 @@ const SelectBtn = styled.button`
   margin: 7px;
 
   &:hover {
-    background-color: #4ea7ff52;
   }
 
   &:active {
     background-color: #4ea7ff52;
+  }
+
+  &:focus {
+    color: #50fa7b ;
   }
 `;
 

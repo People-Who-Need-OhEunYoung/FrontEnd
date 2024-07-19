@@ -241,9 +241,11 @@ const BookText = styled.div`
 const PageButton = styled.button<{ active: boolean }>`
   width: 30px;
   margin-right: 10px;
-  background-color: ${({ active }) => (active ? '#38bff873' : 'transparent')};
-  color: #cbd5e1;
-  border-radius: 10px;
+  border-bottom: ${({ active }) =>
+    active ? '2px solid #ff79c6' : 'transparent'};
+  color: ${({ active }) => (active ? '#50fa7b' : '#cbd5e1')};
+  background-color: transparent;
+
   font-size: 1rem;
   border: none;
 `;
