@@ -16,6 +16,8 @@ export {
   getResolvedProblems,
   SetTime,
   SetNickName,
+  getRoomList,
+  setRoom,
 };
 
 //닉네임 중복 검사
@@ -385,7 +387,6 @@ const RunCode = async (
       bojNumber: id,
       testCase: testCases,
       elapsed_time: 0,
-
     }),
   })
     .then((res) => {
@@ -437,8 +438,6 @@ const SetTime = async (
     });
 };
 
-
-
 //푼 문제 정보 가져오기
 const getResolvedProblems = async () => {
   return await fetch(`${import.meta.env.VITE_APP_IP}/resolvedProblems`, {
@@ -463,8 +462,7 @@ const getResolvedProblems = async () => {
     });
 };
 
-
-const SetNickName  = async (nickName: string): Promise<any> => {
+const SetNickName = async (nickName: string): Promise<any> => {
   return await fetch(`${import.meta.env.VITE_APP_IP}/changeNickName`, {
     method: 'POST',
     headers: {
@@ -490,3 +488,63 @@ const SetNickName  = async (nickName: string): Promise<any> => {
     });
 };
 
+const getRoomList = async (page: number) => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/roomlist?page=${page}`, {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.statusText}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return 'ERROR : ' + error;
+    });
+};
+
+const setRoom = async (
+  roomTitle: string,
+  problemTitle: string,
+  problemNo: number,
+  problemTier: number,
+  roomOwner: string,
+  maxPeople: number
+) => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/roomlist`, {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      room_title: roomTitle,
+      problem_title: problemTitle,
+      problem_no: problemNo,
+      problem_tier: problemTier,
+      room_owner: roomOwner,
+      max_people: maxPeople,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.statusText}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return 'ERROR : ' + error;
+    });
+};
