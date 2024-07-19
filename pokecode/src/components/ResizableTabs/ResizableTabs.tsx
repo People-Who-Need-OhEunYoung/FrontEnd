@@ -38,7 +38,7 @@ const Resizer = styled.div`
   background-color: #0000006d;
   transform: translateX(-50%);
   height: 100%;
-  z-index: 100;
+  z-index: 200;
   position: absolute;
   border-radius: 20px;
   transition: 0.5s;
@@ -53,7 +53,7 @@ const Resizer = styled.div`
   -khtml-user-select: none;
   &:hover {
     opacity: 1;
-    z-index: 100;
+    z-index: 200;
   }
 `;
 
@@ -98,7 +98,13 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
         ((e.clientX - containerRef.current.getBoundingClientRect().left) /
           containerWidth) *
         100;
-      setWidth(newWidth);
+      if (newWidth < 30) {
+        setWidth(30);
+      } else if (newWidth > 50) {
+        setWidth(50);
+      } else {
+        setWidth(newWidth);
+      }
     }
   };
   const handleMouseMove1 = (e: MouseEvent) => {
@@ -107,7 +113,13 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
       const containerWidth = containerRect.width;
       const newWidth =
         ((containerRect.right - e.clientX) / containerWidth) * 100;
-      setWidth1(newWidth);
+      if (newWidth < 10) {
+        setWidth1(10);
+      } else if (newWidth > 50) {
+        setWidth1(50);
+      } else {
+        setWidth1(newWidth);
+      }
     }
   };
 
@@ -146,7 +158,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
               height: '100%',
             }}
           >
-            <ProblemText id={id} isshowheader="true" size="90%" />
+            <ProblemText id={id} isshowheader="true" size="calc(100% - 80px)" />
           </div>
         </Tab>
         <Resizer
