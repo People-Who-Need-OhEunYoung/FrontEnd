@@ -8,7 +8,9 @@ import _path from 'path';
 
 const getDetails = async (id: string): Promise<ProblemDetails> => {
   try {
-    const response = await axios.get(`http://localhost:8481/problem/${id}`);
+    const response = await axios.get(
+      `${import.meta.env.VITE_APP_SOLVED}/problem/${id}`
+    );
     return response.data;
   } catch (error) {
     throw new Error(`Error fetching problem details: ${error}`);

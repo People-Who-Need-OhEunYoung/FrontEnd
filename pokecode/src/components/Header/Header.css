@@ -1,9 +1,9 @@
 .header {
-  height: 100px;
+  height: 80px;
   position: relative;
 }
 .titleLogo {
-  line-height: 100px;
+  line-height: 80px;
   margin: 0 0 0 30px;
   font-size: 2em;
   font-weight: bold;

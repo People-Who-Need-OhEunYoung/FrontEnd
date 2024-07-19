@@ -36,6 +36,7 @@ const Modal = ({
   prob_title = '문제명',
   id = '',
   component,
+  roomid,
   on = false,
   event,
 }: any) => {
@@ -67,7 +68,7 @@ const Modal = ({
           ) : nowcomponent === 3 ? (
             <>
               <Title>{'축하합니다!'}</Title>
-              <ModalContent3 />
+              <ModalContent3 onoff={event} />
             </>
           ) : nowcomponent === 4 ? (
             <>
@@ -82,7 +83,7 @@ const Modal = ({
           ) : nowcomponent === 6 ? (
             <>
               <Title>{title}</Title>
-              <ModalContent7 id={id} title={prob_title} />
+              <ModalContent7 id={id} title={prob_title} roomId={roomid} />
             </>
           ) : (
             ''

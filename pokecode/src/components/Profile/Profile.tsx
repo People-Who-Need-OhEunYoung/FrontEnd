@@ -17,11 +17,21 @@ export const Profile = ({ ...props }) => {
     navigate('/');
   };
   return (
-    <div onMouseLeave={handleMouseOut} onMouseOver={handleMouseOver}>
+    <div>
       <MyPic
         src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${props.pokemonId}.svg`}
         alt=""
       />
+      <p
+        style={{
+          position: 'absolute',
+          bottom: '5px',
+          width: '45px',
+          textAlign: 'center',
+        }}
+      >
+        LV100
+      </p>
       <Myinfo>
         <p>
           {props.name}님
@@ -29,15 +39,20 @@ export const Profile = ({ ...props }) => {
           <span style={{ fontSize: '0.7em' }}>보유크래딧 : {props.credit}</span>
         </p>
       </Myinfo>
+
       <DownMenu
-        className="downmenu"
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 512 512"
+        viewBox="0 0 320 512"
+        onMouseOver={handleMouseOver}
+        className="downmenu"
         fill="white"
       >
-        <path d="M256 464a208 208 0 1 1 0-416 208 208 0 1 1 0 416zM256 0a256 256 0 1 0 0 512A256 256 0 1 0 256 0zM376.9 294.6c4.5-4.2 7.1-10.1 7.1-16.3c0-12.3-10-22.3-22.3-22.3H304V160c0-17.7-14.3-32-32-32l-32 0c-17.7 0-32 14.3-32 32v96H150.3C138 256 128 266 128 278.3c0 6.2 2.6 12.1 7.1 16.3l107.1 99.9c3.8 3.5 8.7 5.5 13.8 5.5s10.1-2 13.8-5.5l107.1-99.9z" />
+        <path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z" />
       </DownMenu>
-      <MyMenu style={isHovering ? { display: 'flex', opacity: 1 } : {}}>
+      <MyMenu
+        style={isHovering ? { display: 'flex', opacity: 1 } : {}}
+        onMouseLeave={handleMouseOut}
+      >
         <MyMenuList>
           <Link
             style={{
@@ -93,22 +108,23 @@ export const Profile = ({ ...props }) => {
 };
 
 const MyPic = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
-  margin: 25px 0 25px;
+  margin: 10px 0 10px 0;
   @media (max-width: 1240px) {
     display: none;
   }
 `;
 const Myinfo = styled.div`
   width: 150px;
-  padding: 20px;
+  padding: 0 20px;
   box-sizing: border-box;
   position: absolute;
   top: 50%;
   left: 50px;
   transform: translateY(-50%);
+  font-size: 0.7em;
   @media (max-width: 1240px) {
     display: none;
   }
@@ -119,7 +135,7 @@ const MyMenu = styled.ul`
   z-index: 200;
   position: absolute;
   right: 0;
-  top: 90px;
+  top: 75px;
   align-content: space-around;
   flex-wrap: wrap;
   flex-direction: column;
@@ -135,11 +151,10 @@ const MyMenuList = styled.li`
   }
 `;
 const DownMenu = styled.svg`
-  width: 50px;
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
   left: 200px;
+  top: 5%;
+  width: 30px;
   @media (max-width: 1240px) {
     display: none;
   }

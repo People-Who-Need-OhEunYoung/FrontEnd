@@ -13,6 +13,9 @@ export {
   createRoom,
   SubmitCode,
   RunCode,
+  getResolvedProblems,
+  SetTime,
+  SetNickName,
 };
 
 //닉네임 중복 검사
@@ -60,7 +63,6 @@ const userInfo = async () => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
       return data;
     })
     .catch((error) => {
@@ -83,7 +85,6 @@ const getPooCount = async () => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
       return data;
     })
     .catch((error) => {
@@ -110,7 +111,6 @@ const pokemonName = async (number: number) => {
       return res.json();
     })
     .then((data) => {
-      console.log(data.names[2].name);
       return data.names[2].name;
     })
     .catch(() => {
@@ -162,7 +162,6 @@ const getGachaPokemon: Function = async () => {
       return res.json();
     })
     .then(async (data) => {
-      console.log(data);
       return await fetch(data.chain.species.url, {
         method: 'GET',
       })
@@ -205,8 +204,6 @@ const updateMyPokemon = async (pokId: number) => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
-      console.log(pokId);
       return data;
     })
     .catch((error) => {
@@ -214,7 +211,6 @@ const updateMyPokemon = async (pokId: number) => {
       return 'ERROR : ' + error;
     });
 };
-
 
 //문제 검색
 function problemSearch(
@@ -267,6 +263,7 @@ const showPokemonBook = async () => {
       return res.json();
     })
     .then((data) => {
+      console.log(data);
       return data;
     })
     .catch((error) => {
@@ -291,7 +288,6 @@ const showRoomList = async () => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
       return data;
     })
     .catch((error) => {
@@ -338,7 +334,6 @@ const createRoom = async (
     });
 };
 
-
 //코드 제출하기
 const SubmitCode = async (editorContent: string, id: string): Promise<any> => {
   return await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
@@ -348,9 +343,50 @@ const SubmitCode = async (editorContent: string, id: string): Promise<any> => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      code: editorContent, bojNumber: id 
+      code: editorContent,
+      bojNumber: id,
     }),
-    
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.statusText}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      console.log('data : ', data);
+      return data;
+    })
+    .catch((error) => {
+      console.log('error : ', error);
+      return 'ERROR : ' + error;
+    });
+};
+
+interface TestCase {
+  input_case: string;
+  output_case: string;
+}
+
+//테스트케이스 실행하기
+const RunCode = async (
+  editorContent: string,
+  id: string,
+  testCases: TestCase[]
+): Promise<any> => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      code: editorContent,
+      bojNumber: id,
+      testCase: testCases,
+      elapsed_time: 0,
+
+    }),
   })
     .then((res) => {
       if (!res.ok) {
@@ -368,38 +404,89 @@ const SubmitCode = async (editorContent: string, id: string): Promise<any> => {
     });
 };
 
-interface TestCase {
-  input_case: string;
-  output_case: string;
-}
-
-const RunCode = async (editorContent: string, id: string, testCases: TestCase[]): Promise<any> => {
-
-  return await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
+const SetTime = async (
+  elapsedTime: number,
+  limitTime: number,
+  problemId: string
+): Promise<any> => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/setTime`, {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify( {
-      code: editorContent,
-      bojNumber: id,
-      testCase: testCases
+    body: JSON.stringify({
+      elapsed_time: elapsedTime,
+      limit_time: limitTime,
+      problem_id: problemId,
     }),
   })
-  .then((res) => {
-    if (!res.ok) {
-      throw new Error(`HTTP error! Status: ${res.statusText}`);
-    }
-    return res.json();
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.statusText}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      console.log(data);
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return 'ERROR : ' + error;
+    });
+};
+
+
+
+//푼 문제 정보 가져오기
+const getResolvedProblems = async () => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/resolvedProblems`, {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
   })
-  .then((data) => {
-    console.log(data);
-    return data;
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return 'ERROR : ' + error;
+    });
+};
+
+
+const SetNickName  = async (nickName: string): Promise<any> => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/changeNickName`, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      nickName: nickName,
+    }),
   })
-  .catch((error) => {
-    console.log(error);
-    return 'ERROR : ' + error;
-  });
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.statusText}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return 'ERROR : ' + error;
+    });
 };
 

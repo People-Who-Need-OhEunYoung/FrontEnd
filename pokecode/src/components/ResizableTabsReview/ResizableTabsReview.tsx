@@ -5,12 +5,14 @@ import { Pokemon } from '../../pages/UserMain/UserMain';
 import { TestSharedEditor } from '../TestSharedEditor';
 import { DesignedButton1 } from '../DesignedButton';
 import { ProblemText } from '../ProblemText';
-// import { VoiceChat } from '../VoiceChat';
+// 진욱이 소스 import { VoiceChat } from '../VoiceChat';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import ChatRoom from './ChatRoom';
 import VoiceChatOV from './VoiceChatOV';
 import { setRoomId, setUsername } from '../../store/roomdataSlice';
+import { CodeAIWardBalloon } from '../CodeAIButton';
+import backGR from '../../assets/images/background.jpg';
 
 const Container = styled.div`
   display: flex;
@@ -142,7 +144,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
       }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
+      style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
       <motion.div
         drag
@@ -153,13 +155,22 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           display: 'inline-block',
           width: '5vw',
           zIndex: 9999,
-          bottom: '30%',
-          right: 175,
+          bottom: '80px',
+          right: '48%',
           transform: 'translateX(0px) translateY(0px) translateZ(0px)',
           transition: '0.1s',
         }}
         className="pokemon"
       >
+        <CodeAIWardBalloon
+          width="300px"
+          left="-100px"
+          fontSize="1em"
+          padding="30px"
+          right="30px"
+          bottom="100px"
+          position="absolute"
+        />
         <Pokemon
           width={'100%'}
           src={
@@ -176,7 +187,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           </HeaderTxt>
           <ProblemText
             id={id}
-            isShowHeader="false"
+            isshowheader="false"
             size={'calc(100% - 80px)'}
           />
         </Tab>
@@ -193,13 +204,20 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           </div>
           <div
             style={{
-              background: 'yellow',
               width: '100%',
               height: '20%',
               overflow: 'auto',
             }}
           >
-            <ChatRoom />
+            <Home style={{ background: `url(${backGR})`, textAlign: 'center' }}>
+              <DesignedButton1
+                style={{ width: '150px', height: '30px', lineHeight: '20px' }}
+                color="rgb(65, 0, 109)"
+                onClick={handleDragEnd}
+              >
+                원 위치로
+              </DesignedButton1>
+            </Home>
           </div>
         </div>
         <Resizer
@@ -209,16 +227,13 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
         <Tab width={width1}>
           <div
             style={{
+              background: '#5F6275',
               width: '100%',
               height: '80%',
               overflow: 'auto',
             }}
           >
-            <Home>
-              <DesignedButton1 color="rgb(65, 0, 109)" onClick={handleDragEnd}>
-                원 위치로
-              </DesignedButton1>
-            </Home>
+            <ChatRoom />
           </div>
           <div
             style={{
@@ -228,7 +243,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
             }}
           >
             <VoiceChatOV />
-            {/* <VoiceChat /> */}
+            {/* 진욱이 소스 <VoiceChat /> */}
           </div>
         </Tab>
       </Container>

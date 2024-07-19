@@ -1,15 +1,23 @@
-
-export { userSearch, userChecker, getTop100, probSearch, crawlUserprob , getProb};
-
+export {
+  userSearch,
+  userChecker,
+  getTop100,
+  probSearch,
+  crawlUserprob,
+  getProb,
+};
 
 function userSearch(name: string): Promise<any> {
-  return fetch(`http://localhost:8481/proxy/search/user?query=${name}`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'x-solvedac-language': 'ko',
-    },
-  })
+  return fetch(
+    `${import.meta.env.VITE_APP_SOLVED}/proxy/search/user?query=${name}`,
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'x-solvedac-language': 'ko',
+      },
+    }
+  )
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
@@ -25,10 +33,12 @@ function userSearch(name: string): Promise<any> {
       throw error; // 오류를 다시 throw하여 호출자에게 전파
     });
 }
+
+
 async function userChecker(name: string): Promise<string> {
   try {
     const response = await fetch(
-      `http://localhost:8481/proxy/search/user?query=${name}`,
+      `${import.meta.env.VITE_APP_SOLVED}/proxy/search/user?query=${name}`,
       {
         method: 'GET',
         headers: {
@@ -61,13 +71,16 @@ async function userChecker(name: string): Promise<string> {
 }
 
 function getTop100(name: string): Promise<any> {
-  return fetch(`http://localhost:8481/proxy/user/top_100?handle=${name}`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'x-solvedac-language': 'ko',
-    },
-  })
+  return fetch(
+    `${import.meta.env.VITE_APP_SOLVED}/proxy/user/top_100?handle=${name}`,
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'x-solvedac-language': 'ko',
+      },
+    }
+  )
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
@@ -84,14 +97,24 @@ function getTop100(name: string): Promise<any> {
     });
 }
 
-function probSearch(title: string, sort: string, page: number, order: string): Promise<any> {
-  return fetch(`http://localhost:8481/proxy/search/problem?query=+${title}&direction=${order}&page=${page}&sort=${sort}`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'x-solvedac-language': 'ko',
-    },
-  })
+function probSearch(
+  title: string,
+  sort: string,
+  page: number,
+  order: string
+): Promise<any> {
+  return fetch(
+    `${
+      import.meta.env.VITE_APP_SOLVED
+    }/proxy/search/problem?query=+${title}&direction=${order}&page=${page}&sort=${sort}`,
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'x-solvedac-language': 'ko',
+      },
+    }
+  )
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
@@ -110,7 +133,9 @@ function probSearch(title: string, sort: string, page: number, order: string): P
 
 function crawlUserprob(name: string, page: number): Promise<any> {
   return fetch(
-    `http://localhost:8481/proxy_profile/${name}/solved?page=${page}`,
+    `${
+      import.meta.env.VITE_APP_SOLVED
+    }/proxy_profile/${name}/solved?page=${page}`,
     {
       method: 'GET',
       headers: {
@@ -134,14 +159,18 @@ function crawlUserprob(name: string, page: number): Promise<any> {
     });
 }
 
-
 function getProb(problemId: number): Promise<any> {
-  return fetch(`http://localhost:8481/proxy/problem/show?problemId=${problemId}`, {
-    method: 'GET',
-    headers: {
-      "Content-Type" : 'application/json',
-    },
-  })
+  return fetch(
+    `${
+      import.meta.env.VITE_APP_SOLVED
+    }/proxy/problem/show?problemId=${problemId}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  )
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);

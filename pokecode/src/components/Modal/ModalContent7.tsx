@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-const ModalContent7 = ({ id, title }: any) => {
+const ModalContent7 = ({ id, title, roomId }: any) => {
   const navigate = useNavigate();
 
   //우현코드 start
   const enterRoom = async () => {
     const value = localStorage.getItem('loginuserid');
-    const roomIdValue = '3cde4f2a-f231-4554-bb45-da17a046a1ef';
+    const roomIdValue = roomId;
 
     if (!value || !roomIdValue) {
       alert('Please enter both username and room ID.');

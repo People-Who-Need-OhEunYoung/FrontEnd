@@ -123,7 +123,7 @@ const ModalContent2 = ({ width, reset }: any) => {
       const { data } = await axios.post(
         'https://api.poke-code.com:3334/create-room-with-user',
         {
-          username: userId,
+          username: userId, // 닉네임.
         }
       );
       localStorage.setItem('username', userId);

@@ -4,7 +4,13 @@ import { RootState } from '../../store';
 import { setReturnCall } from '../../store/codeCallerReducer';
 
 const CodeRunButton = () => {
-  const { writtenCode } = useSelector((state: RootState) => state.probinfo);
+  const { writtenCode, TestCases } = useSelector(
+    (state: RootState) => state.probinfo
+  );
+
+  const { elapsedTime, limitTime } = useSelector(
+    (state: RootState) => state.timer
+  );
 
   const dispatch = useDispatch();
 
@@ -15,7 +21,13 @@ const CodeRunButton = () => {
   const handleInit = () => {
     dispatch(setReturnCall(''));
   };
-  
+
+  // useEffect(() => {
+  //   console.log('TestCases', TestCases);
+  //   console.log('elapsedTime', elapsedTime);
+  //   console.log('limitTime', limitTime);
+  // }, [TestCases]);
+
   const handleSubmit = async () => {
     const editorContent = writtenCode;
     try {
@@ -25,7 +37,13 @@ const CodeRunButton = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify({ code: editorContent, bojNumber: id }),
+        body: JSON.stringify({
+          code: editorContent,
+          bojNumber: id,
+          elapsed_time: elapsedTime,
+          limit_time: limitTime,
+          testCase: TestCases,
+        }),
       });
 
       if (!response.ok) {

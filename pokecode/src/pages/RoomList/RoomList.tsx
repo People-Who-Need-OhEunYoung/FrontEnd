@@ -2,10 +2,10 @@ import styled, { css } from 'styled-components';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Modal from '../../components/Modal/Modal';
-import { createRoom, showRoomList } from '../../utils/api/api';
+import { showRoomList } from '../../utils/api/api';
 
 type ItemType = {
-  roomId: number;
+  roomId: string;
   problemId: string;
   problemTitle: string;
   roomTitle: string;
@@ -26,12 +26,13 @@ const RoomList = () => {
 
   const [roomTitle, setRoomTitle] = useState<string>('');
   const [problemTitle, setproblemTitle] = useState<string>('');
+  const [roomId, setRoomId] = useState<string>('');
   const [problemId, setproblemId] = useState<string>('');
   const [roomlist, setRoomlist] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
   if (roomlist == null)
     setRoomlist([
       {
-        roomId: 1,
+        roomId: '1',
         problemId: '1000',
         problemTitle: 'A+B',
         roomTitle: '해결 좀 ㅎ ㅐ주세요',
@@ -121,7 +122,7 @@ const RoomList = () => {
       }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{ position: 'relative', height: 'calc(100vh - 180px)' }}
+      style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
       <MainWrapper>
         <SearchWrapper>
@@ -160,8 +161,7 @@ const RoomList = () => {
           <h4 style={{ width: '15%' }}> 문제 제목 </h4>
           <h4 style={{ width: '30%' }}> 방 이름 </h4>
           <h4 style={{ width: '45%', textAlign: 'end', marginRight: '5%' }}>
-            {' '}
-            방 정보{' '}
+            방 정보
           </h4>
         </Listheader>
         <ListView>
@@ -177,6 +177,7 @@ const RoomList = () => {
                       setRoomTitle(item.roomTitle);
                       setproblemId(item.problemId);
                       setproblemTitle(item.problemTitle);
+                      setRoomId(item.roomId);
                     }}
                   >
                     <Probinfo>
@@ -190,7 +191,6 @@ const RoomList = () => {
 
                     <Roominfo>
                       <p style={{ marginBottom: '10px' }}>
-                        {' '}
                         참여 인원: {item.cur_num} /{item.limit_num}
                       </p>
                       <p> 닉네임: {item.master} </p>
@@ -206,6 +206,7 @@ const RoomList = () => {
           title={roomTitle}
           prob_title={problemTitle}
           id={problemId}
+          roomid={roomId}
           component={6}
           on={isEnterModalOpen}
           event={setIsEnterModalOpen}
