@@ -151,7 +151,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
               height: '100%',
             }}
           >
-            <ProblemText id={id} isshowheader="true" size="calc(100% - 80px)" />
+            <ProblemText id={id} isshowheader="true" size="calc(100% - 61px)" />
           </div>
         </Tab>
         <Resizer
