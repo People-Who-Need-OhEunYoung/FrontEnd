@@ -19,9 +19,11 @@ const ModalContent2 = ({ width, reset }: any) => {
   const [isEditing, setIsEditing] = useState(false);
   const [problems, setProblems] = useState<ProblemType[]>([]); // 문제 데이터를 저장할 배열
 
+
   const [selectedProblem, setSelectedProblem] = useState<ProblemType | null>(
     null
   );
+
 
   //우현코드 start
   const navigate = useNavigate();
@@ -93,11 +95,10 @@ const ModalContent2 = ({ width, reset }: any) => {
   const selecthandleChange = (selectedOption: any) => {
     // 선택된 옵션을 처리합니다. selectedOption 객체가 전달됩니다.
     console.log(selectedOption); // 전체 선택된 객체를 로그로 확인
-    setSelectedProblem(selectedOption);
 
     if (selectedOption) {
-      console.log('Selected problem ID: ', selectedOption.id);
-      console.log('Selected problem title: ', selectedOption.title);
+      console.log('Selected problem ID: ', selectedOption.id); 
+      console.log('Selected problem title: ', selectedOption.title); 
     }
   };
 
@@ -129,16 +130,14 @@ const ModalContent2 = ({ width, reset }: any) => {
       const { data } = await axios.post(
         'https://api.poke-code.com:3334/create-room-with-user',
         {
-          username: userId,
+          username: userId, // 닉네임.
         }
       );
       localStorage.setItem('username', userId);
       localStorage.setItem('roomId', data.roomId);
 
       alert('성공적으로 방이 생성되었습니다.');
-      navigate(
-        `/room?roomid=${data.roomId}&id=${selectedProblem?.id}&title=${selectedProblem?.title}&level=${selectedProblem?.level}`
-      );
+      navigate(`/room?roomid=${data.roomId}`);
     } catch (error) {
       console.error('Error creating room:', error);
       alert('Failed to create room.');
