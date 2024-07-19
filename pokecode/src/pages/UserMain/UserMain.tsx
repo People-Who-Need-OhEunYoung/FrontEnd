@@ -301,8 +301,10 @@ const PokeName = styled.div`
   border-radius: 30px;
   height: 40px;
   line-height: 40px;
+  font-size: 1.2rem;
+  color: #d3dde8;
   text-align: center;
-  background: #80495c;
+  border: 4px solid #6366f1;
 `;
 
 const LevelWrap = styled.div`
@@ -392,6 +394,6 @@ const StyledRange = styled.div<{ setprogress: number }>`
   width: ${(props) => `${props.setprogress}%`};
   height: 10px;
   border-radius: 10px;
-  background: linear-gradient(to right, #ffacfc, #b76cfd);
+  background: linear-gradient(to right, #38bdf8, #6366f1);
 `;
 export default UserMain;

@@ -45,6 +45,7 @@ const CodeRunButton = () => {
           testCase: TestCases,
         }),
       });
+      console.log('TestCases:', TestCases);
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -71,7 +72,6 @@ const CodeRunButton = () => {
           fontSize: '1em',
           marginRight: '10px',
         }}
-        color="#a62df1"
       >
         테스트케이스 실행
       </DesignedButton1>

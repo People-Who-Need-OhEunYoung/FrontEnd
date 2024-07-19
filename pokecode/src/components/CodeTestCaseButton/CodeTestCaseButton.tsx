@@ -20,7 +20,6 @@ const CodeTestCaseButton = () => {
         onClick={() => {
           setIsModalOpen(true);
         }}
-        color="#a62df1"
       >
         테스트케이스 추가
       </DesignedButton1>

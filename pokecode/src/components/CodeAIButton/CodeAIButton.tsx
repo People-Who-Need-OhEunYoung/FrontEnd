@@ -162,7 +162,6 @@ const CodeAIButton = ({
           fontSize: fontSize,
           marginRight: marginRight,
         }}
-        color="#a62df1"
       >
         AI 피드백
       </DesignedButton1>

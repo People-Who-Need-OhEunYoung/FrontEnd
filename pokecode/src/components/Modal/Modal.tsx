@@ -92,7 +92,7 @@ const Modal = ({
             ''
           )}
           <DesignedButton1
-            color="rgba(79, 70, 229, 1)"
+            color="#D3DDE8"
             style={{ marginBottom: '35px' }}
             onClick={() => {
               handleClose();
@@ -126,9 +126,10 @@ const ModalWrap = styled.div`
   left: 50%;
   color: #ffffff;
   transform: translate(-50%, -50%);
-  background: #667fce;
+  background: #324056da;
   border-radius: 10px;
-  box-shadow: 10px 10px 10px 0 rgba(68, 68, 68, 0.836);
+  border: 4px solid #d3dde816;
+  //box-shadow: 10px 10px 10px 0 rgba(68, 68, 68, 0.836);
   /* filter: drop-shadow(5px 5px rgba(255, 255, 255, 0.336)); */
 `;
 

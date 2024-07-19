@@ -37,9 +37,9 @@ const ModalContent7 = ({ id, title, roomId }: any) => {
 };
 
 const ProblemInfo = styled.p`
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: bold;
-  color: #434343;
+  color: #ff79c6;
   margin: 10%;
 `;
 
@@ -49,9 +49,10 @@ const SolveBtn = styled.button`
   margin: 10px 20%;
   padding: 0.3rem 1rem;
   font-size: 1.2em;
-  border-radius: 30px;
+  color: white;
+  border-radius: 10px;
   border: none;
-  background-color: #d6d4d4;
+  background-color: #6366f1;
   box-sizing: border-box;
   cursor: pointer;
 `;
