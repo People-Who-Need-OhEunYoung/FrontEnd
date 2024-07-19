@@ -7,10 +7,12 @@ import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 import { CodeAIWardBalloon } from '../CodeAIButton';
 import { Terminal } from '../Terminal';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setReturnCall } from '../../store/codeCallerReducer';
 import { useLocation } from 'react-router-dom';
+
 
 const Container = styled.div`
   display: flex;
@@ -129,6 +131,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
     document.removeEventListener('mousemove', handleMouseMove1);
     document.removeEventListener('mouseup', handleMouseUp1);
   };
+
   useEffect(() => {
     dispatch(setReturnCall(''));
   }, [location]);

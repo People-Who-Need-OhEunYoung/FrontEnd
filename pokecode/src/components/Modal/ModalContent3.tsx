@@ -3,14 +3,15 @@ import { CodeAIButton } from '../CodeAIButton';
 
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-
 const ModalContent3 = ({ handleClose }: any) => {
+
   const { pokemonId } = useSelector((state: RootState) => state.userinfo);
 
   return (
     <div style={{ overflow: 'hidden', width: '400px' }}>
       <img
-        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemonId}.svg`}
+        src={'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
+                  pokemonId + '.gif'}
         height={'150px'}
         style={{ padding: '30px 0' }}
       />
