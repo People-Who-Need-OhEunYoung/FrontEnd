@@ -364,7 +364,10 @@ const Inputsearch = styled.input`
 `;
 
 const Item = styled.div`
-  border-bottom: 1px solid #8d8d8d;
+  border: 1.2px solid #4f678e;
+  border-radius: 10px;
+  background-color: #1e293b;
+  margin: 10px;
   padding: 15px;
   cursor: pointer;
 `;

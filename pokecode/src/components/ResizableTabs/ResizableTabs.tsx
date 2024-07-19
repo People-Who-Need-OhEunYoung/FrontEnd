@@ -11,7 +11,8 @@ import { CodeAIWardBalloon } from '../CodeAIButton';
 import VoiceChatOV from '../ResizableTabsReview/VoiceChatOV';
 import ChatRoom from '../ResizableTabsReview/ChatRoom';
 import { Terminal } from '../Terminal';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const Container = styled.div`
   display: flex;
@@ -69,9 +70,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const [position, setPosition] = useState({
     x: '50%',
   });
-  const { pokemonId } = useSelector(
-    (state: RootState) => state.userinfo
-  );
+  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const controls = useAnimation();
 
@@ -119,13 +118,13 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
     document.removeEventListener('mouseup', handleMouseUp1);
   };
 
-  const userSet = async () => {
-    setUser(await userInfo());
-  };
+  // const userSet = async () => {
+  //   setUser(await userInfo());
+  // };
 
-  useEffect(() => {
-    userSet();
-  }, [controls]);
+  // useEffect(() => {
+  //   userSet();
+  // }, [controls]);
 
   return (
     <motion.div
@@ -147,7 +146,6 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           >
             <ProblemText id={id} isshowheader="true" size="90%" />
           </div>
-
         </Tab>
         <Resizer
           onMouseDown={handleMouseDown}
@@ -200,7 +198,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
                 className="pokemon"
               >
                 <Pokemon
-                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${user.curPokeId}.gif`}
+                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemonId}.gif`}
                 ></Pokemon>
               </motion.div>
             </Home>
