@@ -93,7 +93,7 @@ const Modal = ({
           )}
           <DesignedButton1
             color="rgba(79, 70, 229, 1)"
-            style={{ marginBottom: '40px' }}
+            style={{ marginBottom: '35px' }}
             onClick={() => {
               handleClose();
               setNowcomponent(component);
@@ -124,16 +124,16 @@ const ModalWrap = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
-  color: #111826;
+  color: #ffffff;
   transform: translate(-50%, -50%);
-  background: #ffffff;
+  background: #667fce;
   border-radius: 10px;
   box-shadow: 10px 10px 10px 0 rgba(68, 68, 68, 0.836);
   /* filter: drop-shadow(5px 5px rgba(255, 255, 255, 0.336)); */
 `;
 
 const Title = styled.p`
-  padding: 50px 0 5%;
+  padding: 50px 0 0;
   font-weight: bold;
   font-size: 1.6rem;
   word-wrap: break-word; /* Deprecated, use overflow-wrap instead */

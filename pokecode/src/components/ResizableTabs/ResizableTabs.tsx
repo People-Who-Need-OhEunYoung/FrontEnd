@@ -5,11 +5,12 @@ import { Pokemon } from '../../pages/UserMain/UserMain';
 import background from '../../assets/images/background3.gif';
 import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
-import { userInfo } from '../../utils/api/api';
 import { CodeAIWardBalloon } from '../CodeAIButton';
 import { Terminal } from '../Terminal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { setReturnCall } from '../../store/codeCallerReducer';
+import { useLocation } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -70,6 +71,8 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const controls = useAnimation();
+  const location = useLocation();
+  const dispatch = useDispatch();
 
   const handleDivClick = (e: any) => {
     const containerRect = e.currentTarget.getBoundingClientRect();
@@ -126,14 +129,9 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
     document.removeEventListener('mousemove', handleMouseMove1);
     document.removeEventListener('mouseup', handleMouseUp1);
   };
-
-  const userSet = async () => {
-    setUser(await userInfo());
-  };
-
   useEffect(() => {
-    userSet();
-  }, [controls]);
+    dispatch(setReturnCall(''));
+  }, [location]);
 
   return (
     <motion.div
