@@ -7,11 +7,9 @@ import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 import { userInfo } from '../../utils/api/api';
 import { CodeAIWardBalloon } from '../CodeAIButton';
-
-import VoiceChatOV from '../ResizableTabsReview/VoiceChatOV';
-import ChatRoom from '../ResizableTabsReview/ChatRoom';
 import { Terminal } from '../Terminal';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const Container = styled.div`
   display: flex;
@@ -69,9 +67,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const [position, setPosition] = useState({
     x: '50%',
   });
-  const { pokemonId } = useSelector(
-    (state: RootState) => state.userinfo
-  );
+  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const controls = useAnimation();
 
@@ -159,7 +155,6 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           >
             <ProblemText id={id} isshowheader="true" size="calc(100% - 80px)" />
           </div>
-
         </Tab>
         <Resizer
           onMouseDown={handleMouseDown}
@@ -212,7 +207,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
                 className="pokemon"
               >
                 <Pokemon
-                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${user.curPokeId}.gif`}
+                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemonId}.gif`}
                 ></Pokemon>
               </motion.div>
             </Home>
