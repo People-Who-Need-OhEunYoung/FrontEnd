@@ -5,13 +5,12 @@ import { Pokemon } from '../../pages/UserMain/UserMain';
 import background from '../../assets/images/background3.gif';
 import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
-import { userInfo } from '../../utils/api/api';
 import { CodeAIWardBalloon } from '../CodeAIButton';
-
-import VoiceChatOV from '../ResizableTabsReview/VoiceChatOV';
-import ChatRoom from '../ResizableTabsReview/ChatRoom';
 import { Terminal } from '../Terminal';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { setReturnCall } from '../../store/codeCallerReducer';
+import { useLocation } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -40,7 +39,7 @@ const Resizer = styled.div`
   background-color: #0000006d;
   transform: translateX(-50%);
   height: 100%;
-  z-index: 100;
+  z-index: 200;
   position: absolute;
   border-radius: 20px;
   transition: 0.5s;
@@ -55,7 +54,7 @@ const Resizer = styled.div`
   -khtml-user-select: none;
   &:hover {
     opacity: 1;
-    z-index: 100;
+    z-index: 200;
   }
 `;
 
@@ -69,11 +68,11 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const [position, setPosition] = useState({
     x: '50%',
   });
-  const { pokemonId } = useSelector(
-    (state: RootState) => state.userinfo
-  );
+  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const controls = useAnimation();
+  const location = useLocation();
+  const dispatch = useDispatch();
 
   const handleDivClick = (e: any) => {
     const containerRect = e.currentTarget.getBoundingClientRect();
@@ -97,7 +96,13 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
         ((e.clientX - containerRef.current.getBoundingClientRect().left) /
           containerWidth) *
         100;
-      setWidth(newWidth);
+      if (newWidth < 30) {
+        setWidth(30);
+      } else if (newWidth > 50) {
+        setWidth(50);
+      } else {
+        setWidth(newWidth);
+      }
     }
   };
   const handleMouseMove1 = (e: MouseEvent) => {
@@ -106,7 +111,13 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
       const containerWidth = containerRect.width;
       const newWidth =
         ((containerRect.right - e.clientX) / containerWidth) * 100;
-      setWidth1(newWidth);
+      if (newWidth < 10) {
+        setWidth1(10);
+      } else if (newWidth > 50) {
+        setWidth1(50);
+      } else {
+        setWidth1(newWidth);
+      }
     }
   };
 
@@ -118,14 +129,9 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
     document.removeEventListener('mousemove', handleMouseMove1);
     document.removeEventListener('mouseup', handleMouseUp1);
   };
-
-  const userSet = async () => {
-    setUser(await userInfo());
-  };
-
   useEffect(() => {
-    userSet();
-  }, [controls]);
+    dispatch(setReturnCall(''));
+  }, [location]);
 
   return (
     <motion.div
@@ -145,9 +151,8 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
               height: '100%',
             }}
           >
-            <ProblemText id={id} isshowheader="true" size="90%" />
+            <ProblemText id={id} isshowheader="true" size="calc(100% - 80px)" />
           </div>
-
         </Tab>
         <Resizer
           onMouseDown={handleMouseDown}
@@ -200,7 +205,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
                 className="pokemon"
               >
                 <Pokemon
-                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${user.curPokeId}.gif`}
+                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemonId}.gif`}
                 ></Pokemon>
               </motion.div>
             </Home>
