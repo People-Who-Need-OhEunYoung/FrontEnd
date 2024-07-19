@@ -96,7 +96,7 @@ const Solvedlist = () => {
               <ProblemBox>
                 <div>제목:{problem.problem_title}</div>
                 <div>얻은 크레딧:{problem.get_credit}</div>
-                <div>획득날짜:{problem.resolved_date}</div>
+                <div>획득날짜:{problem.resolved_date.includes('T') ? problem.resolved_date.split('T')[0] : problem.resolved_date}</div>
                 <div>경과시간:{problem.elapsed_time}</div>
               </ProblemBox>
             </div>
