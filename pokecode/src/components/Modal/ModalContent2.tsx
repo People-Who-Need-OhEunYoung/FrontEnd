@@ -19,6 +19,7 @@ const ModalContent2 = ({ width, reset }: any) => {
   const [isEditing, setIsEditing] = useState(false);
   const [problems, setProblems] = useState<ProblemType[]>([]); // 문제 데이터를 저장할 배열
 
+
   const [selectedProblem, setSelectedProblem] = useState<ProblemType | null>(
     null
   );
@@ -94,11 +95,10 @@ const ModalContent2 = ({ width, reset }: any) => {
   const selecthandleChange = (selectedOption: any) => {
     // 선택된 옵션을 처리합니다. selectedOption 객체가 전달됩니다.
     console.log(selectedOption); // 전체 선택된 객체를 로그로 확인
-    setSelectedProblem(selectedOption);
 
     if (selectedOption) {
-      console.log('Selected problem ID: ', selectedOption.id);
-      console.log('Selected problem title: ', selectedOption.title);
+      console.log('Selected problem ID: ', selectedOption.id); 
+      console.log('Selected problem title: ', selectedOption.title); 
     }
   };
 
@@ -107,12 +107,14 @@ const ModalContent2 = ({ width, reset }: any) => {
       ...provided,
       width: '70%', // 부모 요소의 너비를 100%로 설정
       margin: 'auto',
-      padding: '10px',
+      padding: '10px 0',
       cursor: 'pointer',
+      color: 'black',
     }),
     control: (provided: any) => ({
       ...provided,
       width: '100%', // Select 컴포넌트의 너비를 설정
+      color: 'black',
     }),
   };
   //우현코드 start
@@ -128,16 +130,14 @@ const ModalContent2 = ({ width, reset }: any) => {
       const { data } = await axios.post(
         'https://api.poke-code.com:3334/create-room-with-user',
         {
-          username: userId,
+          username: userId, // 닉네임.
         }
       );
       localStorage.setItem('username', userId);
       localStorage.setItem('roomId', data.roomId);
 
       alert('성공적으로 방이 생성되었습니다.');
-      navigate(
-        `/room?roomid=${data.roomId}&id=${selectedProblem?.id}&title=${selectedProblem?.title}&level=${selectedProblem?.level}`
-      );
+      navigate(`/room?roomid=${data.roomId}`);
     } catch (error) {
       console.error('Error creating room:', error);
       alert('Failed to create room.');
@@ -146,24 +146,24 @@ const ModalContent2 = ({ width, reset }: any) => {
   // 우현코드 end
 
   return (
-    <div style={{ width: '400px' }}>
+    <div style={{ width: '400px', marginTop: '20px' }}>
       <div
         style={{
           width: width,
-          padding: '30px 0 20px',
           fontWeight: 'bold',
         }}
       >
-        <Select
-          options={problems}
-          styles={customStyles}
-          placeholder="문제 검색"
-          getOptionLabel={(option) => option.title} // 라벨을 지정
-          getOptionValue={(option) => option.id} // 값을 지정
-          onChange={selecthandleChange}
-        />
-
-        <div style={{ minHeight: '40px' }} onDoubleClick={handleDoubleClick}>
+        <div style={{ lineHeight: '20px' }}>
+          <Select
+            options={problems}
+            styles={customStyles}
+            placeholder="문제 검색"
+            getOptionLabel={(option) => option.title} // 라벨을 지정
+            getOptionValue={(option) => option.id} // 값을 지정
+            onChange={selecthandleChange}
+          />
+        </div>
+        <div style={{ minHeight: '20px' }} onDoubleClick={handleDoubleClick}>
           {isEditing ? (
             <Titleinput
               value={title}
@@ -208,11 +208,11 @@ const ModalContent2 = ({ width, reset }: any) => {
             &gt;
           </span>
         </PersonWrap>
-        <p>최대인원은 4명 입니다.</p>
+        <p style={{ marginBottom: '30px' }}>최대인원은 4명 입니다</p>
       </div>
 
       <DesignedButton1
-        color="#5d5d5d"
+        color="#6c37fd"
         onClick={() => {
           createRoom();
         }}
@@ -228,15 +228,14 @@ const Titleinput = styled.textarea`
   height: auto;
   min-height: 11.5px; /* 최소 높이를 설정 */
   text-align: center;
-  background: #6ebfee2b;
   word-break: break-all;
-  /* border: 1px solid #000000; */
   border: none;
   font-size: 1rem;
   font-weight: bold;
   outline: none;
   resize: none;
   overflow: auto;
+  border-radius: 5px;
   height: 5%;
 `;
 const Person = styled.input`
@@ -246,14 +245,15 @@ const Person = styled.input`
   width: 80px;
   font-size: 35px;
   background: none;
-  color: #000000;
+  color: #fff;
 `;
 
 const PersonWrap = styled.div`
   display: flex;
-  margin: 30px auto;
+  margin: auto;
   width: 100%;
   font-size: 40px;
+  margin: 20px 0 0;
   justify-content: center;
 `;
 
