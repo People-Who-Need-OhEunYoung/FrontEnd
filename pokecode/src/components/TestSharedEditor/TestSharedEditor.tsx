@@ -12,25 +12,33 @@ import { RootState } from '../../store';
 import { userInfo } from '../../utils/api/api';
 import { setWrittenCode } from '../../store/problemSlice';
 
-const TestSharedEditor = ({ editorRoom = 'notice' }) => {
+const TestSharedEditor = () => {
   const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
   const [editorContent, setEditorContent] = useState('');
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const { writtenCode } = useSelector((state: RootState) => state.probinfo);
   const { language } = useSelector((state: RootState) => state.codecaller);
   const dispatch = useDispatch();
-  //우현변수start
   const roomId = localStorage.getItem('roomId');
-  //우현변수end
 
-  console.log(editorRoom);
 
-  const element = document.querySelector('.remote-caret');
-  if (element) {
-    (element as HTMLElement).style.background =
-      'url(https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/119.gif)';
-    (element as HTMLElement).style.backgroundSize = 'contain';
-  }
+  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
+
+  const elements = document.querySelectorAll('.remote-caret');
+
+  // userInfo().then((res)=>{
+  //   const allStates = provider.awareness.getStates();
+  //   console.log("다른사람들 상태:", allStates);
+  // })
+
+  // useEffect(()=>{
+  //   console.log("몬가 바뀜!");
+  // },[editor])
+
+  elements.forEach((element) => {
+    const childElement = element.querySelector('div');
+    console.log("자식 요소:", childElement); // 각 <span> 요소의 자식 <div> 요소를 출력합니다.
+  });
 
   useEffect(() => {
     // KHS 코드 리뷰방으로 이동을 위해 dispatch 작업
@@ -48,7 +56,7 @@ const TestSharedEditor = ({ editorRoom = 'notice' }) => {
       return;
     }
     //우현코드e
-    if (editorContainerRef.current) {
+    if (editorContainerRef.current && pokemonId !== 0) {
       if (editor == null) {
         const ydoc = new Y.Doc();
         const provider = new WebsocketProvider(
@@ -56,15 +64,42 @@ const TestSharedEditor = ({ editorRoom = 'notice' }) => {
           `codemirror_${roomId}`,
           ydoc
         );
-        userInfo().then((res) => {
-          console.log(res.nickName);
-          provider.awareness.setLocalStateField('user', {
-            color: 'white',
-            name: res.nickName,
+
+        provider.awareness.on('update', () => {
+          const allStates = provider.awareness.getStates();
+          allStates.forEach((state, key) => {
+            if (state.user && state.user.name) {
+              console.log(`User ID: ${key}, Name: ${state.user.name}, pokemon:${state.user.pokemonid}`);
+
+              const elements = document.querySelectorAll('.remote-caret');
+
+              elements.forEach((element) => {
+                const childElement = element.querySelector('div');
+                // console.log("자식 요소:", childElement); // 각 <span> 요소의 자식 <div> 요소를 출력합니다.
+                if (childElement !== null && state.user.name == childElement.textContent) {
+                  (element as HTMLElement).style.background =
+                    `url(https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${state.user.pokemonid}.gif) no-repeat`;
+                    // console.log("발동!");
+                  (element as HTMLElement).style.backgroundSize = 'contain';
+                }
+              });
+
+            }
           });
         });
 
-        const yText = ydoc.getText(`codemirror_${roomId}`);
+        userInfo().then((res) => {
+          provider.awareness.setLocalStateField('user', {
+            color: 'white',
+            name: res.nickName,
+            pokemonid: pokemonId
+          });
+          const allStates = provider.awareness.getStates();
+          console.log("다른사람들 상태:", allStates);
+        });
+
+
+        const yText = ydoc.getText(`codemirror_${roomId}`); 
 
         // 기본 텍스트를 설정합니다.
         yText.insert(0, writtenCode);
@@ -94,7 +129,6 @@ const TestSharedEditor = ({ editorRoom = 'notice' }) => {
           seteditor,
           provider.awareness
         );
-        console.log(provider.awareness.clientID);
 
         return () => {
           binding.destroy();
@@ -102,11 +136,9 @@ const TestSharedEditor = ({ editorRoom = 'notice' }) => {
         };
       }
     }
-  }, []);
+  }, [pokemonId]);
   return (
-    <>
       <div ref={editorContainerRef} className="editor-container"></div>
-    </>
   );
 };
 
