@@ -201,6 +201,11 @@ export const Header3 = () => {
       }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      style={{
+        background: '#111826',
+        boxShadow: '0 1px 5px black',
+        zIndex: 1000,
+      }}
     >
       <Link
         className="titleLogo"
