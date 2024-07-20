@@ -9,13 +9,14 @@ import Modal from '../../components/Modal/Modal';
 import { setProblemId } from '../../store/problemSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import Select from 'react-select';
 
 type ProblemType = {
   id: string;
   level: number;
   title: string;
   solved: number;
-  average_try: number;
+  type: string;
 };
 
 const ProblemList = () => {
@@ -80,6 +81,23 @@ const ProblemList = () => {
       </>
     );
   };
+
+  const customStyles = {
+    container: (provided: any) => ({
+      ...provided,
+      width: '70%', // 부모 요소의 너비를 100%로 설정
+      margin: 'auto',
+      padding: '10px 0',
+      cursor: 'pointer',
+      color: 'black',
+    }),
+    control: (provided: any) => ({
+      ...provided,
+      width: '100%', // Select 컴포넌트의 너비를 설정
+      color: 'black',
+    }),
+  };
+
 
   useEffect(() => {
     fetchProbData().then((res) => {
@@ -170,13 +188,6 @@ const ProblemList = () => {
               푼 사람 수
             </SelectBtn>
             <SelectBtn
-              onClick={() => {
-                handleSortClick('average_try');
-              }}
-            >
-              평균 시도
-            </SelectBtn>
-            <SelectBtn
               style={{
                 fontSize: '1.5rem',
                 fontFamily: 'math',
@@ -197,10 +208,10 @@ const ProblemList = () => {
 
         {/* <SortList/> */}
         <Listheader>
-          <h4 style={{ width: '24px' }}>#</h4>
+          <h4 style={{ width: '40px' }}>#</h4>
           <h4 style={{ width: '30%' }}> 제목 </h4>
           <h4 style={{ width: '10%' }}> 푼 사람 수 </h4>
-          <h4 style={{ width: '10%' }}> 평균 시도 </h4>
+          <h4 style={{ width: '10%' }}> 알고리즘 유형 </h4>
         </Listheader>
         <ListView>
           {problems.map((item, index) => (
@@ -224,8 +235,8 @@ const ProblemList = () => {
                     <p
                       style={{
                         position: 'absolute',
-                        right: '30%',
-                        textAlign: 'end',
+                        right: '31%',
+                        textAlign: 'center',
                       }}
                     >
                       {item.solved}
@@ -233,11 +244,11 @@ const ProblemList = () => {
                     <p
                       style={{
                         position: 'absolute',
-                        right: '8%',
-                        textAlign: 'end',
+                        right: '6%',
+                        textAlign: 'center',
                       }}
                     >
-                      {item.average_try.toFixed(3)}
+                      {item.type}
                     </p>
                   </ProblemComponent>
                 );
@@ -307,9 +318,9 @@ const ProblemComponent = styled.div`
 `;
 
 const ListView = styled.div`
-  background-color: #6666661d;
-  width: 75%;
-  height: 62%;
+  //background-color: #6666661d;
+  width: 90%;
+  height: 70%;
   overflow-y: auto;
   margin: auto;
   font-size: 1.2rem;
@@ -318,7 +329,7 @@ const ListView = styled.div`
 `;
 
 const Listheader = styled.div`
-  width: 75%;
+  width: 90%;
   display: flex;
   margin: auto;
   justify-content: space-around;
@@ -401,7 +412,7 @@ const SelectBtn = styled.button`
   }
 
   &:focus {
-    color: #50fa7b ;
+    color: #50fa7b;
   }
 `;
 

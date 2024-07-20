@@ -6,13 +6,10 @@ import background from '../../assets/images/background3.gif';
 import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 import { CodeAIWardBalloon } from '../CodeAIButton';
+
 import { Terminal } from '../Terminal';
-
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { setReturnCall } from '../../store/codeCallerReducer';
-import { useLocation } from 'react-router-dom';
-
 
 const Container = styled.div`
   display: flex;
@@ -32,6 +29,7 @@ const Tab = styled.div<TabProps>`
   /* min-width: 550px; */
   flex-basis: ${({ width }) => width}%;
   z-index: 100;
+  resize: horizontal;
 `;
 
 const Resizer = styled.div`
@@ -41,7 +39,7 @@ const Resizer = styled.div`
   background-color: #0000006d;
   transform: translateX(-50%);
   height: 100%;
-  z-index: 200;
+  z-index: 100;
   position: absolute;
   border-radius: 20px;
   transition: 0.5s;
@@ -56,7 +54,7 @@ const Resizer = styled.div`
   -khtml-user-select: none;
   &:hover {
     opacity: 1;
-    z-index: 200;
+    z-index: 100;
   }
 `;
 
@@ -73,8 +71,8 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const controls = useAnimation();
-  const location = useLocation();
-  const dispatch = useDispatch();
+  const tabRef = useRef<HTMLDivElement | null>(null);
+  const [tabWidth, setTabWidth] = useState(0); // Tab의 초기 너비 상태
 
   const handleDivClick = (e: any) => {
     const containerRect = e.currentTarget.getBoundingClientRect();
@@ -98,13 +96,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
         ((e.clientX - containerRef.current.getBoundingClientRect().left) /
           containerWidth) *
         100;
-      if (newWidth < 30) {
-        setWidth(30);
-      } else if (newWidth > 50) {
-        setWidth(50);
-      } else {
-        setWidth(newWidth);
-      }
+      setWidth(newWidth);
     }
   };
   const handleMouseMove1 = (e: MouseEvent) => {
@@ -113,13 +105,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
       const containerWidth = containerRect.width;
       const newWidth =
         ((containerRect.right - e.clientX) / containerWidth) * 100;
-      if (newWidth < 10) {
-        setWidth1(10);
-      } else if (newWidth > 50) {
-        setWidth1(50);
-      } else {
-        setWidth1(newWidth);
-      }
+      setWidth1(newWidth);
     }
   };
 
@@ -133,8 +119,27 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   };
 
   useEffect(() => {
-    dispatch(setReturnCall(''));
-  }, [location]);
+    const tabElement = tabRef.current;
+    if (tabElement) {
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+          const { width } = entry.contentRect;
+          setTabWidth(width); // 너비 상태 업데이트
+        }
+      });
+      console.log('tabWidth: ', tabWidth);
+      resizeObserver.observe(tabElement); // 탭 요소 관찰 시작
+      return () => resizeObserver.disconnect(); // 컴포넌트 언마운트 시 관찰 중단
+    }
+  }, [tabWidth]);
+
+  // const userSet = async () => {
+  //   setUser(await userInfo());
+  // };
+
+  // useEffect(() => {
+  //   userSet();
+  // }, [controls]);
 
   return (
     <motion.div
@@ -147,15 +152,8 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
       style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
       <Container ref={containerRef}>
-        <Tab width={width}>
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
-          >
-            <ProblemText id={id} isshowheader="true" size="calc(100% - 61px)" />
-          </div>
+        <Tab width={width} ref={tabRef}>
+          <ProblemText id={id} isshowheader="true" size="calc(100% - 60px)" tabwidth={tabWidth} />
         </Tab>
         <Resizer
           onMouseDown={handleMouseDown}
