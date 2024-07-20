@@ -8,7 +8,6 @@ const CodeLanguageButton = () => {
   const { language } = useSelector((state: RootState) => state.codecaller);
   const dispatch = useDispatch();
 
-
   return (
     <DesignedButton1
       style={{
@@ -21,7 +20,12 @@ const CodeLanguageButton = () => {
       <label htmlFor="language">언어 : </label>
       <select
         id="language"
-        style={{ background: 'white', border: 'none', color: 'black', fontSize: '1rem' }}
+        style={{
+          background: '#324056',
+          border: 'none',
+          color: 'white',
+          fontSize: '1rem',
+        }}
         onChange={(e: any) => {
           dispatch(setLanguage(e.target.value));
         }}
