@@ -21,27 +21,37 @@ const TestSharedEditor = () => {
   const dispatch = useDispatch();
   const roomId = localStorage.getItem('roomId');
 
-
   const { pokemonId } = useSelector((state: RootState) => state.userinfo);
 
-  const elements = document.querySelectorAll('.remote-caret');
+  const loadImage = (url: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = url;
+      img.onload = () => resolve(url);
+      img.onerror = (err) => reject(err);
+    });
+  };
 
-  // userInfo().then((res)=>{
-  //   const allStates = provider.awareness.getStates();
-  //   console.log("다른사람들 상태:", allStates);
-  // })
-
-  // useEffect(()=>{
-  //   console.log("몬가 바뀜!");
-  // },[editor])
-
-  elements.forEach((element) => {
-    const childElement = element.querySelector('div');
-    console.log("자식 요소:", childElement); // 각 <span> 요소의 자식 <div> 요소를 출력합니다.
-  });
+  const updateCaretBackground = async (allStates) => {
+    const elements = document.querySelectorAll('.remote-caret');
+    for (const element of elements) {
+      const childElement = element.querySelector('div');
+      for (const [key, state] of allStates.entries()) {
+        if (state.user && state.user.name === childElement?.textContent) {
+          try {
+            const imgUrl = await loadImage(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${state.user.pokemonid}.gif`);
+            (element as HTMLElement).style.background = `url(${imgUrl}) no-repeat`;
+            console.log("발동!");
+            (element as HTMLElement).style.backgroundSize = 'contain';
+          } catch (error) {
+            console.error('Image load error:', error);
+          }
+        }
+      }
+    }
+  };
 
   useEffect(() => {
-    // KHS 코드 리뷰방으로 이동을 위해 dispatch 작업
     dispatch(setWrittenCode(editorContent));
   }, [editorContent]);
 
@@ -50,58 +60,36 @@ const TestSharedEditor = () => {
   }, [language]);
 
   useEffect(() => {
-    //우현코드s
     if (!roomId) {
       console.error('roomId가 존재하지 않음');
       return;
     }
-    //우현코드e
     if (editorContainerRef.current && pokemonId !== 0) {
       if (editor == null) {
         const ydoc = new Y.Doc();
         const provider = new WebsocketProvider(
-          'wss://api.poke-code.com:3333/room/?roomId=${roomId}',
+          `wss://api.poke-code.com:3333/room/?roomId=${roomId}`,
           `codemirror_${roomId}`,
           ydoc
         );
 
-        provider.awareness.on('update', () => {
+        provider.awareness.on('update', async () => {
           const allStates = provider.awareness.getStates();
-          allStates.forEach((state, key) => {
-            if (state.user && state.user.name) {
-              console.log(`User ID: ${key}, Name: ${state.user.name}, pokemon:${state.user.pokemonid}`);
-
-              const elements = document.querySelectorAll('.remote-caret');
-
-              elements.forEach((element) => {
-                const childElement = element.querySelector('div');
-                // console.log("자식 요소:", childElement); // 각 <span> 요소의 자식 <div> 요소를 출력합니다.
-                if (childElement !== null && state.user.name == childElement.textContent) {
-                  (element as HTMLElement).style.background =
-                    `url(https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${state.user.pokemonid}.gif) no-repeat`;
-                    // console.log("발동!");
-                  (element as HTMLElement).style.backgroundSize = 'contain';
-                }
-              });
-
-            }
-          });
+          await updateCaretBackground(allStates);
         });
 
-        userInfo().then((res) => {
+        userInfo().then(async (res) => {
           provider.awareness.setLocalStateField('user', {
             color: 'white',
             name: res.nickName,
             pokemonid: pokemonId
           });
           const allStates = provider.awareness.getStates();
-          console.log("다른사람들 상태:", allStates);
+          await updateCaretBackground(allStates);
         });
-
 
         const yText = ydoc.getText(`codemirror_${roomId}`); 
 
-        // 기본 텍스트를 설정합니다.
         yText.insert(0, writtenCode);
         const seteditor = CodeMirror(editorContainerRef.current, {
           theme: 'dracula',
@@ -109,11 +97,11 @@ const TestSharedEditor = () => {
           lineNumbers: true,
           spellcheck: true,
           autocorrect: true,
-          autoCloseBrackets: true, // 자동 괄호 닫기
-          matchBrackets: true, // 괄호 매칭
-          showHint: true, // 자동 완성 힌트
+          autoCloseBrackets: true,
+          matchBrackets: true,
+          showHint: true,
           extraKeys: {
-            'Ctrl-Space': 'autocomplete', // 자동 완성 키 설정
+            'Ctrl-Space': 'autocomplete',
           },
         });
 
@@ -130,13 +118,23 @@ const TestSharedEditor = () => {
           provider.awareness
         );
 
+        const observer = new MutationObserver(async (mutations) => {
+          const allStates = provider.awareness.getStates();
+          await updateCaretBackground(allStates);
+        });
+
+        const config = { childList: true, subtree: true };
+        observer.observe(editorContainerRef.current, config);
+
         return () => {
           binding.destroy();
           provider.disconnect();
+          observer.disconnect();
         };
       }
     }
   }, [pokemonId]);
+
   return (
       <div ref={editorContainerRef} className="editor-container"></div>
   );
