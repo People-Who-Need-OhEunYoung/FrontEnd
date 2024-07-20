@@ -12,7 +12,7 @@ import ChatRoom from './ChatRoom';
 import VoiceChatOV from './VoiceChatOV';
 import { setRoomId, setUsername } from '../../store/roomdataSlice';
 import { CodeAIWardBalloon } from '../CodeAIButton';
-import { Terminal } from '../Terminal';
+// import { Terminal } from '../Terminal';
 
 import backGR from '../../assets/images/background.jpg';
 

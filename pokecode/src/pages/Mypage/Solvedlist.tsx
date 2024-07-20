@@ -14,7 +14,7 @@ interface Problem {
 }
 
 const Solvedlist = () => {
-  const [userData, setUserData] = useState(''); // API로부터 받은 데이터
+ //const [userData, setUserData] = useState(''); // API로부터 받은 데이터
   const [problems, setProblems] = useState<Problem[]>([]); // 문제 데이터를 저장할 배열
 
   //const [items, setItems] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
@@ -23,9 +23,10 @@ const Solvedlist = () => {
   // const [page, setPage] = useState<number>(1);
   // const [totalPages] = useState<number>(0);
 
-  const [page, setPage] = useState<number>(1);
-  const [totalPages] = useState<number>(0);
-  console.log(page);
+  // const [page, setPage] = useState<number>(1);
+  // const [totalPages] = useState<number>(0);
+
+  //console.log(page);
 
 
   // const fetchUserData = async () => {
@@ -78,10 +79,9 @@ const Solvedlist = () => {
 
       }
     }
-    
     fetchResolvedProblems()
 
-  }, [userData]);
+  }, []);
 
   return (
     <Wrap>

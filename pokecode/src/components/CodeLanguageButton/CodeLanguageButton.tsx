@@ -2,12 +2,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { DesignedButton1 } from '../DesignedButton';
 import { setLanguage } from '../../store/codeCallerReducer';
-import Select from 'react-select';
 
 const CodeLanguageButton = () => {
   const { language } = useSelector((state: RootState) => state.codecaller);
   const dispatch = useDispatch();
-
 
   return (
     <DesignedButton1
@@ -21,7 +19,12 @@ const CodeLanguageButton = () => {
       <label htmlFor="language">언어 : </label>
       <select
         id="language"
-        style={{ background: 'white', border: 'none', color: 'black', fontSize: '1rem' }}
+        style={{
+          background: 'white',
+          border: 'none',
+          color: 'black',
+          fontSize: '1rem',
+        }}
         onChange={(e: any) => {
           dispatch(setLanguage(e.target.value));
         }}

@@ -53,7 +53,7 @@ const CodeRunButton = () => {
 
       const data = await response.json();
       dispatch(setReturnCall(data.data));
-      console.log(data);
+      console.log(data.data);
     } catch (error) {
       console.error('테스트 케이스 과정 에러 발생 : ', error);
     }

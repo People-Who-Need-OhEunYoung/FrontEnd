@@ -13,6 +13,7 @@ import { setAcquireReview, setProblemDetail } from '../../store/problemSlice';
 import Modal from '../../components/Modal/Modal';
 import { useNavigate } from 'react-router-dom';
 import { SetTime } from '../../utils/api/api';
+import { FaBars } from 'react-icons/fa';
 
 const ProblemText: React.FC<ResizableTabsProps> = ({
   id,
@@ -28,6 +29,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
     (state: RootState) => state.timer
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -159,16 +161,18 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
             >
               {formatTime(elapsedTime)}
             </Timer>
-            <HeaderBtn
-              style={{ height: '40%', margin: '15px' }}
-              onClick={() => {
-                dispatch(resetElapsedTime());
-                localStorage.removeItem(`solvedTime-${id}`);
-              }}
-            >
-              초기화
-            </HeaderBtn>
-            <div style={{ position: 'absolute', right: '3%' }}>
+            <HamburgerMenu onClick={() => setMenuOpen(!menuOpen)}>
+              <FaBars />
+            </HamburgerMenu>
+            <ButtonContainer menuOpen={menuOpen}>
+              <HeaderBtn
+                onClick={() => {
+                  dispatch(resetElapsedTime());
+                  localStorage.removeItem(`solvedTime-${id}`);
+                }}
+              >
+                초기화
+              </HeaderBtn>
               <HeaderBtn
                 onClick={() => {
                   dispatch(setAcquireReview(true));
@@ -179,7 +183,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
                 코드 리뷰 요청
               </HeaderBtn>
               <HeaderBtn> 힌트 보기 </HeaderBtn>
-            </div>
+            </ButtonContainer>
           </HeaderTxt>
         )}
       </Header>
@@ -249,6 +253,32 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
   );
 };
 
+const ButtonContainer = styled.div<{ menuOpen: boolean }>`
+  display: flex;
+  @media (max-width: 600px) {
+    display: ${(props) => (props.menuOpen ? 'flex' : 'none')};
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
+  }
+`;
+
+const HamburgerMenu = styled.div`
+  display: none;
+  cursor: pointer;
+  @media (max-width: 600px) {
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    font-size: 1.5rem;
+  }
+`;
+
 const Wrap = styled.div`
   height: calc(100%);
   overflow: auto;
@@ -257,6 +287,7 @@ const Wrap = styled.div`
 const Header = styled.div<{ isShowHeader: string }>`
   position: relative;
   height: 60px;
+  width: 100%;
 
   background-color: transparent;
   border-bottom: 2px solid #b6b5b546;
@@ -266,10 +297,11 @@ const Header = styled.div<{ isShowHeader: string }>`
 `;
 
 const HeaderBtn = styled.button`
-  padding: 5px 15px;
+  left: 4%;
+  padding: 0 25px;
   border-radius: 30px;
   font-weight: bold;
-  margin-left: 10px;
+  margin: 10px;
   &:hover {
     background-color: #4ea6ff;
   }

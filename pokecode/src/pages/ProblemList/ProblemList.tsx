@@ -197,7 +197,7 @@ const ProblemList = () => {
 
         {/* <SortList/> */}
         <Listheader>
-          <h4 style={{ width: '24px' }}>#</h4>
+          <h4 style={{ width: '40px' }}>#</h4>
           <h4 style={{ width: '30%' }}> 제목 </h4>
           <h4 style={{ width: '10%' }}> 푼 사람 수 </h4>
           <h4 style={{ width: '10%' }}> 평균 시도 </h4>
@@ -307,9 +307,9 @@ const ProblemComponent = styled.div`
 `;
 
 const ListView = styled.div`
-  background-color: #6666661d;
-  width: 75%;
-  height: 62%;
+  //background-color: #6666661d;
+  width: 90%;
+  height: 70%;
   overflow-y: auto;
   margin: auto;
   font-size: 1.2rem;
@@ -318,7 +318,7 @@ const ListView = styled.div`
 `;
 
 const Listheader = styled.div`
-  width: 75%;
+  width: 90%;
   display: flex;
   margin: auto;
   justify-content: space-around;
