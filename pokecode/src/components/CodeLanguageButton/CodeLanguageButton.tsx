@@ -20,9 +20,11 @@ const CodeLanguageButton = () => {
       <select
         id="language"
         style={{
-          background: 'white',
+
+          background: '#324056',
           border: 'none',
-          color: 'black',
+          color: 'white',
+
           fontSize: '1rem',
         }}
         onChange={(e: any) => {

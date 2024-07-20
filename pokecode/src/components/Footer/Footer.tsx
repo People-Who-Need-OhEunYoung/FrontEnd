@@ -22,6 +22,8 @@ export const Footer1 = () => {
         height: '80px',
         position: 'relative',
         background: '#111826',
+        boxShadow: '0 1px 5px black',
+        zIndex: 1000,
       }}
     >
       <div

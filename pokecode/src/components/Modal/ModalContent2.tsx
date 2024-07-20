@@ -97,8 +97,8 @@ const ModalContent2 = ({ width, reset }: any) => {
     console.log(selectedOption); // 전체 선택된 객체를 로그로 확인
 
     if (selectedOption) {
-      console.log('Selected problem ID: ', selectedOption.id); 
-      console.log('Selected problem title: ', selectedOption.title); 
+      console.log('Selected problem ID: ', selectedOption.id);
+      console.log('Selected problem title: ', selectedOption.title);
     }
   };
 
@@ -128,7 +128,8 @@ const ModalContent2 = ({ width, reset }: any) => {
 
     try {
       const { data } = await axios.post(
-        'https://api.poke-code.com:3334/create-room-with-user',
+        //'https://api.poke-code.com:3334/create-room-with-user',
+        'http://192.168.1.18:3334/create-room-with-user',
         {
           username: userId, // 닉네임.
         }

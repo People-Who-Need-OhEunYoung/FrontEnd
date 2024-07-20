@@ -14,7 +14,6 @@ const Terminal = () => {
   const [isTypingPaused, setIsTypingPaused] = useState<boolean>(false);
   // ------- 타이핑 출력 end ---------
   const { returnCall } = useSelector((state: RootState) => state.codecaller);
-  //const dispatch = useDispatch();
   useEffect(() => {
     // PDG 테스트 케이스 리턴 메세지를 받도록 수정
     setSequence('');
