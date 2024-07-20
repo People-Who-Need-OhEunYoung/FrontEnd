@@ -38,6 +38,7 @@ const TestSharedEditor = () => {
       const childElement = element.querySelector('div');
       for (const [key, state] of allStates.entries()) {
         if (state.user && state.user.name === childElement?.textContent) {
+          console.log('포켓몬아이디~!:',state.user.pokemonid);
           try {
             const imgUrl = await loadImage(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${state.user.pokemonid}.gif`);
             (element as HTMLElement).style.background = `url(${imgUrl}) no-repeat`;
@@ -64,7 +65,7 @@ const TestSharedEditor = () => {
       console.error('roomId가 존재하지 않음');
       return;
     }
-    if (editorContainerRef.current && pokemonId !== 0) {
+    if (editorContainerRef.current ) {
       if (editor == null) {
         const ydoc = new Y.Doc();
         const provider = new WebsocketProvider(
@@ -75,6 +76,7 @@ const TestSharedEditor = () => {
 
         provider.awareness.on('update', async () => {
           const allStates = provider.awareness.getStates();
+          console.log("여기1");
           await updateCaretBackground(allStates);
         });
 
@@ -85,6 +87,7 @@ const TestSharedEditor = () => {
             pokemonid: pokemonId
           });
           const allStates = provider.awareness.getStates();
+          console.log("여기2");
           await updateCaretBackground(allStates);
         });
 
@@ -120,20 +123,29 @@ const TestSharedEditor = () => {
 
         const observer = new MutationObserver(async (mutations) => {
           const allStates = provider.awareness.getStates();
+          console.log("여기3");
           await updateCaretBackground(allStates);
         });
 
         const config = { childList: true, subtree: true };
         observer.observe(editorContainerRef.current, config);
 
-        return () => {
+        const cleanup = () => {
+          console.log('컴포넌트 언마운트');
+          alert("언마운트!");
+          setEditor(null);
           binding.destroy();
           provider.disconnect();
           observer.disconnect();
         };
+  
+        window.addEventListener('beforeunload', cleanup);
+
+
       }
     }
-  }, [pokemonId]);
+
+  }, []);
 
   return (
       <div ref={editorContainerRef} className="editor-container"></div>
