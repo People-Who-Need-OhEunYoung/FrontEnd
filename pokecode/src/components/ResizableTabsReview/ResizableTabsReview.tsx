@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, useAnimation, useDragControls } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
@@ -73,8 +73,10 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
 }: any) => {
   const [width, setWidth] = useState<number>(25);
   const [width1, setWidth1] = useState<number>(25);
+  const [tabWidth, setTabWidth] = useState(0); // Tab의 초기 너비 상태
   const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const tabRef = useRef<HTMLDivElement | null>(null);
 
   const dispatch = useDispatch();
 
@@ -138,6 +140,21 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
     document.removeEventListener('mouseup', handleMouseUp1);
   };
 
+  useEffect(() => {
+    const tabElement = tabRef.current;
+    if (tabElement) {
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+          const { width } = entry.contentRect;
+          setTabWidth(width); // 너비 상태 업데이트
+        }
+      });
+      console.log('tabWidth: ', tabWidth);
+      resizeObserver.observe(tabElement); // 탭 요소 관찰 시작
+      return () => resizeObserver.disconnect(); // 컴포넌트 언마운트 시 관찰 중단
+    }
+  }, [tabWidth]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -191,6 +208,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
             id={id}
             isshowheader="false"
             size={'calc(100% - 80px)'}
+            tabwidth={tabWidth}
           />
         </Tab>
         <Resizer onMouseDown={handleMouseDown} style={{ left: width + '%' }} />

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -19,6 +19,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
   id,
   isshowheader,
   size,
+  tabwidth,
 }) => {
   const [problemDetails, setProblemDetails] = useState<ProblemDetails | null>(
     null
@@ -33,6 +34,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
 
   const navigate = useNavigate();
 
+  /* 문제에 대한 크롤링 데이터  요청 */
   const fetchCrawlData = async () => {
     try {
       const res: ProblemDetails = await getDetails(id);
@@ -43,6 +45,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
     }
   };
 
+  /* 시간저장 API 호출 */
   const SendTimeData = async (
     elapsedTime: number,
     limitTime: number,
@@ -58,6 +61,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
     }
   };
 
+  /* 문제 내의 글자 태그를 변환 (가독성) */
   const parseDescription = (description: string) => {
     // '$text$'를 '<i>text</i>'로 변환
     const italicBoldText = description.replace(
@@ -75,14 +79,12 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
     return imgWithWidth;
   };
 
+  /* 컴포넌트 마운트 시, 현재 시간을 설정. */
   useEffect(() => {
     dispatch(setStartTime(Date.now()));
   }, []);
 
-  useEffect(() => {
-    console.log('menuOpen:', menuOpen);
-  }, [menuOpen]);
-
+  /* 타이머 업데이트  */
   useEffect(() => {
     const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`); //localstorage에서 저장된 데이터 가져오기
     let start_time = Date.now(); //시작 시간 설정
@@ -130,6 +132,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
     };
   }, [startTime, id]);
 
+  /* 크롤링 데이터 가져오기  */
   useEffect(() => {
     fetchCrawlData().then((res) => {
       if (res) {
@@ -165,17 +168,23 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
             >
               {formatTime(elapsedTime)}
             </Timer>
-            <HamburgerMenu onClick={() => setMenuOpen(!menuOpen)}>
+            <HamburgerMenu
+              onClick={() => setMenuOpen(!menuOpen)}
+              tabwidth={tabwidth}
+            >
               <FaBars />
             </HamburgerMenu>
-            <ButtonContainer ismenuopen={menuOpen.toString()}>
+            <ButtonContainer
+              ismenuopen={menuOpen.toString()}
+              tabwidth={tabwidth}
+            >
               <HeaderBtn
                 onClick={() => {
                   dispatch(resetElapsedTime());
                   localStorage.removeItem(`solvedTime-${id}`);
                 }}
               >
-                초기화
+                reset
               </HeaderBtn>
               <HeaderBtn
                 onClick={() => {
@@ -257,39 +266,52 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
   );
 };
 
-const ButtonContainer = styled.div<{ ismenuopen: string }>`
-  display: flex;
-  @media (max-width: 600px) {
-    display: ${(props) => (props.ismenuopen === 'true' ? 'flex' : 'none')};
-    flex-direction: column;
-    position: absolute;
-    top: 60px;
-    right: 10px;
-    background-color: #333;
-    padding: 10px;
-    border-radius: 5px;
-  }
+// tabwidth가 600 이하일 때 공통적으로 적용될 스타일
+const commonStyles = css`
+  position: absolute;
+  right: 10px;
+  top: 60px;
+  background-color: #33333365;
+  padding: 10px;
+  border-radius: 5px;
+  flex-direction: column;
 `;
 
-const HamburgerMenu = styled.div`
-   display: none;
+const ButtonContainer = styled.div<{ ismenuopen: string; tabwidth: number }>`
+  display: flex;
+  position: absolute;
+  right: 10px;
+  padding: 10px 0px;
+
+  ${({ tabwidth, ismenuopen }) =>
+    tabwidth <= 570 &&
+    css`
+      display: ${ismenuopen === 'true' ? 'flex' : 'none'};
+      ${commonStyles}
+    `}
+`;
+
+const HamburgerMenu = styled.div<{ tabwidth: number }>`
+  display: none;
   cursor: pointer;
-  @media (max-width: 900px) {
-    display: block;
-    position: absolute;
-    top: 15px;
-    right: 10px;
-    font-size: 1.5rem;
-  }
+  color: #38bdf8;
+
+  ${({ tabwidth }) =>
+    tabwidth <= 570 &&
+    css`
+      display: block;
+      position: absolute;
+      right: 15px;
+      font-size: 2rem;
+    `};
 `;
 
 const Wrap = styled.div`
-  height: calc(100%);
+  height: 100%;
   overflow: auto;
 `;
 
-const Header = styled.div<{ isShowHeader: string }> `
-  position: relative;
+const Header = styled.div<{ isShowHeader: string }>`
   height: 60px;
   width: 100%;
 
@@ -300,16 +322,17 @@ const Header = styled.div<{ isShowHeader: string }> `
   display: ${(props) => (props.isShowHeader == 'true' ? 'block' : 'none')};
 `;
 
-  
-
 const HeaderBtn = styled.button`
-  left: 4%;
-  padding: 0 25px;
-  border-radius: 30px;
+  padding: 6px 15px;
+  border-radius: 7px;
   font-weight: bold;
-  margin: 10px;
+  font-size: 0.8rem;
+  margin: 5px;
+  border: none;
+  color: #d3dde8;
+  background-color: #324056;
   &:hover {
-    background-color: #4ea6ff;
+    background-color: #7b7df7;
   }
 `;
 
@@ -318,6 +341,7 @@ const HeaderTxt = styled.div`
   line-height: 60px;
   font-size: 1.2rem;
   color: white;
+  position: relative;
 `;
 
 const Title = styled.p`

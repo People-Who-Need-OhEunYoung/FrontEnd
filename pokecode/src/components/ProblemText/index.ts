@@ -31,6 +31,7 @@ export interface ResizableTabsProps {
   id: string;
   isshowheader: string;
   size: string;
+  tabwidth: number;
 }
 
 export interface TimeDetails {

@@ -1,4 +1,4 @@
-import { useState, useRef} from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, useAnimation } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
@@ -29,6 +29,7 @@ const Tab = styled.div<TabProps>`
   /* min-width: 550px; */
   flex-basis: ${({ width }) => width}%;
   z-index: 100;
+  resize: horizontal;
 `;
 
 const Resizer = styled.div`
@@ -70,6 +71,8 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const controls = useAnimation();
+  const tabRef = useRef<HTMLDivElement | null>(null);
+  const [tabWidth, setTabWidth] = useState(0); // Tab의 초기 너비 상태
 
   const handleDivClick = (e: any) => {
     const containerRect = e.currentTarget.getBoundingClientRect();
@@ -115,6 +118,21 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
     document.removeEventListener('mouseup', handleMouseUp1);
   };
 
+  useEffect(() => {
+    const tabElement = tabRef.current;
+    if (tabElement) {
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+          const { width } = entry.contentRect;
+          setTabWidth(width); // 너비 상태 업데이트
+        }
+      });
+      console.log('tabWidth: ', tabWidth);
+      resizeObserver.observe(tabElement); // 탭 요소 관찰 시작
+      return () => resizeObserver.disconnect(); // 컴포넌트 언마운트 시 관찰 중단
+    }
+  }, [tabWidth]);
+
   // const userSet = async () => {
   //   setUser(await userInfo());
   // };
@@ -134,16 +152,8 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
       style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
       <Container ref={containerRef}>
-        <Tab width={width}>
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-
-            }}
-          >
-            <ProblemText id={id} isshowheader="true" size="100%"/>
-          </div>
+        <Tab width={width} ref={tabRef}>
+          <ProblemText id={id} isshowheader="true" size="calc(100% - 60px)" tabwidth={tabWidth} />
         </Tab>
         <Resizer
           onMouseDown={handleMouseDown}
