@@ -80,6 +80,10 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
   }, []);
 
   useEffect(() => {
+    console.log('menuOpen:', menuOpen);
+  }, [menuOpen]);
+
+  useEffect(() => {
     const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`); //localstorage에서 저장된 데이터 가져오기
     let start_time = Date.now(); //시작 시간 설정
 
@@ -164,7 +168,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
             <HamburgerMenu onClick={() => setMenuOpen(!menuOpen)}>
               <FaBars />
             </HamburgerMenu>
-            <ButtonContainer menuOpen={menuOpen}>
+            <ButtonContainer ismenuopen={menuOpen.toString()}>
               <HeaderBtn
                 onClick={() => {
                   dispatch(resetElapsedTime());
@@ -253,10 +257,10 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
   );
 };
 
-const ButtonContainer = styled.div<{ menuOpen: boolean }>`
+const ButtonContainer = styled.div<{ ismenuopen: string }>`
   display: flex;
   @media (max-width: 600px) {
-    display: ${(props) => (props.menuOpen ? 'flex' : 'none')};
+    display: ${(props) => (props.ismenuopen === 'true' ? 'flex' : 'none')};
     flex-direction: column;
     position: absolute;
     top: 60px;
@@ -268,9 +272,9 @@ const ButtonContainer = styled.div<{ menuOpen: boolean }>`
 `;
 
 const HamburgerMenu = styled.div`
-  display: none;
+   display: none;
   cursor: pointer;
-  @media (max-width: 600px) {
+  @media (max-width: 900px) {
     display: block;
     position: absolute;
     top: 15px;
@@ -284,7 +288,7 @@ const Wrap = styled.div`
   overflow: auto;
 `;
 
-const Header = styled.div<{ isShowHeader: string }>`
+const Header = styled.div<{ isShowHeader: string }> `
   position: relative;
   height: 60px;
   width: 100%;
@@ -295,6 +299,8 @@ const Header = styled.div<{ isShowHeader: string }>`
   font-weight: bold;
   display: ${(props) => (props.isShowHeader == 'true' ? 'block' : 'none')};
 `;
+
+  
 
 const HeaderBtn = styled.button`
   left: 4%;
