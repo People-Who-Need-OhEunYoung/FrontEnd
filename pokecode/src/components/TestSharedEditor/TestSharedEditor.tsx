@@ -21,7 +21,7 @@ const TestSharedEditor = () => {
   const dispatch = useDispatch();
   const roomId = localStorage.getItem('roomId');
 
-  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
+  let { pokemonId } = useSelector((state: RootState) => state.userinfo);
 
   const loadImage = (url: string): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -61,6 +61,7 @@ const TestSharedEditor = () => {
   }, [language]);
 
   useEffect(() => {
+      // pokemonId = useSelector((state: RootState) => state.userinfo.pokemonId);
     if (!roomId) {
       console.error('roomId가 존재하지 않음');
       return;
@@ -76,15 +77,17 @@ const TestSharedEditor = () => {
 
         provider.awareness.on('update', async () => {
           const allStates = provider.awareness.getStates();
-          console.log("여기1");
+          console.log("여기1:",allStates);
           await updateCaretBackground(allStates);
         });
 
+        // 내 정보 등록
         userInfo().then(async (res) => {
+          console.log("userInfo의 답변:",res);
           provider.awareness.setLocalStateField('user', {
             color: 'white',
             name: res.nickName,
-            pokemonid: pokemonId
+            pokemonid: res.curPokeId
           });
           const allStates = provider.awareness.getStates();
           console.log("여기2");
@@ -120,7 +123,8 @@ const TestSharedEditor = () => {
           seteditor,
           provider.awareness
         );
-
+        
+        //다른사람 움직이면 반응
         const observer = new MutationObserver(async (mutations) => {
           const allStates = provider.awareness.getStates();
           console.log("여기3");
