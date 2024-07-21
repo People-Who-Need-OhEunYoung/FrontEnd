@@ -29,7 +29,6 @@ const ModalContent2 = ({ width, reset }: any) => {
     (state: RootState) => state.userinfo
   );
 
-
   //우현코드 start
   const navigate = useNavigate();
   //우현코드 end
@@ -221,12 +220,13 @@ const ModalContent2 = ({ width, reset }: any) => {
       </div>
 
       <DesignedButton1
-        color="#6c37fd"
+        color="white"
+        back_color="#6366F1"
         onClick={() => {
           createRoom();
         }}
       >
-        방만들기
+        방 만들기
       </DesignedButton1>
     </div>
   );

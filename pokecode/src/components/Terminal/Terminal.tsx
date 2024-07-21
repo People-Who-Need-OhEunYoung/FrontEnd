@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import styled from 'styled-components';
 
 const Terminal = () => {
   // ------- 타이핑 출력 start ---------
@@ -51,18 +52,26 @@ const Terminal = () => {
   return (
     <div
       style={{
-        background: 'yellow',
+        position: 'relative',
         width: '100%',
         height: '100%',
         overflow: 'hidden',
       }}
     >
+      <Header>
+        <Buttongroup back_color="#ff79c6 " />
+        <Buttongroup back_color="#3bbe5c " pos = "22px" />
+        <Buttongroup back_color="#6366F1" pos = "44px" />
+        <p style = {{ width: '100%', textAlign: 'center', boxSizing: 'border-box', padding: '8px'}}> Terminal </p>
+      </Header>
       <pre
         style={{
           height: '100%',
-          background: '#000',
-          color: 'white',
+          background: '#273244 ',
+          color: '#D3DDE8',
           overflow: 'auto',
+          boxSizing: 'border-box',
+          padding: '10px',
         }}
       >
         {sequence}
@@ -70,5 +79,24 @@ const Terminal = () => {
     </div>
   );
 };
+
+const Header = styled.div`
+  position: relative;
+  width: 100%;
+  height: 40px;
+  background-color: #111826;
+  color: #d3dde8;
+  box-sizing: border-box;
+`;
+
+const Buttongroup = styled.a<{ back_color?: string; pos?: string }>`
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  margin: 12px;
+  border-radius: 50%;
+  left: ${(props) => props.pos || '0'};
+  background-color: ${(props) => props.back_color || '#324056'};
+`;
 
 export default Terminal;

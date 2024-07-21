@@ -300,6 +300,7 @@ const HamburgerMenu = styled.div<{ tabwidth: number }>`
       right: 15px;
       font-size: 2rem;
     `};
+
 `;
 
 const Wrap = styled.div`

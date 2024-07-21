@@ -10,13 +10,12 @@ export default function TestCase({
 }: any) {
   const [inputValue, setInputValue] = useState<string>(inputdata);
   const [outputValue, setOutputValue] = useState<string>(outputdata);
-  const inputRef = useRef<HTMLTextAreaElement>();
-  const outputRef = useRef<HTMLTextAreaElement>();
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
+  const outputRef = useRef<HTMLTextAreaElement | null>(null);
 
   const autoResizeTextarea = (textarea: HTMLTextAreaElement) => {
     //textarea.style.height = 'auto'; // 기존 높이를 초기화
     textarea.style.height = `${textarea.scrollHeight}px`; // 새로운 높이를 scrollHeight로 설정
-    console.log('textarea.scrollHeight:', textarea.scrollHeight);
   };
 
   useEffect(() => {
@@ -29,6 +28,7 @@ export default function TestCase({
       autoResizeTextarea(outputRef.current);
     }
   }, [inputdata, outputdata]);
+
   useEffect(() => {
     if (inputRef.current) {
       autoResizeTextarea(inputRef.current);
@@ -48,7 +48,6 @@ export default function TestCase({
     >
       <Badges> 예시 {caseno} </Badges>
       <InoutWrap>
-
         <label
           style={{ textAlign: 'left', height: '50px', fontWeight: 'bold' }}
           htmlFor={'indata' + caseno}
@@ -57,6 +56,7 @@ export default function TestCase({
         </label>
         <div>
           <InOutput
+            ref={inputRef}
             id={'indata' + caseno}
             name={'indata' + caseno}
             value={inputValue}
@@ -67,7 +67,6 @@ export default function TestCase({
               border: 'none',
               height: 'auto',
             }}
-            ref={inputRef}
             onChange={(e) => {
               setInputValue(e.target.value);
               onInputChange(e);
@@ -111,7 +110,7 @@ export default function TestCase({
 
 const Badges = styled.p`
   font-weight: bold;
-  background-color: #6366f1;
+  background-color: #38bdf8;
   text-align: center;
   width: 20%;
   height: 40px;
@@ -123,7 +122,7 @@ const InoutWrap = styled.div`
   margin: 10px 0 40px;
   background-color: #46464647;
   border-radius: 10px;
-  border: 2px solid #6366f1;
+  border: 2px solid #38bdf8;
 `;
 
 const InOutput = styled.textarea`
