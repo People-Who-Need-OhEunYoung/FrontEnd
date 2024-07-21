@@ -12,7 +12,7 @@ interface User {
   username: any;
 }
 
-const ChatRoom: React.FC = () => {
+const ChatRoom: React.FC = ({onUserChange}) => {
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
@@ -82,6 +82,7 @@ const ChatRoom: React.FC = () => {
     socket.on('ROOM:CONNECTION', (users: User[]) => {
       console.log(`Users in room ${savedRoomId}:`, users);
       setUsers(users);
+      onUserChange(users);
     });
 
     socket.on('ROOM:MESSAGES', (messages: Message[]) => {
