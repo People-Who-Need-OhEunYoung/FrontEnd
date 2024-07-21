@@ -220,7 +220,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           }}
         >
           <div style={{ background: 'green', width: '100%', height: '80%' }}>
-            <TestSharedEditor editorRoom={editorRoom} />
+            <TestSharedEditor />
           </div>
           <div
             style={{

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 export default function TestCase({
@@ -10,22 +10,25 @@ export default function TestCase({
 }: any) {
   const [inputValue, setInputValue] = useState<string>(inputdata);
   const [outputValue, setOutputValue] = useState<string>(outputdata);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-  const outputRef = useRef<HTMLTextAreaElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>();
+  const outputRef = useRef<HTMLTextAreaElement>();
 
   const autoResizeTextarea = (textarea: HTMLTextAreaElement) => {
-    textarea.style.height = 'auto'; // 기존 높이를 초기화
+    //textarea.style.height = 'auto'; // 기존 높이를 초기화
     textarea.style.height = `${textarea.scrollHeight}px`; // 새로운 높이를 scrollHeight로 설정
     console.log('textarea.scrollHeight:', textarea.scrollHeight);
-    setInputValue(inputdata);
-    setOutputValue(outputdata);
   };
 
   useEffect(() => {
     setInputValue(inputdata);
     setOutputValue(outputdata);
+    if (inputRef.current) {
+      autoResizeTextarea(inputRef.current);
+    }
+    if (outputRef.current) {
+      autoResizeTextarea(outputRef.current);
+    }
   }, [inputdata, outputdata]);
-
   useEffect(() => {
     if (inputRef.current) {
       autoResizeTextarea(inputRef.current);
@@ -33,8 +36,7 @@ export default function TestCase({
     if (outputRef.current) {
       autoResizeTextarea(outputRef.current);
     }
-  }, [inputValue, outputValue, inputdata, outputdata, inputRef]);
-
+  });
   return (
     <div
       style={{
@@ -46,10 +48,7 @@ export default function TestCase({
     >
       <Badges> 예시 {caseno} </Badges>
       <InoutWrap>
-        <label
-          style={{ textAlign: 'left', height: '50px' }}
-          htmlFor={'indata' + caseno}
-        >
+        <label style={{ textAlign: 'left' }} htmlFor={'indata' + caseno}>
           입력
         </label>
         <div>
@@ -59,10 +58,10 @@ export default function TestCase({
             value={inputValue}
             style={{
               width: '100%',
-              minHeight: '100px',
-              overflow: 'hidden',
+
               resize: 'none',
               border: 'none',
+              height: 'auto',
             }}
             ref={inputRef}
             onChange={(e) => {
@@ -72,7 +71,7 @@ export default function TestCase({
             rows={1}
           />
         </div>
-        <div style={{ textAlign: 'left', height: '50px' }}>
+        <div style={{ textAlign: 'left' }}>
           <label htmlFor={'outdata' + caseno}>출력</label>
         </div>
         <div>
@@ -80,11 +79,11 @@ export default function TestCase({
             ref={outputRef}
             style={{
               width: '100%',
-              minHeight: '50px',
+
               marginBottom: '20px',
-              overflow: 'hidden',
               resize: 'none',
               border: 'none',
+              height: 'auto',
             }}
             id={'outdata' + caseno}
             name={'outdata' + caseno}
@@ -93,6 +92,7 @@ export default function TestCase({
               setOutputValue(e.target.value);
               onOutputChange(e);
             }}
+            rows={1}
           />
         </div>
       </InoutWrap>
