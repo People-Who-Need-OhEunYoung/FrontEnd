@@ -51,7 +51,7 @@ const ChatRoom: React.FC = () => {
   useEffect(() => {
     if (!savedUsername || !savedRoomId) {
       alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요');
-      navigate('..');
+      navigate('/roomlist');
       return;
     }
 
@@ -149,13 +149,18 @@ const ChatRoom: React.FC = () => {
 
       <div
         style={{
-          height: '15%',
-          textAlign: 'center',
+          height: '8%',
           color: 'white',
-          lineHeight: '55px',
+          lineHeight: '20px',
           boxSizing: 'border-box',
+          backgroundColor: '#111826',
+          width: '100%',
+          display:'flex',
+          alignItems:'center'
+          
         }}
       >
+
         방에 접속중인 인원: <b>{users.length}</b>
       </div>
       <div

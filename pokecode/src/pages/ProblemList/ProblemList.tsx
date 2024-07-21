@@ -319,7 +319,7 @@ const ProblemComponent = styled.div`
 
 const ListView = styled.div`
   //background-color: #6666661d;
-  width: 90%;
+  width: 80%;
   height: 60%;
   overflow-y: auto;
   margin: auto;
@@ -329,7 +329,7 @@ const ListView = styled.div`
 `;
 
 const Listheader = styled.div`
-  width: 90%;
+  width: 80%;
   display: flex;
   margin: auto;
   justify-content: space-around;

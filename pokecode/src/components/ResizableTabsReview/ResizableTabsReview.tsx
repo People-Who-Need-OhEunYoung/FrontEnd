@@ -13,8 +13,7 @@ import VoiceChatOV from './VoiceChatOV';
 import { setRoomId, setUsername } from '../../store/roomdataSlice';
 import { CodeAIWardBalloon } from '../CodeAIButton';
 // import { Terminal } from '../Terminal';
-
-import backGR from '../../assets/images/background.jpg';
+import ChatBG from '../../assets/images/ChatBG3.jpg';
 
 const Container = styled.div`
   display: flex;
@@ -248,12 +247,11 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
         <Resizer onMouseDown={handleMouseDown} style={{ left: width + '%' }} />
         <div
           style={{
-            background: 'blue',
             width: 100 - width - width1 + '%',
             height: '100%',
           }}
         >
-          <div style={{ background: 'green', width: '100%', height: '80%' }}>
+          <div style={{ width: '100%', height: '100%' }}>
             <TestSharedEditor />
           </div>
           <div
@@ -263,10 +261,16 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
               overflow: 'auto',
             }}
           >
-            <Home style={{ background: `url(${backGR})`, textAlign: 'center' }}>
+            <Home style={{ textAlign: 'center' }}>
               <DesignedButton1
-                style={{ width: '150px', height: '30px', lineHeight: '20px' }}
-                color="rgb(65, 0, 109)"
+                style={{
+                  width: '150px',
+                  height: '30px',
+                  lineHeight: '20px',
+                  position: 'absolute',
+                  bottom: '0',
+                  right: '6%',
+                }}
                 onClick={handleDragEnd}
               >
                 원 위치로
@@ -279,20 +283,13 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           style={{ left: 100 - width1 + '%' }}
         />
         <Tab width={width1}>
-          <div
-            style={{
-              background: '#5F6275',
-              width: '100%',
-              height: '80%',
-              overflow: 'auto',
-            }}
-          >
+          <ChatRoomDiv >
             <ChatRoom />
-          </div>
+          </ChatRoomDiv>
           <div
             style={{
               width: '100%',
-              height: '20%',
+              height: '30%',
               overflow: 'auto',
             }}
           >
@@ -323,5 +320,14 @@ const Home = styled.div`
   height: 100%;
   margin: 0 auto;
   overflow: hidden;
+  background-color: #282a36;
+`;
+
+const ChatRoomDiv = styled.div`
+  background: url(${ChatBG}) no-repeat;
+  width: 100%;
+  height: 70%;
+  overflow: auto;
+  background-size: cover;
 `;
 export default ResizableTabsReview;
