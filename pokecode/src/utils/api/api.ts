@@ -66,6 +66,7 @@ const userInfo = async () => {
       return res.json();
     })
     .then((data) => {
+      console.log('poke', data);
       return data;
     })
     .catch((error) => {

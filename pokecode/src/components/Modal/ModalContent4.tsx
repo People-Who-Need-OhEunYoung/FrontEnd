@@ -10,11 +10,7 @@ const ModalContent4 = ({ event, handleClose }: any) => {
     <div style={{ width: '400px' }}>
       <RainEffect></RainEffect>
       <img
-        src={
-          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-          pokemonId +
-          '.gif'
-        }
+        src={'/' + pokemonId + '.gif'}
         height={'150px'}
         style={{ padding: '50px 0' }}
       />

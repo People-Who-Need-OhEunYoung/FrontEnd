@@ -34,12 +34,10 @@ const TestSharedEditor = () => {
     const elements = document.querySelectorAll('.remote-caret');
     for (const element of elements) {
       const childElement = element.querySelector('div');
-      for (const [key, state] of allStates.entries()) {
+      for (const [_, state] of allStates.entries()) {
         if (state.user && state.user.name === childElement?.textContent) {
           try {
-            const imgUrl = await loadImage(
-              `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${state.user.pokemonid}.gif`
-            );
+            const imgUrl = await loadImage(`/${state.user.pokemonid}.gif`);
             (
               element as HTMLElement
             ).style.background = `url(${imgUrl}) no-repeat`;
@@ -80,7 +78,7 @@ const TestSharedEditor = () => {
           await updateCaretBackground(allStates);
         });
 
-        provider.awareness.on('change', ({ added, updated, removed }: any) => {
+        provider.awareness.on('change', ({ added, removed }: any) => {
           if (added.length > 0) {
             // 새로운 사용자가 접속함
             console.log('New user connected:', added);
@@ -137,7 +135,7 @@ const TestSharedEditor = () => {
         );
 
         //다른사람 움직이면 반응
-        const observer = new MutationObserver(async (mutations) => {
+        const observer = new MutationObserver(async () => {
           const allStates = provider.awareness.getStates();
           await updateCaretBackground(allStates);
         });
@@ -155,7 +153,13 @@ const TestSharedEditor = () => {
       }
     }
   }, []);
-  return <div style={{boxSizing: 'border-box', padding:'5px'}} ref={editorContainerRef} className="editor-container"></div>;
+  return (
+    <div
+      style={{ boxSizing: 'border-box', padding: '5px' }}
+      ref={editorContainerRef}
+      className="editor-container"
+    ></div>
+  );
 };
 
 export default TestSharedEditor;

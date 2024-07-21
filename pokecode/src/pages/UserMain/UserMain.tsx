@@ -187,7 +187,7 @@ const UserMain = () => {
           >
             <Pokemon
               style={{ transform: 'scale(2.5)' }}
-              src={pokemonId == 0 ? pokeball : '/public/1.gif'}
+              src={pokemonId == 0 ? pokeball : `/${pokemonId}.gif`}
             ></Pokemon>
           </motion.div>
           <PokeNameWrap>

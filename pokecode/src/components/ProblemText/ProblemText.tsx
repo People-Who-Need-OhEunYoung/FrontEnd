@@ -11,7 +11,6 @@ import { ProblemDetails, ResizableTabsProps, TimeDetails } from './index';
 import { RootState } from '../../store/index';
 import { setAcquireReview, setProblemDetail } from '../../store/problemSlice';
 import Modal from '../../components/Modal/Modal';
-import { useNavigate } from 'react-router-dom';
 import { SetTime } from '../../utils/api/api';
 import { FaBars } from 'react-icons/fa';
 
@@ -31,8 +30,6 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const navigate = useNavigate();
 
   /* 문제에 대한 크롤링 데이터  요청 */
   const fetchCrawlData = async () => {
