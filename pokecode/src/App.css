@@ -9,6 +9,8 @@ input {
   outline: none;
 }
 
+
+
 * {
   font-family: 'Noto Sans KR', 'Arsenal SC', sans-serif;
   /* font-family: 'GmarketSansMedium', sans-serif; */
@@ -53,4 +55,10 @@ input {
   font-family: cursive;
   inline-size: 30%;
   font-size: 11px;
+}
+
+.editor-container {
+  border-radius: 10px;
+  overflow: hidden;
+  box-sizing: border-box;
 }

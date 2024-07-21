@@ -30,6 +30,7 @@ const CodeRunButton = () => {
 
   const handleSubmit = async () => {
     const editorContent = writtenCode;
+    console.log('editorContent:', editorContent);
     try {
       const response = await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
         method: 'POST',
@@ -45,7 +46,7 @@ const CodeRunButton = () => {
           testCase: TestCases,
         }),
       });
-      console.log('TestCases:', TestCases);
+      console.log('response', response);
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);

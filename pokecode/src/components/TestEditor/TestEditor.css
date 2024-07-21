@@ -16,3 +16,13 @@
 /* .remote-caret.hide-name > div {
   background-color: green !important;
 } */
+
+.CodeMirror {
+  font-size: 17px;
+
+  /* 원하는 폰트 크기로 조정 */
+}
+
+.CodeMirror-lines {
+  padding: 20px 0;
+}
