@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, useAnimation } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
-import background from '../../assets/images/background3.gif';
+import background from '../../assets/images/background2.jpg';
 import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 import { CodeAIWardBalloon } from '../CodeAIButton';
@@ -178,7 +178,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
             style={{
               background: '#5F6275',
               width: '100%',
-              height: '80%',
+              height: '60%',
               overflow: 'auto',
             }}
           >
@@ -197,7 +197,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
                 style={{
                   position: 'relative',
                   transform: 'translateX(-50%)',
-                  top: '80%',
+                  top: '70%',
                   left: position.x,
                   display: 'inline-block',
                   transition: '1s',
@@ -213,7 +213,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           <div
             style={{
               width: '100%',
-              height: '20%',
+              height: '40%',
               overflow: 'auto',
             }}
           >
