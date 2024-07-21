@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef, ChangeEvent, KeyboardEvent } from 'react';
-import { useSelector } from 'react-redux';
 import io, { Socket } from 'socket.io-client';
-import { RootState } from '../../store';
+import { setWrittenCode } from '../../store/problemSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 interface Message {
-  username: any;
+  nick_name: any;
   message: any;
 }
 
@@ -16,10 +17,8 @@ const ChatRoom: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
-  //const [first, setFirst] = useState(false);
-  const { userId, pokemonId } = useSelector(
-    (state: RootState) => state.userinfo
-  );
+  const [first, setFirst] = useState(false);
+  const dispatch = useDispatch();
   const socketRef = useRef<Socket | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -27,7 +26,7 @@ const ChatRoom: React.FC = () => {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
+  const navigate = useNavigate();
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -37,24 +36,22 @@ const ChatRoom: React.FC = () => {
   const savedPokeId: string | null = localStorage.getItem('cur_poke_id');
   const savedUserId: string | null = localStorage.getItem('user_id');
 
-  console.log('1---------------------------------' + savedUsername);
-  console.log('2---------------------------------' + savedRoomId);
-
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       sendMessage();
     }
   };
-  // useEffect(() => {
-  //   setMessage('[notice]' + savedUsername + '님이 입장했습니다.');
-  //   setFirst(true);
-  //   sendMessage();
-  // }, [first]);
+  useEffect(() => {
+    setMessage('[notice]' + savedUsername + '님이 입장했습니다.');
+    setFirst(true);
+    sendMessage();
+  }, [first]);
 
   useEffect(() => {
     if (!savedUsername || !savedRoomId) {
       alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요');
+      navigate('..');
       return;
     }
 
@@ -64,7 +61,6 @@ const ChatRoom: React.FC = () => {
     });
 
     socketRef.current = socket;
-    console.log('야 니들 사라지는거냐 ㅠㅠ :', userId, pokemonId);
     socket.on('connect', () => {
       console.log(`Connected to socket, joining room ${savedRoomId}`);
       socket.emit('CONNECTED_TO_ROOM', {
@@ -94,8 +90,8 @@ const ChatRoom: React.FC = () => {
     });
 
     return () => {
+      dispatch(setWrittenCode(''));
       console.log(`Leaving room ${savedRoomId}`);
-      //socket.emit('DISCONNECT_FROM_ROOM', { savedRoomId, savedUsername });
       leaveRoom();
       socket.off();
     };
@@ -128,11 +124,11 @@ const ChatRoom: React.FC = () => {
         message: leaveMessage,
       });
 
-      console.log(`Leaving room ${savedRoomId}`);
       socket.emit('DISCONNECT_FROM_ROOM', {
         room_id: savedRoomId,
         nick_name: savedUsername,
       });
+
       socket.off();
       setUsers([]);
       setMessages([]);
@@ -151,20 +147,21 @@ const ChatRoom: React.FC = () => {
       </h2>
       <button onClick={leaveRoom}>나가기</button> */}
 
-      <h2
+      <div
         style={{
-          height: '8%',
+          height: '15%',
           textAlign: 'center',
           color: 'white',
           lineHeight: '55px',
+          boxSizing: 'border-box',
         }}
       >
         방에 접속중인 인원: <b>{users.length}</b>
-      </h2>
+      </div>
       <div
         style={{
           overflowY: 'scroll',
-          height: '82%',
+          height: '70%',
         }}
       >
         {messages.map((msg, index) =>
@@ -182,25 +179,14 @@ const ChatRoom: React.FC = () => {
             >
               {msg.message.replace('[notice]', '')}
             </h2>
-          ) : msg.username == savedUsername ? (
+          ) : msg.nick_name == savedUsername ? (
             <div style={{ textAlign: 'right' }}>
-              <strong
-                style={{
-                  display: 'inline-block',
-                  background: 'white',
-                  padding: '5px',
-                  borderRadius: '5px',
-                  margin: '3px 10px',
-                }}
-              >
-                {msg.username}
-              </strong>
               <br />
               <pre
                 style={{
                   boxSizing: 'border-box',
                   padding: '10px',
-                  background: 'white',
+                  background: 'yellow',
                   display: 'inline-block',
                   borderRadius: '5px',
                   margin: '0 10px',
@@ -221,10 +207,10 @@ const ChatRoom: React.FC = () => {
                   background: 'white',
                   padding: '5px',
                   borderRadius: '5px',
-                  margin: '3px 10px',
+                  margin: '0 10px',
                 }}
               >
-                {msg.username}
+                {msg.nick_name}
               </strong>
               <br />
               <pre
@@ -248,7 +234,7 @@ const ChatRoom: React.FC = () => {
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div style={{ height: '10%' }}>
+      <div style={{ height: '15%' }}>
         <textarea
           value={message}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -263,7 +249,6 @@ const ChatRoom: React.FC = () => {
             margin: '0',
             border: '1px solid #ccc',
             padding: '10px',
-            borderRadius: '5px',
             boxSizing: 'border-box',
             resize: 'none',
           }}

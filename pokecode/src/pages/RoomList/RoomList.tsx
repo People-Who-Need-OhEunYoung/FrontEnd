@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Modal from '../../components/Modal/Modal';
 import { showRoomList } from '../../utils/api/api';
-
+import reload from '../../assets/images/reload.png';
 type ItemType = {
   roomId: string;
   problemId: string;
@@ -52,7 +52,6 @@ const RoomList = () => {
   const fetchRoomData = async () => {
     try {
       const res = await showRoomList();
-      // console.log(res);
       return res;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -82,6 +81,27 @@ const RoomList = () => {
 
   const switchButton = () => {
     setCheck(check === 'ON' ? 'OFF' : 'ON');
+  };
+
+  const reList = () => {
+    fetchRoomData().then((res) => {
+      const parsedData = res;
+      const page_count = Math.ceil(res.count / parsedData.reviews.length);
+      // console.log(parsedData.problem);
+
+      setPageCount(page_count);
+      if (parsedData.reviews.length > 0) {
+        const itemsArray = [];
+        for (let i = 0; i < parsedData.reviews.length; i++) {
+          const item = parsedData.reviews[i];
+          // console.log('item:', item);
+          itemsArray.push(item);
+        }
+        setRoomlist(itemsArray); // items 상태 업데이트
+      } else {
+        setRoomlist([]);
+      }
+    });
   };
 
   const renderPageButtons = () => {
@@ -154,6 +174,13 @@ const RoomList = () => {
             >
               방 만들기
             </MakeRoomButton>
+            <Reload
+              onClick={() => {
+                reList();
+              }}
+            >
+              <img src={reload} alt="" width={20} />
+            </Reload>
           </SearchHeader>
         </SearchWrapper>
         <Listheader>
@@ -290,7 +317,7 @@ const CheckSlide = styled.div<{ timeck: string }>`
   padding: 0.25rem;
   margin: 0 10px;
   cursor: pointer;
-  
+
   ${(props: any) =>
     props.timeck === 'ON' &&
     css`
@@ -388,6 +415,28 @@ const MakeRoomButton = styled.button`
 
   &:active {
     background-color: #35428b;
+  }
+`;
+const Reload = styled.button`
+  padding: 5px;
+  line-height: 1px;
+  background-color: #6366f1;
+  color: #ffffff;
+  border-radius: 10px;
+  border: none;
+  margin-left: 10px;
+  transform: rotateZ('360deg');
+  cursor: pointer;
+
+  &:active {
+    background-color: #35428b;
+  }
+  &:hover {
+    & > img {
+      transition: 1s;
+      transform: rotateZ(360deg);
+    }
+    background-color: #8284f5;
   }
 `;
 

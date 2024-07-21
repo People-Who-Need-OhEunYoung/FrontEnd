@@ -10,8 +10,8 @@ export default function TestCase({
 }: any) {
   const [inputValue, setInputValue] = useState<string>(inputdata);
   const [outputValue, setOutputValue] = useState<string>(outputdata);
-  const inputRef = useRef<HTMLTextAreaElement>();
-  const outputRef = useRef<HTMLTextAreaElement>();
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const outputRef = useRef<HTMLTextAreaElement>(null);
 
   const autoResizeTextarea = (textarea: HTMLTextAreaElement) => {
     //textarea.style.height = 'auto'; // 기존 높이를 초기화

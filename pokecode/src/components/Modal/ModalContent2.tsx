@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setCurRoom } from '../../store/userInfo';
-
+import rolling from '../../assets/images/rolling2.svg';
 type ProblemType = {
   id: string;
   title: string;
@@ -19,6 +19,7 @@ const ModalContent2 = ({ width, reset }: any) => {
   const [title, setTitle] = useState('');
   const [query, setQuery] = useState('');
   const [person, setPerson] = useState(2);
+  const [loding, setLoding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [problems, setProblems] = useState<ProblemType[]>([]); // 문제 데이터를 저장할 배열
 
@@ -28,7 +29,6 @@ const ModalContent2 = ({ width, reset }: any) => {
   const { userNickname, userId } = useSelector(
     (state: RootState) => state.userinfo
   );
-
 
   //우현코드 start
   const navigate = useNavigate();
@@ -124,11 +124,12 @@ const ModalContent2 = ({ width, reset }: any) => {
   };
   //우현코드 start
   const createRoom = async () => {
+    setLoding(true);
+
     if (!userNickname) {
       alert('사용자 정보가 없습니다. 재로그인 바랍니다.');
       return;
     }
-
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_APP_ROOM}/create-room-with-user`,
@@ -144,91 +145,109 @@ const ModalContent2 = ({ width, reset }: any) => {
       localStorage.setItem('roomId', data.room_id);
       setCurRoom(data.room_id);
 
-      alert('성공적으로 방이 생성되었습니다.');
-      navigate(`/room?roomid=${data.room_id}`);
+      const queryParam: any = {
+        roomid: data.room_id,
+        id: selectedProblem?.id,
+        title: selectedProblem?.title,
+        level: selectedProblem?.level,
+      };
+      const params = new URLSearchParams(queryParam);
+      setTimeout(() => {
+        navigate(`/room?${params}`);
+      }, 2000);
     } catch (error) {
       console.log(userId);
       console.error('Error creating room:', error);
       alert('서버 문제로 방만들기를 실패했습니다.');
+      setLoding(false);
     }
   };
   // 우현코드 end
 
   return (
-    <div style={{ width: '400px', marginTop: '20px' }}>
-      <div
-        style={{
-          width: width,
-          fontWeight: 'bold',
-        }}
-      >
-        <div style={{ lineHeight: '20px' }}>
-          <Select
-            options={problems}
-            styles={customStyles}
-            placeholder="문제 검색"
-            getOptionLabel={(option) => option.title} // 라벨을 지정
-            getOptionValue={(option) => option.id} // 값을 지정
-            onChange={selecthandleChange}
-          />
-        </div>
-        <div style={{ minHeight: '20px' }} onDoubleClick={handleDoubleClick}>
-          {isEditing ? (
-            <Titleinput
-              value={title}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              style={{ padding: '10px' }}
-              onKeyDown={(e) => {
-                if (e.keyCode === 13) handleBlur();
-              }}
-              rows={1}
-              autoFocus
-            />
-          ) : (
-            <Titleinput
-              value={title}
-              style={{
-                display: 'inline-block',
-                wordBreak: 'break-all',
-                padding: '10px',
-                cursor: 'pointer',
-              }}
-              rows={1}
-              placeholder="방 제목을 입력해주세요"
-              readOnly
+    <>
+      {loding ? (
+        <img src={rolling} alt="" />
+      ) : (
+        <div style={{ width: '400px', marginTop: '20px' }}>
+          <div
+            style={{
+              width: width,
+              fontWeight: 'bold',
+            }}
+          >
+            <div style={{ lineHeight: '20px' }}>
+              <Select
+                options={problems}
+                styles={customStyles}
+                placeholder="문제 검색"
+                getOptionLabel={(option) => option.title} // 라벨을 지정
+                getOptionValue={(option) => option.id} // 값을 지정
+                onChange={selecthandleChange}
+              />
+            </div>
+            <div
+              style={{ minHeight: '20px' }}
+              onDoubleClick={handleDoubleClick}
             >
-              {/* {title == '' ? '방 제목을 입력해주세요.' : title} */}
-            </Titleinput>
-          )}
-        </div>
-        <PersonWrap>
-          <span
-            style={{ width: '40px', cursor: 'pointer', userSelect: 'none' }}
-            onClick={personMinus}
-          >
-            &lt;
-          </span>
-          <Person type="text" value={person} readOnly />
-          <span
-            style={{ width: '40px', cursor: 'pointer', userSelect: 'none' }}
-            onClick={personPlus}
-          >
-            &gt;
-          </span>
-        </PersonWrap>
-        <p style={{ marginBottom: '30px' }}>최대인원은 4명 입니다</p>
-      </div>
+              {isEditing ? (
+                <Titleinput
+                  value={title}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  style={{ padding: '10px' }}
+                  onKeyDown={(e) => {
+                    if (e.keyCode === 13) handleBlur();
+                  }}
+                  rows={1}
+                  autoFocus
+                />
+              ) : (
+                <Titleinput
+                  value={title}
+                  style={{
+                    display: 'inline-block',
+                    wordBreak: 'break-all',
+                    padding: '10px',
+                    cursor: 'pointer',
+                  }}
+                  rows={1}
+                  placeholder="방 제목을 입력해주세요"
+                  readOnly
+                >
+                  {/* {title == '' ? '방 제목을 입력해주세요.' : title} */}
+                </Titleinput>
+              )}
+            </div>
+            <PersonWrap>
+              <span
+                style={{ width: '40px', cursor: 'pointer', userSelect: 'none' }}
+                onClick={personMinus}
+              >
+                &lt;
+              </span>
+              <Person type="text" value={person} readOnly />
+              <span
+                style={{ width: '40px', cursor: 'pointer', userSelect: 'none' }}
+                onClick={personPlus}
+              >
+                &gt;
+              </span>
+            </PersonWrap>
+            <p style={{ marginBottom: '30px' }}>최대인원은 4명 입니다</p>
+          </div>
 
-      <DesignedButton1
-        color="#6c37fd"
-        onClick={() => {
-          createRoom();
-        }}
-      >
-        방만들기
-      </DesignedButton1>
-    </div>
+          <DesignedButton1
+            color="#fff"
+            onClick={() => {
+              createRoom();
+            }}
+          >
+            방만들기
+          </DesignedButton1>
+        </div>
+      )}
+    </>
   );
 };
 
