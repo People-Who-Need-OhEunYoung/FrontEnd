@@ -1,9 +1,10 @@
 import { useEffect, useState, useRef, ChangeEvent, KeyboardEvent } from 'react';
 import io, { Socket } from 'socket.io-client';
 import { setWrittenCode } from '../../store/problemSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { RootState } from '../../store';
 
 interface Message {
   nick_name: any;
@@ -23,6 +24,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
   const [first, setFirst] = useState(false);
+  const { userNickname } = useSelector((state: RootState) => state.userinfo);
   const dispatch = useDispatch();
   const socketRef = useRef<Socket | null>(null);
 
@@ -56,6 +58,12 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
 
   useEffect(() => {
     if (!savedUsername || !savedRoomId) {
+      alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요');
+      navigate('/roomlist');
+      return;
+    }
+    console.log('--------------------' + userNickname);
+    if (userNickname == '') {
       alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요');
       navigate('/roomlist');
       return;
@@ -95,8 +103,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
     //강퇴기능 추가 필요
-    socket.on('USER:FORCED_OUT', () => {
-      setMessage(message);
+    socket.on('USER:FORCED_OUT', (a) => {
+      setMessage(`[notice]${a}님이 퇴장당했습니다.`);
     });
 
     return () => {

@@ -150,6 +150,8 @@ const ModalContent2 = ({ width, reset }: any) => {
         id: selectedProblem?.id,
         title: selectedProblem?.title,
         level: selectedProblem?.level,
+        max_people: person,
+        room_title: title,
       };
       const params = new URLSearchParams(queryParam);
       setTimeout(() => {

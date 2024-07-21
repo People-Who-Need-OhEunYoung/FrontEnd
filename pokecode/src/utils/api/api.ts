@@ -292,6 +292,7 @@ const showRoomList = async () => {
       return res.json();
     })
     .then((data) => {
+      console.log(data);
       return data;
     })
     .catch((error) => {
@@ -505,6 +506,7 @@ const getRoomList = async (page: number) => {
       return res.json();
     })
     .then((data) => {
+      console.log(data);
       return data;
     })
     .catch((error) => {
@@ -543,6 +545,7 @@ const setRoom = async (
       return res.json();
     })
     .then((data) => {
+      console.log(data);
       return data;
     })
     .catch((error) => {

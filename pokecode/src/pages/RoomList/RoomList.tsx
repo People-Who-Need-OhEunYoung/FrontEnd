@@ -29,6 +29,7 @@ const RoomList = () => {
   const [roomId, setRoomId] = useState<string>('');
   const [problemId, setproblemId] = useState<string>('');
   const [roomlist, setRoomlist] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
+  const [person, setPerson] = useState(2); // 문제 데이터를 저장할 배열
   if (roomlist == null)
     setRoomlist([
       {
@@ -100,7 +101,7 @@ const RoomList = () => {
         const itemsArray = [];
         for (let i = 0; i < parsedData.reviews.length; i++) {
           const item = parsedData.reviews[i];
-          // console.log('item:', item);
+          console.log('item:', item);
           itemsArray.push(item);
         }
         setRoomlist(itemsArray); // items 상태 업데이트
@@ -211,6 +212,7 @@ const RoomList = () => {
                       setproblemId(item.problemId);
                       setproblemTitle(item.problemTitle);
                       setRoomId(item.roomId);
+                      setPerson(item.limit_num);
                     }}
                   >
                     <Probinfo>
@@ -240,6 +242,7 @@ const RoomList = () => {
           prob_title={problemTitle}
           id={problemId}
           roomid={roomId}
+          limitNum={person}
           component={6}
           on={isEnterModalOpen}
           event={setIsEnterModalOpen}
