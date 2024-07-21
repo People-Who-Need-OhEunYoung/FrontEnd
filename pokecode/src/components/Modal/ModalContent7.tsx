@@ -1,19 +1,34 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import rolling from '../../assets/images/rolling2.svg';
 import { RootState } from '../../store';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setWrittenCode } from '../../store/problemSlice';
+import { getRoomPeopleChecker } from '../../utils/api/api';
 
-const ModalContent7 = ({ id, title, roomId }: any) => {
+const ModalContent7 = ({ id, title, roomId, maxPerson, event }: any) => {
   const [loding, setLoding] = useState(false);
   const { userNickname } = useSelector((state: RootState) => state.userinfo);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   //우현코드 start
   const enterRoom = async () => {
     setLoding(true);
-    const value = localStorage.getItem('loginuserid');
+
+    let countPerson = await getRoomPeopleChecker(roomId);
+    console.log('maxPerson, countPerson--------------');
+    console.log(maxPerson, countPerson);
+    console.log('maxPerson, countPerson--------------');
+
+    if (maxPerson == countPerson.count) {
+      alert('인원이 초과되었습니다.');
+      setLoding(false);
+      event(false);
+      return;
+    }
+
+    const value = localStorage.getItem('user_id');
     const roomIdValue = roomId;
 
     if (!value || !roomIdValue) {
@@ -36,6 +51,10 @@ const ModalContent7 = ({ id, title, roomId }: any) => {
   };
   //추가 수정 필요 가능성 있음 현재 봤을때는 UUID 만 있으면 방에 참여하는 것으로 보임
   //우현코드 end
+
+  useEffect(() => {
+    dispatch(setWrittenCode(''));
+  }, []);
 
   return (
     <>

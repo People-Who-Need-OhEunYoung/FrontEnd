@@ -1,11 +1,10 @@
 import { useEffect, useState, useRef, ChangeEvent, KeyboardEvent } from 'react';
 import io, { Socket } from 'socket.io-client';
 import { setWrittenCode } from '../../store/problemSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getRoomPeopleChecker } from '../../utils/api/api';
-
+import { RootState } from '../../store';
 
 interface Message {
   nick_name: any;
@@ -25,6 +24,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
   const [first, setFirst] = useState(false);
+  const { userNickname } = useSelector((state: RootState) => state.userinfo);
   const dispatch = useDispatch();
   const socketRef = useRef<Socket | null>(null);
 
@@ -58,6 +58,12 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
 
   useEffect(() => {
     if (!savedUsername || !savedRoomId) {
+      alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요');
+      navigate('/roomlist');
+      return;
+    }
+    console.log('--------------------' + userNickname);
+    if (userNickname == '') {
       alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요');
       navigate('/roomlist');
       return;
@@ -97,8 +103,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
     //강퇴기능 추가 필요
-    socket.on('USER:FORCED_OUT', () => {
-      setMessage(message);
+    socket.on('USER:FORCED_OUT', (a) => {
+      setMessage(`[notice]${a}님이 퇴장당했습니다.`);
     });
 
     return () => {
@@ -131,8 +137,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
     if (socket) {
       const leaveMessage = `[notice]${savedUsername}님이 퇴장했습니다.`;
       socket.emit('SEND_MESSAGE', {
-        roomId: savedRoomId,
-        username: savedUsername,
+        room_id: savedRoomId,
+        nick_name: savedUsername,
         message: leaveMessage,
       });
 
@@ -165,13 +171,14 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   };
 
   return (
-    <div style={{ overflow: 'hidden', height: '100%', borderRadius:'10px' ,boxSizing:'border-box'}}>
-      {/* <h2>너의 이름은 {savedUsername}</h2>
-      <h2>방 ID: {savedRoomId}</h2>
-      <h2>
-      방에 접속중인 사람 개수: <b>{users.length}</b>
-      </h2>
-      <button onClick={leaveRoom}>나가기</button> */}
+    <div
+      style={{
+        overflow: 'hidden',
+        height: '100%',
+        borderRadius: '10px',
+        boxSizing: 'border-box',
+      }}
+    >
       <Header>
         <p style={{ position: 'absolute', left: '15px', fontSize: '1.2rem' }}>
           채팅
@@ -179,7 +186,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         <p style={{ position: 'absolute', right: '20px', fontSize: '1rem' }}>
           접속중인 인원: <b> {users.length}</b>
         </p>
-                <button
+        <button
           onClick={() => {
             forceOut('테스터');
           }}

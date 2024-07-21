@@ -29,6 +29,7 @@ const RoomList = () => {
   const [roomId, setRoomId] = useState<string>('');
   const [problemId, setproblemId] = useState<string>('');
   const [roomlist, setRoomlist] = useState<ItemType[]>([]); // 문제 데이터를 저장할 배열
+  const [person, setPerson] = useState(2); // 문제 데이터를 저장할 배열
   if (roomlist == null)
     setRoomlist([
       {
@@ -59,24 +60,30 @@ const RoomList = () => {
   };
 
   useEffect(() => {
-    fetchRoomData().then((res) => {
-      const parsedData = res;
-      const page_count = Math.ceil(res.count / parsedData.reviews.length);
-      // console.log(parsedData.problem);
+    // 데이터를 가져오는 함수
+    const fetchData = async () => {
+      try {
+        const res = await fetchRoomData();
+        const parsedData = res;
+        const page_count = Math.ceil(res.count / parsedData.reviews.length);
 
-      setPageCount(page_count);
-      if (parsedData.reviews.length > 0) {
-        const itemsArray = [];
-        for (let i = 0; i < parsedData.reviews.length; i++) {
-          const item = parsedData.reviews[i];
-          // console.log('item:', item);
-          itemsArray.push(item);
+        setPageCount(page_count);
+
+        if (parsedData.reviews.length > 0) {
+          setRoomlist(parsedData.reviews);
+        } else {
+          setRoomlist([]);
         }
-        setRoomlist(itemsArray); // items 상태 업데이트
-      } else {
-        setRoomlist([]);
+      } catch (error) {
+        console.error('Error fetching room data:', error);
       }
-    });
+    };
+    fetchData();
+    // 인터벌을 설정하는 함수
+    const intervalId = setInterval(fetchData, 5000); // 5초마다 데이터를 가져옴
+
+    // 컴포넌트 언마운트 시 인터벌을 정리
+    return () => clearInterval(intervalId);
   }, []);
 
   const switchButton = () => {
@@ -94,7 +101,7 @@ const RoomList = () => {
         const itemsArray = [];
         for (let i = 0; i < parsedData.reviews.length; i++) {
           const item = parsedData.reviews[i];
-          // console.log('item:', item);
+          console.log('item:', item);
           itemsArray.push(item);
         }
         setRoomlist(itemsArray); // items 상태 업데이트
@@ -205,6 +212,7 @@ const RoomList = () => {
                       setproblemId(item.problemId);
                       setproblemTitle(item.problemTitle);
                       setRoomId(item.roomId);
+                      setPerson(item.limit_num);
                     }}
                   >
                     <Probinfo>
@@ -234,6 +242,7 @@ const RoomList = () => {
           prob_title={problemTitle}
           id={problemId}
           roomid={roomId}
+          limitNum={person}
           component={6}
           on={isEnterModalOpen}
           event={setIsEnterModalOpen}

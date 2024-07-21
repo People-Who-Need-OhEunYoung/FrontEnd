@@ -18,10 +18,7 @@ export const Profile = ({ ...props }) => {
   };
   return (
     <div>
-      <MyPic
-        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${props.pokemonId}.svg`}
-        alt=""
-      />
+      <MyPic src={`/dw/${props.pokemonId}.svg`} alt="" />
       <Myinfo>
         <p>
           {props.name}님
@@ -109,11 +106,7 @@ const MyPic = styled.img`
     display: none;
   }
 `;
-const Level = styled.p`
-  @media (max-width: 1240px) {
-    display: none;
-  }
-`;
+
 const Myinfo = styled.div`
   width: 150px;
   padding: 0 20px;

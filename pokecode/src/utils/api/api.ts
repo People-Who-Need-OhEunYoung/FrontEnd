@@ -66,6 +66,7 @@ const userInfo = async () => {
       return res.json();
     })
     .then((data) => {
+      console.log('poke', data);
       return data;
     })
     .catch((error) => {
@@ -291,6 +292,7 @@ const showRoomList = async () => {
       return res.json();
     })
     .then((data) => {
+      console.log(data);
       return data;
     })
     .catch((error) => {
@@ -504,6 +506,7 @@ const getRoomList = async (page: number) => {
       return res.json();
     })
     .then((data) => {
+      console.log(data);
       return data;
     })
     .catch((error) => {
@@ -542,6 +545,7 @@ const setRoom = async (
       return res.json();
     })
     .then((data) => {
+      console.log(data);
       return data;
     })
     .catch((error) => {

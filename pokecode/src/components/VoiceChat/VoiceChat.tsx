@@ -230,11 +230,7 @@ const VoiceChat = ({ room = 1000 }) => {
             style={{ background: 'white', borderRadius: '50%' }}
             width={'50'}
             height={'50'}
-            src={
-              'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/' +
-              pokemonId +
-              '.svg'
-            }
+            src={'/dw/' + pokemonId + '.svg'}
             alt=""
           />
           <p
@@ -285,11 +281,7 @@ const VoiceChat = ({ room = 1000 }) => {
               style={{ background: 'white', borderRadius: '50%' }}
               width={'50'}
               height={'50'}
-              src={
-                'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/' +
-                pokemonId +
-                '.svg'
-              }
+              src={'/dw/' + pokemonId + '.svg'}
               alt=""
             />
             <p

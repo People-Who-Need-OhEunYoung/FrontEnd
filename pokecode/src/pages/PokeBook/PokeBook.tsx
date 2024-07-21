@@ -140,11 +140,7 @@ const PokeBook = () => {
       <PokeMonView>
         <PokemonGif
           ref={pokemonGifRef}
-          src={
-            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-            curPokeId +
-            '.gif'
-          }
+          src={'/' + curPokeId + '.gif'}
           onLoad={() => {
             setFilter();
           }}
@@ -231,8 +227,8 @@ const PokeBook = () => {
                         <Pokemon
                           src={
                             item.poke_Lv === 0
-                              ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
-                              : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${item.poke_id}.svg`
+                              ? '/poke-ball.png'
+                              : `/dw/${item.poke_id}.svg`
                           }
                         />
                       </div>
@@ -271,8 +267,8 @@ const PokeBook = () => {
                         <Pokemon
                           src={
                             item.poke_Lv === 0
-                              ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
-                              : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${item.poke_id}.svg`
+                              ? '/poke-ball.png'
+                              : `/dw/${item.poke_id}.svg`
                           }
                         />
                       </div>

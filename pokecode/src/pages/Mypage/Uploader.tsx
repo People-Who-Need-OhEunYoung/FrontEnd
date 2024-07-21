@@ -56,7 +56,7 @@ const Uploader = () => {
               boxSizing: 'border-box',
               padding: '15px',
             }}
-            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemonId}.svg`}
+            src={`/dw/${pokemonId}.svg`}
             alt="Preview"
           />
         </Image>

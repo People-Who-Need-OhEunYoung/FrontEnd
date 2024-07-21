@@ -13,7 +13,6 @@ import VoiceChatOV from './VoiceChatOV';
 import { setRoomId, setUsername } from '../../store/roomdataSlice';
 import { CodeAIWardBalloon } from '../CodeAIButton';
 // import { Terminal } from '../Terminal';
-import ChatBG from '../../assets/images/ChatBG3.jpg';
 
 const Container = styled.div`
   display: flex;
@@ -90,7 +89,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
 
   const handleContextMenu = (event: MouseEvent, index: number) => {
     event.preventDefault();
-    const newContextMenus = contextMenus.map((menu, i) =>
+    const newContextMenus = contextMenus.map((_, i) =>
       i === index
         ? { mouseX: event.clientX - 2, mouseY: event.clientY - 4 }
         : null
@@ -128,7 +127,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const dragControls = useDragControls();
   const animationControls = useAnimation();
 
-  const setIdData = localStorage.getItem('username');
+  const setIdData = localStorage.getItem('nickname');
   const setRoomIdData = localStorage.getItem('roomId');
 
   if (setIdData != null) {
@@ -224,7 +223,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                 position: 'fixed',
                 display: 'inline-block',
                 zIndex: 9999,
-                bottom: '80px',
+                bottom: '90px',
                 left: `${30 + 10 * key}%`,
                 transform: 'translateX(0px) translateY(0px) translateZ(0px)',
                 transition: '0.1s',
@@ -245,11 +244,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                 ''
               )}
               <Pokemon
-                src={
-                  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-                  user.cur_poke_id +
-                  '.gif'
-                }
+                src={'/' + user.cur_poke_id + '.gif'}
                 onContextMenu={(e: any) => handleContextMenu(e, key)}
               ></Pokemon>
               {contextMenus[key] ? (
@@ -263,6 +258,10 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                 >
                   <li
                     style={{
+                      position: 'absolute',
+                      left: '50%',
+                      top: '-40px',
+                      transform: 'translateX(-50%)',
                       color: 'white',
                       borderRadius: '10px',
                       background: '#324056',
@@ -298,7 +297,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
             height: '100%',
           }}
         >
-          <div style={{ width: '100%', height: '100%'}}>
+          <div style={{ width: '100%', height: '100%' }}>
             <TestSharedEditor />
           </div>
           <div style={{ position: 'relative' }}>
@@ -380,10 +379,10 @@ const NicknameBox = styled.p`
   height: 10%;
   margin: 0 auto;
   overflow: hidden;
-  background-color: rgba(221, 160, 221, 0.8); /* 연보라색 배경 */
-  opacity: 40%; /* 수정된 부분 */
+  color: white;
+  background-color: #324056; /* 연보라색 배경 */
+  opacity: 60%; /* 수정된 부분 */
   border-radius: 8px; /* 둥근 모서리 */
-  font-family: 'Arial', sans-serif; /* 예쁜 글씨체 */
   text-align: center; /* 텍스트 중앙 정렬 */
   font-size: 14px; /* 글씨 크기 조정 */
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 추가 */

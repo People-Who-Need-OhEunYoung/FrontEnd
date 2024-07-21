@@ -32,6 +32,7 @@ export const Footer1 = () => {
           height: '100%',
           lineHeight: '80px',
           textAlign: 'right',
+          overflow: 'hidden',
         }}
       >
         <CodeTestCaseButton />
