@@ -21,8 +21,6 @@ const TestSharedEditor = () => {
   const dispatch = useDispatch();
   const roomId = localStorage.getItem('roomId');
 
-  let { pokemonId } = useSelector((state: RootState) => state.userinfo);
-
   const loadImage = (url: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -38,11 +36,9 @@ const TestSharedEditor = () => {
       const childElement = element.querySelector('div');
       for (const [key, state] of allStates.entries()) {
         if (state.user && state.user.name === childElement?.textContent) {
-          console.log('포켓몬아이디~!:',state.user.pokemonid);
           try {
             const imgUrl = await loadImage(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${state.user.pokemonid}.gif`);
             (element as HTMLElement).style.background = `url(${imgUrl}) no-repeat`;
-            console.log("발동!");
             (element as HTMLElement).style.backgroundSize = 'contain';
           } catch (error) {
             console.error('Image load error:', error);
@@ -77,20 +73,17 @@ const TestSharedEditor = () => {
 
         provider.awareness.on('update', async () => {
           const allStates = provider.awareness.getStates();
-          console.log("여기1:",allStates);
           await updateCaretBackground(allStates);
         });
 
         // 내 정보 등록
         userInfo().then(async (res) => {
-          console.log("userInfo의 답변:",res);
           provider.awareness.setLocalStateField('user', {
             color: 'white',
             name: res.nickName,
             pokemonid: res.curPokeId
           });
           const allStates = provider.awareness.getStates();
-          console.log("여기2");
           await updateCaretBackground(allStates);
         });
 
@@ -127,24 +120,11 @@ const TestSharedEditor = () => {
         //다른사람 움직이면 반응
         const observer = new MutationObserver(async (mutations) => {
           const allStates = provider.awareness.getStates();
-          console.log("여기3");
           await updateCaretBackground(allStates);
         });
 
         const config = { childList: true, subtree: true };
         observer.observe(editorContainerRef.current, config);
-
-        const cleanup = () => {
-          console.log('컴포넌트 언마운트');
-          alert("언마운트!");
-          setEditor(null);
-          binding.destroy();
-          provider.disconnect();
-          observer.disconnect();
-        };
-  
-        window.addEventListener('beforeunload', cleanup);
-
 
       }
     }
