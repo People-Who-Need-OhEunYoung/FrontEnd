@@ -199,6 +199,40 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           }
         ></Pokemon>
       </motion.div>
+      <motion.div
+        drag
+        dragControls={dragControls}
+        animate={animationControls} // 애니메이션 컨트롤 적용
+        style={{
+          position: 'fixed',
+          display: 'inline-block',
+          width: '5vw',
+          zIndex: 9999,
+          bottom: '80px',
+          right: '48%',
+          transform: 'translateX(0px) translateY(0px) translateZ(0px)',
+          transition: '0.1s',
+        }}
+        className="pokemon"
+      >
+        <CodeAIWardBalloon
+          width="300px"
+          left="-100px"
+          fontSize="1em"
+          padding="30px"
+          right="30px"
+          bottom="100px"
+          position="absolute"
+        />
+        <Pokemon
+          width={'100%'}
+          src={
+            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
+            pokemonId +
+            '.gif'
+          }
+        ></Pokemon>
+      </motion.div>
       <Container ref={containerRef}>
         <Tab width={width}>
           <HeaderTxt>
