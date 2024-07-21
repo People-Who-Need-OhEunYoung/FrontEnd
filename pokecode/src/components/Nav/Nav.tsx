@@ -28,7 +28,7 @@ const LinkButton = styled(Link)`
   }
 
   &:focus {
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.584);
+    color: #50fa7b;
   }
 `;
 

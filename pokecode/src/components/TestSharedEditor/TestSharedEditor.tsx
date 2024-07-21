@@ -62,7 +62,7 @@ const TestSharedEditor = () => {
       console.error('roomId가 존재하지 않음');
       return;
     }
-    if (editorContainerRef.current ) {
+    if (editorContainerRef.current  && editor === null) {
       if (editor == null) {
         const ydoc = new Y.Doc();
         const provider = new WebsocketProvider(
@@ -76,8 +76,23 @@ const TestSharedEditor = () => {
           await updateCaretBackground(allStates);
         });
 
+        provider.awareness.on('change', ({ added, updated, removed }) => {
+          if (added.length > 0) {
+            // 새로운 사용자가 접속함
+            console.log('New user connected:', added);
+            // 필요한 처리 작업 수행
+          }
+        
+          if (removed.length > 0) {
+            // 사용자가 접속을 끊음
+            console.log('User disconnected:', removed);
+            // 필요한 처리 작업 수행
+          }
+        });
+
         // 내 정보 등록
         userInfo().then(async (res) => {
+          console.log("정보등록!!!!");
           provider.awareness.setLocalStateField('user', {
             color: 'white',
             name: res.nickName,
@@ -126,6 +141,14 @@ const TestSharedEditor = () => {
         const config = { childList: true, subtree: true };
         observer.observe(editorContainerRef.current, config);
 
+        
+        return () => {
+          console.log("정보 해지");
+          setEditor(null);
+          binding.destroy();
+          provider.disconnect();
+          observer.disconnect();
+        }
       }
     }
 

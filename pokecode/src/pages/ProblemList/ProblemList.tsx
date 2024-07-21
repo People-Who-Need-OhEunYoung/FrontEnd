@@ -152,6 +152,7 @@ const ProblemList = () => {
             <Inputsearch
               type="text"
               value={query}
+              placeholder="문제 제목, 알고리즘 유형"
               onChange={(e) => {
                 setQuery(e.target.value);
               }}
@@ -371,6 +372,10 @@ const Inputsearch = styled.input`
   border-radius: 30px;
   box-shadow: 0 0 15px 7px rgba(255, 255, 255, 0.267);
   box-sizing: border-box;
+  /* Placeholder 스타일링 */
+  &::placeholder {
+    color: #999;
+  }
 `;
 
 const Item = styled.div`

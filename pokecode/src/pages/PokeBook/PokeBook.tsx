@@ -1,11 +1,19 @@
 import styled from 'styled-components';
 import { MainWrapper } from '../../components/MainWrapper';
-import { showPokemonBook, pokemonName, updateMyPokemon } from '../../utils/api/api';
+import {
+  showPokemonBook,
+  pokemonName,
+  updateMyPokemon,
+} from '../../utils/api/api';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import background from '../../assets/images/background2.jpg';
-
+import waterIcon from '../../assets/images/물.png';
+import fireIcon from '../../assets/images/불.png';
+import grassIcon from '../../assets/images/풀.png';
+import electricIcon from '../../assets/images/전기.png';
+import psychicIcon from '../../assets/images/에스퍼.png';
 import { useDispatch } from 'react-redux';
 import { setPokemonId } from '../../store/userInfo';
 
@@ -17,7 +25,6 @@ type PokemonType = {
   poke_Exp: number;
 };
 
-
 const PokeBook = () => {
   const dispatch = useDispatch();
 
@@ -26,20 +33,20 @@ const PokeBook = () => {
   const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const [curPokeId, setCurPokeId] = useState<number>(pokemonId);
   const [selectedPokemon, setSelectedPokemon] = useState<boolean>(true);
-  const [visibleList, setVisibleList] = useState<string>('all_list');
+  const [visibleList, setVisibleList] = useState<string>('Stats_listt');
   const [page, setPage] = useState<number>(1);
   const pokemonGifRef = useRef<HTMLImageElement>(null);
-  const [activeButton, setActiveButton] = useState<string>('all_list');
+  const [activeButton, setActiveButton] = useState<string>('Stats_list');
   const [pokemonname, setPokemonname] = useState('');
 
   const itemsPerPage = 50;
 
-  const handleUpdate = async(poke_id:number) => {
-    let 결과 = await updateMyPokemon(poke_id)
-    if(결과.result == 'success'){
-      dispatch(setPokemonId(poke_id))
+  const handleUpdate = async (poke_id: number) => {
+    let 결과 = await updateMyPokemon(poke_id);
+    if (결과.result == 'success') {
+      dispatch(setPokemonId(poke_id));
     }
-  }
+  };
 
   const fetchPokeBook = async () => {
     try {
@@ -51,7 +58,8 @@ const PokeBook = () => {
   };
 
   const renderPageButtons = () => {
-    const totalItems = visibleList === 'all_list' ? allPokemons.length : gatchPokemons.length;
+    const totalItems =
+      visibleList === 'Stats_list' ? allPokemons.length : gatchPokemons.length;
     const pageCount = Math.ceil(totalItems / itemsPerPage);
     const buttons = [];
 
@@ -80,7 +88,10 @@ const PokeBook = () => {
     }
   };
 
-  const displayedItems = visibleList === 'all_list' ? getPagedItems(allPokemons, page) : getPagedItems(gatchPokemons, page);
+  const displayedItems =
+    visibleList === 'Stats_list'
+      ? getPagedItems(allPokemons, page)
+      : getPagedItems(gatchPokemons, page);
 
   useEffect(() => {
     setCurPokeId(pokemonId);
@@ -98,7 +109,7 @@ const PokeBook = () => {
         pokemonnameSet(curPokeId);
       }
     }
-  }
+  };
 
   useEffect(() => {
     fetchPokeBook().then((res) => {
@@ -122,7 +133,7 @@ const PokeBook = () => {
         setGatchPpokemons([]);
       }
     });
-  }, [])
+  }, []);
 
   return (
     <MainWrapper>
@@ -134,19 +145,84 @@ const PokeBook = () => {
             curPokeId +
             '.gif'
           }
-          onLoad={() => { setFilter() }}
+          onLoad={() => {
+            setFilter();
+          }}
         ></PokemonGif>
-        <PokemonName>  {curPokeId}. {pokemonname} </PokemonName>
+        <PokemonName>
+          {' '}
+          {curPokeId}. {pokemonname}{' '}
+        </PokemonName>
       </PokeMonView>
       <ListWrap>
         <ButtonGroup>
-          <SelectBtn active={activeButton === 'all_list'} onClick={() => { setVisibleList('all_list'); setActiveButton('all_list'); }}> 전체 </SelectBtn>
-          <SelectBtn active={activeButton === 'gatcha_list'} onClick={() => { setVisibleList('gatcha_list'); setActiveButton('gatcha_list'); }}> 획득한 포켓몬 </SelectBtn>
+          {/* <SelectBtn
+            active={activeButton === 'Stats_list'}
+            onClick={() => {
+              setVisibleList('Stats_list');
+              setActiveButton('Stats_list');
+            }}
+            style={{height:'30px', padding:'0 31.2px'}}
+          >
+            전체
+          </SelectBtn> */}
+          <SelectBtn
+            active={activeButton === 'water_list'}
+            onClick={() => {
+              setVisibleList('water_list');
+              setActiveButton('water_list');
+            }}
+          >
+            <Icon src={waterIcon}></Icon>
+          </SelectBtn>
+          <SelectBtn
+            active={activeButton === 'fire_list'}
+            onClick={() => {
+              setVisibleList('fire_list');
+              setActiveButton('fire_list');
+            }}
+          >
+            <Icon src={fireIcon}></Icon>
+          </SelectBtn>
+          <SelectBtn
+            active={activeButton === 'grass_list'}
+            onClick={() => {
+              setVisibleList('grass_list');
+              setActiveButton('grass_list');
+            }}
+          >
+            <Icon src={grassIcon}></Icon>
+          </SelectBtn>
+          <SelectBtn
+            active={activeButton === 'electronic_list'}
+            onClick={() => {
+              setVisibleList('electronic_list');
+              setActiveButton('electronic_list');
+            }}
+          >
+            <Icon src={electricIcon}></Icon>
+          </SelectBtn>
+          <SelectBtn
+            active={activeButton === 'psychic_list'}
+            onClick={() => {
+              setVisibleList('psychic_list');
+              setActiveButton('psychic_list');
+            }}
+          >
+            <Icon src={psychicIcon}></Icon>
+          </SelectBtn>
         </ButtonGroup>
         <ListView>
           {visibleList === 'all_list' &&
             displayedItems.map((item, index) => (
-              <Item key={index} onClick={() => { setCurPokeId(item.poke_id); setSelectedPokemon(item.poke_Lv !== 0); handleUpdate(item.poke_id) }}>
+              <Item
+                key={index}
+                onClick={() => {
+                  setCurPokeId(item.poke_id);
+                  setSelectedPokemon(item.poke_Lv !== 0);
+                  handleUpdate(item.poke_id);
+                }}
+              >
                 {(() => {
                   return (
                     <BookText>
@@ -177,16 +253,21 @@ const PokeBook = () => {
                 })()}
               </Item>
             ))}
-          {visibleList === 'gatcha_list' &&
+          {visibleList === 'water_list' &&
             gatchPokemons.map((item, index) => (
-              <Item key={index} onClick={() => { setCurPokeId(item.poke_id); setSelectedPokemon(true); handleUpdate(item.poke_id)}}>
+              <Item
+                key={index}
+                onClick={() => {
+                  setCurPokeId(item.poke_id);
+                  setSelectedPokemon(true);
+                  handleUpdate(item.poke_id);
+                }}
+              >
                 {(() => {
                   return (
                     <BookText>
                       <div>
-                        <p style={{ padding: '10px' }}>
-                          No. {item.poke_id}
-                        </p>
+                        <p style={{ padding: '10px' }}>No. {item.poke_id}</p>
                         <Pokemon
                           src={
                             item.poke_Lv === 0
@@ -196,12 +277,8 @@ const PokeBook = () => {
                         />
                       </div>
                       <div>
-                        <p>
-                          Level: {item.poke_Lv}
-                        </p>
-                        <p>
-                          Exp: {item.poke_Exp}
-                        </p>
+                        <p>Level: {item.poke_Lv}</p>
+                        <p>Exp: {item.poke_Exp}</p>
                       </div>
                     </BookText>
                   );
@@ -209,13 +286,11 @@ const PokeBook = () => {
               </Item>
             ))}
         </ListView>
-        <PageBtnGroup>
-          {renderPageButtons()}
-        </PageBtnGroup>
+        <PageBtnGroup>{renderPageButtons()}</PageBtnGroup>
       </ListWrap>
     </MainWrapper>
   );
-}
+};
 
 const PokemonName = styled.div`
   position: absolute;
@@ -230,6 +305,12 @@ const PokemonName = styled.div`
   left: 25%;
   color: #cbd5e1;
   bottom: 5%;
+`;
+
+const Icon = styled.img`
+  width: 35px;
+  box-sizing: border-box;
+  padding-top: 5px;
 `;
 
 const BookText = styled.div`
@@ -261,7 +342,7 @@ const PageBtnGroup = styled.div`
 `;
 
 const SelectBtn = styled.button<{ active: boolean }>`
-  padding: 5px 50px;
+  padding: 0px 31.2px;
   border: none;
   outline: none;
   cursor: pointer;
@@ -275,7 +356,6 @@ const SelectBtn = styled.button<{ active: boolean }>`
   background-color: ${({ active }) => (active ? '#1E293B' : '#38455a9b')};
   color: ${({ active }) => (active ? '#38BDF8' : '#8ea5af')};
 `;
-
 
 const PokeMonView = styled.div`
   width: 30%;

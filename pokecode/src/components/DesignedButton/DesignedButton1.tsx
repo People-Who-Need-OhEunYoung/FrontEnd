@@ -8,7 +8,7 @@ const DesignedButton1 = styled.button<{ back_color?: string; color?: string }>`
   font-size: 1.2em;
   border-radius: 10px;
   background-color: ${(props) => props.back_color || '#324056'};
-  border: 2px solid #d3dde82f;
+  border: 1px solid #d3dde82f;
   box-sizing: border-box;
   cursor: pointer;
 `;

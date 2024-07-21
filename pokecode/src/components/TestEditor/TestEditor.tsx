@@ -59,6 +59,7 @@ const TestEditor = () => {
           extraKeys: {
             'Ctrl-Space': 'autocomplete', // 자동 완성 키 설정
           },
+          
         });
 
         cmEditor.on('change', (instance) => {

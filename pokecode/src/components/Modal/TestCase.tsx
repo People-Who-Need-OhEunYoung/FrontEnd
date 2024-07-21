@@ -10,13 +10,14 @@ export default function TestCase({
 }: any) {
   const [inputValue, setInputValue] = useState<string>(inputdata);
   const [outputValue, setOutputValue] = useState<string>(outputdata);
+
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const outputRef = useRef<HTMLTextAreaElement>(null);
+
 
   const autoResizeTextarea = (textarea: HTMLTextAreaElement) => {
     //textarea.style.height = 'auto'; // 기존 높이를 초기화
     textarea.style.height = `${textarea.scrollHeight}px`; // 새로운 높이를 scrollHeight로 설정
-    console.log('textarea.scrollHeight:', textarea.scrollHeight);
   };
 
   useEffect(() => {
@@ -29,6 +30,7 @@ export default function TestCase({
       autoResizeTextarea(outputRef.current);
     }
   }, [inputdata, outputdata]);
+
   useEffect(() => {
     if (inputRef.current) {
       autoResizeTextarea(inputRef.current);
@@ -48,11 +50,15 @@ export default function TestCase({
     >
       <Badges> 예시 {caseno} </Badges>
       <InoutWrap>
-        <label style={{ textAlign: 'left' }} htmlFor={'indata' + caseno}>
+        <label
+          style={{ textAlign: 'left', height: '50px', fontWeight: 'bold' }}
+          htmlFor={'indata' + caseno}
+        >
           입력
         </label>
         <div>
           <InOutput
+            ref={inputRef}
             id={'indata' + caseno}
             name={'indata' + caseno}
             value={inputValue}
@@ -63,7 +69,6 @@ export default function TestCase({
               border: 'none',
               height: 'auto',
             }}
-            ref={inputRef}
             onChange={(e) => {
               setInputValue(e.target.value);
               onInputChange(e);
@@ -71,9 +76,14 @@ export default function TestCase({
             rows={1}
           />
         </div>
-        <div style={{ textAlign: 'left' }}>
-          <label htmlFor={'outdata' + caseno}>출력</label>
-        </div>
+
+        <label
+          style={{ textAlign: 'left', height: '50px', fontWeight: 'bold' }}
+          htmlFor={'outdata' + caseno}
+        >
+          출력
+        </label>
+
         <div>
           <InOutput
             ref={outputRef}

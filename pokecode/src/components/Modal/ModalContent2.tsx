@@ -237,17 +237,17 @@ const ModalContent2 = ({ width, reset }: any) => {
             <p style={{ marginBottom: '30px' }}>최대인원은 4명 입니다</p>
           </div>
 
-          <DesignedButton1
-            color="#fff"
-            onClick={() => {
-              createRoom();
-            }}
-          >
-            방만들기
-          </DesignedButton1>
-        </div>
-      )}
-    </>
+
+      <DesignedButton1
+        color="white"
+        back_color="#6366F1"
+        onClick={() => {
+          createRoom();
+        }}
+      >
+        방 만들기
+      </DesignedButton1>
+    </div>
   );
 };
 
