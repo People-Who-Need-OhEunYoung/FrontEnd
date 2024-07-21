@@ -75,7 +75,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRef = useRef<HTMLDivElement | null>(null);
   const [usersInfo, setUsersInfo] = useState<any[]>([]);
-
+  const { userNickname } = useSelector((state: RootState) => state.userinfo);
   const dispatch = useDispatch();
 
   const dragControls = useDragControls();
@@ -168,7 +168,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
       style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
       {usersInfo !== null ? (
-        usersInfo.map((user) => (
+        usersInfo.map((user, key) => (
           <motion.div
             drag
             dragControls={dragControls}
@@ -178,21 +178,24 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
               display: 'inline-block',
               zIndex: 9999,
               bottom: '80px',
-              right: '48%',
+              left: `${30 + 10 * key}%`,
               transform: 'translateX(0px) translateY(0px) translateZ(0px)',
               transition: '0.1s',
             }}
             className="pokemon"
           >
-            <CodeAIWardBalloon
-              width="300px"
-              left="-100px"
-              fontSize="1em"
-              padding="30px"
-              right="30px"
-              bottom="100px"
-              position="absolute"
-            />
+            {user.nick_name == userNickname ? (
+              <CodeAIWardBalloon
+                width="300px"
+                left="-150px"
+                fontSize="1em"
+                padding="30px"
+                bottom="100px"
+                position="absolute"
+              />
+            ) : (
+              ''
+            )}
             <Pokemon
               src={
                 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
