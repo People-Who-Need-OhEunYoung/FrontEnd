@@ -22,7 +22,7 @@ export const Profile = ({ ...props }) => {
         src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${props.pokemonId}.svg`}
         alt=""
       />
-      <p
+      <Level
         style={{
           position: 'absolute',
           bottom: '5px',
@@ -31,7 +31,7 @@ export const Profile = ({ ...props }) => {
         }}
       >
         LV100
-      </p>
+      </Level>
       <Myinfo>
         <p>
           {props.name}님
@@ -99,6 +99,7 @@ export const Profile = ({ ...props }) => {
           fill="white"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 448 512"
+          onMouseOver={handleMouseOver}
         >
           <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
         </svg>
@@ -112,6 +113,11 @@ const MyPic = styled.img`
   height: 45px;
   border-radius: 50%;
   margin: 10px 0 10px 0;
+  @media (max-width: 1240px) {
+    display: none;
+  }
+`;
+const Level = styled.p`
   @media (max-width: 1240px) {
     display: none;
   }
