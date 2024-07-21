@@ -129,8 +129,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
     if (socket) {
       const leaveMessage = `[notice]${savedUsername}님이 퇴장했습니다.`;
       socket.emit('SEND_MESSAGE', {
-        roomId: savedRoomId,
-        username: savedUsername,
+        room_id: savedRoomId,
+        nick_name: savedUsername,
         message: leaveMessage,
       });
 
@@ -171,12 +171,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         boxSizing: 'border-box',
       }}
     >
-      {/* <h2>너의 이름은 {savedUsername}</h2>
-      <h2>방 ID: {savedRoomId}</h2>
-      <h2>
-      방에 접속중인 사람 개수: <b>{users.length}</b>
-      </h2>
-      <button onClick={leaveRoom}>나가기</button> */}
       <Header>
         <p style={{ position: 'absolute', left: '15px', fontSize: '1.2rem' }}>
           채팅

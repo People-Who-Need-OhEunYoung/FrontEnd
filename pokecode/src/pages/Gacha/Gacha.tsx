@@ -157,11 +157,7 @@ const Gacha = () => {
                 transform: 'translate(-50%,-50%)',
                 width: '30%',
               }}
-              src={
-                'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-                getPokemon +
-                '.gif'
-              }
+              src={'/' + getPokemon + '.gif'}
             />
             <h1
               style={{ position: 'absolute', bottom: '110px', width: '100%' }}
