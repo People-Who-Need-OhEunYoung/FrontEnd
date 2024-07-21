@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 export default function TestCase({
   caseno,
@@ -34,57 +35,84 @@ export default function TestCase({
   return (
     <div
       style={{
-        width: '80%',
+        width: '90%',
         margin: '0 auto',
         textAlign: 'left',
+        lineHeight: '40px',
       }}
     >
-      <div style={{ fontWeight: 'bold', padding: '0 0 10px', height: '40px' }}>
-        테스트케이스{caseno}
-      </div>
-      <div style={{ textAlign: 'left', height: '50px' }}>
-        <label htmlFor={'indata' + caseno}>입력</label>
-      </div>
-      <div>
-        <textarea
-          ref={inputRef}
-          style={{
-            width: '100%',
-            minHeight: '100px',
-            overflow: 'hidden',
-            resize: 'none',
-          }}
-          id={'indata' + caseno}
-          name={'indata' + caseno}
-          value={inputValue}
-          onChange={(e) => {
-            setInputValue(e.target.value);
-            onInputChange(e);
-          }}
-        />
-      </div>
-      <div style={{ textAlign: 'left', height: '50px' }}>
-        <label htmlFor={'outdata' + caseno}>출력</label>
-      </div>
-      <div>
-        <textarea
-          ref={outputRef}
-          style={{
-            width: '100%',
-            minHeight: '50px',
-            marginBottom: '20px',
-            overflow: 'hidden',
-            resize: 'none',
-          }}
-          id={'outdata' + caseno}
-          name={'outdata' + caseno}
-          value={outputValue}
-          onChange={(e) => {
-            setOutputValue(e.target.value);
-            onOutputChange(e);
-          }}
-        />
-      </div>
+      <Badges> 예시 {caseno} </Badges>
+      <InoutWrap>
+        <label
+          style={{ textAlign: 'left', height: '50px' }}
+          htmlFor={'indata' + caseno}
+        >
+          입력
+        </label>
+        <div>
+          <InOutput
+            ref={inputRef}
+            style={{
+              width: '100%',
+              minHeight: '100px',
+              overflow: 'hidden',
+              resize: 'none',
+            }}
+            id={'indata' + caseno}
+            name={'indata' + caseno}
+            value={inputValue}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+              onInputChange(e);
+            }}
+          />
+        </div>
+        <div style={{ textAlign: 'left', height: '50px' }}>
+          <label htmlFor={'outdata' + caseno}>출력</label>
+        </div>
+        <div>
+          <InOutput
+            ref={outputRef}
+            style={{
+              width: '100%',
+              minHeight: '50px',
+              marginBottom: '20px',
+              overflow: 'hidden',
+              resize: 'none',
+            }}
+            id={'outdata' + caseno}
+            name={'outdata' + caseno}
+            value={outputValue}
+            onChange={(e) => {
+              setOutputValue(e.target.value);
+              onOutputChange(e);
+            }}
+          />
+        </div>
+      </InoutWrap>
     </div>
   );
-}
+};
+
+const Badges = styled.p`
+  font-weight: bold;
+  background-color: #38bdf8;
+  text-align: center;
+  width: 20%;
+  height: 40px;
+  border-radius: 10px;
+`;
+
+const InoutWrap = styled.div`
+  padding: 0 20px;
+  margin: 10px 0 40px;
+  background-color: #46464647;
+  border-radius: 10px;
+  border: 2px solid #38bdf8;
+`;
+
+const InOutput = styled.textarea`
+  border-radius: 10px;
+  box-sizing: border-box;
+  padding: 10px;
+`;

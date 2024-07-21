@@ -237,7 +237,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
               {problemDetails.samples.map((sample, index) => (
                 <div key={index}>
                   <TextBox> 예시 {index + 1} </TextBox>
-                  <Hr style={{ width: '16%' }} />
+                  <Hr style={{ width: '60px' }} />
                   <ExampleWrap>
                     <Example>
                       <p style={{ margin: '10px' }}>입력</p>
