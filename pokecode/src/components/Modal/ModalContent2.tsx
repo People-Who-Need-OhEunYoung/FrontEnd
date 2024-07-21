@@ -19,10 +19,9 @@ const ModalContent2 = ({ width, reset }: any) => {
   const [isEditing, setIsEditing] = useState(false);
   const [problems, setProblems] = useState<ProblemType[]>([]); // 문제 데이터를 저장할 배열
 
-
-  // const [selectedProblem, setSelectedProblem] = useState<ProblemType | null>(
-  //   null
-  // );
+  const [selectedProblem, setSelectedProblem] = useState<ProblemType | null>(
+    null
+  );
 
 
   //우현코드 start

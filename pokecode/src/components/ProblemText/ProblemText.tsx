@@ -53,8 +53,6 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
   ) => {
     try {
       const res: TimeDetails = await SetTime(elapsedTime, limitTime, id);
-      console.log(elapsedTime, limitTime, id);
-      console.log('SendTimeData', res);
       return res; // 객체 형태의 데이터를 반환
     } catch (error) {
       return null;
@@ -107,8 +105,6 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
         })
       );
     }
-
-    console.log('elapsedTime', elapsedTime);
     const interval = setInterval(() => {
       if (startTime !== null) {
         const newElapsedTime =
@@ -237,7 +233,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
               {problemDetails.samples.map((sample, index) => (
                 <div key={index}>
                   <TextBox> 예시 {index + 1} </TextBox>
-                  <Hr style={{ width: '16%' }} />
+                  <Hr style={{ width: '60px' }} />
                   <ExampleWrap>
                     <Example>
                       <p style={{ margin: '10px' }}>입력</p>

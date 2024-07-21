@@ -104,18 +104,18 @@ const ModalContent5 = () => {
         }}
       >
         <DesignedButton1
-          style={{ margin: '0 10px 20px', width: '35%' }}
-          color="cadetblue"
+          style={{ margin: '10px 10px 20px', width: '25%' }}
           onClick={() => addTestCase()}
+          back_color="#38bdf8;"
         >
-          테스트케이스 추가
+          추가
         </DesignedButton1>
         <DesignedButton1
-          style={{ margin: '0 10px 20px', width: '35%' }}
-          color="cadetblue"
+          style={{ margin: '10px 10px 20px', width: '25%' }}
           onClick={() => removeTestCase()}
+          back_color="#38bdf8;"
         >
-          테스트케이스 제거
+          제거
         </DesignedButton1>
       </div>
     </div>
