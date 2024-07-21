@@ -280,7 +280,7 @@ const ButtonContainer = styled.div<{ ismenuopen: string; tabwidth: number }>`
   padding: 10px 0px;
 
   ${({ tabwidth, ismenuopen }) =>
-    tabwidth <= 570 &&
+    tabwidth <= 680 &&
     css`
       display: ${ismenuopen === 'true' ? 'flex' : 'none'};
       ${commonStyles}
@@ -293,7 +293,7 @@ const HamburgerMenu = styled.div<{ tabwidth: number }>`
   color: #38bdf8;
 
   ${({ tabwidth }) =>
-    tabwidth <= 570 &&
+    tabwidth <= 680 &&
     css`
       display: block;
       position: absolute;

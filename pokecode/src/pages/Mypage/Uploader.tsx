@@ -5,14 +5,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SetNickName } from '../../utils/api/api';
 import { setUserNickname } from '../../store/userInfo';
 const Uploader = () => {
-  const [buttonText, setButtonText] = useState<string>('수정하기');
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [editedNickname, setEditedNickname] = useState<string>('');
-
   const inputRef = useRef<HTMLInputElement>(null);
   const { userNickname, credit, pokemonId } = useSelector(
     (state: RootState) => state.userinfo
   );
+
+  const [editedNickname, setEditedNickname] = useState<string>(userNickname);
+  const [buttonText, setButtonText] = useState<string>('수정하기');
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+
   const dispatch = useDispatch();
   const sendNewNickName = async (nickname: string) => {
     try {
@@ -152,7 +153,7 @@ const Image = styled.div`
 
 const MainContainer = styled.div`
   display: flex; // 자식 요소를 옆으로 나란히 배치
-  background-color: #31313888;
+  background-color: #1e293b7d;
   border-radius: 20px;
   margin-left: 10%;
   position: relative;
@@ -163,7 +164,7 @@ const InfoContainer = styled.div``;
 
 const Text = styled.p`
   margin: 20px 40px;
-  color: #ffffff;
+  color: #d3dde8;
   text-align: left;
   font-size: 1em;
 `;

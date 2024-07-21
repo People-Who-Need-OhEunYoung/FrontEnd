@@ -297,9 +297,10 @@ const PokeName = styled.div`
   height: 40px;
   line-height: 40px;
   font-size: 1.2rem;
-  color: #d3dde8;
+  color: white;
   text-align: center;
-  border: 4px solid #6366f1;
+  background-color: #6366f1;
+  //border: 4px solid #6366f1;
 `;
 
 const LevelWrap = styled.div`

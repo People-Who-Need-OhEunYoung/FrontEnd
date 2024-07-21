@@ -126,7 +126,7 @@ const ModalWrap = styled.div`
   left: 50%;
   color: #ffffff;
   transform: translate(-50%, -50%);
-  background: #324056da;
+  background: #324056;
   border-radius: 10px;
   border: 4px solid #d3dde816;
   //box-shadow: 10px 10px 10px 0 rgba(68, 68, 68, 0.836);

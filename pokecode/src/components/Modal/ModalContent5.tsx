@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { DesignedButton1 } from '../DesignedButton';
 import TestCase from './TestCase';
 
@@ -14,6 +14,7 @@ type TestDataType = {
 const ModalContent5 = () => {
   const [testCase, setTestCase] = useState<TestDataType[]>([]);
   const dispatch = useDispatch();
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const problemDetails = useSelector(
     (state: RootState) => state.probinfo.problemDetails
@@ -68,6 +69,10 @@ const ModalContent5 = () => {
   useEffect(() => {
     console.log('testCase: ', testCase);
     dispatch(setTestCases(testCase));
+
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
   }, [testCase]);
 
   useEffect(() => {
@@ -83,7 +88,7 @@ const ModalContent5 = () => {
 
   return (
     <div style={{ width: '450px' }}>
-      <div style={{ height: '300px', overflow: 'auto' }}>
+      <div style={{ height: '300px', overflow: 'auto' }} ref={scrollRef}>
         {testCase.length > 0 &&
           testCase.map((testdata: any, index: any) => (
             <TestCase
@@ -106,14 +111,14 @@ const ModalContent5 = () => {
         <DesignedButton1
           style={{ margin: '10px 10px 20px', width: '25%' }}
           onClick={() => addTestCase()}
-          back_color="#38bdf8;"
+          back_color="#6366F1"
         >
           추가
         </DesignedButton1>
         <DesignedButton1
           style={{ margin: '10px 10px 20px', width: '25%' }}
           onClick={() => removeTestCase()}
-          back_color="#38bdf8;"
+          back_color="#6366F1;"
         >
           제거
         </DesignedButton1>
