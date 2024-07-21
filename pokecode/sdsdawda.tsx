@@ -12,43 +12,28 @@ import { RootState } from '../../store';
 import { userInfo } from '../../utils/api/api';
 import { setWrittenCode } from '../../store/problemSlice';
 
-const TestSharedEditor = () => {
+const TestSharedEditor = ({ editorRoom = 'notice' }) => {
   const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
   const [editorContent, setEditorContent] = useState('');
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const { writtenCode } = useSelector((state: RootState) => state.probinfo);
   const { language } = useSelector((state: RootState) => state.codecaller);
   const dispatch = useDispatch();
+  //우현변수start
   const roomId = localStorage.getItem('roomId');
+  //우현변수end
 
-  const loadImage = (url: string): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.src = url;
-      img.onload = () => resolve(url);
-      img.onerror = (err) => reject(err);
-    });
-  };
+  console.log(editorRoom);
 
-  const updateCaretBackground = async (allStates) => {
-    const elements = document.querySelectorAll('.remote-caret');
-    for (const element of elements) {
-      const childElement = element.querySelector('div');
-      for (const [key, state] of allStates.entries()) {
-        if (state.user && state.user.name === childElement?.textContent) {
-          try {
-            const imgUrl = await loadImage(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${state.user.pokemonid}.gif`);
-            (element as HTMLElement).style.background = `url(${imgUrl}) no-repeat`;
-            (element as HTMLElement).style.backgroundSize = 'contain';
-          } catch (error) {
-            console.error('Image load error:', error);
-          }
-        }
-      }
-    }
-  };
+  const element = document.querySelector('.remote-caret');
+  if (element) {
+    (element as HTMLElement).style.background =
+      'url(https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/119.gif)';
+    (element as HTMLElement).style.backgroundSize = 'contain';
+  }
 
   useEffect(() => {
+    // KHS 코드 리뷰방으로 이동을 위해 dispatch 작업
     dispatch(setWrittenCode(editorContent));
   }, [editorContent]);
 
@@ -57,38 +42,31 @@ const TestSharedEditor = () => {
   }, [language]);
 
   useEffect(() => {
-      // pokemonId = useSelector((state: RootState) => state.userinfo.pokemonId);
+    //우현코드s
     if (!roomId) {
       console.error('roomId가 존재하지 않음');
       return;
     }
-    if (editorContainerRef.current ) {
+    //우현코드e
+    if (editorContainerRef.current) {
       if (editor == null) {
         const ydoc = new Y.Doc();
         const provider = new WebsocketProvider(
-          `wss://api.poke-code.com:3333/room/?roomId=${roomId}`,
+          'wss://api.poke-code.com:3333/room/?roomId=${roomId}',
           `codemirror_${roomId}`,
           ydoc
         );
-
-        provider.awareness.on('update', async () => {
-          const allStates = provider.awareness.getStates();
-          await updateCaretBackground(allStates);
-        });
-
-        // 내 정보 등록
-        userInfo().then(async (res) => {
+        userInfo().then((res) => {
+          console.log(res.nickName);
           provider.awareness.setLocalStateField('user', {
             color: 'white',
             name: res.nickName,
-            pokemonid: res.curPokeId
           });
-          const allStates = provider.awareness.getStates();
-          await updateCaretBackground(allStates);
         });
 
-        const yText = ydoc.getText(`codemirror_${roomId}`); 
+        const yText = ydoc.getText(`codemirror_${roomId}`);
 
+        // 기본 텍스트를 설정합니다.
         yText.insert(0, writtenCode);
         const seteditor = CodeMirror(editorContainerRef.current, {
           theme: 'dracula',
@@ -96,11 +74,11 @@ const TestSharedEditor = () => {
           lineNumbers: true,
           spellcheck: true,
           autocorrect: true,
-          autoCloseBrackets: true,
-          matchBrackets: true,
-          showHint: true,
+          autoCloseBrackets: true, // 자동 괄호 닫기
+          matchBrackets: true, // 괄호 매칭
+          showHint: true, // 자동 완성 힌트
           extraKeys: {
-            'Ctrl-Space': 'autocomplete',
+            'Ctrl-Space': 'autocomplete', // 자동 완성 키 설정
           },
         });
 
@@ -116,23 +94,20 @@ const TestSharedEditor = () => {
           seteditor,
           provider.awareness
         );
-        
-        //다른사람 움직이면 반응
-        const observer = new MutationObserver(async (mutations) => {
-          const allStates = provider.awareness.getStates();
-          await updateCaretBackground(allStates);
-        });
+        console.log(provider.awareness.clientID);
 
-        const config = { childList: true, subtree: true };
-        observer.observe(editorContainerRef.current, config);
-
+        return () => {
+          alert("언마운트 됨");
+          binding.destroy();
+          provider.disconnect();
+        };
       }
     }
-
   }, []);
-
   return (
+    <>
       <div ref={editorContainerRef} className="editor-container"></div>
+    </>
   );
 };
 

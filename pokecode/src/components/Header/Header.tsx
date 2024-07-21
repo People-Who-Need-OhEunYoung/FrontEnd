@@ -12,6 +12,7 @@ import {
   setUserCredit,
   setUserNickname,
   setPokemonId,
+  setUserId,
 } from '../../store/userInfo';
 
 const Header = () => {
@@ -46,6 +47,11 @@ export const Header2 = () => {
     dispatch(setUserNickname(user.nickName));
     dispatch(setUserCredit(user.credit));
     dispatch(setPokemonId(user.curPokeId));
+    dispatch(setUserId(user.user_id));
+
+    localStorage.setItem('nickname', user.nickName);
+    localStorage.setItem('cur_poke_id', user.curPokeId);
+    localStorage.setItem('user_id', user.user_id);
   };
 
   useEffect(() => {

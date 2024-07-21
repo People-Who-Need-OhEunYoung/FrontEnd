@@ -62,13 +62,13 @@ const Gacha = () => {
     >
       <MainWrapper style={{ background: '#FFBBD3', flexDirection: 'column' }}>
         <h1 style={{ color: '#80495C', fontWeight: 'bold', fontSize: '3em' }}>
-          새로운 포켓몬 뽑기
+          전설의 포켓몬 뽑기
         </h1>
         <div
           style={{
             width: '40%',
             overflow: 'hidden',
-            borderRadius: '50% 50% 50% 0',
+            borderRadius: '50% 50% 50% 50%',
           }}
         >
           <GachaImg src={garchimg} width={'100%'} />
@@ -81,7 +81,7 @@ const Gacha = () => {
             <div>
               <DesignedButton1
                 style={{ width: '400px', margin: '20px 0' }}
-                color="#80495C"
+                color="#fff"
                 onClick={(e) => {
                   e.preventDefault();
                   setGachaResult(false);
@@ -101,7 +101,11 @@ const Gacha = () => {
                 color="#80495C"
               >
                 <Link
-                  style={{ display: 'inline-block', width: '100%' }}
+                  style={{
+                    display: 'inline-block',
+                    width: '100%',
+                    color: 'white',
+                  }}
                   to={'/usermain'}
                 >
                   나가기
@@ -192,7 +196,7 @@ const Gacha = () => {
                 width: '60%',
                 boxSizing: 'border-box',
                 margin: '0 20%',
-                color: 'black',
+                color: 'white',
               }}
               onClick={() => {
                 setGachaRun(false);
@@ -208,7 +212,6 @@ const Gacha = () => {
   );
 };
 
-
 const GachaImg = styled.img`
   width: 100%;
 
@@ -220,7 +223,6 @@ const GachaImg = styled.img`
     inset 0 0 20px #fff;
   } 
    */
-
 `;
 
 export default Gacha;

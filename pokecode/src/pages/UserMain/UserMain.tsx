@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import art from '../../assets/images/Vector.png';
 import { MainWrapper } from '../../components/MainWrapper';
 import poo from '../../assets/images/poo.png';
+import pokeball from '../../assets/images/poke-ball.png';
 
 import {
   pokemonName,
@@ -186,13 +187,7 @@ const UserMain = () => {
           >
             <Pokemon
               style={{ transform: 'scale(2.5)' }}
-              src={
-                pokemonId == 0
-                  ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
-                  : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-                    pokemonId +
-                    '.gif'
-              }
+              src={pokemonId == 0 ? pokeball : '/public/1.gif'}
             ></Pokemon>
           </motion.div>
           <PokeNameWrap>

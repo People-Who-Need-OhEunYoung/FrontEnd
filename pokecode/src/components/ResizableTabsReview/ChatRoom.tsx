@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef, ChangeEvent, KeyboardEvent } from 'react';
+import { useSelector } from 'react-redux';
 import io, { Socket } from 'socket.io-client';
+import { RootState } from '../../store';
 
 interface Message {
   username: any;
@@ -14,7 +16,10 @@ const ChatRoom: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
-  const [first, setFirst] = useState(false);
+  //const [first, setFirst] = useState(false);
+  const { userId, pokemonId } = useSelector(
+    (state: RootState) => state.userinfo
+  );
   const socketRef = useRef<Socket | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -27,8 +32,10 @@ const ChatRoom: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  const savedUsername: string | null = localStorage.getItem('username');
+  const savedUsername: string | null = localStorage.getItem('nickname');
   const savedRoomId: string | null = localStorage.getItem('roomId');
+  const savedPokeId: string | null = localStorage.getItem('cur_poke_id');
+  const savedUserId: string | null = localStorage.getItem('user_id');
 
   console.log('1---------------------------------' + savedUsername);
   console.log('2---------------------------------' + savedRoomId);
@@ -39,11 +46,11 @@ const ChatRoom: React.FC = () => {
       sendMessage();
     }
   };
-  useEffect(() => {
-    setMessage('[notice]' + savedUsername + '님이 입장했습니다.');
-    setFirst(true);
-    sendMessage();
-  }, [first]);
+  // useEffect(() => {
+  //   setMessage('[notice]' + savedUsername + '님이 입장했습니다.');
+  //   setFirst(true);
+  //   sendMessage();
+  // }, [first]);
 
   useEffect(() => {
     if (!savedUsername || !savedRoomId) {
@@ -51,17 +58,20 @@ const ChatRoom: React.FC = () => {
       return;
     }
 
-    const socket = io('https://api.poke-code.com:3334', {
+    //const socket = io('https://api.poke-code.com:3334', {
+    const socket = io(import.meta.env.VITE_APP_ROOM, {
       transports: ['websocket'],
     });
 
     socketRef.current = socket;
-
+    console.log('야 니들 사라지는거냐 ㅠㅠ :', userId, pokemonId);
     socket.on('connect', () => {
       console.log(`Connected to socket, joining room ${savedRoomId}`);
       socket.emit('CONNECTED_TO_ROOM', {
-        roomId: savedRoomId,
-        username: savedUsername,
+        room_id: savedRoomId,
+        bakjoon_id: savedUserId,
+        nick_name: savedUsername,
+        cur_poke_id: savedPokeId,
       });
     });
 
@@ -85,7 +95,7 @@ const ChatRoom: React.FC = () => {
 
     return () => {
       console.log(`Leaving room ${savedRoomId}`);
-      //socket.emit('DISCONNECT_FROM_ROOM', { roomId, username });
+      //socket.emit('DISCONNECT_FROM_ROOM', { savedRoomId, savedUsername });
       leaveRoom();
       socket.off();
     };
@@ -97,8 +107,8 @@ const ChatRoom: React.FC = () => {
       if (socket) {
         console.log(`Sending message: ${message}`);
         socket.emit('SEND_MESSAGE', {
-          roomId: savedRoomId,
-          username: savedUsername,
+          room_id: savedRoomId,
+          nick_name: savedUsername,
           message: message,
         });
         console.log(savedRoomId);
@@ -119,7 +129,10 @@ const ChatRoom: React.FC = () => {
       });
 
       console.log(`Leaving room ${savedRoomId}`);
-      socket.emit('DISCONNECT_FROM_ROOM', { savedRoomId, savedUsername }); // Request server to remove user info
+      socket.emit('DISCONNECT_FROM_ROOM', {
+        room_id: savedRoomId,
+        nick_name: savedUsername,
+      });
       socket.off();
       setUsers([]);
       setMessages([]);

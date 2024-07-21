@@ -5,6 +5,9 @@ import Select from 'react-select';
 import { problemSearch } from '../../utils/api/api';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { setCurRoom } from '../../store/userInfo';
 
 type ProblemType = {
   id: string;
@@ -21,6 +24,9 @@ const ModalContent2 = ({ width, reset }: any) => {
 
   const [selectedProblem, setSelectedProblem] = useState<ProblemType | null>(
     null
+  );
+  const { userNickname, userId } = useSelector(
+    (state: RootState) => state.userinfo
   );
 
 
@@ -94,7 +100,7 @@ const ModalContent2 = ({ width, reset }: any) => {
   const selecthandleChange = (selectedOption: any) => {
     // 선택된 옵션을 처리합니다. selectedOption 객체가 전달됩니다.
     console.log(selectedOption); // 전체 선택된 객체를 로그로 확인
-
+    setSelectedProblem(selectedOption);
     if (selectedOption) {
       console.log('Selected problem ID: ', selectedOption.id);
       console.log('Selected problem title: ', selectedOption.title);
@@ -118,29 +124,32 @@ const ModalContent2 = ({ width, reset }: any) => {
   };
   //우현코드 start
   const createRoom = async () => {
-    const userId = localStorage.getItem('loginuserid');
-
-    if (!userId) {
+    if (!userNickname) {
       alert('사용자 정보가 없습니다. 재로그인 바랍니다.');
       return;
     }
 
     try {
       const { data } = await axios.post(
-        //'https://api.poke-code.com:3334/create-room-with-user',
-        'http://192.168.1.18:3334/create-room-with-user',
+        `${import.meta.env.VITE_APP_ROOM}/create-room-with-user`,
         {
-          username: userId, // 닉네임.
+          room_title: title,
+          problem_no: selectedProblem?.id,
+          problem_tier: selectedProblem?.level,
+          problem_title: selectedProblem?.title,
+          max_people: person,
+          room_owner: userId,
         }
       );
-      localStorage.setItem('username', userId);
-      localStorage.setItem('roomId', data.roomId);
+      localStorage.setItem('roomId', data.room_id);
+      setCurRoom(data.room_id);
 
       alert('성공적으로 방이 생성되었습니다.');
-      navigate(`/room?roomid=${data.roomId}`);
+      navigate(`/room?roomid=${data.room_id}`);
     } catch (error) {
+      console.log(userId);
       console.error('Error creating room:', error);
-      alert('Failed to create room.');
+      alert('서버 문제로 방만들기를 실패했습니다.');
     }
   };
   // 우현코드 end

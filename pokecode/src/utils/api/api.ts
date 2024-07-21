@@ -489,7 +489,7 @@ const SetNickName = async (nickName: string): Promise<any> => {
 };
 
 const getRoomList = async (page: number) => {
-  return await fetch(`${import.meta.env.VITE_APP_IP}/roomlist?page=${page}`, {
+  return await fetch(`${import.meta.env.VITE_APP_ROOM}/roomlist?page=${page}`, {
     method: 'GET',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -519,8 +519,8 @@ const setRoom = async (
   roomOwner: string,
   maxPeople: number
 ) => {
-  return await fetch(`${import.meta.env.VITE_APP_IP}/roomlist`, {
-    method: 'GET',
+  return await fetch(`${import.meta.env.VITE_APP_ROOM}/roomlist`, {
+    method: 'POST',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       'Content-Type': 'application/json',

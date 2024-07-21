@@ -12,7 +12,7 @@ type TestDataType = {
 };
 
 const ModalContent5 = () => {
-  const [testCase, setTestCase] = useState<TestDataType[]>([]); // 테스트케이스 데이터를 저장할 배열
+  const [testCase, setTestCase] = useState<TestDataType[]>([]);
   const dispatch = useDispatch();
   const scrollRef = useRef<HTMLDivElement>(null);
 
