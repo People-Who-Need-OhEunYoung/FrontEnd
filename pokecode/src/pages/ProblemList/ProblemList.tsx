@@ -320,7 +320,7 @@ const ProblemComponent = styled.div`
 const ListView = styled.div`
   //background-color: #6666661d;
   width: 90%;
-  height: 70%;
+  height: 60%;
   overflow-y: auto;
   margin: auto;
   font-size: 1.2rem;
