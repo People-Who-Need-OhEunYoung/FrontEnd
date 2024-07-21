@@ -57,3 +57,8 @@ input {
   font-size: 11px;
 }
 
+.editor-container {
+  border-radius: 10px;
+  overflow: hidden;
+  box-sizing: border-box;
+}

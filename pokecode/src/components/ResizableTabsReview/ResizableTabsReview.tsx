@@ -20,6 +20,7 @@ const Container = styled.div`
   align-items: center;
   height: 100%;
   border: none;
+  background-color: #111826;
 `;
 
 interface TabProps {
@@ -32,6 +33,8 @@ const Tab = styled.div<TabProps>`
   border-right: none;
   flex-basis: ${({ width }) => width}%;
   z-index: 100;
+  padding: 10px;
+  box-sizing: border-box;
 `;
 
 const Resizer = styled.div`
@@ -231,7 +234,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
             height: '100%',
           }}
         >
-          <div style={{ width: '100%', height: '100%' }}>
+          <div style={{ width: '100%', height: '100%'}}>
             <TestSharedEditor />
           </div>
           <div>
@@ -300,7 +303,7 @@ const Home = styled.div`
 `;
 
 const ChatRoomDiv = styled.div`
-  background: url(${ChatBG}) no-repeat;
+  background-color: #282a3a;
   width: 100%;
   height: 70%;
   overflow: auto;
