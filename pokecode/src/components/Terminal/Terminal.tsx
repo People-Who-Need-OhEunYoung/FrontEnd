@@ -56,14 +56,23 @@ const Terminal = () => {
         width: '100%',
         height: '100%',
         overflow: 'hidden',
-  
       }}
     >
       <Header>
         <Buttongroup back_color="#ff79c6 " />
-        <Buttongroup back_color="#3bbe5c " pos = "22px" />
-        <Buttongroup back_color="#6366F1" pos = "44px" />
-        <p style = {{ width: '100%', textAlign: 'center', boxSizing: 'border-box', padding: '8px'}}> Terminal </p>
+        <Buttongroup back_color="#3bbe5c " pos="22px" />
+        <Buttongroup back_color="#6366F1" pos="44px" />
+        <p
+          style={{
+            width: '100%',
+            textAlign: 'center',
+            boxSizing: 'border-box',
+            padding: '8px',
+          }}
+        >
+          {' '}
+          Terminal{' '}
+        </p>
       </Header>
       <pre
         style={{
@@ -73,6 +82,8 @@ const Terminal = () => {
           overflow: 'auto',
           boxSizing: 'border-box',
           padding: '10px',
+          whiteSpace: 'break-spaces',
+          wordBreak: 'break-all',
         }}
       >
         {sequence}

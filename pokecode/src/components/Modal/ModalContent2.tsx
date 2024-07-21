@@ -166,7 +166,7 @@ const ModalContent2 = ({ width, reset }: any) => {
 
   return (
     <>
-    {loding ? (
+      {loding ? (
         <img src={rolling} alt="" />
       ) : (
         <div style={{ width: '400px', marginTop: '20px' }}>
@@ -214,9 +214,7 @@ const ModalContent2 = ({ width, reset }: any) => {
                   rows={1}
                   placeholder="방 제목을 입력해주세요"
                   readOnly
-                >
-                  {/* {title == '' ? '방 제목을 입력해주세요.' : title} */}
-                </Titleinput>
+                ></Titleinput>
               )}
             </div>
             <PersonWrap>
@@ -241,7 +239,8 @@ const ModalContent2 = ({ width, reset }: any) => {
             back_color="#6366F1"
             onClick={() => {
               createRoom();
-            }}>
+            }}
+          >
             방 만들기
           </DesignedButton1>
         </div>

@@ -18,6 +18,7 @@ export {
   SetNickName,
   getRoomList,
   setRoom,
+  getRoomPeopleChecker,
 };
 
 //닉네임 중복 검사
@@ -541,6 +542,34 @@ const setRoom = async (
       return res.json();
     })
     .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return 'ERROR : ' + error;
+    });
+};
+
+const getRoomPeopleChecker = async (roomId: string | null) => {
+  return await fetch(`${import.meta.env.VITE_APP_ROOM}/max-people-check`, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      room_id: roomId,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.statusText}`);
+      }
+      console.log(res);
+      return res.json();
+    })
+    .then((data) => {
+      console.log(data);
       return data;
     })
     .catch((error) => {

@@ -3,6 +3,7 @@ import io, { Socket } from 'socket.io-client';
 import { setWrittenCode } from '../../store/problemSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { getRoomPeopleChecker } from '../../utils/api/api';
 
 interface Message {
   nick_name: any;
@@ -46,6 +47,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       sendMessage();
     }
   };
+
   useEffect(() => {
     setMessage('[notice]' + savedUsername + '님이 입장했습니다.');
     setFirst(true);
@@ -59,7 +61,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       return;
     }
 
-    //const socket = io('https://api.poke-code.com:3334', {
     const socket = io(import.meta.env.VITE_APP_ROOM, {
       transports: ['websocket'],
     });
@@ -92,6 +93,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
     socket.on('MESSAGE', (message: Message) => {
       console.log(`Received message in room ${savedRoomId}:`, message);
       setMessages((prevMessages) => [...prevMessages, message]);
+    });
+    //강퇴기능 추가 필요
+    socket.on('USER:FORCED_OUT', (message: Message) => {
+      setMessage(message);
     });
 
     return () => {
@@ -133,12 +138,25 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         room_id: savedRoomId,
         nick_name: savedUsername,
       });
-
+      localStorage.removeItem('nickname');
+      localStorage.removeItem('roomId');
       socket.off();
       setUsers([]);
       setMessages([]);
       setMessage('');
-      localStorage.removeItem('username');
+    }
+  };
+
+  //강퇴기능 추가 필요
+  const forceOut = (nickname: string) => {
+    const socket = socketRef.current;
+    if (socket) {
+      socket.emit('FORCE_OUT', {
+        roomId: savedRoomId,
+        nick_name: nickname,
+      });
+
+      localStorage.removeItem('nickname');
       localStorage.removeItem('roomId');
     }
   };
