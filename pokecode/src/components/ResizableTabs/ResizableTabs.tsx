@@ -127,7 +127,6 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           setTabWidth(width); // 너비 상태 업데이트
         }
       });
-      console.log('tabWidth: ', tabWidth);
       resizeObserver.observe(tabElement); // 탭 요소 관찰 시작
       return () => resizeObserver.disconnect(); // 컴포넌트 언마운트 시 관찰 중단
     }
