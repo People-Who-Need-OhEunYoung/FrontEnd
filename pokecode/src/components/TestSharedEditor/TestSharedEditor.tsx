@@ -155,8 +155,7 @@ const TestSharedEditor = () => {
       }
     }
   }, []);
-
-  return <div ref={editorContainerRef} className="editor-container"></div>;
+  return <div style={{boxSizing: 'border-box', padding:'5px'}} ref={editorContainerRef} className="editor-container"></div>;
 };
 
 export default TestSharedEditor;

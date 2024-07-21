@@ -3,7 +3,9 @@ import io, { Socket } from 'socket.io-client';
 import { setWrittenCode } from '../../store/problemSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import { getRoomPeopleChecker } from '../../utils/api/api';
+
 
 interface Message {
   nick_name: any;
@@ -162,7 +164,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   };
 
   return (
-    <div style={{ overflow: 'hidden', height: '100%' }}>
+    <div style={{ overflow: 'hidden', height: '100%', borderRadius:'10px' ,boxSizing:'border-box'}}>
       {/* <h2>너의 이름은 {savedUsername}</h2>
       <h2>방 ID: {savedRoomId}</h2>
       <h2>
@@ -170,97 +172,39 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       </h2>
       <button onClick={leaveRoom}>나가기</button> */}
 
-      <div
-        style={{
-          height: '8%',
-          color: 'white',
-          lineHeight: '20px',
-          boxSizing: 'border-box',
-          backgroundColor: '#111826',
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        방에 접속중인 인원: <b>{users.length}</b>
-      </div>
+      <Header>
+        <p style={{ position: 'absolute', left: '15px', fontSize: '1.2rem' }}>
+          채팅
+        </p>
+        <p style={{ position: 'absolute', right: '20px', fontSize: '1rem' }}>
+          접속중인 인원: <b> {users.length}</b>
+        </p>
+      </Header>
       <div
         style={{
           overflowY: 'scroll',
-          height: '70%',
+          height: '80%',
         }}
       >
         {messages.map((msg, index) =>
           msg.message.includes('[notice]') ? (
-            <h2
-              key={index}
-              style={{
-                background: 'white',
-                textAlign: 'center',
-                borderRadius: '10px',
-                boxSizing: 'border-box',
-                margin: '10px',
-                padding: '10px',
-              }}
-            >
+            <NoticeMessage key={index}>
               {msg.message.replace('[notice]', '')}
-            </h2>
+            </NoticeMessage>
           ) : msg.nick_name == savedUsername ? (
-            <div style={{ textAlign: 'right' }}>
-              <br />
-              <pre
-                style={{
-                  boxSizing: 'border-box',
-                  padding: '10px',
-                  background: 'yellow',
-                  display: 'inline-block',
-                  borderRadius: '5px',
-                  margin: '0 10px',
-                  maxWidth: '300px',
-                  whiteSpace: 'break-spaces',
-                  wordBreak: 'break-all',
-                }}
-                key={index}
-              >
-                {msg.message}
-              </pre>
-            </div>
+            <MessageContainer key={index} isOwnMessage>
+              <MessageBubble isOwnMessage={true}>{msg.message}</MessageBubble>
+            </MessageContainer>
           ) : (
-            <div>
-              <strong
-                style={{
-                  display: 'inline-block',
-                  background: 'white',
-                  padding: '5px',
-                  borderRadius: '5px',
-                  margin: '0 10px',
-                }}
-              >
-                {msg.nick_name}
-              </strong>
-              <br />
-              <pre
-                style={{
-                  boxSizing: 'border-box',
-                  padding: '10px',
-                  background: 'white',
-                  display: 'inline-block',
-                  borderRadius: '5px',
-                  margin: '10px',
-                  maxWidth: '300px',
-                  whiteSpace: 'break-spaces',
-                  wordBreak: 'break-all',
-                }}
-                key={index}
-              >
-                {msg.message}
-              </pre>
-            </div>
+            <MessageContainer key={index}>
+              <UserName>{msg.nick_name}</UserName>
+              <MessageBubble isOwnMessage={false}>{msg.message}</MessageBubble>
+            </MessageContainer>
           )
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div style={{ height: '15%' }}>
+      <div style={{ height: '10%' }}>
         <textarea
           value={message}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -295,5 +239,76 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
     </div>
   );
 };
+
+const UserName = styled.strong`
+  display: inline-block;
+  padding: 5px;
+  border-radius: 5px;
+  margin: 0 10px;
+  color: #d3dde8;
+`;
+
+const NoticeMessage = styled.p`
+  background: #ffffff1d;
+  width: 70%;
+  text-align: center;
+  color: white;
+  border-radius: 30px;
+  box-sizing: border-box;
+  margin: 40px auto;
+  padding: 5px;
+`;
+
+const MessageContainer = styled.div<{ isOwnMessage?: boolean }>`
+  text-align: ${({ isOwnMessage }) => (isOwnMessage ? 'right' : 'left')};
+  margin: 10px;
+`;
+
+const MessageBubble = styled.pre<{ isOwnMessage?: boolean }>`
+  box-sizing: border-box;
+  padding: 10px;
+  background: ${({ isOwnMessage }) =>
+    isOwnMessage
+      ? 'linear-gradient(to right, #6295A2, #538392)'
+      : 'linear-gradient(to right, #97b9b2, #80B9AD)'};
+  display: inline-block;
+  border-radius: 10px;
+  margin: 0 10px;
+  max-width: 300px;
+  white-space: break-spaces;
+  word-break: break-all;
+  position: relative;
+  color: ${({ isOwnMessage }) => (isOwnMessage ? 'white' : 'black')};
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    left: ${({ isOwnMessage }) => (isOwnMessage ? 'auto' : '-10px')};
+    right: ${({ isOwnMessage }) => (isOwnMessage ? '-10px' : 'auto')};
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-top-color: ${({ isOwnMessage }) =>
+      isOwnMessage ? '#538392' : '#97b9b2'};
+    border-bottom: 0;
+    margin-top: -5px;
+    /* transform: ${({ isOwnMessage }) =>
+      isOwnMessage ? 'rotate(180deg)' : 'none'}; */
+  }
+`;
+
+const Header = styled.div`
+  height: 10%;
+  color: #d3dde8;
+  line-height: 20px;
+  box-sizing: border-box;
+  border-bottom: 2px solid white;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  position: relative;
+`;
 
 export default ChatRoom;
