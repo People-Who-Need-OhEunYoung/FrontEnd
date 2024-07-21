@@ -64,6 +64,10 @@ interface ResizableTabsProps {
   title: string;
   editorRoom: string;
 }
+interface ContextMenuPosition {
+  mouseX: number;
+  mouseY: number;
+}
 
 const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   id,
@@ -76,6 +80,46 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const tabRef = useRef<HTMLDivElement | null>(null);
   const [usersInfo, setUsersInfo] = useState<any[]>([]);
   const { userNickname } = useSelector((state: RootState) => state.userinfo);
+
+  const [contextMenus, setContextMenus] = useState<
+    (ContextMenuPosition | null)[]
+  >([null, null, null, null]);
+
+  const handleContextMenu = (event: MouseEvent, index: number) => {
+    event.preventDefault();
+    const newContextMenus = contextMenus.map((menu, i) =>
+      i === index
+        ? { mouseX: event.clientX - 2, mouseY: event.clientY - 4 }
+        : null
+    );
+    setContextMenus(newContextMenus);
+  };
+
+  const handleClickAway = () => {
+    setContextMenus([null, null, null, null]);
+  };
+
+  const handleKickOut = (index: number) => {
+    alert(`객체 ${index + 1} 강퇴되었습니다.`);
+    setContextMenus([null, null, null, null]);
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickAway);
+
+    return () => {
+      document.removeEventListener('click', handleClickAway);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickAway);
+
+    return () => {
+      document.removeEventListener('click', handleClickAway);
+    };
+  }, []);
+
   const dispatch = useDispatch();
 
   const dragControls = useDragControls();
@@ -167,48 +211,70 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
       exit={{ opacity: 0 }}
       style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
-      {usersInfo !== null ? (
-        usersInfo.map((user, key) => (
-          <motion.div
-            drag
-            dragControls={dragControls}
-            animate={animationControls} // 애니메이션 컨트롤 적용
-            style={{
-              position: 'fixed',
-              display: 'inline-block',
-              zIndex: 9999,
-              bottom: '80px',
-              left: `${30 + 10 * key}%`,
-              transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-              transition: '0.1s',
-            }}
-            className="pokemon"
-          >
-            {user.nick_name == userNickname ? (
-              <CodeAIWardBalloon
-                width="300px"
-                left="-150px"
-                fontSize="1em"
-                padding="30px"
-                bottom="100px"
-                position="absolute"
-              />
-            ) : (
-              ''
-            )}
-            <Pokemon
-              src={
-                'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-                user.cur_poke_id +
-                '.gif'
-              }
-            ></Pokemon>
-            <NicknameBox>{user.nick_name}</NicknameBox>
-          </motion.div>
-        ))
-      ) : (
-        <p>암것도없어</p>
-      )}
+      {usersInfo !== null
+        ? usersInfo.map((user, key) => (
+            <motion.div
+              drag
+              dragControls={dragControls}
+              animate={animationControls} // 애니메이션 컨트롤 적용
+              style={{
+                position: 'fixed',
+                display: 'inline-block',
+                zIndex: 9999,
+                bottom: '80px',
+                left: `${30 + 10 * key}%`,
+                transform: 'translateX(0px) translateY(0px) translateZ(0px)',
+                transition: '0.1s',
+                textAlign: 'center',
+              }}
+              className="pokemon"
+            >
+              {user.nick_name == userNickname ? (
+                <CodeAIWardBalloon
+                  width="300px"
+                  left="-150px"
+                  fontSize="1em"
+                  padding="30px"
+                  bottom="100px"
+                  position="absolute"
+                />
+              ) : (
+                ''
+              )}
+              <Pokemon
+                src={
+                  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
+                  user.cur_poke_id +
+                  '.gif'
+                }
+                onContextMenu={(e: any) => handleContextMenu(e, key)}
+              ></Pokemon>
+              {contextMenus[key] ? (
+                <ul
+                  className="context-menu"
+                  style={{
+                    top: contextMenus[key].mouseY,
+                    left: contextMenus[key].mouseX,
+                    textAlign: 'center',
+                  }}
+                >
+                  <li
+                    style={{
+                      color: 'white',
+                      borderRadius: '10px',
+                      background: '#324056',
+                      width: '50px',
+                    }}
+                    onClick={() => handleKickOut(key)}
+                  >
+                    강퇴
+                  </li>
+                </ul>
+              ) : null}
+              <NicknameBox>{user.nick_name}</NicknameBox>
+            </motion.div>
+          ))
+        : null}
 
       <Container ref={containerRef}>
         <Tab width={width}>

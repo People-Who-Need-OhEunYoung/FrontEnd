@@ -95,7 +95,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
     //강퇴기능 추가 필요
-    socket.on('USER:FORCED_OUT', (message: Message) => {
+    socket.on('USER:FORCED_OUT', () => {
       setMessage(message);
     });
 
@@ -138,13 +138,14 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         room_id: savedRoomId,
         nick_name: savedUsername,
       });
-      localStorage.removeItem('nickname');
-      localStorage.removeItem('roomId');
+
       socket.off();
       setUsers([]);
       setMessages([]);
       setMessage('');
     }
+    localStorage.removeItem('nickname');
+    localStorage.removeItem('roomId');
   };
 
   //강퇴기능 추가 필요
@@ -156,8 +157,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         nick_name: nickname,
       });
 
-      localStorage.removeItem('nickname');
-      localStorage.removeItem('roomId');
+      //localStorage.removeItem('nickname');
+      //localStorage.removeItem('roomId');
     }
   };
 
@@ -183,6 +184,13 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         }}
       >
         방에 접속중인 인원: <b>{users.length}</b>
+        <button
+          onClick={() => {
+            forceOut('테스터');
+          }}
+        >
+          강퇴 테스트
+        </button>
       </div>
       <div
         style={{
