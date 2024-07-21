@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, useAnimation } from 'framer-motion';
 import { Pokemon } from '../../pages/UserMain/UserMain';
-import background from '../../assets/images/background3.gif';
+import background from '../../assets/images/background2.jpg';
 import { ProblemText } from '../ProblemText';
 import { TestEditor } from '../TestEditor';
 import { CodeAIWardBalloon } from '../CodeAIButton';
@@ -16,6 +16,7 @@ const Container = styled.div`
   align-items: center;
   height: 100%;
   border: none;
+  background-color: #111826;
 `;
 
 interface TabProps {
@@ -30,6 +31,10 @@ const Tab = styled.div<TabProps>`
   flex-basis: ${({ width }) => width}%;
   z-index: 100;
   resize: horizontal;
+  padding: 10px 0;
+  box-sizing: border-box;
+
+  border-radius: 10px;
 `;
 
 const Resizer = styled.div`
@@ -152,7 +157,12 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
     >
       <Container ref={containerRef}>
         <Tab width={width} ref={tabRef}>
-          <ProblemText id={id} isshowheader="true" size="calc(100% - 60px)" tabwidth={tabWidth} />
+          <ProblemText
+            id={id}
+            isshowheader="true"
+            size="calc(100% - 60px)"
+            tabwidth={tabWidth}
+          />
         </Tab>
         <Resizer
           onMouseDown={handleMouseDown}
@@ -160,12 +170,18 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
         />
         <div
           style={{
-            background: 'blue',
             width: 100 - width - width1 + '%',
             height: '100%',
           }}
         >
-          <div style={{ background: 'green', width: '100%', height: '100%' }}>
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              boxSizing: 'border-box',
+              padding: '10px'
+            }}
+          >
             <TestEditor />
           </div>
         </div>
@@ -178,8 +194,9 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
             style={{
               background: '#5F6275',
               width: '100%',
-              height: '80%',
+              height: '60%',
               overflow: 'auto',
+              borderRadius: '10px',
             }}
           >
             <Home style={{ position: 'relative' }} onClick={handleDivClick}>
@@ -190,14 +207,14 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
                 fontSize="1em"
                 padding="20px 50px"
                 right="50px"
-                bottom="140px"
+                bottom="170px"
               />
               <motion.div
                 animate={controls}
                 style={{
                   position: 'relative',
                   transform: 'translateX(-50%)',
-                  top: '80%',
+                  top: '70%',
                   left: position.x,
                   display: 'inline-block',
                   transition: '1s',
@@ -213,7 +230,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           <div
             style={{
               width: '100%',
-              height: '20%',
+              height: '40%',
               overflow: 'auto',
             }}
           >

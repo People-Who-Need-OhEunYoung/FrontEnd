@@ -136,7 +136,7 @@ const ModalWrap = styled.div`
 const Title = styled.p`
   padding: 50px 0 0;
   font-weight: bold;
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   word-wrap: break-word; /* Deprecated, use overflow-wrap instead */
   word-break: break-word; /* For non-CJK text */
   overflow-wrap: break-word;

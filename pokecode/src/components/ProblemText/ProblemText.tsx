@@ -185,8 +185,8 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
               <HeaderBtn
                 onClick={() => {
                   dispatch(setAcquireReview(true));
-                  // setIsModalOpen(true);
-                  navigate(`/room?id=${id}&title=${problemDetails.title}`);
+                  setIsModalOpen(true);
+                  //navigate(`/room?id=${id}&title=${problemDetails.title}`);
                 }}
               >
                 코드 리뷰 요청
@@ -290,7 +290,7 @@ const ButtonContainer = styled.div<{ ismenuopen: string; tabwidth: number }>`
 const HamburgerMenu = styled.div<{ tabwidth: number }>`
   display: none;
   cursor: pointer;
-  color: #38bdf8;
+  color: white;
 
   ${({ tabwidth }) =>
     tabwidth <= 680 &&
