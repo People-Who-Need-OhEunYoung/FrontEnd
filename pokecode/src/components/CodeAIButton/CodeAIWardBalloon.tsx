@@ -10,7 +10,6 @@ import { useEffect, useRef } from 'react';
 interface WordBalwrapProps {
   position: 'absolute' | 'relative' | 'fixed' | 'static' | 'sticky';
   left: string;
-  right: string;
   bottom: string;
   width: string;
   padding: string;
@@ -18,11 +17,10 @@ interface WordBalwrapProps {
 }
 
 const CodeAIWardBalloon: React.FC<WordBalwrapProps> = ({
-  width = '50%',
+  width = '80%',
   left = 0,
   fontSize = '1.5em',
   padding = '20px 4%',
-  right = '70px',
   bottom = '150px',
   position = 'fixed',
 }) => {
@@ -46,9 +44,9 @@ const CodeAIWardBalloon: React.FC<WordBalwrapProps> = ({
         left: left,
         bottom: bottom,
         maxHeight: '300px',
-        width: '80%',
+        width: width,
         margin: 'auto',
-        marginLeft:'40px',
+        marginLeft: '40px',
         backgroundColor: 'white',
         borderRadius: '10px',
         color: 'black',
@@ -66,7 +64,7 @@ const CodeAIWardBalloon: React.FC<WordBalwrapProps> = ({
           right: '15px',
           top: '15px',
           cursor: 'pointer',
-          width: '30px'
+          width: '30px',
           // background: `url(${closebox}) no-repeat`,
         }}
         onClick={() => {
