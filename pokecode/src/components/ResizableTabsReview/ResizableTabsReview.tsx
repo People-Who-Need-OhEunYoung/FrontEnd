@@ -77,6 +77,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRef = useRef<HTMLDivElement | null>(null);
+  const [usersInfo, setUsersInfo] = useState<any[]>([]);
 
   const dispatch = useDispatch();
 
@@ -140,6 +141,10 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
     document.removeEventListener('mouseup', handleMouseUp1);
   };
 
+  const handlePokemons = (users) => {
+    setUsersInfo(users);
+  }
+
   useEffect(() => {
     const tabElement = tabRef.current;
     if (tabElement) {
@@ -165,74 +170,49 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
       exit={{ opacity: 0 }}
       style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
-      <motion.div
-        drag
-        dragControls={dragControls}
-        animate={animationControls} // 애니메이션 컨트롤 적용
-        style={{
-          position: 'fixed',
-          display: 'inline-block',
-          width: '5vw',
-          zIndex: 9999,
-          bottom: '80px',
-          right: '48%',
-          transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-          transition: '0.1s',
-        }}
-        className="pokemon"
-      >
-        <CodeAIWardBalloon
-          width="300px"
-          left="-100px"
-          fontSize="1em"
-          padding="30px"
-          right="30px"
-          bottom="100px"
-          position="absolute"
-        />
-        <Pokemon
-          width={'100%'}
-          src={
-            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-            pokemonId +
-            '.gif'
-          }
-        ></Pokemon>
-      </motion.div>
-      <motion.div
-        drag
-        dragControls={dragControls}
-        animate={animationControls} // 애니메이션 컨트롤 적용
-        style={{
-          position: 'fixed',
-          display: 'inline-block',
-          width: '5vw',
-          zIndex: 9999,
-          bottom: '80px',
-          right: '48%',
-          transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-          transition: '0.1s',
-        }}
-        className="pokemon"
-      >
-        <CodeAIWardBalloon
-          width="300px"
-          left="-100px"
-          fontSize="1em"
-          padding="30px"
-          right="30px"
-          bottom="100px"
-          position="absolute"
-        />
-        <Pokemon
-          width={'100%'}
-          src={
-            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-            pokemonId +
-            '.gif'
-          }
-        ></Pokemon>
-      </motion.div>
+      {
+        (usersInfo !== null) ?
+          usersInfo.map((user) =>
+            <motion.div
+              drag
+              dragControls={dragControls}
+              animate={animationControls} // 애니메이션 컨트롤 적용
+              style={{
+                position: 'fixed',
+                display: 'inline-block',
+                width: '5vw',
+                zIndex: 9999,
+                bottom: '80px',
+                right: '48%',
+                transform: 'translateX(0px) translateY(0px) translateZ(0px)',
+                transition: '0.1s',
+              }}
+              className="pokemon"
+            >
+              <CodeAIWardBalloon
+                width="300px"
+                left="-100px"
+                fontSize="1em"
+                padding="30px"
+                right="30px"
+                bottom="100px"
+                position="absolute"
+              />
+              <Pokemon
+                width={'100%'}
+                src={
+                  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
+                  user.cur_poke_id +
+                  '.gif'
+                }
+              ></Pokemon>
+              <NicknameBox>{user.nick_name}</NicknameBox>
+            </motion.div>
+          )
+          :
+          <p>암것도없어</p>
+      }
+
       <Container ref={containerRef}>
         <Tab width={width}>
           <HeaderTxt>
@@ -287,7 +267,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
               overflow: 'auto',
             }}
           >
-            <ChatRoom />
+            <ChatRoom onUserChange={handlePokemons} />
           </div>
           <div
             style={{
@@ -306,22 +286,37 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
 };
 
 const HeaderTxt = styled.p`
-  height: 80px;
-  box-sizing: border-box;
-  display: flex;
-  line-height: 60px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: white;
-  border-bottom: 2px solid gray;
-  padding: 10px;
-  padding-left: 5%;
-`;
+      height: 80px;
+      box-sizing: border-box;
+      display: flex;
+      line-height: 60px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+      border-bottom: 2px solid gray;
+      padding: 10px;
+      padding-left: 5%;
+      `;
 
 const Home = styled.div`
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-  overflow: hidden;
-`;
+      width: 100%;
+      height: 100%;
+      margin: 0 auto;
+      overflow: hidden;
+      `;
+
+      const NicknameBox = styled.p`
+      transform: translateX(-10%);
+      width: 120%;
+      height: 10%;
+      margin: 0 auto;
+      overflow: hidden;
+      background-color: rgba(221, 160, 221, 0.8); /* 연보라색 배경 */
+      opacity: 40%; /* 수정된 부분 */
+      border-radius: 8px; /* 둥근 모서리 */
+      font-family: 'Arial', sans-serif; /* 예쁜 글씨체 */
+      text-align: center; /* 텍스트 중앙 정렬 */
+      font-size: 14px; /* 글씨 크기 조정 */
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 추가 */
+    `;
 export default ResizableTabsReview;
