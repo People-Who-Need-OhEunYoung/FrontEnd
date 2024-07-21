@@ -68,12 +68,10 @@ interface ResizableTabsProps {
 const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   id,
   title,
-  editorRoom = '1000',
 }: any) => {
   const [width, setWidth] = useState<number>(25);
   const [width1, setWidth1] = useState<number>(25);
   const [tabWidth, setTabWidth] = useState(0); // Tab의 초기 너비 상태
-  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRef = useRef<HTMLDivElement | null>(null);
   const [usersInfo, setUsersInfo] = useState<any[]>([]);
@@ -140,9 +138,9 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
     document.removeEventListener('mouseup', handleMouseUp1);
   };
 
-  const handlePokemons = (users : any) => {
+  const handlePokemons = (users: any) => {
     setUsersInfo(users);
-  }
+  };
 
   useEffect(() => {
     const tabElement = tabRef.current;
@@ -169,48 +167,45 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
       exit={{ opacity: 0 }}
       style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
-      {
-        (usersInfo !== null) ?
-          usersInfo.map((user) =>
-            <motion.div
-              drag
-              dragControls={dragControls}
-              animate={animationControls} // 애니메이션 컨트롤 적용
-              style={{
-                position: 'fixed',
-                display: 'inline-block',
-                width: '5vw',
-                zIndex: 9999,
-                bottom: '80px',
-                right: '48%',
-                transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-                transition: '0.1s',
-              }}
-              className="pokemon"
-            >
-              <CodeAIWardBalloon
-                width="300px"
-                left="-100px"
-                fontSize="1em"
-                padding="30px"
-                right="30px"
-                bottom="100px"
-                position="absolute"
-              />
-              <Pokemon
-                width={'100%'}
-                src={
-                  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-                  user.cur_poke_id +
-                  '.gif'
-                }
-              ></Pokemon>
-              <NicknameBox>{user.nick_name}</NicknameBox>
-            </motion.div>
-          )
-          :
-          <p>암것도없어</p>
-      }
+      {usersInfo !== null ? (
+        usersInfo.map((user) => (
+          <motion.div
+            drag
+            dragControls={dragControls}
+            animate={animationControls} // 애니메이션 컨트롤 적용
+            style={{
+              position: 'fixed',
+              display: 'inline-block',
+              zIndex: 9999,
+              bottom: '80px',
+              right: '48%',
+              transform: 'translateX(0px) translateY(0px) translateZ(0px)',
+              transition: '0.1s',
+            }}
+            className="pokemon"
+          >
+            <CodeAIWardBalloon
+              width="300px"
+              left="-100px"
+              fontSize="1em"
+              padding="30px"
+              right="30px"
+              bottom="100px"
+              position="absolute"
+            />
+            <Pokemon
+              src={
+                'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
+                user.cur_poke_id +
+                '.gif'
+              }
+            ></Pokemon>
+            <NicknameBox>{user.nick_name}</NicknameBox>
+          </motion.div>
+        ))
+      ) : (
+        <p>암것도없어</p>
+      )}
 
       <Container ref={containerRef}>
         <Tab width={width}>
@@ -234,7 +229,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           <div style={{ width: '100%', height: '100%' }}>
             <TestSharedEditor />
           </div>
-          <div>
+          <div style={{ position: 'relative' }}>
             <Home style={{ textAlign: 'center' }}>
               <DesignedButton1
                 style={{
@@ -242,8 +237,9 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                   height: '30px',
                   lineHeight: '20px',
                   position: 'absolute',
-                  bottom: '0',
-                  right: '6%',
+                  bottom: '10px',
+                  right: '30px',
+                  margin: 0,
                 }}
                 onClick={handleDragEnd}
               >
@@ -257,9 +253,8 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           style={{ left: 100 - width1 + '%' }}
         />
         <Tab width={width1}>
-
-          <ChatRoomDiv >
-            <ChatRoom onUserChange={handlePokemons}/>
+          <ChatRoomDiv>
+            <ChatRoom onUserChange={handlePokemons} />
           </ChatRoomDiv>
 
           <div
@@ -279,17 +274,17 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
 };
 
 const HeaderTxt = styled.p`
-      height: 80px;
-      box-sizing: border-box;
-      display: flex;
-      line-height: 60px;
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: white;
-      border-bottom: 2px solid gray;
-      padding: 10px;
-      padding-left: 5%;
-      `;
+  height: 80px;
+  box-sizing: border-box;
+  display: flex;
+  line-height: 60px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  border-bottom: 2px solid gray;
+  padding: 10px;
+  padding-left: 5%;
+`;
 
 const Home = styled.div`
   width: 100%;
@@ -307,8 +302,7 @@ const ChatRoomDiv = styled.div`
   background-size: cover;
 `;
 
-
-  const NicknameBox = styled.p`
+const NicknameBox = styled.p`
   transform: translateX(-10%);
   width: 120%;
   height: 10%;
