@@ -36,7 +36,7 @@ const ProblemList = () => {
   const fetchProbData = async () => {
     try {
       const res = await problemSearch(query, sort, page, order);
-      console.log(res);
+      // console.log(res);
       return res;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -98,12 +98,11 @@ const ProblemList = () => {
     }),
   };
 
-
   useEffect(() => {
     fetchProbData().then((res) => {
       const parsedData = res;
       const page_count = Math.ceil(res.count / parsedData.problem.length);
-      console.log(parsedData.problem);
+      // console.log(parsedData.problem);
 
       setPageCount(page_count);
       if (parsedData.problem.length > 0) {
