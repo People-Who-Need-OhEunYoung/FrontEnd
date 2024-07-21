@@ -13,7 +13,11 @@ interface User {
   username: any;
 }
 
-const ChatRoom: React.FC = ({onUserChange}) => {
+interface ChatRoomProps {
+  onUserChange: (users: any) => void;
+}
+
+const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
@@ -156,12 +160,10 @@ const ChatRoom: React.FC = ({onUserChange}) => {
           boxSizing: 'border-box',
           backgroundColor: '#111826',
           width: '100%',
-          display:'flex',
-          alignItems:'center'
-          
+          display: 'flex',
+          alignItems: 'center',
         }}
       >
-
         방에 접속중인 인원: <b>{users.length}</b>
       </div>
       <div

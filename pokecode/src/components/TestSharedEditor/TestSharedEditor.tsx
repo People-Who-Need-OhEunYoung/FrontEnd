@@ -66,7 +66,7 @@ const TestSharedEditor = () => {
       console.error('roomId가 존재하지 않음');
       return;
     }
-    if (editorContainerRef.current && editor === null) {
+    if (editorContainerRef.current) {
       if (editor == null) {
         const ydoc = new Y.Doc();
         const provider = new WebsocketProvider(

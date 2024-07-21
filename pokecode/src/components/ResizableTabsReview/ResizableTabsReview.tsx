@@ -140,7 +140,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
     document.removeEventListener('mouseup', handleMouseUp1);
   };
 
-  const handlePokemons = (users) => {
+  const handlePokemons = (users : any) => {
     setUsersInfo(users);
   }
 
@@ -234,13 +234,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           <div style={{ width: '100%', height: '100%' }}>
             <TestSharedEditor />
           </div>
-          <div
-            style={{
-              width: '100%',
-              height: '20%',
-              overflow: 'auto',
-            }}
-          >
+          <div>
             <Home style={{ textAlign: 'center' }}>
               <DesignedButton1
                 style={{
