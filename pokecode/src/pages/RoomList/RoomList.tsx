@@ -140,7 +140,7 @@ const RoomList = () => {
               <CheckSlide
                 onClick={switchButton}
                 timeck={check}
-                style={{ position: 'absolute', right: 0, top: '6px' }}
+                style={{ position: 'absolute', right: 0, top: '5.5px' }}
               >
                 <CheckBtn timeck={check}></CheckBtn>
                 <OnOffText timeck={check}>{check}</OnOffText>
@@ -290,7 +290,7 @@ const CheckSlide = styled.div<{ timeck: string }>`
   padding: 0.25rem;
   margin: 0 10px;
   cursor: pointer;
-  
+
   ${(props: any) =>
     props.timeck === 'ON' &&
     css`

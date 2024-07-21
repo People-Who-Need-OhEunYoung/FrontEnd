@@ -22,16 +22,6 @@ export const Profile = ({ ...props }) => {
         src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${props.pokemonId}.svg`}
         alt=""
       />
-      <p
-        style={{
-          position: 'absolute',
-          bottom: '5px',
-          width: '45px',
-          textAlign: 'center',
-        }}
-      >
-        LV100
-      </p>
       <Myinfo>
         <p>
           {props.name}님
@@ -108,10 +98,12 @@ export const Profile = ({ ...props }) => {
 };
 
 const MyPic = styled.img`
+  position: absolute;
   width: 45px;
   height: 45px;
   border-radius: 50%;
-  margin: 10px 0 10px 0;
+  margin: 20px;
+  left: -15px;
   @media (max-width: 1240px) {
     display: none;
   }
@@ -134,20 +126,24 @@ const MyMenu = styled.ul`
   opacity: 0;
   z-index: 200;
   position: absolute;
-  right: 0;
-  top: 75px;
+  right: -60px;
+  top: 60px;
+  width: 150px;
   align-content: space-around;
   flex-wrap: wrap;
   flex-direction: column;
-  background: violet;
-  border-radius: 20px;
+  background: #2e3b53;
+  border-radius: 10px;
 `;
 const MyMenuList = styled.li`
   width: 100%;
-  border-radius: 20px;
   text-align: center;
+  border-radius: 10px;
+  line-height: 10px;
+  font-size: 1em;
+  font-weight: bold;
   &:hover {
-    background: #e96fe9;
+    color: #38bdf8;
   }
 `;
 const DownMenu = styled.svg`

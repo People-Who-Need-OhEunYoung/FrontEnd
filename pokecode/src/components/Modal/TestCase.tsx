@@ -47,7 +47,7 @@ export default function TestCase({
       <Badges> 예시 {caseno} </Badges>
       <InoutWrap>
         <label
-          style={{ textAlign: 'left', height: '50px' }}
+          style={{ textAlign: 'left', height: '50px', fontWeight: 'bold' }}
           htmlFor={'indata' + caseno}
         >
           입력
@@ -72,9 +72,14 @@ export default function TestCase({
             rows={1}
           />
         </div>
-        <div style={{ textAlign: 'left', height: '50px' }}>
-          <label htmlFor={'outdata' + caseno}>출력</label>
-        </div>
+
+        <label
+          style={{ textAlign: 'left', height: '50px', fontWeight: 'bold' }}
+          htmlFor={'outdata' + caseno}
+        >
+          출력
+        </label>
+
         <div>
           <InOutput
             ref={outputRef}
@@ -102,7 +107,7 @@ export default function TestCase({
 
 const Badges = styled.p`
   font-weight: bold;
-  background-color: #38bdf8;
+  background-color: #6366f1;
   text-align: center;
   width: 20%;
   height: 40px;
@@ -114,7 +119,7 @@ const InoutWrap = styled.div`
   margin: 10px 0 40px;
   background-color: #46464647;
   border-radius: 10px;
-  border: 2px solid #38bdf8;
+  border: 2px solid #6366f1;
 `;
 
 const InOutput = styled.textarea`
