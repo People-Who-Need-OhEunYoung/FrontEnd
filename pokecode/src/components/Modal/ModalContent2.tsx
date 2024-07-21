@@ -215,7 +215,6 @@ const ModalContent2 = ({ width, reset }: any) => {
                   placeholder="방 제목을 입력해주세요"
                   readOnly
                 >
-                  {/* {title == '' ? '방 제목을 입력해주세요.' : title} */}
                 </Titleinput>
               )}
             </div>
@@ -236,8 +235,6 @@ const ModalContent2 = ({ width, reset }: any) => {
             </PersonWrap>
             <p style={{ marginBottom: '30px' }}>최대인원은 4명 입니다</p>
           </div>
-
-
       <DesignedButton1
         color="white"
         back_color="#6366F1"
@@ -248,7 +245,8 @@ const ModalContent2 = ({ width, reset }: any) => {
         방 만들기
       </DesignedButton1>
     </div>
-  );
+    </>
+  ))
 };
 
 const Titleinput = styled.textarea`
