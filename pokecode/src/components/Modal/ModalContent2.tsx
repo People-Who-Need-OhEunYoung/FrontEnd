@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { setCurRoom } from '../../store/userInfo';
 import rolling from '../../assets/images/rolling2.svg';
 type ProblemType = {
   id: string;
@@ -26,9 +25,7 @@ const ModalContent2 = ({ width, reset }: any) => {
   const [selectedProblem, setSelectedProblem] = useState<ProblemType | null>(
     null
   );
-  const { userNickname, userId } = useSelector(
-    (state: RootState) => state.userinfo
-  );
+  const { user } = useSelector((state: RootState) => state.userinfo);
 
   //우현코드 start
   const navigate = useNavigate();
@@ -126,7 +123,7 @@ const ModalContent2 = ({ width, reset }: any) => {
   const createRoom = async () => {
     setLoding(true);
 
-    if (!userNickname) {
+    if (!user.nick_name) {
       alert('사용자 정보가 없습니다. 재로그인 바랍니다.');
       return;
     }
@@ -139,11 +136,10 @@ const ModalContent2 = ({ width, reset }: any) => {
           problem_tier: selectedProblem?.level,
           problem_title: selectedProblem?.title,
           max_people: person,
-          room_owner: userId,
+          room_owner: user.bakjoon_id,
         }
       );
       localStorage.setItem('roomId', data.room_id);
-      setCurRoom(data.room_id);
 
       const queryParam: any = {
         roomid: data.room_id,
@@ -158,7 +154,6 @@ const ModalContent2 = ({ width, reset }: any) => {
         navigate(`/room?${params}`);
       }, 2000);
     } catch (error) {
-      console.log(userId);
       console.error('Error creating room:', error);
       alert('서버 문제로 방만들기를 실패했습니다.');
       setLoding(false);

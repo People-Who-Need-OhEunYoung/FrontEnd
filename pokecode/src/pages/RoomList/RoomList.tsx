@@ -44,10 +44,6 @@ const RoomList = () => {
       },
     ]);
 
-  //임시 빌드 로직 제거 해도 돼요 start
-  if (pageCount == null) setPageCount(1);
-  //임시 빌드 로직 제거 해도 돼요 end
-
   console.log(page);
 
   const fetchRoomData = async () => {
@@ -60,7 +56,6 @@ const RoomList = () => {
   };
 
   useEffect(() => {
-    // 데이터를 가져오는 함수
     const fetchData = async () => {
       try {
         const res = await fetchRoomData();

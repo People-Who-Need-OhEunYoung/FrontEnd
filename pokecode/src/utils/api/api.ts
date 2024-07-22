@@ -66,8 +66,26 @@ const userInfo = async () => {
       return res.json();
     })
     .then((data) => {
-      console.log('poke', data);
-      return data;
+      console.log('poke', data.user[0]);
+      localStorage.setItem('bakjoon_id', data.user[0].bakjoon_id);
+      localStorage.setItem('cur_poke_id', data.user[0].cur_poke_id);
+      localStorage.setItem('data_coin', data.user[0].data_coin);
+      localStorage.setItem('data_exp', data.user[0].data_exp);
+      localStorage.setItem('dp_coin', data.user[0].dp_coin);
+      localStorage.setItem('dp_exp', data.user[0].dp_exp);
+      localStorage.setItem('exp_index', data.user[0].exp_index);
+      localStorage.setItem('graph_coin', data.user[0].graph_coin);
+      localStorage.setItem('graph_exp', data.user[0].graph_exp);
+      localStorage.setItem('impl_coin', data.user[0].impl_coin);
+      localStorage.setItem('impl_exp', data.user[0].impl_exp);
+      localStorage.setItem('last_login', data.user[0].last_login);
+      localStorage.setItem('math_coin', data.user[0].math_coin);
+      localStorage.setItem('math_exp', data.user[0].math_exp);
+      localStorage.setItem('nick_name', data.user[0].nick_name);
+      localStorage.setItem('user_exp', data.user[0].user_exp);
+      localStorage.setItem('user_level', data.user[0].user_level);
+
+      return data.user[0];
     })
     .catch((error) => {
       return 'ERROR : ' + error;
