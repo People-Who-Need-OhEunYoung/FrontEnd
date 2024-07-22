@@ -81,7 +81,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRef = useRef<HTMLDivElement | null>(null);
   const [usersInfo, setUsersInfo] = useState<any[]>([]);
-  const { userNickname } = useSelector((state: RootState) => state.userinfo);
+  const { user } = useSelector((state: RootState) => state.userinfo);
 
   const [contextMenus, setContextMenus] = useState<
     (ContextMenuPosition | null)[]
@@ -214,7 +214,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
       style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
       {usersInfo !== null
-        ? usersInfo.map((user, key) => (
+        ? usersInfo.map((userOne, key) => (
             <motion.div
               drag
               dragControls={dragControls}
@@ -231,7 +231,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
               }}
               className="pokemon"
             >
-              {user.nick_name == userNickname ? (
+              {userOne.nick_name == user.nick_name ? (
                 <CodeAIWardBalloon
                   width="300px"
                   left="-150px"
@@ -244,7 +244,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                 ''
               )}
               <Pokemon
-                src={'/' + user.cur_poke_id + '.gif'}
+                src={'/' + userOne.cur_poke_id + '.gif'}
                 onContextMenu={(e: any) => handleContextMenu(e, key)}
               ></Pokemon>
               {contextMenus[key] ? (
@@ -273,7 +273,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                   </li>
                 </ul>
               ) : null}
-              <NicknameBox>{user.nick_name}</NicknameBox>
+              <NicknameBox>{userOne.nick_name}</NicknameBox>
             </motion.div>
           ))
         : null}
