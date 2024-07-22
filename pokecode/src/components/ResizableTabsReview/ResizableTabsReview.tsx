@@ -129,7 +129,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const dragControls = useDragControls();
   const animationControls = useAnimation();
 
-  const setIdData = localStorage.getItem('nickname');
+  const setIdData = localStorage.getItem('nick_name');
   const setRoomIdData = localStorage.getItem('roomId');
 
   if (setIdData != null) {
@@ -245,6 +245,15 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
               ) : (
                 ''
               )}
+              {hoveredPokeId === userOne.cur_poke_id && (
+                <div>
+                  <div>구현:{userOne.impl_exp}</div>
+                  <div>수학:{userOne.math_exp}</div>
+                  <div>자료구조:{userOne.data_exp}</div>
+                  <div>그래프:{userOne.graph_exp}</div>
+                  <div>DP:{userOne.dp_exp}</div>
+                </div>
+              )}
               <Pokemon
                 src={'/' + userOne.cur_poke_id + '.gif'}
                 onContextMenu={(e: any) => handleContextMenu(e, key)}
@@ -255,7 +264,6 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                   setHoveredPokeId(null);
                 }}
               ></Pokemon>
-              {hoveredPokeId === userOne.cur_poke_id && <div>안뇽!</div>}
               {contextMenus[key] ? (
                 <ul
                   className="context-menu"

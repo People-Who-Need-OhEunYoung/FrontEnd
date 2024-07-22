@@ -62,8 +62,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       navigate('/roomlist');
       return;
     }
-    if (user.nick_name == '') {
-      alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요');
+    if (user.nick_name == '' && users.length == 0) {
+      alert('사용자정보가 없습니다. 다시 입장하세요');
       navigate('/roomlist');
       return;
     }
@@ -151,21 +151,17 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       setMessages([]);
       setMessage('');
     }
-    localStorage.removeItem('nickname');
-    localStorage.removeItem('roomId');
+    if (users.length === 0) localStorage.removeItem('roomId');
   };
 
   //강퇴기능 추가 필요
-  const forceOut = (nickname: string) => {
+  const forceOut = (nick_name: string) => {
     const socket = socketRef.current;
     if (socket) {
       socket.emit('FORCE_OUT', {
         room_id: savedRoomId,
-        nick_name: nickname,
+        nick_name: nick_name,
       });
-
-      //localStorage.removeItem('nickname');
-      //localStorage.removeItem('roomId');
     }
   };
 
