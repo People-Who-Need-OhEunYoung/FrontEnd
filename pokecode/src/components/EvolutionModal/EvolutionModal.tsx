@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import './EvolutionModal.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { pokemonName } from '../../utils/api/api';
 import { RootState } from '../../store';
 
 const EvolutionModal = () => {
   const [isEvolving, setIsEvolving] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [showEvolved, setShowEvolved] = useState(false);
   const [currentPokemonName, setCurrentPokemonName] = useState('');
   const [nextPokemonName, setNextPokemonName] = useState('');
   const { user } = useSelector((state: RootState) => state.userinfo);
@@ -29,14 +30,15 @@ const EvolutionModal = () => {
     setTimeout(() => {
       setIsEvolving(true);
     }, 2000); // 2초 후 진화 애니메이션 시작
-  }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(false); // 7초 후 모달 숨기기
-    }, 7000);
+    setTimeout(() => {
+      setIsEvolving(false);
+      setShowEvolved(true);
+    }, 7000); // 7초 후 진화 완료 상태로 변경
 
-    return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 제거
+    setTimeout(() => {
+      setIsVisible(false); // 10초 후 모달 숨기기
+    }, 10000); // 10초 후 모달 숨기기
   }, []);
 
   if (!isVisible) return null;
@@ -45,30 +47,27 @@ const EvolutionModal = () => {
     <div className="modal-overlay">
       <div className="modal">
         <div className="pokemon-container">
-          {!isEvolving && (
-            <>
-              <div className="text-box">
-                <p>어라！？<br />{currentPokemonName}의 상태가！</p>
-              </div>
+          {!showEvolved && (
+            <div className={`pokemon ${isEvolving ? 'fade-out' : 'fade-in'}`}>
               <img 
                 src={`/${currentPokemonNumber}.gif`} 
                 alt={currentPokemonName} 
-                className="pokemon"
+                className="pokemon-image"
               />
-            </>
+            </div>
           )}
-          {isEvolving && (
-            <>
-              <div className="text-box">
-                <p>{currentPokemonName}은 진화해<br />{nextPokemonName}이 되었다！</p>
-              </div>
+          {showEvolved && (
+            <div className={`pokemon`}>
               <img 
                 src={`/${nextPokemonNumber}.gif`} 
                 alt={nextPokemonName} 
-                className="pokemon evolve"
+                className="pokemon-image"
               />
-            </>
+            </div>
           )}
+        </div>
+        <div className="text-box">
+          <p>{showEvolved ? `${currentPokemonName}는 ${nextPokemonName}로 진화했다!` : `어라！？ ${currentPokemonName}의 상태가！`}</p>
         </div>
       </div>
     </div>

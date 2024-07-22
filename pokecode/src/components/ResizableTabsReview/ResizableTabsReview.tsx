@@ -319,7 +319,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           <div style={{ position: 'relative' }}>
             <Home style={{ textAlign: 'center' }}>
               {/* 아마 이코드때문에 포켓몬 밑에 닉네임박스 길쭉해지고 난리날거임 */}
-              {/* <div style={{
+              <div style={{
                 width: '150px',
                 height: '30px',
                 lineHeight: '20px',
@@ -331,7 +331,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                 <button onClick={() => setIsModalOpen(true)}>Evolve Pokemon</button>
                 {isModalOpen && (<EvolutionModal />)}
                 <button onClick={() => setIsModalOpen(false)}>Close</button>
-              </div> */}
+              </div>
               {/* 아마 이코드때문에 포켓몬 밑에 닉네임박스 길쭉해지고 난리날거임 */}
 
               <DesignedButton1
