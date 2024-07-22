@@ -97,8 +97,8 @@ const TestSharedEditor = () => {
           console.log('정보등록!!!!');
           provider.awareness.setLocalStateField('user', {
             color: 'white',
-            name: res.nickName,
-            pokemonid: res.curPokeId,
+            name: res.nick_name,
+            pokemonid: res.cur_poke_id,
           });
           const allStates = provider.awareness.getStates();
           await updateCaretBackground(allStates);
