@@ -6,7 +6,6 @@ export {
   removePoo,
   getGachaPokemon,
   updateMyPokemon,
-  setGachaPokemon,
   problemSearch,
   showPokemonBook,
   showRoomList,
@@ -140,16 +139,16 @@ const pokemonName = async (number: number) => {
     });
 };
 
-//사용자 포켓몬 도감 등록 및 크래딧 차감
-const setGachaPokemon = async (number: number) => {
-  return await fetch(`${import.meta.env.VITE_APP_IP}/gambling`, {
+//사용자 포켓몬 뽑기
+const getGachaPokemon: Function = async (coinSet: string) => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/legendGambling`, {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      pok_id: number,
+      coin: coinSet,
     }),
   })
     .then((res) => {
@@ -159,51 +158,11 @@ const setGachaPokemon = async (number: number) => {
       return res.json();
     })
     .then(async (data) => {
-      console.log(data);
       return data;
-    })
-    .catch((error) => {
-      return 'ERROR : ' + error;
-    });
-};
-
-//사용자 포켓몬 뽑기
-const getGachaPokemon: Function = async () => {
-  return await fetch(
-    `https://pokeapi.co/api/v2/evolution-chain/${Math.floor(
-      Math.random() * 336 + 1
-    )}/`,
-    {
-      method: 'GET',
-    }
-  )
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
-      return res.json();
-    })
-    .then(async (data) => {
-      return await fetch(data.chain.species.url, {
-        method: 'GET',
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(`HTTP error! Status: ${res.status}`);
-          }
-          return res.json();
-        })
-        .then(async (idData) => {
-          console.log(idData.id);
-          if (idData.id > 649) {
-            await getGachaPokemon();
-          }
-          return idData.id;
-        });
     })
     .catch(async (error) => {
       console.log(error);
-      return await getGachaPokemon();
+      return { result: 'fail', message: '알수 없는 에러' + error };
     });
 };
 
