@@ -73,7 +73,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const [position, setPosition] = useState({
     x: '50%',
   });
-  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
+  const { user } = useSelector((state: RootState) => state.userinfo);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const controls = useAnimation();
   const tabRef = useRef<HTMLDivElement | null>(null);
@@ -179,7 +179,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
               width: '100%',
               height: '100%',
               boxSizing: 'border-box',
-              padding: '10px'
+              padding: '10px',
             }}
           >
             <TestEditor />
@@ -220,9 +220,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
                 }}
                 className="pokemon"
               >
-                <Pokemon
-                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemonId}.gif`}
-                ></Pokemon>
+                <Pokemon src={`/${user.cur_poke_id}.gif`}></Pokemon>
               </motion.div>
             </Home>
           </div>

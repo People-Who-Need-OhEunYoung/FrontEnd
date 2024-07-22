@@ -31,7 +31,6 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-
   /* 문제에 대한 크롤링 데이터  요청 */
   const fetchCrawlData = async () => {
     try {

@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef, ChangeEvent, KeyboardEvent } from 'react';
 import io, { Socket } from 'socket.io-client';
 import { setWrittenCode } from '../../store/problemSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-// import { getRoomPeopleChecker } from '../../utils/api/api';
+
+import { RootState } from '../../store';
 
 
 interface Message {
@@ -25,6 +26,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
   const [first, setFirst] = useState(false);
+  const { user } = useSelector((state: RootState) => state.userinfo);
   const dispatch = useDispatch();
   const socketRef = useRef<Socket | null>(null);
 
@@ -38,10 +40,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
     scrollToBottom();
   }, [messages]);
 
-  const savedUsername: string | null = localStorage.getItem('nickname');
+  const savedUsername: string | null = localStorage.getItem('nick_name');
   const savedRoomId: string | null = localStorage.getItem('roomId');
   const savedPokeId: string | null = localStorage.getItem('cur_poke_id');
-  const savedUserId: string | null = localStorage.getItem('user_id');
+  const savedUserId: string | null = localStorage.getItem('bakjoon_id');
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -59,6 +61,11 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   useEffect(() => {
     if (!savedUsername || !savedRoomId) {
       alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요');
+      navigate('/roomlist');
+      return;
+    }
+    if (user.nick_name == '' && users.length == 0) {
+      alert('사용자정보가 없습니다. 다시 입장하세요');
       navigate('/roomlist');
       return;
     }
@@ -97,8 +104,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
     //강퇴기능 추가 필요
-    socket.on('USER:FORCED_OUT', () => {
-      setMessage(message);
+    socket.on('USER:FORCED_OUT', (a) => {
+      setMessage(`[notice]${a}님이 퇴장당했습니다.`);
     });
 
     return () => {
@@ -131,8 +138,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
     if (socket) {
       const leaveMessage = `[notice]${savedUsername}님이 퇴장했습니다.`;
       socket.emit('SEND_MESSAGE', {
-        roomId: savedRoomId,
-        username: savedUsername,
+        room_id: savedRoomId,
+        nick_name: savedUsername,
         message: leaveMessage,
       });
 
@@ -146,21 +153,17 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       setMessages([]);
       setMessage('');
     }
-    localStorage.removeItem('nickname');
-    localStorage.removeItem('roomId');
+    if (users.length === 0) localStorage.removeItem('roomId');
   };
 
   //강퇴기능 추가 필요
-  const forceOut = (nickname: string) => {
+  const forceOut = (nick_name: string) => {
     const socket = socketRef.current;
     if (socket) {
       socket.emit('FORCE_OUT', {
-        roomId: savedRoomId,
-        nick_name: nickname,
+        room_id: savedRoomId,
+        nick_name: nick_name,
       });
-
-      //localStorage.removeItem('nickname');
-      //localStorage.removeItem('roomId');
     }
   };
 
@@ -173,12 +176,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         boxSizing: 'border-box',
       }}
     >
-      {/* <h2>너의 이름은 {savedUsername}</h2>
-      <h2>방 ID: {savedRoomId}</h2>
-      <h2>
-      방에 접속중인 사람 개수: <b>{users.length}</b>
-      </h2>
-      <button onClick={leaveRoom}>나가기</button> */}
+
       <Header>
         <p style={{ position: 'absolute', left: '15px', fontSize: '1.2rem' }}>
           채팅
@@ -188,7 +186,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         </p>
         <button
           onClick={() => {
-            forceOut('테스터');
+            forceOut('우주최강다흰짱짱');
           }}
           style={{ position: 'absolute', left: '80px', fontSize: '1rem' }}
         >

@@ -4,17 +4,13 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { CodeAIButton } from '../CodeAIButton';
 const ModalContent4 = ({ event, handleClose }: any) => {
-  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
+  const { user } = useSelector((state: RootState) => state.userinfo);
 
   return (
     <div style={{ width: '400px' }}>
       <RainEffect></RainEffect>
       <img
-        src={
-          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-          pokemonId +
-          '.gif'
-        }
+        src={'/' + user.cur_poke_id + '.gif'}
         height={'150px'}
         style={{ padding: '50px 0' }}
       />

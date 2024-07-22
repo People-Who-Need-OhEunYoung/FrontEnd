@@ -75,13 +75,15 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   id,
   title,
 }: any) => {
-  const [width, setWidth] = useState<number>(25);
-  const [width1, setWidth1] = useState<number>(25);
+  const [width, setWidth] = useState<number>(30);
+  const [width1, setWidth1] = useState<number>(30);
   const [tabWidth, setTabWidth] = useState(0); // Tab의 초기 너비 상태
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRef = useRef<HTMLDivElement | null>(null);
   const [usersInfo, setUsersInfo] = useState<any[]>([]);
-  const { userNickname } = useSelector((state: RootState) => state.userinfo);
+  const { user } = useSelector((state: RootState) => state.userinfo);
+
+  const [hoveredPokeId, setHoveredPokeId] = useState(null);
 
   const [contextMenus, setContextMenus] = useState<
     (ContextMenuPosition | null)[]
@@ -127,7 +129,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const dragControls = useDragControls();
   const animationControls = useAnimation();
 
-  const setIdData = localStorage.getItem('username');
+  const setIdData = localStorage.getItem('nick_name');
   const setRoomIdData = localStorage.getItem('roomId');
 
   if (setIdData != null) {
@@ -214,7 +216,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
       style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
       {usersInfo !== null
-        ? usersInfo.map((user, key) => (
+        ? usersInfo.map((userOne, key) => (
             <motion.div
               drag
               dragControls={dragControls}
@@ -223,7 +225,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                 position: 'fixed',
                 display: 'inline-block',
                 zIndex: 9999,
-                bottom: '80px',
+                bottom: '90px',
                 left: `${30 + 10 * key}%`,
                 transform: 'translateX(0px) translateY(0px) translateZ(0px)',
                 transition: '0.1s',
@@ -231,7 +233,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
               }}
               className="pokemon"
             >
-              {user.nick_name == userNickname ? (
+              {userOne.nick_name == user.nick_name ? (
                 <CodeAIWardBalloon
                   width="300px"
                   left="-150px"
@@ -243,13 +245,24 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
               ) : (
                 ''
               )}
+              {hoveredPokeId === userOne.cur_poke_id && (
+                <div>
+                  <div>구현:{userOne.impl_exp}</div>
+                  <div>수학:{userOne.math_exp}</div>
+                  <div>자료구조:{userOne.data_exp}</div>
+                  <div>그래프:{userOne.graph_exp}</div>
+                  <div>DP:{userOne.dp_exp}</div>
+                </div>
+              )}
               <Pokemon
-                src={
-                  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-                  user.cur_poke_id +
-                  '.gif'
-                }
+                src={'/' + userOne.cur_poke_id + '.gif'}
                 onContextMenu={(e: any) => handleContextMenu(e, key)}
+                onMouseEnter={() => {
+                  setHoveredPokeId(userOne.cur_poke_id);
+                }}
+                onMouseLeave={() => {
+                  setHoveredPokeId(null);
+                }}
               ></Pokemon>
               {contextMenus[key] ? (
                 <ul
@@ -262,6 +275,10 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                 >
                   <li
                     style={{
+                      position: 'absolute',
+                      left: '50%',
+                      top: '-40px',
+                      transform: 'translateX(-50%)',
                       color: 'white',
                       borderRadius: '10px',
                       background: '#324056',
@@ -273,7 +290,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                   </li>
                 </ul>
               ) : null}
-              <NicknameBox>{user.nick_name}</NicknameBox>
+              <NicknameBox>{userOne.nick_name}</NicknameBox>
             </motion.div>
           ))
         : null}
@@ -379,10 +396,10 @@ const NicknameBox = styled.p`
   height: 10%;
   margin: 0 auto;
   overflow: hidden;
-  background-color: rgba(221, 160, 221, 0.8); /* 연보라색 배경 */
-  opacity: 40%; /* 수정된 부분 */
+  color: white;
+  background-color: #324056; /* 연보라색 배경 */
+  opacity: 60%; /* 수정된 부분 */
   border-radius: 8px; /* 둥근 모서리 */
-  font-family: 'Arial', sans-serif; /* 예쁜 글씨체 */
   text-align: center; /* 텍스트 중앙 정렬 */
   font-size: 14px; /* 글씨 크기 조정 */
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 추가 */

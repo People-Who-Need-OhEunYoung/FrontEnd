@@ -39,6 +39,7 @@ const Modal = ({
   roomid,
   on = false,
   event,
+  limitNum = 2,
 }: any) => {
   const [nowcomponent, setNowcomponent] = useState(component);
   const [reset, setReset] = useState(false);
@@ -86,7 +87,13 @@ const Modal = ({
           ) : nowcomponent === 6 ? (
             <>
               <Title>{title}</Title>
-              <ModalContent7 id={id} title={prob_title} roomId={roomid} />
+              <ModalContent7
+                id={id}
+                title={prob_title}
+                roomId={roomid}
+                maxPerson={limitNum}
+                event={event}
+              />
             </>
           ) : (
             ''

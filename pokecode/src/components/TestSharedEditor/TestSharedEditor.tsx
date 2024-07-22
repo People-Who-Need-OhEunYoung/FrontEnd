@@ -34,13 +34,12 @@ const TestSharedEditor = () => {
     const elements = document.querySelectorAll('.remote-caret');
     for (const element of elements) {
       const childElement = element.querySelector('div');
-      for (const [key, state] of allStates.entries()) {
+      for (const [_, state] of allStates.entries()) {
         if (state.user && state.user.name === childElement?.textContent) {
           try {
-            const imgUrl = await loadImage(
-              `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${state.user.pokemonid}.gif`
-            );
-            console.log(key);
+
+            const imgUrl = await loadImage(`/${state.user.pokemonid}.gif`);
+
             (
               element as HTMLElement
             ).style.background = `url(${imgUrl}) no-repeat`;
@@ -101,8 +100,8 @@ const TestSharedEditor = () => {
           console.log('정보등록!!!!');
           provider.awareness.setLocalStateField('user', {
             color: 'white',
-            name: res.nickName,
-            pokemonid: res.curPokeId,
+            name: res.nick_name,
+            pokemonid: res.cur_poke_id,
           });
           const allStates = provider.awareness.getStates();
           await updateCaretBackground(allStates);
@@ -157,7 +156,13 @@ const TestSharedEditor = () => {
       }
     }
   }, []);
-  return <div style={{boxSizing: 'border-box', padding:'5px'}} ref={editorContainerRef} className="editor-container"></div>;
+  return (
+    <div
+      style={{ boxSizing: 'border-box', padding: '5px' }}
+      ref={editorContainerRef}
+      className="editor-container"
+    ></div>
+  );
 };
 
 export default TestSharedEditor;

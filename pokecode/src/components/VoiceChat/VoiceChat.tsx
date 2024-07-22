@@ -24,13 +24,12 @@ const VoiceChat = ({ room = 1000 }) => {
       iceCandidates: RTCIceCandidate[];
     };
   }>({});
-  const { userNickname } = useSelector((state: RootState) => state.userinfo);
-  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
+  const { user } = useSelector((state: RootState) => state.userinfo);
 
   let myId: string | null = null;
 
   const roomIdElem = room;
-  const userIdElem = userNickname;
+  const userIdElem = user.nick_name;
 
   const startWebRTC = async () => {
     try {
@@ -230,11 +229,7 @@ const VoiceChat = ({ room = 1000 }) => {
             style={{ background: 'white', borderRadius: '50%' }}
             width={'50'}
             height={'50'}
-            src={
-              'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/' +
-              pokemonId +
-              '.svg'
-            }
+            src={'/dw/' + user.cur_poke_id + '.svg'}
             alt=""
           />
           <p
@@ -249,7 +244,7 @@ const VoiceChat = ({ room = 1000 }) => {
               whiteSpace: 'nowrap',
             }}
           >
-            {userNickname}
+            {user.nick_name}
           </p>
           <audio ref={localVideoRef} autoPlay className="local-video" />
           <button
@@ -285,11 +280,7 @@ const VoiceChat = ({ room = 1000 }) => {
               style={{ background: 'white', borderRadius: '50%' }}
               width={'50'}
               height={'50'}
-              src={
-                'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/' +
-                pokemonId +
-                '.svg'
-              }
+              src={'/dw/' + user.cur_poke_id + '.svg'}
               alt=""
             />
             <p

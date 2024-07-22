@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import styled from 'styled-components';
+import { setReturnCall } from '../../store/codeCallerReducer';
 
 const Terminal = () => {
   // ------- 타이핑 출력 start ---------
@@ -15,6 +16,11 @@ const Terminal = () => {
   const [isTypingPaused, setIsTypingPaused] = useState<boolean>(false);
   // ------- 타이핑 출력 end ---------
   const { returnCall } = useSelector((state: RootState) => state.codecaller);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setReturnCall(''));
+  }, []);
   useEffect(() => {
     // PDG 테스트 케이스 리턴 메세지를 받도록 수정
     setSequence('');
@@ -70,8 +76,7 @@ const Terminal = () => {
             padding: '8px',
           }}
         >
-          {' '}
-          Terminal{' '}
+          Terminal
         </p>
       </Header>
       <pre

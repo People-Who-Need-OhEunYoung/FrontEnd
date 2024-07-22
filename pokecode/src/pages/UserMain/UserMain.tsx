@@ -8,12 +8,7 @@ import { MainWrapper } from '../../components/MainWrapper';
 import poo from '../../assets/images/poo.png';
 import pokeball from '../../assets/images/poke-ball.png';
 
-import {
-  pokemonName,
-  getPooCount,
-  removePoo,
-  showPokemonBook,
-} from '../../utils/api/api';
+import { pokemonName, getPooCount, removePoo } from '../../utils/api/api';
 
 import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
@@ -25,11 +20,14 @@ const UserMain = () => {
   });
 
   const [pooset, setPooset] = useState<{ x: number; y: number }[]>([]);
-
   const [pokemonname, setPokemonname] = useState('');
-  const [pokemonExp, setPokemonExp] = useState(0);
-
-  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
+  const [isHover, setIsHover] = useState(false);
+  const [isHoverMath, setIsHoverMath] = useState(false);
+  const [isHoverImpl, setIsHoverImpl] = useState(false);
+  const [isHoverDp, setIsHoverDp] = useState(false);
+  const [isHoverData, setIsHoverData] = useState(false);
+  const [isHoverGraph, setIsHoverGraph] = useState(false);
+  const { user } = useSelector((state: RootState) => state.userinfo);
   const controls = useAnimation();
   const controlsPoo = useAnimation();
 
@@ -103,31 +101,9 @@ const UserMain = () => {
     }
   };
 
-  const fetchPokeBook = async () => {
-    try {
-      const res = await showPokemonBook();
-      const foundPokemon = res.book.find(
-        (poke: any) => poke.poke_id === pokemonId
-      );
-      if (foundPokemon) {
-        console.log(foundPokemon.poke_Exp);
-        setPokemonExp(foundPokemon.poke_Exp);
-      }
-      return res;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
   useEffect(() => {
-    fetchPokeBook().then((res) => {
-      console.log(res);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (pokemonId) pokemonnameSet(pokemonId);
-  }, [pokemonId]);
+    if (user.cur_poke_id) pokemonnameSet(user.cur_poke_id);
+  }, [user.cur_poke_id]);
 
   useEffect(() => {
     pooCount();
@@ -187,20 +163,149 @@ const UserMain = () => {
           >
             <Pokemon
               style={{ transform: 'scale(2.5)' }}
-              src={pokemonId == 0 ? pokeball : `/public/${pokemonId}.gif`}
+              src={
+                user.cur_poke_id == 0 ? pokeball : `/${user.cur_poke_id}.gif`
+              }
             ></Pokemon>
           </motion.div>
           <PokeNameWrap>
-            <PokeName>{pokemonId == 0 ? 'error' : pokemonname}</PokeName>
+            <PokeName>{user.cur_poke_id == 0 ? 'error' : pokemonname}</PokeName>
           </PokeNameWrap>
-          <LevelWrap>
-            <Level>
-              LV {Math.floor(pokemonExp / 100) + 1}
-              <br />
-              <StyledBase>
-                <StyledRange setprogress={pokemonExp % 100} />
-              </StyledBase>
-            </Level>
+          <LevelWrap
+            onMouseEnter={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}
+          >
+            {isHover ? (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, left: '-100%' }}
+                  transition={{
+                    duration: 0.5,
+                  }}
+                  animate={{ opacity: 1, left: '0' }}
+                  exit={{ opacity: 0, left: '-100%' }}
+                  style={{ position: 'relative' }}
+                >
+                  <Level>
+                    수학 : LV {Math.floor(user.math_exp / 100) + 1}
+                    <br />
+                    <StyledBase
+                      onMouseEnter={() => setIsHoverMath(true)}
+                      onMouseLeave={() => setIsHoverMath(false)}
+                    >
+                      <StyledRange setprogress={user.math_exp % 100} />
+                      {isHoverMath ? (
+                        <HoverModal setprogress={user.math_exp % 100}>
+                          {user.math_exp % 100}
+                        </HoverModal>
+                      ) : null}
+                    </StyledBase>
+                  </Level>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, left: '-100%' }}
+                  transition={{
+                    duration: 0.6,
+                  }}
+                  animate={{ opacity: 1, left: '0' }}
+                  exit={{ opacity: 0, left: '-100%' }}
+                  style={{ position: 'relative' }}
+                >
+                  <Level>
+                    구현 : LV {Math.floor(user.impl_exp / 100) + 1}
+                    <br />
+                    <StyledBase
+                      onMouseEnter={() => setIsHoverImpl(true)}
+                      onMouseLeave={() => setIsHoverImpl(false)}
+                    >
+                      <StyledRange setprogress={user.impl_exp % 100} />
+                      {isHoverImpl ? (
+                        <HoverModal setprogress={user.impl_exp % 100}>
+                          {user.impl_exp % 100}
+                        </HoverModal>
+                      ) : null}
+                    </StyledBase>
+                  </Level>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, left: '-100%' }}
+                  transition={{
+                    duration: 0.7,
+                  }}
+                  animate={{ opacity: 1, left: '0' }}
+                  exit={{ opacity: 0, left: '-100%' }}
+                  style={{ position: 'relative' }}
+                >
+                  <Level>
+                    DP : LV {Math.floor(user.dp_exp / 100) + 1}
+                    <br />
+                    <StyledBase
+                      onMouseEnter={() => setIsHoverDp(true)}
+                      onMouseLeave={() => setIsHoverDp(false)}
+                    >
+                      <StyledRange setprogress={user.dp_exp % 100} />
+                      {isHoverDp ? (
+                        <HoverModal setprogress={user.dp_exp % 100}>
+                          {user.dp_exp % 100}
+                        </HoverModal>
+                      ) : null}
+                    </StyledBase>
+                  </Level>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, left: '-100%' }}
+                  transition={{
+                    duration: 0.9,
+                  }}
+                  animate={{ opacity: 1, left: '0' }}
+                  exit={{ opacity: 0, left: '-100%' }}
+                  style={{ position: 'relative' }}
+                >
+                  <Level>
+                    자료 : LV {Math.floor(user.data_exp / 100) + 1}
+                    <br />
+                    <StyledBase
+                      onMouseEnter={() => setIsHoverData(true)}
+                      onMouseLeave={() => setIsHoverData(false)}
+                    >
+                      <StyledRange setprogress={user.data_exp % 100} />
+                      {isHoverData ? (
+                        <HoverModal setprogress={user.data_exp % 100}>
+                          {user.data_exp % 100}
+                        </HoverModal>
+                      ) : null}
+                    </StyledBase>
+                  </Level>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, left: '-100%' }}
+                  transition={{
+                    duration: 1,
+                  }}
+                  animate={{ opacity: 1, left: '0' }}
+                  exit={{ opacity: 0, left: '-100%' }}
+                  style={{ position: 'relative' }}
+                >
+                  <Level>
+                    그래프 : LV {Math.floor(user.graph_exp / 100) + 1}
+                    <br />
+                    <StyledBase
+                      onMouseEnter={() => setIsHoverGraph(true)}
+                      onMouseLeave={() => setIsHoverGraph(false)}
+                    >
+                      <StyledRange setprogress={user.graph_exp % 100} />
+                      {isHoverGraph ? (
+                        <HoverModal setprogress={user.graph_exp % 100}>
+                          {user.graph_exp % 100}
+                        </HoverModal>
+                      ) : null}
+                    </StyledBase>
+                  </Level>
+                </motion.div>
+              </>
+            ) : (
+              <p style={{ textAlign: 'center' }}>현재 능력치</p>
+            )}
           </LevelWrap>
           <ButtonWrap>
             <Button
@@ -249,6 +354,7 @@ const Home = styled.div`
   margin: 2em auto;
 `;
 export const Pokemon = styled.img`
+  transform: scale(2);
   -webkit-user-drag: none;
   -khtml-user-drag: none;
   -webkit-user-drag: none;
@@ -337,7 +443,9 @@ const LevelWrap = styled.div`
 
 const Level = styled.div`
   border-radius: 30px;
-  text-align: center;
+  font-size: 0.8rem;
+  text-align: left;
+  margin-left: 10%;
 `;
 
 const ButtonWrap = styled.div`
@@ -382,8 +490,7 @@ const StyledBase = styled.div`
   height: 10px;
   border: 3px solid;
   border-radius: 10px;
-  margin-right: 15%;
-  margin-left: 15%;
+  margin: 10px 10% 10px 0;
 `;
 
 const StyledRange = styled.div<{ setprogress: number }>`
@@ -391,5 +498,36 @@ const StyledRange = styled.div<{ setprogress: number }>`
   height: 10px;
   border-radius: 10px;
   background: linear-gradient(to right, #38bdf8, #6366f1);
+`;
+
+const HoverModal = styled.p<{ setprogress: number }>`
+  text-align: center;
+  margin: 0;
+  font-family: 'Noto Sans KR', 'Arsenal SC', sans-serif;
+  font-optical-sizing: auto;
+  position: absolute;
+  width: 40px;
+  left: ${(props) => `${props.setprogress}%`};
+  top: 100%;
+  border-radius: 8px;
+  background: #38bdf8;
+  color: #fff;
+  font-size: 10px;
+  display: block;
+  z-index: 1000;
+  border: none;
+  &::after {
+    position: absolute;
+    bottom: 100%;
+    width: 0;
+    height: 0;
+    margin-left: -10px;
+    border: solid transparent;
+    border-color: rgba(51, 51, 51, 0);
+    border-bottom-color: #38bdf8;
+    border-width: 5px;
+    pointer-events: none;
+    content: '';
+  }
 `;
 export default UserMain;

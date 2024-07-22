@@ -80,6 +80,8 @@ const CodeAIWardBalloon: React.FC<WordBalwrapProps> = ({
           whiteSpace: 'pre-wrap',
           maxHeight: '200px',
           overflow: 'scroll',
+          userSelect: 'all',
+          textAlign: 'left',
         }}
       >
         {returnAiCall}

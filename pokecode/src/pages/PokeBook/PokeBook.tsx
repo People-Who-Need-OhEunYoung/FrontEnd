@@ -33,120 +33,120 @@ import {Bar} from 'react-chartjs-2'
 const PokeBook = () => {
   // const dispatch = useDispatch();
 
-  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
-  const [curPokeId, setCurPokeId] = useState<number>(pokemonId);
-  // const [selectedPokemon, setSelectedPokemon] = useState<boolean>(true);
+  const [allPokemons, setAllPokemons] = useState<PokemonType[]>([]);
+  const [gatchPokemons, setGatchPpokemons] = useState<PokemonType[]>([]);
+  const { user } = useSelector((state: RootState) => state.userinfo);
+  const [curPokeId, setCurPokeId] = useState<number>(user.cur_poke_id);
+  const [selectedPokemon, setSelectedPokemon] = useState<boolean>(true);
+
   const [visibleList, setVisibleList] = useState<string>('Stats_listt');
   // const [page, setPage] = useState<number>(1);
   // const pokemonGifRef = useRef<HTMLImageElement>(null);
   const [activeButton, setActiveButton] = useState<string>('Stats_list');
   const [pokemonname, setPokemonname] = useState('');
 
-  // const itemsPerPage = 50;
+  const itemsPerPage = 50;
 
-  // const handleUpdate = async (poke_id: number) => {
-  //   let 결과 = await updateMyPokemon(poke_id);
-  //   if (결과.result == 'success') {
-  //     dispatch(setPokemonId(poke_id));
-  //   }
-  // };
+  const handleUpdate = async (poke_id: number) => {
+    let 결과 = await updateMyPokemon(poke_id);
+    if (결과.result == 'success') {
+      dispatch(setPokemonId(poke_id));
+    }
+  };
 
-  // const fetchPokeBook = async () => {
-  //   try {
-  //     const res = await showPokemonBook();
-  //     return res;
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   }
-  // };
+  const fetchPokeBook = async () => {
+    try {
+      const res = await showPokemonBook();
+      return res;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
-  // const renderPageButtons = () => {
-  //   const totalItems =
-  //     visibleList === 'Stats_list' ? allPokemons.length : gatchPokemons.length;
-  //   const pageCount = Math.ceil(totalItems / itemsPerPage);
-  //   const buttons = [];
+  const renderPageButtons = () => {
+    const totalItems =
+      visibleList === 'Stats_list' ? allPokemons.length : gatchPokemons.length;
+    const pageCount = Math.ceil(totalItems / itemsPerPage);
+    const buttons = [];
 
-  //   for (let i = 1; i <= pageCount; i++) {
-  //     buttons.push(
-  //       <PageButton key={i} onClick={() => setPage(i)} active={i === page}>
-  //         {i}
-  //       </PageButton>
-  //     );
-  //   }
-  //   return buttons;
-  // };
+    for (let i = 1; i <= pageCount; i++) {
+      buttons.push(
+        <PageButton key={i} onClick={() => setPage(i)} active={i === page}>
+          {i}
+        </PageButton>
+      );
+    }
 
-  // const getPagedItems = (items: PokemonType[], page: number) => {
-  //   const start = (page - 1) * itemsPerPage;
-  //   const end = start + itemsPerPage;
-  //   return items.slice(start, end);
-  // };
+    return buttons;
+  };
 
-  // const pokemonnameSet = async (name: number) => {
-  //   if (name === 0) {
-  //     setPokemonname('???');
-  //   } else {
-  //     setPokemonname(await pokemonName(name));
-  //   }
-  // };
+  const getPagedItems = (items: PokemonType[], page: number) => {
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return items.slice(start, end);
+  };
 
-  // const displayedItems =
-  //   visibleList === 'Stats_list'
-  //     ? getPagedItems(allPokemons, page)
-  //     : getPagedItems(gatchPokemons, page);
+  const pokemonnameSet = async (name: number) => {
+    if (name === 0) {
+      setPokemonname('???');
+    } else {
+      setPokemonname(await pokemonName(name));
+    }
+  };
 
-  // useEffect(() => {
-  //   setCurPokeId(pokemonId);
-  //   //pokemonnameSet(pokemonId);
-  //   //console.log(pokemonname);
-  // }, [pokemonId]);
+  const displayedItems =
+    visibleList === 'Stats_list'
+      ? getPagedItems(allPokemons, page)
+      : getPagedItems(gatchPokemons, page);
 
-  // const setFilter = () => {
-  //   if (pokemonGifRef.current) {
-  //     if (!selectedPokemon) {
-  //       pokemonGifRef.current.style.filter = 'brightness(0.01)';
-  //       pokemonnameSet(0);
-  //     } else {
-  //       pokemonGifRef.current.style.filter = '';
-  //       pokemonnameSet(curPokeId);
-  //     }
-  //   }
-  // };
+  useEffect(() => {
+    setCurPokeId(user.cur_poke_id);
+    //pokemonnameSet(pokemonId);
+    //console.log(pokemonname);
+  }, [user.cur_poke_id]);
 
-  // useEffect(() => {
-  //   fetchPokeBook().then((res) => {
-  //     const ParseData = res.book;
-  //     if (ParseData.length > 0) {
-  //       const defaultPokemon = Array.from({ length: 649 }, (_, index) => ({
-  //         poke_id: index + 1,
-  //         poke_Lv: 0,
-  //         poke_Exp: 0,
-  //       }));
-  //       const GatchaPokemon = [];
-  //       for (let i = 0; i < ParseData.length; i++) {
-  //         const item = ParseData[i];
-  //         defaultPokemon[item.poke_id - 1] = item; // ID를 인덱스에 맞게 설정
-  //         GatchaPokemon.push(item);
-  //       }
-  //       setAllPokemons(defaultPokemon);
-  //       setGatchPpokemons(GatchaPokemon);
-  //     } else {
-  //       setAllPokemons([]);
-  //       setGatchPpokemons([]);
-  //     }
-  //   });
-  // }, []);
+  const setFilter = () => {
+    if (pokemonGifRef.current) {
+      if (!selectedPokemon) {
+        pokemonGifRef.current.style.filter = 'brightness(0.01)';
+        pokemonnameSet(0);
+      } else {
+        pokemonGifRef.current.style.filter = '';
+        pokemonnameSet(curPokeId);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchPokeBook().then((res) => {
+      const ParseData = res.book;
+      if (ParseData.length > 0) {
+        const defaultPokemon = Array.from({ length: 649 }, (_, index) => ({
+          poke_id: index + 1,
+          poke_Lv: 0,
+          poke_Exp: 0,
+        }));
+        const GatchaPokemon = [];
+        for (let i = 0; i < ParseData.length; i++) {
+          const item = ParseData[i];
+          defaultPokemon[item.poke_id - 1] = item; // ID를 인덱스에 맞게 설정
+          GatchaPokemon.push(item);
+        }
+        setAllPokemons(defaultPokemon);
+        setGatchPpokemons(GatchaPokemon);
+      } else {
+        setAllPokemons([]);
+        setGatchPpokemons([]);
+      }
+    });
+  }, []);
 
   return (
     <MainWrapper>
       <PokeMonView>
         {/* <PokemonGif
           ref={pokemonGifRef}
-          src={
-            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/' +
-            curPokeId +
-            '.gif'
-          }
+          src={'/' + curPokeId + '.gif'}
           onLoad={() => {
             setFilter();
           }}
@@ -243,8 +243,8 @@ const PokeBook = () => {
                         <Pokemon
                           src={
                             item.poke_Lv === 0
-                              ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
-                              : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${item.poke_id}.svg`
+                              ? '/poke-ball.png'
+                              : `/dw/${item.poke_id}.svg`
                           }
                         />
                       </div>
@@ -264,7 +264,41 @@ const PokeBook = () => {
                   );
                 })()}
               </Item>
+
             ))} */}
+          {visibleList === 'water_list' &&
+            gatchPokemons.map((item, index) => (
+              <Item
+                key={index}
+                onClick={() => {
+                  setCurPokeId(item.poke_id);
+                  setSelectedPokemon(true);
+                  handleUpdate(item.poke_id);
+                }}
+              >
+                {(() => {
+                  return (
+                    <BookText>
+                      <div>
+                        <p style={{ padding: '10px' }}>No. {item.poke_id}</p>
+                        <Pokemon
+                          src={
+                            item.poke_Lv === 0
+                              ? '/poke-ball.png'
+                              : `/dw/${item.poke_id}.svg`
+                          }
+                        />
+                      </div>
+                      <div>
+                        <p>Level: {item.poke_Lv}</p>
+                        <p>Exp: {item.poke_Exp}</p>
+                      </div>
+                    </BookText>
+                  );
+                })()}
+              </Item>
+            ))}
+
         </ListView>
         {/* <PageBtnGroup>{renderPageButtons()}</PageBtnGroup> */}
       </ListWrap>

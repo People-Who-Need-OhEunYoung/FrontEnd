@@ -33,7 +33,6 @@ const Login = () => {
         console.log(data);
         if (data.result == 'success') {
           alert('로그인에 성공했습니다.');
-          localStorage.setItem('loginuserid', id);
           localStorage.setItem('token', data.token);
 
           navigate('/usermain');
