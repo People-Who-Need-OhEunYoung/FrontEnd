@@ -84,7 +84,6 @@ const userInfo = async () => {
       localStorage.setItem('nick_name', data.user[0].nick_name);
       localStorage.setItem('user_exp', data.user[0].user_exp);
       localStorage.setItem('user_level', data.user[0].user_level);
-
       return data.user[0];
     })
     .catch((error) => {
