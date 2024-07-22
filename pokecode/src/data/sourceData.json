@@ -1,22 +1,22 @@
 [
   {
-    "label": "자료구조",
+    "label": "구현",
     "value": 50
   },
   {
-    "label": "수학",
+    "label": "그래프",
     "value": 45
   },
   {
-    "label": "구현",
-    "value": 43
+    "label": "자료구조",
+    "value": 40
   },
   {
-    "label": "그래프",
+    "label": "수학",
     "value": 53
   },
   {
     "label": "DP",
-    "value": 43
+    "value": 36
   }
 ]

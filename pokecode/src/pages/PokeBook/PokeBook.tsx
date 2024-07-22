@@ -1,60 +1,71 @@
 import styled from 'styled-components';
 import { MainWrapper } from '../../components/MainWrapper';
-// import {
-//   showPokemonBook,
-//   pokemonName,
-//   updateMyPokemon,
-// } from '../../utils/api/api';
-import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import background from '../../assets/images/background2.jpg';
+import background from '../../assets/images/ChatBG4.jpg';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  defaults,
+} from 'chart.js';
+
+import sourceData from '../../data/sourceData.json';
+import { Bar, Radar } from 'react-chartjs-2';
 import waterIcon from '../../assets/images/물.png';
 import fireIcon from '../../assets/images/불.png';
 import grassIcon from '../../assets/images/풀.png';
 import electricIcon from '../../assets/images/전기.png';
 import psychicIcon from '../../assets/images/에스퍼.png';
-// import { useDispatch } from 'react-redux';
-// import { setPokemonId } from '../../store/userInfo';
-import {Chart as ChartJS} from 'chart.js/auto';
-import {Bar} from 'react-chartjs-2'
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { pokemonName, showPokemonBook } from '../../utils/api/api';
+import { setPokemonId } from '../../store/userInfo';
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  RadialLinearScale,
+  PointElement,
+  LineElement
+);
 
-
-
-// const dispatch = useDispatch();
-
-// type PokemonType = {
-//   poke_id: number;
-//   poke_Lv: number;
-//   poke_Exp: number;
-// };
+defaults.maintainAspectRatio = false;
+defaults.responsive = true;
 
 const PokeBook = () => {
-  // const dispatch = useDispatch();
+  const chartRef = useRef<ChartJS<'bar'> | null>(null);
+  const [type, setType] = useState<number>(1);
+  const [sortedPoketmon, setSortedPoketmon] = useState<any[]>([]);
+  const [allPoketmon, setAllPoketmon] = useState<any[]>([]);
+  const [ownPoketmon, setOwnPoketmon] = useState<any[]>([]);
 
-  const [allPokemons, setAllPokemons] = useState<PokemonType[]>([]);
-  const [gatchPokemons, setGatchPpokemons] = useState<PokemonType[]>([]);
+  const iconArr = [fireIcon, waterIcon, grassIcon, electricIcon, psychicIcon];
+  const typeArr = ['구현', '그래프', '자료구조', '수학', 'DP'];
   const { user } = useSelector((state: RootState) => state.userinfo);
-  const [curPokeId, setCurPokeId] = useState<number>(user.cur_poke_id);
-  const [selectedPokemon, setSelectedPokemon] = useState<boolean>(true);
+  const [curpokegif, setCurpokegif] = useState<string>(
+    `/${user.cur_poke_id}.gif`
+  );
 
-  const [visibleList, setVisibleList] = useState<string>('Stats_listt');
-  // const [page, setPage] = useState<number>(1);
-  // const pokemonGifRef = useRef<HTMLImageElement>(null);
-  const [activeButton, setActiveButton] = useState<string>('Stats_list');
-  const [pokemonname, setPokemonname] = useState('');
+  const [selectedPokemon, setSelectedPokemon] = useState<number>(
+    user.cur_poke_id
+  );
+  const [pokemonname, setPokemonname] = useState<string>();
+  const [curType, setCurType] = useState<number>(0);
 
-  const itemsPerPage = 50;
+  const dispatch = useDispatch();
 
-  const handleUpdate = async (poke_id: number) => {
-    let 결과 = await updateMyPokemon(poke_id);
-    if (결과.result == 'success') {
-      dispatch(setPokemonId(poke_id));
-    }
-  };
-
-  const fetchPokeBook = async () => {
+  const fetchPokemonData = async () => {
     try {
       const res = await showPokemonBook();
       return res;
@@ -63,362 +74,415 @@ const PokeBook = () => {
     }
   };
 
-  const renderPageButtons = () => {
-    const totalItems =
-      visibleList === 'Stats_list' ? allPokemons.length : gatchPokemons.length;
-    const pageCount = Math.ceil(totalItems / itemsPerPage);
-    const buttons = [];
-
-    for (let i = 1; i <= pageCount; i++) {
-      buttons.push(
-        <PageButton key={i} onClick={() => setPage(i)} active={i === page}>
-          {i}
-        </PageButton>
-      );
-    }
-
-    return buttons;
-  };
-
-  const getPagedItems = (items: PokemonType[], page: number) => {
-    const start = (page - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    return items.slice(start, end);
-  };
-
   const pokemonnameSet = async (name: number) => {
-    if (name === 0) {
-      setPokemonname('???');
-    } else {
-      setPokemonname(await pokemonName(name));
-    }
+    setPokemonname(await pokemonName(name));
   };
 
-  const displayedItems =
-    visibleList === 'Stats_list'
-      ? getPagedItems(allPokemons, page)
-      : getPagedItems(gatchPokemons, page);
-
+  //모든 포켓몬은 한번만 불러옴.
   useEffect(() => {
-    setCurPokeId(user.cur_poke_id);
-    //pokemonnameSet(pokemonId);
-    //console.log(pokemonname);
-  }, [user.cur_poke_id]);
-
-  const setFilter = () => {
-    if (pokemonGifRef.current) {
-      if (!selectedPokemon) {
-        pokemonGifRef.current.style.filter = 'brightness(0.01)';
-        pokemonnameSet(0);
-      } else {
-        pokemonGifRef.current.style.filter = '';
-        pokemonnameSet(curPokeId);
-      }
-    }
-  };
-
-  useEffect(() => {
-    fetchPokeBook().then((res) => {
-      const ParseData = res.book;
-      if (ParseData.length > 0) {
-        const defaultPokemon = Array.from({ length: 649 }, (_, index) => ({
-          poke_id: index + 1,
-          poke_Lv: 0,
-          poke_Exp: 0,
-        }));
-        const GatchaPokemon = [];
-        for (let i = 0; i < ParseData.length; i++) {
-          const item = ParseData[i];
-          defaultPokemon[item.poke_id - 1] = item; // ID를 인덱스에 맞게 설정
-          GatchaPokemon.push(item);
-        }
-        setAllPokemons(defaultPokemon);
-        setGatchPpokemons(GatchaPokemon);
-      } else {
-        setAllPokemons([]);
-        setGatchPpokemons([]);
+    fetchPokemonData().then((res) => {
+      setAllPoketmon(res.allPoketmon);
+      setOwnPoketmon(res.book);
+      const currentPokemon = res.book.find(
+        (pokemon: any) => pokemon.poke_id === user.cur_poke_id
+      );
+      if (currentPokemon) {
+         const typeIndex = typeArr.indexOf(currentPokemon.poke_type);
+         if (typeIndex !== -1) {
+           setType(typeIndex + 1); // setType은 1-based index 사용
+           setCurType(typeIndex + 1);
+         }
       }
     });
+    pokemonnameSet(user.cur_poke_id);
   }, []);
+
+  //선택한 타입이 바뀔 때, 선택된 타입의 포켓몬 정렬
+  useEffect(() => {
+    const filteredPoketmon = allPoketmon.filter(
+      (pokemon: any) => pokemon.poke_type === typeArr[type - 1]
+    );
+    // poke_eval에 따라 오름차순으로 정렬
+    const sortedPoketmon = filteredPoketmon.sort(
+      (a: { poke_eval: number }, b: { poke_eval: number }) =>
+        a.poke_eval - b.poke_eval
+    );
+    console.log('sortedPoketmon', sortedPoketmon);
+    setSortedPoketmon(sortedPoketmon);
+  }, [type, allPoketmon]);
+
+  useEffect(() => {
+    const chart = chartRef.current;
+    if (chart && chart.ctx) {
+      const ctx = chart.ctx;
+      const gradient = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
+      gradient.addColorStop(0, '#6365f1a7');
+      gradient.addColorStop(0.5, '#38BDF8');
+      gradient.addColorStop(1, 'rgba(25, 28, 241, 0.5)');
+      chart.data.datasets[0].backgroundColor = gradient;
+      chart.update();
+    }
+  }, [type]);
+
+
+  const HandleChangePokemon = () => {
+    if (selectedPokemon) {
+      dispatch(setPokemonId(selectedPokemon));
+      console.log('selectedPokemon', selectedPokemon);
+    }
+  };
+
+  const isOwned = (pokemonId: number) =>
+    ownPoketmon.some((own) => own.poke_id === pokemonId);
 
   return (
     <MainWrapper>
-      <PokeMonView>
-        {/* <PokemonGif
-          ref={pokemonGifRef}
-          src={'/' + curPokeId + '.gif'}
-          onLoad={() => {
-            setFilter();
-          }}
-        ></PokemonGif> */}
-        <Bar
-          data={{
-            labels: ["A", "B", "C"],
-            datasets: [
-              {
-                label: 'Test',
-                data: [200, 300, 400],
-              },
-            ],
-          }}
-        />
-        <PokemonName>
-          {curPokeId}. {pokemonname}{' '}
-        </PokemonName>
-      </PokeMonView>
-      <ListWrap>
+      <MainContents>
         <ButtonGroup>
-          {/* <SelectBtn
-            active={activeButton === 'Stats_list'}
+          <TypeBtn
+            back_img={fireIcon}
             onClick={() => {
-              setVisibleList('Stats_list');
-              setActiveButton('Stats_list');
+              setType(1);
             }}
-            style={{height:'30px', padding:'0 31.2px'}}
-          >
-            전체
-          </SelectBtn> */}
-          <SelectBtn
-            active={activeButton === 'water_list'}
+          />
+          <TypeBtn
+            back_img={waterIcon}
             onClick={() => {
-              setVisibleList('water_list');
-              setActiveButton('water_list');
+              setType(2);
             }}
-          >
-            <Icon src={waterIcon}></Icon>
-          </SelectBtn>
-          <SelectBtn
-            active={activeButton === 'fire_list'}
+          />
+          <TypeBtn
+            back_img={grassIcon}
             onClick={() => {
-              setVisibleList('fire_list');
-              setActiveButton('fire_list');
+              setType(3);
             }}
-          >
-            <Icon src={fireIcon}></Icon>
-          </SelectBtn>
-          <SelectBtn
-            active={activeButton === 'grass_list'}
+          />
+          <TypeBtn
+            back_img={electricIcon}
             onClick={() => {
-              setVisibleList('grass_list');
-              setActiveButton('grass_list');
+              setType(4);
             }}
-          >
-            <Icon src={grassIcon}></Icon>
-          </SelectBtn>
-          <SelectBtn
-            active={activeButton === 'electronic_list'}
+          />
+          <TypeBtn
+            back_img={psychicIcon}
             onClick={() => {
-              setVisibleList('electronic_list');
-              setActiveButton('electronic_list');
+              setType(5);
             }}
-          >
-            <Icon src={electricIcon}></Icon>
-          </SelectBtn>
-          <SelectBtn
-            active={activeButton === 'psychic_list'}
-            onClick={() => {
-              setVisibleList('psychic_list');
-              setActiveButton('psychic_list');
-            }}
-          >
-            <Icon src={psychicIcon}></Icon>
-          </SelectBtn>
+          />
         </ButtonGroup>
-        <ListView>
-          {/* {visibleList === 'all_list' &&
-            displayedItems.map((item, index) => (
-              <Item
-                key={index}
-                onClick={() => {
-                  setCurPokeId(item.poke_id);
-                  setSelectedPokemon(item.poke_Lv !== 0);
-                  handleUpdate(item.poke_id);
+        <PokeMonViewWrap>
+          <Titled> 도감 정보 </Titled>
+          <PokeMonView>
+            <PokeMonInfoWrap>
+              <PokeMonType back_img={iconArr[curType - 1]}></PokeMonType>
+              <PokeMonName>{pokemonname}</PokeMonName>
+            </PokeMonInfoWrap>
+            <PokemonWrap>
+              <Pokemon src={curpokegif} />
+            </PokemonWrap>
+          </PokeMonView>
+          <CurPokeMonSelect
+            onClick={() => {
+              HandleChangePokemon();
+            }}
+          >
+            현재 포켓몬으로 설정
+          </CurPokeMonSelect>
+        </PokeMonViewWrap>
+        <Contents>
+          <ExpInfoWrap>
+            <RestExp>진화까지 남은 경험치 - 000 </RestExp>
+            <ExpBar>
+              <Bar
+                ref={chartRef}
+                data={{
+                  labels: [sourceData[type - 1].label], // 첫 번째 인덱스의 라벨
+                  datasets: [
+                    {
+                      label: sourceData[type - 1].label, // 첫 번째 인덱스의 라벨
+                      data: [sourceData[type - 1].value], // 첫 번째 인덱스의 값
+                      borderColor: '#000000', // 선 색
+                      borderRadius: 5,
+                    },
+                  ],
                 }}
-              >
-                {(() => {
-                  return (
-                    <BookText>
-                      <div>
-                        <p style={{ padding: '20px 0' }}>No. {item.poke_id}</p>
-                        <Pokemon
-                          src={
-                            item.poke_Lv === 0
-                              ? '/poke-ball.png'
-                              : `/dw/${item.poke_id}.svg`
-                          }
-                        />
-                      </div>
-                      <div>
-                        {item.poke_Lv > 0 ? (
-                          <p>Level: {item.poke_Lv}</p>
-                        ) : (
-                          <p> ??? </p>
-                        )}
-                        {item.poke_Lv > 0 ? (
-                          <p>Exp: {item.poke_Exp}</p>
-                        ) : (
-                          <p> </p>
-                        )}
-                      </div>
-                    </BookText>
-                  );
-                })()}
-              </Item>
-
-            ))} */}
-          {visibleList === 'water_list' &&
-            gatchPokemons.map((item, index) => (
-              <Item
-                key={index}
-                onClick={() => {
-                  setCurPokeId(item.poke_id);
-                  setSelectedPokemon(true);
-                  handleUpdate(item.poke_id);
+                options={{
+                  indexAxis: 'y',
+                  scales: {
+                    x: {
+                      min: 0,
+                      max: 120,
+                      ticks: {
+                        color: '#ffffff', // x축 눈금 색상
+                        display: true, // x축 눈금 숨기기
+                      },
+                      grid: {
+                        display: true, // x축 그리드 숨기기
+                      },
+                    },
+                    y: {
+                      ticks: {
+                        display: false, // y축 눈금 숨기기
+                      },
+                      grid: {
+                        display: false, // y축 그리드 숨기기
+                      },
+                    },
+                  },
+                  plugins: {
+                    legend: {
+                      display: false, // 범례 숨기기
+                    },
+                  },
                 }}
-              >
-                {(() => {
-                  return (
-                    <BookText>
-                      <div>
-                        <p style={{ padding: '10px' }}>No. {item.poke_id}</p>
-                        <Pokemon
-                          src={
-                            item.poke_Lv === 0
-                              ? '/poke-ball.png'
-                              : `/dw/${item.poke_id}.svg`
-                          }
-                        />
-                      </div>
-                      <div>
-                        <p>Level: {item.poke_Lv}</p>
-                        <p>Exp: {item.poke_Exp}</p>
-                      </div>
-                    </BookText>
-                  );
-                })()}
-              </Item>
+              />
+            </ExpBar>
+          </ExpInfoWrap>
+          <EvalTree>
+            {sortedPoketmon.slice(0, 3).map((pokemon) => (
+              <PokemonCard
+                key={pokemon.idx}
+                back_img={pokemon.poke_profile_img}
+                isOwned={isOwned(pokemon.idx)}
+                onClick={
+                  isOwned(pokemon.idx)
+                    ? () => {
+                        setCurpokegif(pokemon.poke_img);
+                        setSelectedPokemon(pokemon.idx);
+                        setPokemonname(pokemon.poke_name);
+                        setCurType(type);
+                      }
+                    : undefined
+                }
+              />
             ))}
-
-        </ListView>
-        {/* <PageBtnGroup>{renderPageButtons()}</PageBtnGroup> */}
-      </ListWrap>
+            <PokemonLegendTree>
+              {sortedPoketmon.slice(3, 6).map((pokemon) => (
+                <PokemonCard
+                  key={pokemon.idx}
+                  back_img={pokemon.poke_profile_img}
+                  isOwned={isOwned(pokemon.idx)}
+                  onClick={
+                    isOwned(pokemon.idx)
+                      ? () => {
+                          setCurpokegif(pokemon.poke_img);
+                          setSelectedPokemon(pokemon.idx);
+                          setPokemonname(pokemon.poke_name);
+                        }
+                      : undefined
+                  }
+                />
+              ))}
+            </PokemonLegendTree>
+          </EvalTree>
+        </Contents>
+        <GraphWrap>
+          <RaderGraph>
+            <Radar
+              data={{
+                labels: sourceData.map((data) => data.label),
+                datasets: [
+                  {
+                    label: 'Count',
+                    data: sourceData.map((data) => data.value),
+                    fill: true,
+                    backgroundColor: 'rgba(47, 50, 255, 0.2)', // 배경색
+                    borderColor: '#38BDF8 ', // 선 색
+                  },
+                ],
+              }}
+              options={{
+                scales: {
+                  r: {
+                    angleLines: {
+                      color: '#b9b9b9', // 방사형 각도선 색상
+                    },
+                    grid: {
+                      color: '#b9b9b9', // 방사형 그리드선 색상
+                    },
+                    pointLabels: {
+                      color: '#f5f5f5', // 라벨 폰트 색상
+                      font: {
+                        size: 16, // 라벨 폰트 사이즈
+                        weight: 'bold',
+                      },
+                    },
+                    min: 0, // 최소값
+                    ticks: {
+                      color: '#ffffff', // 눈금 폰트 색상
+                      backdropColor: 'transparent',
+                      font: {
+                        size: 14, // 눈금 폰트 사이즈
+                      },
+                      stepSize: 10, // 눈금 단위
+                    },
+                  },
+                },
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+              }}
+            />
+          </RaderGraph>
+          <AlertBadge>DP 문제에 더 분발해보세요!! </AlertBadge>
+          <BarGraph>
+            <Bar
+              data={{
+                labels: sourceData.map((data) => data.label),
+                datasets: [
+                  {
+                    label: 'Count',
+                    data: sourceData.map((data) => data.value),
+                    borderColor: '#6366F1', // 선 색
+                    backgroundColor: '#38bff8ce ', // 막대 배경색
+                    borderRadius: 7,
+                  },
+                ],
+              }}
+              options={{
+                indexAxis: 'y',
+                scales: {
+                  x: {
+                    ticks: {
+                      color: '#ffffff', // x축 눈금 색상
+                      font: {
+                        size: 14, // x축 눈금 폰트 사이즈
+                      },
+                    },
+                  },
+                  y: {
+                    ticks: {
+                      color: '#ffffff', // y축 눈금 색상
+                      font: {
+                        size: 14, // y축 눈금 폰트 사이즈
+                      },
+                    },
+                  },
+                },
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+              }}
+            />
+          </BarGraph>
+        </GraphWrap>
+      </MainContents>
     </MainWrapper>
   );
 };
 
-const PokemonName = styled.div`
-  position: absolute;
-  background-color: #1e293b;
-  font-size: 1.4rem;
-  font-weight: bold;
-  width: 50%;
-  height: 8%;
-  text-align: center;
-  line-height: 1.8;
-  border-radius: 10px;
-  left: 25%;
-  color: #cbd5e1;
-  bottom: 5%;
+const MainContents = styled.div`
+  width: 100%;
+  height: 90%;
+  display: flex;
+  align-items: center;
 `;
 
-const Icon = styled.img`
-  width: 35px;
-  box-sizing: border-box;
-  padding-top: 5px;
-`;
-
-const BookText = styled.div`
-  color: #cbd5e1;
-  font-size: 1rem;
-  font-weight: bold;
-`;
-
-const PageButton = styled.button<{ active: boolean }>`
-  width: 30px;
-  margin-right: 10px;
-  border-bottom: ${({ active }) =>
-    active ? '2px solid #ff79c6' : 'transparent'};
-  color: ${({ active }) => (active ? '#50fa7b' : '#cbd5e1')};
-  background-color: transparent;
-
-  font-size: 1rem;
-  border: none;
-`;
-
+//타입 선택 그룹
 const ButtonGroup = styled.div`
-  border-radius: 10px;
-`;
-
-const PageBtnGroup = styled.div`
-  margin: 1.5%;
-  position: absolute;
-  left: 10%;
-`;
-
-const SelectBtn = styled.button<{ active: boolean }>`
-  padding: 0px 31.2px;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  font-size: 1.1rem;
-  line-height: 1.75;
-  text-transform: uppercase;
-  transition: background-color 0.3s;
-  background-color: #1e293b;
-  border-bottom: ${({ active }) =>
-    active ? '2px solid #38BDF8' : '2px solid #1E293B'};
-  background-color: ${({ active }) => (active ? '#1E293B' : '#38455a9b')};
-  color: ${({ active }) => (active ? '#38BDF8' : '#8ea5af')};
-`;
-
-const PokeMonView = styled.div`
-  width: 30%;
+  width: 8%;
   height: 70%;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  justify-content: center;
+  justify-items: center;
+`;
+
+//어떤 타입 선택할건지?
+const TypeBtn = styled.button<{ back_img: string }>`
+  width: 60%;
+  margin: 15px;
+  border-radius: 10px;
+  background: ${(props) => `url(${props.back_img}) no-repeat`};
+  background-size: 100% 100%;
   text-align: center;
+  border: 2px solid #111826;
+  &:hover {
+    border: 2px solid white;
+  }
+  &:focus {
+    border: 2px solid white;
+    box-shadow: 0 0 10px 5px white;
+  }
+`;
+
+//현재 포켓몬이 보이는 창
+const PokeMonViewWrap = styled.div`
+  width: 20%;
+  height: 100%;
   box-sizing: border-box;
-  border-radius: 30px 20px;
-  background: url(${background}) no-repeat;
-  background-size: cover;
-  overflow: hidden;
-  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 `;
 
-const PokemonGif = styled.img`
-  transform: scale(0.5);
-`;
-
-const Item = styled.button`
-  padding: 15px;
-  box-sizing: border-box;
+//도감 정보
+const Titled = styled.div`
+  width: 80%;
+  background-color: #32405640;
+  height: 50px;
+  color: #d3dde8;
+  text-align: center;
   display: flex;
   justify-content: center;
-  margin: 7%;
-  background-color: #97b1db2b;
-  border: none;
+  align-items: center;
+  margin-bottom: 20%;
   border-radius: 10px;
-  cursor: pointer;
+  font-size: 1.3rem;
+  font-weight: bold;
 `;
 
-const ListWrap = styled.div`
-  width: 50%;
-  height: 80%;
-  margin-left: 10px;
+//포켓몬 정보
+const PokeMonView = styled.div`
+  width: 80%;
+  height: 55%;
+  background-color: #324056;
+  border-radius: 15px;
+  border: 2px solid transparent;
   position: relative;
+  background: url(${background}) no-repeat;
+  background-size: cover;
 `;
 
-const ListView = styled.div`
-  background-color: #1e293b;
-  height: 87%;
-  overflow-y: auto;
-  font-size: 1.2rem;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-auto-rows: 260px;
+//위에 타입 + 이름  wrap
+const PokeMonInfoWrap = styled.div`
+  width: 100%;
+  height: 50px;
+  background-color: #324056;
+  display: flex;
+  align-items: center;
+  border-radius: 10px 10px 0 0;
 `;
 
+//포켓몬 타입 이미지
+const PokeMonType = styled.div<{ back_img: string }>`
+  width: 50px;
+  height: 50px;
+  background: ${(props) => `url(${props.back_img}) no-repeat`};
+  background-size: 100% 100%;
+  text-align: center;
+  border-radius: 5px;
+`;
+
+//포켓몬 이름
+const PokeMonName = styled.p`
+  color: #ffffff;
+  margin: auto;
+`;
+
+const PokemonWrap = styled.div`
+  transform: translateX(-50%);
+  position: absolute;
+  bottom: 35%;
+  left: 50%;
+`;
+
+//포켓몬 이미지
 export const Pokemon = styled.img`
   -webkit-user-drag: none;
   -khtml-user-drag: none;
@@ -429,10 +493,104 @@ export const Pokemon = styled.img`
   -webkit-user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
-  //transform: scale(1.6);
-  /* border: 2px solid white; */
-  width: 40px;
-  margin-top: 20%;
+  transform: scale(2.5);
+`;
+
+//현재 포켓몬으로 설정 버튼
+const CurPokeMonSelect = styled.button`
+  width: 70%;
+  height: 40px;
+  margin: 6%;
+  background-color: #6365f163;
+  border: 2px solid #6366f1;
+  border-radius: 10px;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: bold;
+`;
+
+//포켓몬 도감 트리 보이는 창
+const Contents = styled.div`
+  width: 45%;
+  height: 90%;
+  background-color: #324056;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+`;
+
+//경험치 바 + 남은 경험치 텍스트 정보
+const ExpInfoWrap = styled.div`
+  width: 90%;
+  height: 15%;
+`;
+
+const RestExp = styled.p``;
+
+const ExpBar = styled.div`
+  width: 100%;
+  height: 60px;
+`;
+
+//경험치 트리창
+const EvalTree = styled.div`
+  width: 90%;
+  height: 75%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+`;
+
+const PokemonCard = styled.div<{ back_img: string; isOwned: boolean }>`
+  margin: 10px;
+  height: 120px;
+  border-radius: 20px;
+  background: ${(props) => `url(${props.back_img}) no-repeat center center`};
+  background-color: #2e2e2e75;
+  background-size: 60% 60%;
+  filter: ${(props) => (props.isOwned ? 'none' : 'brightness(0.01)')};
+`;
+
+const PokemonLegendTree = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+`;
+
+//그래프 정보
+const GraphWrap = styled.div`
+  width: 30%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+//레이더 그래프
+const RaderGraph = styled.div`
+  width: 90%;
+  height: 45%;
+`;
+
+//알람 정보
+const AlertBadge = styled.div`
+  width: 80%;
+  height: 30px;
+  margin: 3%;
+  border-radius: 10px;
+  background-color: #38bff840;
+  border: 3px solid #38bdf8;
+  text-align: center;
+  line-height: 30px;
+  font-weight: bold;
+`;
+
+//막대 그래프
+const BarGraph = styled.div`
+  width: 80%;
+  height: 45%;
 `;
 
 export default PokeBook;
