@@ -217,70 +217,78 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
     >
       {usersInfo !== null
         ? usersInfo.map((userOne, key) => (
-            <motion.div
-              drag
-              dragControls={dragControls}
-              animate={animationControls} // 애니메이션 컨트롤 적용
-              style={{
-                position: 'fixed',
-                display: 'inline-block',
-                zIndex: 9999,
-                bottom: '90px',
-                left: `${30 + 10 * key}%`,
-                transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-                transition: '0.1s',
-                textAlign: 'center',
-              }}
-              className="pokemon"
-            >
-              {userOne.nick_name == user.nick_name ? (
-                <CodeAIWardBalloon
-                  width="300px"
-                  left="-150px"
-                  fontSize="1em"
-                  padding="30px"
-                  bottom="100px"
-                  position="absolute"
-                />
-              ) : (
-                ''
-              )}
-              <Pokemon
-                src={'/' + userOne.cur_poke_id + '.gif'}
-                onContextMenu={(e: any) => handleContextMenu(e, key)}
-                onMouseEnter={() => {setHoveredPokeId(user.cur_poke_id)}}
-                onMouseLeave={() => {setHoveredPokeId(null)}}
-              ></Pokemon>
-              {hoveredPokeId === user.cur_poke_id && <div>안뇽!</div>}
-              {contextMenus[key] ? (
-                <ul
-                  className="context-menu"
+          <motion.div
+            drag
+            dragControls={dragControls}
+            animate={animationControls} // 애니메이션 컨트롤 적용
+            style={{
+              position: 'fixed',
+              display: 'inline-block',
+              zIndex: 9999,
+              bottom: '90px',
+              left: `${30 + 10 * key}%`,
+              transform: 'translateX(0px) translateY(0px) translateZ(0px)',
+              transition: '0.1s',
+              textAlign: 'center',
+            }}
+            className="pokemon"
+          >
+            {userOne.nick_name == user.nick_name ? (
+              <CodeAIWardBalloon
+                width="300px"
+                left="-150px"
+                fontSize="1em"
+                padding="30px"
+                bottom="100px"
+                position="absolute"
+              />
+            ) : (
+              ''
+            )}
+            {hoveredPokeId === userOne.cur_poke_id &&
+              <div>
+                <div>구현:{userOne.impl_exp}</div>
+                <div>수학:{userOne.math_exp}</div>
+                <div>자료구조:{userOne.data_exp}</div>
+                <div>그래프:{userOne.graph_exp}</div>
+                <div>DP:{userOne.dp_exp}</div>
+              </div>
+            }
+            <Pokemon
+              src={'/' + userOne.cur_poke_id + '.gif'}
+              onContextMenu={(e: any) => handleContextMenu(e, key)}
+              onMouseEnter={() => { setHoveredPokeId(userOne.cur_poke_id) }}
+              onMouseLeave={() => { setHoveredPokeId(null) }}
+            ></Pokemon>
+            {contextMenus[key] ? (
+              <ul
+                className="context-menu"
+                style={{
+                  top: contextMenus[key].mouseY,
+                  left: contextMenus[key].mouseX,
+                  textAlign: 'center',
+                }}
+              >
+                <li
                   style={{
-                    top: contextMenus[key].mouseY,
-                    left: contextMenus[key].mouseX,
-                    textAlign: 'center',
+                    position: 'absolute',
+                    left: '50%',
+                    top: '-40px',
+                    transform: 'translateX(-50%)',
+                    color: 'white',
+                    borderRadius: '10px',
+                    background: '#324056',
+                    width: '50px',
                   }}
+                  onClick={() => handleKickOut(key)}
                 >
-                  <li
-                    style={{
-                      position: 'absolute',
-                      left: '50%',
-                      top: '-40px',
-                      transform: 'translateX(-50%)',
-                      color: 'white',
-                      borderRadius: '10px',
-                      background: '#324056',
-                      width: '50px',
-                    }}
-                    onClick={() => handleKickOut(key)}
-                  >
-                    강퇴
-                  </li>
-                </ul>
-              ) : null}
-              <NicknameBox>{userOne.nick_name}</NicknameBox>
-            </motion.div>
-          ))
+                  강퇴
+                </li>
+              </ul>
+            ) : null}
+            <NicknameBox>{userOne.nick_name}</NicknameBox>
+          </motion.div>
+        ))
         : null}
 
       <Container ref={containerRef}>
