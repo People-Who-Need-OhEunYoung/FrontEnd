@@ -60,7 +60,8 @@ export const Profile = ({ ...props }) => {
       <DownMenu
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 320 512"
-        onMouseOver={handleMouseOver}
+        onMouseEnter={handleMouseOver}
+        onMouseLeave={handleMouseOut}
         className="downmenu"
         fill="white"
       >
@@ -155,7 +156,7 @@ const MyMenu = styled.ul`
   opacity: 0;
   z-index: 200;
   position: absolute;
-  right: -60px;
+  right: -40px;
   top: 60px;
   width: 150px;
   align-content: space-around;

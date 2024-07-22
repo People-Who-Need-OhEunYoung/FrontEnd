@@ -10,36 +10,42 @@ import gacha4 from '../../assets/images/가챠4.gif';
 import gacha5 from '../../assets/images/가챠5.gif';
 import gacha6 from '../../assets/images/가챠6.gif';
 import { useRef, useState } from 'react';
-import { getGachaPokemon, setGachaPokemon } from '../../utils/api/api';
+import { getGachaPokemon } from '../../utils/api/api';
 import { pokemonName } from '../../utils/api/api';
 import { updateMyPokemon } from '../../utils/api/api';
 import { minusUserCoin } from '../../store/userInfo';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { setPokemonId } from '../../store/userInfo';
 
 const gachaKind = [
   {
     kind: '[수학]',
+    kindDb: 'math_coin',
     coin: '수학코인',
     styleSet: 'hue-rotate(70deg)',
   },
   {
     kind: '[구현]',
+    kindDb: 'impl_coin',
     coin: '구현코인',
     styleSet: 'hue-rotate(33deg)',
   },
   {
     kind: '[DP]',
+    kindDb: 'dp_coin',
     coin: 'DP코인',
     styleSet: 'hue-rotate(318deg)',
   },
   {
     kind: '[자료구조]',
+    kindDb: 'data_coin',
     coin: '자료구조코인',
     styleSet: 'hue-rotate(137deg)',
   },
   {
     kind: '[그래프]',
+    kindDb: 'graph_coin',
     coin: '그래프코인',
     styleSet: 'hue-rotate(228deg)',
   },
@@ -52,7 +58,6 @@ const Gacha = () => {
   const [gachaResult, setGachaResult] = useState(false);
   const [getPokemon, setGetPokemon] = useState(0);
   const [getpokemonName, setGetpokemonName] = useState(0);
-  const [duplication, setDuplication] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const prevIndexRef = useRef(currentIndex);
@@ -87,22 +92,16 @@ const Gacha = () => {
   const dispatch = useDispatch();
 
   const gachaRunning = async (index: number) => {
-    const pokemonObj = await getGachaPokemon().then(async (res: any) => {
-      return await setGachaPokemon(res);
-    });
+    const pokemonObj = await getGachaPokemon(gachaKind[currentIndex].kindDb);
+    console.log(pokemonObj);
     if (pokemonObj.result == 'fail') {
-      alert('크래딧 부족입니다.');
+      alert(pokemonObj.message);
       setGachaRun(false);
       setIsDisabled(false);
       return;
     }
     dispatch(minusUserCoin(index));
     setTimeout(async () => {
-      if (pokemonObj.message == '중복 포켓몬') {
-        setDuplication(true);
-      } else {
-        setDuplication(false);
-      }
       setGetPokemon(pokemonObj.poke_id);
       setGetpokemonName(await pokemonName(pokemonObj.poke_id));
       setGachaResult(true);
@@ -243,11 +242,7 @@ const Gacha = () => {
               filter: 'none',
             }}
           >
-            <h1 style={{ paddingTop: '20px' }}>
-              {duplication
-                ? '이미 뽑힌 포켓몬입니다'
-                : '다음 포켓몬이 뽑혔습니다'}
-            </h1>
+            <h1 style={{ paddingTop: '20px' }}>다음 포켓몬이 뽑혔습니다</h1>
             <img
               style={{
                 position: 'absolute',
@@ -279,7 +274,7 @@ const Gacha = () => {
               }}
               onClick={() => {
                 updateMyPokemon(getPokemon);
-                //추가 수정 필요 dispatch(setGachaPokemon());
+                dispatch(setPokemonId(getPokemon));
                 setGachaRun(false);
                 setGachaResult(false);
               }}
