@@ -64,19 +64,19 @@ const UserInfo = createSlice({
     },
     minusUserCoin(state, action: PayloadAction<number>) {
       switch (action.payload) {
-        case 1:
+        case 0:
           state.user.math_coin -= 1;
           break;
-        case 2:
+        case 1:
           state.user.impl_coin -= 1;
           break;
-        case 3:
+        case 2:
           state.user.dp_coin -= 1;
           break;
-        case 4:
+        case 3:
           state.user.data_coin -= 1;
           break;
-        case 5:
+        case 4:
           state.user.graph_coin -= 1;
           break;
         default:
