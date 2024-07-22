@@ -24,7 +24,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
   const [first, setFirst] = useState(false);
-  const { userNickname } = useSelector((state: RootState) => state.userinfo);
+  const { user } = useSelector((state: RootState) => state.userinfo);
   const dispatch = useDispatch();
   const socketRef = useRef<Socket | null>(null);
 
@@ -62,8 +62,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       navigate('/roomlist');
       return;
     }
-    console.log('--------------------' + userNickname);
-    if (userNickname == '') {
+    if (user.nick_name == '') {
       alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요2');
       navigate('/roomlist');
       return;
