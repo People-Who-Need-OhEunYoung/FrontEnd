@@ -250,6 +250,7 @@ const Home = styled.div`
   margin: 2em auto;
 `;
 export const Pokemon = styled.img`
+  transform: scale(2);
   -webkit-user-drag: none;
   -khtml-user-drag: none;
   -webkit-user-drag: none;
