@@ -83,6 +83,8 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const [usersInfo, setUsersInfo] = useState<any[]>([]);
   const { userNickname } = useSelector((state: RootState) => state.userinfo);
 
+  const [hoveredPokeId, setHoveredPokeId] = useState(null);
+
   const [contextMenus, setContextMenus] = useState<
     (ContextMenuPosition | null)[]
   >([null, null, null, null]);
@@ -246,7 +248,10 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
               <Pokemon
                 src={'/' + user.cur_poke_id + '.gif'}
                 onContextMenu={(e: any) => handleContextMenu(e, key)}
+                onMouseEnter={() => {setHoveredPokeId(user.cur_poke_id)}}
+                onMouseLeave={() => {setHoveredPokeId(null)}}
               ></Pokemon>
+              {hoveredPokeId === user.cur_poke_id && <div>안뇽!</div>}
               {contextMenus[key] ? (
                 <ul
                   className="context-menu"
