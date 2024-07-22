@@ -36,8 +36,7 @@ export const Header2 = () => {
   const dispatch = useDispatch();
 
   const userSet = async () => {
-    let userData = await userInfo();
-    dispatch(setUser(userData));
+    dispatch(setUser(await userInfo()));
   };
 
   useEffect(() => {
@@ -65,9 +64,9 @@ export const Header2 = () => {
         //console.log(data);
         if (data.result == 'success') {
         } else {
-          confirm('세션이 만료되었습니다. 현재화면을 유지하시겠습니까?')
-            ? ''
-            : navigate('/');
+          confirm('세션이 만료되었습니다. 처음화면으로 돌아갑니다.')
+            ? navigate('/')
+            : '';
         }
       })
       .catch((error) => {
@@ -153,9 +152,9 @@ export const Header3 = () => {
         // console.log(data);
         if (data.result == 'success') {
         } else {
-          confirm('세션이 만료되었습니다. 현재화면을 유지하시겠습니까?')
-            ? ''
-            : navigate('/');
+          confirm('세션이 만료되었습니다. 처음화면으로 돌아갑니다.')
+            ? navigate('/')
+            : '';
         }
       })
       .catch((error) => {

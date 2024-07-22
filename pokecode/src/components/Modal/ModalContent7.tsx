@@ -2,14 +2,12 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import rolling from '../../assets/images/rolling2.svg';
-import { RootState } from '../../store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setWrittenCode } from '../../store/problemSlice';
 import { getRoomPeopleChecker } from '../../utils/api/api';
 
 const ModalContent7 = ({ id, title, roomId, maxPerson, event }: any) => {
   const [loding, setLoding] = useState(false);
-  const { user } = useSelector((state: RootState) => state.userinfo);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   //우현코드 start
@@ -36,7 +34,6 @@ const ModalContent7 = ({ id, title, roomId, maxPerson, event }: any) => {
       setLoding(false);
       return;
     }
-    localStorage.setItem('nickname', user.nick_name);
     localStorage.setItem('roomId', roomIdValue);
 
     const queryParam: any = {
