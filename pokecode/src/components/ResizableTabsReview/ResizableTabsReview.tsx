@@ -75,8 +75,8 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   id,
   title,
 }: any) => {
-  const [width, setWidth] = useState<number>(25);
-  const [width1, setWidth1] = useState<number>(25);
+  const [width, setWidth] = useState<number>(30);
+  const [width1, setWidth1] = useState<number>(30);
   const [tabWidth, setTabWidth] = useState(0); // Tab의 초기 너비 상태
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRef = useRef<HTMLDivElement | null>(null);
@@ -248,10 +248,14 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
               <Pokemon
                 src={'/' + userOne.cur_poke_id + '.gif'}
                 onContextMenu={(e: any) => handleContextMenu(e, key)}
-                onMouseEnter={() => {setHoveredPokeId(user.cur_poke_id)}}
-                onMouseLeave={() => {setHoveredPokeId(null)}}
+                onMouseEnter={() => {
+                  setHoveredPokeId(userOne.cur_poke_id);
+                }}
+                onMouseLeave={() => {
+                  setHoveredPokeId(null);
+                }}
               ></Pokemon>
-              {hoveredPokeId === user.cur_poke_id && <div>안뇽!</div>}
+              {hoveredPokeId === userOne.cur_poke_id && <div>안뇽!</div>}
               {contextMenus[key] ? (
                 <ul
                   className="context-menu"

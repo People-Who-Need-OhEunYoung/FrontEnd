@@ -58,12 +58,12 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
 
   useEffect(() => {
     if (!savedUsername || !savedRoomId) {
-      alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요1');
+      alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요');
       navigate('/roomlist');
       return;
     }
     if (user.nick_name == '') {
-      alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요2');
+      alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요');
       navigate('/roomlist');
       return;
     }
