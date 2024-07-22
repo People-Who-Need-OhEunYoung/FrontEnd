@@ -6,11 +6,9 @@ import { SetNickName } from '../../utils/api/api';
 import { setUserNickname } from '../../store/userInfo';
 const Uploader = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { userNickname, credit, pokemonId } = useSelector(
-    (state: RootState) => state.userinfo
-  );
+  const { user } = useSelector((state: RootState) => state.userinfo);
 
-  const [editedNickname, setEditedNickname] = useState<string>(userNickname);
+  const [editedNickname, setEditedNickname] = useState<string>(user.nick_name);
   const [buttonText, setButtonText] = useState<string>('수정하기');
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
@@ -56,7 +54,7 @@ const Uploader = () => {
               boxSizing: 'border-box',
               padding: '15px',
             }}
-            src={`/dw/${pokemonId}.svg`}
+            src={`/dw/${user.cur_poke_id}.svg`}
             alt="Preview"
           />
         </Image>
@@ -72,9 +70,13 @@ const Uploader = () => {
               />
             </Text>
           ) : (
-            <Text>닉네임: {userNickname}</Text>
+            <Text>닉네임: {user.nick_name}</Text>
           )}
-          <Text>보유 크레딧: {credit}</Text>
+          <Text>수학코인 : {user.math_coin}</Text>
+          <Text>구현코인 : {user.impl_coin}</Text>
+          <Text>DP코인 : {user.dp_coin}</Text>
+          <Text>자료구조코인 : {user.data_coin}</Text>
+          <Text>그래프코인 : {user.graph_coin}</Text>
           <Text>맞은 문제 수: </Text>
         </InfoContainer>
         <ButtonGroup>

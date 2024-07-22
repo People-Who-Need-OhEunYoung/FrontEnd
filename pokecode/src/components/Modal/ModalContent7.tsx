@@ -9,7 +9,7 @@ import { getRoomPeopleChecker } from '../../utils/api/api';
 
 const ModalContent7 = ({ id, title, roomId, maxPerson, event }: any) => {
   const [loding, setLoding] = useState(false);
-  const { userNickname } = useSelector((state: RootState) => state.userinfo);
+  const { user } = useSelector((state: RootState) => state.userinfo);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   //우현코드 start
@@ -28,14 +28,15 @@ const ModalContent7 = ({ id, title, roomId, maxPerson, event }: any) => {
       return;
     }
 
-    const value = localStorage.getItem('user_id');
+    const value = localStorage.getItem('bakjoon_id');
     const roomIdValue = roomId;
 
     if (!value || !roomIdValue) {
       alert('Please enter both username and room ID.');
+      setLoding(false);
       return;
     }
-    localStorage.setItem('nickname', userNickname);
+    localStorage.setItem('nickname', user.nick_name);
     localStorage.setItem('roomId', roomIdValue);
 
     const queryParam: any = {

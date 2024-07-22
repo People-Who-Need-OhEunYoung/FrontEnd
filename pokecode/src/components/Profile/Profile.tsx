@@ -23,7 +23,27 @@ export const Profile = ({ ...props }) => {
         <p>
           {props.name}님
           <br />
-          <span style={{ fontSize: '0.7em' }}>보유크래딧 : {props.credit}</span>
+          <span>
+            총코인 :{' '}
+            {props.math_coin +
+              props.impl_coin +
+              props.dp_coin +
+              props.data_coin +
+              props.graph_coin}
+          </span>
+          <span style={{ fontSize: '0.7em' }}>
+            수학코인 : {props.math_coin}
+          </span>
+          <span style={{ fontSize: '0.7em' }}>
+            구현코인 : {props.impl_coin}
+          </span>
+          <span style={{ fontSize: '0.7em' }}>DP코인 : {props.dp_coin}</span>
+          <span style={{ fontSize: '0.7em' }}>
+            자료구조코인 : {props.data_coin}
+          </span>
+          <span style={{ fontSize: '0.7em' }}>
+            그래프코인 : {props.graph_coin}
+          </span>
         </p>
       </Myinfo>
 

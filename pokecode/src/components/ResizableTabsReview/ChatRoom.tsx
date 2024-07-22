@@ -38,10 +38,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
     scrollToBottom();
   }, [messages]);
 
-  const savedUsername: string | null = localStorage.getItem('nickname');
+  const savedUsername: string | null = localStorage.getItem('nick_name');
   const savedRoomId: string | null = localStorage.getItem('roomId');
   const savedPokeId: string | null = localStorage.getItem('cur_poke_id');
-  const savedUserId: string | null = localStorage.getItem('user_id');
+  const savedUserId: string | null = localStorage.getItem('bakjoon_id');
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -58,13 +58,13 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
 
   useEffect(() => {
     if (!savedUsername || !savedRoomId) {
-      alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요');
+      alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요1');
       navigate('/roomlist');
       return;
     }
     console.log('--------------------' + userNickname);
     if (userNickname == '') {
-      alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요');
+      alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요2');
       navigate('/roomlist');
       return;
     }
@@ -161,7 +161,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
     const socket = socketRef.current;
     if (socket) {
       socket.emit('FORCE_OUT', {
-        roomId: savedRoomId,
+        room_id: savedRoomId,
         nick_name: nickname,
       });
 
@@ -188,7 +188,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         </p>
         <button
           onClick={() => {
-            forceOut('테스터');
+            forceOut('우주최강다흰짱짱');
           }}
         >
           강퇴 테스트

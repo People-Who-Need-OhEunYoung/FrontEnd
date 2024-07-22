@@ -4,12 +4,12 @@ import { CodeAIButton } from '../CodeAIButton';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 const ModalContent3 = ({ handleClose }: any) => {
-  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
+  const { user } = useSelector((state: RootState) => state.userinfo);
 
   return (
     <div style={{ overflow: 'hidden', width: '400px' }}>
       <img
-        src={'/' + pokemonId + '.gif'}
+        src={'/' + user.cur_poke_id + '.gif'}
         height={'150px'}
         style={{ padding: '30px 0' }}
       />

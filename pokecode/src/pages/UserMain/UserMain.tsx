@@ -28,8 +28,7 @@ const UserMain = () => {
 
   const [pokemonname, setPokemonname] = useState('');
   const [pokemonExp, setPokemonExp] = useState(0);
-
-  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
+  const { user } = useSelector((state: RootState) => state.userinfo);
   const controls = useAnimation();
   const controlsPoo = useAnimation();
 
@@ -107,7 +106,7 @@ const UserMain = () => {
     try {
       const res = await showPokemonBook();
       const foundPokemon = res.book.find(
-        (poke: any) => poke.poke_id === pokemonId
+        (poke: any) => poke.poke_id === user.cur_poke_id
       );
       if (foundPokemon) {
         console.log(foundPokemon.poke_Exp);
@@ -126,8 +125,8 @@ const UserMain = () => {
   }, []);
 
   useEffect(() => {
-    if (pokemonId) pokemonnameSet(pokemonId);
-  }, [pokemonId]);
+    if (user.cur_poke_id) pokemonnameSet(user.cur_poke_id);
+  }, [user.cur_poke_id]);
 
   useEffect(() => {
     pooCount();
@@ -187,11 +186,13 @@ const UserMain = () => {
           >
             <Pokemon
               style={{ transform: 'scale(2.5)' }}
-              src={pokemonId == 0 ? pokeball : `/${pokemonId}.gif`}
+              src={
+                user.cur_poke_id == 0 ? pokeball : `/${user.cur_poke_id}.gif`
+              }
             ></Pokemon>
           </motion.div>
           <PokeNameWrap>
-            <PokeName>{pokemonId == 0 ? 'error' : pokemonname}</PokeName>
+            <PokeName>{user.cur_poke_id == 0 ? 'error' : pokemonname}</PokeName>
           </PokeNameWrap>
           <LevelWrap>
             <Level>

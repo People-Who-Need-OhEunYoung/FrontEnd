@@ -30,8 +30,8 @@ const PokeBook = () => {
 
   const [allPokemons, setAllPokemons] = useState<PokemonType[]>([]);
   const [gatchPokemons, setGatchPpokemons] = useState<PokemonType[]>([]);
-  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
-  const [curPokeId, setCurPokeId] = useState<number>(pokemonId);
+  const { user } = useSelector((state: RootState) => state.userinfo);
+  const [curPokeId, setCurPokeId] = useState<number>(user.cur_poke_id);
   const [selectedPokemon, setSelectedPokemon] = useState<boolean>(true);
   const [visibleList, setVisibleList] = useState<string>('Stats_listt');
   const [page, setPage] = useState<number>(1);
@@ -94,10 +94,10 @@ const PokeBook = () => {
       : getPagedItems(gatchPokemons, page);
 
   useEffect(() => {
-    setCurPokeId(pokemonId);
+    setCurPokeId(user.cur_poke_id);
     //pokemonnameSet(pokemonId);
     //console.log(pokemonname);
-  }, [pokemonId]);
+  }, [user.cur_poke_id]);
 
   const setFilter = () => {
     if (pokemonGifRef.current) {

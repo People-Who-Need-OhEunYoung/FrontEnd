@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { getGachaPokemon, setGachaPokemon } from '../../utils/api/api';
 import { pokemonName } from '../../utils/api/api';
 import { updateMyPokemon } from '../../utils/api/api';
-import { minusUserCredit, setPokemonId } from '../../store/userInfo';
+import { minusUserCoin } from '../../store/userInfo';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -85,7 +85,7 @@ const Gacha = () => {
                 onClick={(e) => {
                   e.preventDefault();
                   setGachaResult(false);
-                  dispatch(minusUserCredit());
+                  dispatch(minusUserCoin(1));
                   setGachaRun(true);
                   setBackground(gachaArray[Math.floor(Math.random() * 6)]);
                   gachaRunning();
@@ -176,7 +176,7 @@ const Gacha = () => {
               }}
               onClick={() => {
                 updateMyPokemon(getPokemon);
-                dispatch(setPokemonId(getPokemon));
+                //추가 수정 필요 dispatch(setGachaPokemon());
                 setGachaRun(false);
                 setGachaResult(false);
               }}
@@ -210,15 +210,6 @@ const Gacha = () => {
 
 const GachaImg = styled.img`
   width: 100%;
-
-  /* &:after {
-    box-shadow: 
-    inset 0 0 20px #fff,
-    inset 0 0 20px #fff,
-    inset 0 0 20px #fff,
-    inset 0 0 20px #fff;
-  } 
-   */
 `;
 
 export default Gacha;
