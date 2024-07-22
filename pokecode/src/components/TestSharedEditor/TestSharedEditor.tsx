@@ -37,7 +37,9 @@ const TestSharedEditor = () => {
       for (const [_, state] of allStates.entries()) {
         if (state.user && state.user.name === childElement?.textContent) {
           try {
+
             const imgUrl = await loadImage(`/${state.user.pokemonid}.gif`);
+
             (
               element as HTMLElement
             ).style.background = `url(${imgUrl}) no-repeat`;
@@ -83,6 +85,7 @@ const TestSharedEditor = () => {
             // 새로운 사용자가 접속함
             console.log('New user connected:', added);
             // 필요한 처리 작업 수행
+            
           }
 
           if (removed.length > 0) {

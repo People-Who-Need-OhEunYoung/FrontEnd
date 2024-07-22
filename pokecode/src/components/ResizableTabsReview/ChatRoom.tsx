@@ -4,7 +4,9 @@ import { setWrittenCode } from '../../store/problemSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
 import { RootState } from '../../store';
+
 
 interface Message {
   nick_name: any;
@@ -174,6 +176,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         boxSizing: 'border-box',
       }}
     >
+
       <Header>
         <p style={{ position: 'absolute', left: '15px', fontSize: '1.2rem' }}>
           채팅
@@ -185,6 +188,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
           onClick={() => {
             forceOut('우주최강다흰짱짱');
           }}
+          style={{ position: 'absolute', left: '80px', fontSize: '1rem' }}
         >
           강퇴 테스트
         </button>

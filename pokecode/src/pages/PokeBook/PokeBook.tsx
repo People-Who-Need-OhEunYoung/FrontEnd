@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { MainWrapper } from '../../components/MainWrapper';
-import {
-  showPokemonBook,
-  pokemonName,
-  updateMyPokemon,
-} from '../../utils/api/api';
+// import {
+//   showPokemonBook,
+//   pokemonName,
+//   updateMyPokemon,
+// } from '../../utils/api/api';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -14,28 +14,34 @@ import fireIcon from '../../assets/images/불.png';
 import grassIcon from '../../assets/images/풀.png';
 import electricIcon from '../../assets/images/전기.png';
 import psychicIcon from '../../assets/images/에스퍼.png';
-import { useDispatch } from 'react-redux';
-import { setPokemonId } from '../../store/userInfo';
+// import { useDispatch } from 'react-redux';
+// import { setPokemonId } from '../../store/userInfo';
+import {Chart as ChartJS} from 'chart.js/auto';
+import {Bar} from 'react-chartjs-2'
+
+
+
 
 // const dispatch = useDispatch();
 
-type PokemonType = {
-  poke_id: number;
-  poke_Lv: number;
-  poke_Exp: number;
-};
+// type PokemonType = {
+//   poke_id: number;
+//   poke_Lv: number;
+//   poke_Exp: number;
+// };
 
 const PokeBook = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [allPokemons, setAllPokemons] = useState<PokemonType[]>([]);
   const [gatchPokemons, setGatchPpokemons] = useState<PokemonType[]>([]);
   const { user } = useSelector((state: RootState) => state.userinfo);
   const [curPokeId, setCurPokeId] = useState<number>(user.cur_poke_id);
   const [selectedPokemon, setSelectedPokemon] = useState<boolean>(true);
+
   const [visibleList, setVisibleList] = useState<string>('Stats_listt');
-  const [page, setPage] = useState<number>(1);
-  const pokemonGifRef = useRef<HTMLImageElement>(null);
+  // const [page, setPage] = useState<number>(1);
+  // const pokemonGifRef = useRef<HTMLImageElement>(null);
   const [activeButton, setActiveButton] = useState<string>('Stats_list');
   const [pokemonname, setPokemonname] = useState('');
 
@@ -138,15 +144,25 @@ const PokeBook = () => {
   return (
     <MainWrapper>
       <PokeMonView>
-        <PokemonGif
+        {/* <PokemonGif
           ref={pokemonGifRef}
           src={'/' + curPokeId + '.gif'}
           onLoad={() => {
             setFilter();
           }}
-        ></PokemonGif>
+        ></PokemonGif> */}
+        <Bar
+          data={{
+            labels: ["A", "B", "C"],
+            datasets: [
+              {
+                label: 'Test',
+                data: [200, 300, 400],
+              },
+            ],
+          }}
+        />
         <PokemonName>
-          {' '}
           {curPokeId}. {pokemonname}{' '}
         </PokemonName>
       </PokeMonView>
@@ -209,7 +225,7 @@ const PokeBook = () => {
           </SelectBtn>
         </ButtonGroup>
         <ListView>
-          {visibleList === 'all_list' &&
+          {/* {visibleList === 'all_list' &&
             displayedItems.map((item, index) => (
               <Item
                 key={index}
@@ -248,7 +264,8 @@ const PokeBook = () => {
                   );
                 })()}
               </Item>
-            ))}
+
+            ))} */}
           {visibleList === 'water_list' &&
             gatchPokemons.map((item, index) => (
               <Item
@@ -281,8 +298,9 @@ const PokeBook = () => {
                 })()}
               </Item>
             ))}
+
         </ListView>
-        <PageBtnGroup>{renderPageButtons()}</PageBtnGroup>
+        {/* <PageBtnGroup>{renderPageButtons()}</PageBtnGroup> */}
       </ListWrap>
     </MainWrapper>
   );
