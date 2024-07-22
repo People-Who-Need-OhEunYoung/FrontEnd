@@ -73,7 +73,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const [position, setPosition] = useState({
     x: '50%',
   });
-  const { pokemonId } = useSelector((state: RootState) => state.userinfo);
+  const { user } = useSelector((state: RootState) => state.userinfo);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const controls = useAnimation();
   const tabRef = useRef<HTMLDivElement | null>(null);
@@ -220,7 +220,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
                 }}
                 className="pokemon"
               >
-                <Pokemon src={`/${pokemonId}.gif`}></Pokemon>
+                <Pokemon src={`/${user.cur_poke_id}.gif`}></Pokemon>
               </motion.div>
             </Home>
           </div>
