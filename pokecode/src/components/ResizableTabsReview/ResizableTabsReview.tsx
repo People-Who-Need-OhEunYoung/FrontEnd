@@ -81,7 +81,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRef = useRef<HTMLDivElement | null>(null);
   const [usersInfo, setUsersInfo] = useState<any[]>([]);
-  const { userNickname } = useSelector((state: RootState) => state.userinfo);
+  const { user } = useSelector((state: RootState) => state.userinfo);
 
   const [hoveredPokeId, setHoveredPokeId] = useState(null);
 
@@ -216,7 +216,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
       style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
       {usersInfo !== null
-        ? usersInfo.map((user, key) => (
+        ? usersInfo.map((userOne, key) => (
           <motion.div
             drag
             dragControls={dragControls}
@@ -233,7 +233,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
             }}
             className="pokemon"
           >
-            {user.nick_name == userNickname ? (
+            {userOne.nick_name == user.nick_name ? (
               <CodeAIWardBalloon
                 width="300px"
                 left="-150px"
@@ -245,19 +245,19 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
             ) : (
               ''
             )}
-            {hoveredPokeId === user.cur_poke_id &&
+            {hoveredPokeId === userOne.cur_poke_id &&
               <div>
-                <div>구현:{user.impl_exp}</div>
-                <div>수학:{user.math_exp}</div>
-                <div>자료구조:{user.data_exp}</div>
-                <div>그래프:{user.graph_exp}</div>
-                <div>DP:{user.dp_exp}</div>
+                <div>구현:{userOne.impl_exp}</div>
+                <div>수학:{userOne.math_exp}</div>
+                <div>자료구조:{userOne.data_exp}</div>
+                <div>그래프:{userOne.graph_exp}</div>
+                <div>DP:{userOne.dp_exp}</div>
               </div>
             }
             <Pokemon
-              src={'/' + user.cur_poke_id + '.gif'}
+              src={'/' + userOne.cur_poke_id + '.gif'}
               onContextMenu={(e: any) => handleContextMenu(e, key)}
-              onMouseEnter={() => { setHoveredPokeId(user.cur_poke_id) }}
+              onMouseEnter={() => { setHoveredPokeId(userOne.cur_poke_id) }}
               onMouseLeave={() => { setHoveredPokeId(null) }}
             ></Pokemon>
             {contextMenus[key] ? (
@@ -286,7 +286,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                 </li>
               </ul>
             ) : null}
-            <NicknameBox>{user.nick_name}</NicknameBox>
+            <NicknameBox>{userOne.nick_name}</NicknameBox>
           </motion.div>
         ))
         : null}
