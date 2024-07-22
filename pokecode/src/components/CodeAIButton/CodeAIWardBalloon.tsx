@@ -98,33 +98,5 @@ const WordBal = styled.pre`
     display: none;
   }
 `;
-const Ballon = styled.pre`
-  position: absolute;
-  background: #ffffff; /* 말풍선 배경 색상 */
-  padding: 10px; /* 말풍선 내용 여백 */
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  border-radius: 8px;
-  color: #000000;
-  font-size: 14px;
-  margin: auto;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* 말풍선 그림자 */
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  &::after {
-    position: absolute;
-    bottom: -10px; /* 삼각형을 말풍선 아래쪽에 배치 */
-    left: 50%;
-    margin-left: -10px;
-    border: solid transparent;
-    border-color: rgba(51, 51, 51, 0);
-    border-top-color: #000; /* 말풍선 배경과 동일한 색상 */
-    border-width: 10px;
-    pointer-events: none;
-    content: ' ';
-  }
-`;
 export default CodeAIWardBalloon;

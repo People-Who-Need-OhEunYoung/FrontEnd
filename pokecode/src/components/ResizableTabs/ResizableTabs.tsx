@@ -206,7 +206,6 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
                 left="0"
                 fontSize="1em"
                 padding="20px 50px"
-                right="50px"
                 bottom="170px"
               />
               <motion.div

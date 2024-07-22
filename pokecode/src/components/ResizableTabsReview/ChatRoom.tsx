@@ -4,7 +4,7 @@ import { setWrittenCode } from '../../store/problemSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getRoomPeopleChecker } from '../../utils/api/api';
+// import { getRoomPeopleChecker } from '../../utils/api/api';
 
 
 interface Message {
@@ -165,7 +165,14 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   };
 
   return (
-    <div style={{ overflow: 'hidden', height: '100%', borderRadius:'10px' ,boxSizing:'border-box'}}>
+    <div
+      style={{
+        overflow: 'hidden',
+        height: '100%',
+        borderRadius: '10px',
+        boxSizing: 'border-box',
+      }}
+    >
       {/* <h2>너의 이름은 {savedUsername}</h2>
       <h2>방 ID: {savedRoomId}</h2>
       <h2>
@@ -179,10 +186,11 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         <p style={{ position: 'absolute', right: '20px', fontSize: '1rem' }}>
           접속중인 인원: <b> {users.length}</b>
         </p>
-                <button
+        <button
           onClick={() => {
             forceOut('테스터');
           }}
+          style={{ position: 'absolute', left: '80px', fontSize: '1rem' }}
         >
           강퇴 테스트
         </button>

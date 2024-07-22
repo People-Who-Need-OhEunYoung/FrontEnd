@@ -40,6 +40,7 @@ const TestSharedEditor = () => {
             const imgUrl = await loadImage(
               `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${state.user.pokemonid}.gif`
             );
+            console.log(key);
             (
               element as HTMLElement
             ).style.background = `url(${imgUrl}) no-repeat`;
@@ -80,11 +81,12 @@ const TestSharedEditor = () => {
           await updateCaretBackground(allStates);
         });
 
-        provider.awareness.on('change', ({ added, updated, removed }: any) => {
+        provider.awareness.on('change', ({ added, removed }: any) => {
           if (added.length > 0) {
             // 새로운 사용자가 접속함
             console.log('New user connected:', added);
             // 필요한 처리 작업 수행
+            
           }
 
           if (removed.length > 0) {
@@ -137,7 +139,7 @@ const TestSharedEditor = () => {
         );
 
         //다른사람 움직이면 반응
-        const observer = new MutationObserver(async (mutations) => {
+        const observer = new MutationObserver(async () => {
           const allStates = provider.awareness.getStates();
           await updateCaretBackground(allStates);
         });

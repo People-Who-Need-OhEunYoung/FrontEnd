@@ -13,7 +13,6 @@ import VoiceChatOV from './VoiceChatOV';
 import { setRoomId, setUsername } from '../../store/roomdataSlice';
 import { CodeAIWardBalloon } from '../CodeAIButton';
 // import { Terminal } from '../Terminal';
-import ChatBG from '../../assets/images/ChatBG3.jpg';
 
 const Container = styled.div`
   display: flex;
@@ -90,7 +89,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
 
   const handleContextMenu = (event: MouseEvent, index: number) => {
     event.preventDefault();
-    const newContextMenus = contextMenus.map((menu, i) =>
+    const newContextMenus = contextMenus.map((_, i) =>
       i === index
         ? { mouseX: event.clientX - 2, mouseY: event.clientY - 4 }
         : null
@@ -298,7 +297,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
             height: '100%',
           }}
         >
-          <div style={{ width: '100%', height: '100%'}}>
+          <div style={{ width: '100%', height: '100%' }}>
             <TestSharedEditor />
           </div>
           <div style={{ position: 'relative' }}>

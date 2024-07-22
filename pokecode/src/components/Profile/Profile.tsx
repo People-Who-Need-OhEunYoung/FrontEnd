@@ -109,11 +109,11 @@ const MyPic = styled.img`
     display: none;
   }
 `;
-const Level = styled.p`
-  @media (max-width: 1240px) {
-    display: none;
-  }
-`;
+// const Level = styled.p`
+//   @media (max-width: 1240px) {
+//     display: none;
+//   }
+// `;
 const Myinfo = styled.div`
   width: 150px;
   padding: 0 20px;

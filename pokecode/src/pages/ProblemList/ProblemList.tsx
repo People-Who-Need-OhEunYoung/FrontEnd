@@ -9,7 +9,6 @@ import Modal from '../../components/Modal/Modal';
 import { setProblemId } from '../../store/problemSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import Select from 'react-select';
 
 type ProblemType = {
   id: string;
@@ -82,21 +81,6 @@ const ProblemList = () => {
     );
   };
 
-  const customStyles = {
-    container: (provided: any) => ({
-      ...provided,
-      width: '70%', // 부모 요소의 너비를 100%로 설정
-      margin: 'auto',
-      padding: '10px 0',
-      cursor: 'pointer',
-      color: 'black',
-    }),
-    control: (provided: any) => ({
-      ...provided,
-      width: '100%', // Select 컴포넌트의 너비를 설정
-      color: 'black',
-    }),
-  };
 
   useEffect(() => {
     fetchProbData().then((res) => {
