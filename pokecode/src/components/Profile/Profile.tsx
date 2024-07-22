@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 export const Profile = ({ ...props }) => {
   const [isHovering, setIsHovering] = useState(false);
+  const [isHovering2, setIsHovering2] = useState(false);
   const handleMouseOver = () => {
     setIsHovering(true);
   };
@@ -23,34 +24,44 @@ export const Profile = ({ ...props }) => {
         <p>
           {props.name}님
           <br />
-          <span>
-            총코인 :{' '}
+          <div
+            onMouseEnter={() => setIsHovering2(true)}
+            onMouseLeave={() => setIsHovering2(false)}
+          >
+            총코인 :
             {props.math_coin +
               props.impl_coin +
               props.dp_coin +
               props.data_coin +
               props.graph_coin}
-          </span>
-          <span style={{ fontSize: '0.7em' }}>
-            수학코인 : {props.math_coin}
-          </span>
-          <span style={{ fontSize: '0.7em' }}>
-            구현코인 : {props.impl_coin}
-          </span>
-          <span style={{ fontSize: '0.7em' }}>DP코인 : {props.dp_coin}</span>
-          <span style={{ fontSize: '0.7em' }}>
-            자료구조코인 : {props.data_coin}
-          </span>
-          <span style={{ fontSize: '0.7em' }}>
-            그래프코인 : {props.graph_coin}
-          </span>
+          </div>
         </p>
       </Myinfo>
 
+      {isHovering2 ? (
+        <HoverModal>
+          <span style={{ fontSize: '1em' }}>수학코인 : {props.math_coin}</span>
+          <br />
+          <span style={{ fontSize: '1em' }}>구현코인 : {props.impl_coin}</span>
+          <br />
+          <span style={{ fontSize: '1em' }}>DP코인 : {props.dp_coin}</span>
+          <br />
+          <span style={{ fontSize: '1em' }}>
+            자료구조코인 : {props.data_coin}
+          </span>
+          <br />
+          <span style={{ fontSize: '1em' }}>
+            그래프코인 : {props.graph_coin}
+          </span>
+        </HoverModal>
+      ) : (
+        ''
+      )}
       <DownMenu
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 320 512"
-        onMouseOver={handleMouseOver}
+        onMouseEnter={handleMouseOver}
+        onMouseLeave={handleMouseOut}
         className="downmenu"
         fill="white"
       >
@@ -83,7 +94,7 @@ export const Profile = ({ ...props }) => {
             }}
             to={'/gacha'}
           >
-            뽑기
+            전설 뽑기
           </Link>
         </MyMenuList>
         <MyMenuList>
@@ -145,7 +156,7 @@ const MyMenu = styled.ul`
   opacity: 0;
   z-index: 200;
   position: absolute;
-  right: -60px;
+  right: -40px;
   top: 60px;
   width: 150px;
   align-content: space-around;
@@ -183,6 +194,37 @@ const Logout = styled.div`
     display: block;
     width: 40px;
     line-height: 125px;
+  }
+`;
+const HoverModal = styled.p`
+  text-align: center;
+  margin: 0;
+  font-family: 'Noto Sans KR', 'Arsenal SC', sans-serif;
+  font-optical-sizing: auto;
+  position: absolute;
+  width: 100px;
+  left: 50%;
+  top: 100%;
+  border-radius: 8px;
+  background: #38bdf8;
+  color: #fff;
+  font-size: 10px;
+  display: block;
+  z-index: 1000;
+  border: none;
+  transform: translatex(-50%);
+  &::after {
+    position: absolute;
+    bottom: 100%;
+    width: 0;
+    height: 0;
+    margin-left: -70px;
+    border: solid transparent;
+    border-color: rgba(51, 51, 51, 0);
+    border-bottom-color: #38bdf8;
+    border-width: 5px;
+    pointer-events: none;
+    content: '';
   }
 `;
 export default Profile;

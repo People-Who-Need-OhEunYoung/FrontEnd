@@ -14,6 +14,8 @@ interface WordBalwrapProps {
   width: string;
   padding: string;
   fontSize: string;
+  maxHightSet: string;
+  maxHightSet1: string;
 }
 
 const CodeAIWardBalloon: React.FC<WordBalwrapProps> = ({
@@ -23,6 +25,8 @@ const CodeAIWardBalloon: React.FC<WordBalwrapProps> = ({
   padding = '20px 4%',
   bottom = '150px',
   position = 'fixed',
+  maxHightSet = '300px',
+  maxHightSet1 = '200px',
 }) => {
   const { wordBalloon } = useSelector((state: RootState) => state.codecaller);
   const { returnAiCall } = useSelector((state: RootState) => state.codecaller);
@@ -43,10 +47,9 @@ const CodeAIWardBalloon: React.FC<WordBalwrapProps> = ({
         position: position,
         left: left,
         bottom: bottom,
-        maxHeight: '300px',
+        maxHeight: maxHightSet,
         width: width,
         margin: 'auto',
-        marginLeft: '40px',
         backgroundColor: 'white',
         borderRadius: '10px',
         color: 'black',
@@ -65,7 +68,6 @@ const CodeAIWardBalloon: React.FC<WordBalwrapProps> = ({
           top: '15px',
           cursor: 'pointer',
           width: '30px',
-          // background: `url(${closebox}) no-repeat`,
         }}
         onClick={() => {
           dispatch(setReturnAiCall(''));
@@ -78,7 +80,7 @@ const CodeAIWardBalloon: React.FC<WordBalwrapProps> = ({
         style={{
           width: '95%',
           whiteSpace: 'pre-wrap',
-          maxHeight: '200px',
+          maxHeight: maxHightSet1,
           overflow: 'scroll',
           userSelect: 'all',
           textAlign: 'left',

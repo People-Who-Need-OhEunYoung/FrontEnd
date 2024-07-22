@@ -36,8 +36,7 @@ export const Header2 = () => {
   const dispatch = useDispatch();
 
   const userSet = async () => {
-    let userData = await userInfo();
-    dispatch(setUser(userData));
+    dispatch(setUser(await userInfo()));
   };
 
   useEffect(() => {
@@ -65,9 +64,9 @@ export const Header2 = () => {
         //console.log(data);
         if (data.result == 'success') {
         } else {
-          confirm('세션이 만료되었습니다. 현재화면을 유지하시겠습니까?')
-            ? ''
-            : navigate('/');
+          confirm('세션이 만료되었습니다. 처음화면으로 돌아갑니다.')
+            ? navigate('/')
+            : '';
         }
       })
       .catch((error) => {
@@ -132,8 +131,16 @@ export const Header2 = () => {
 
 export const Header3 = () => {
   const { user } = useSelector((state: RootState) => state.userinfo);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userSet = async () => {
+    dispatch(setUser(await userInfo()));
+  };
+
+  useEffect(() => {
+    userSet();
+    console.log('----유저 정보-----', user);
+  }, [user.bakjoon_id]);
   const loginChecker = async () => {
     await fetch(`${import.meta.env.VITE_APP_IP}/tokenTest`, {
       method: 'POST',
@@ -153,9 +160,9 @@ export const Header3 = () => {
         // console.log(data);
         if (data.result == 'success') {
         } else {
-          confirm('세션이 만료되었습니다. 현재화면을 유지하시겠습니까?')
-            ? ''
-            : navigate('/');
+          confirm('세션이 만료되었습니다. 처음화면으로 돌아갑니다.')
+            ? navigate('/')
+            : '';
         }
       })
       .catch((error) => {
