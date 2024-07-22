@@ -202,11 +202,13 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
             <Home style={{ position: 'relative' }} onClick={handleDivClick}>
               <CodeAIWardBalloon
                 position="absolute"
-                width="100%"
-                left="0"
+                width="95%"
+                left="2.5%"
                 fontSize="1em"
                 padding="20px 50px"
-                bottom="170px"
+                bottom="35%"
+                maxHightSet="70%"
+                maxHightSet1="150px"
               />
               <motion.div
                 animate={controls}

@@ -131,8 +131,16 @@ export const Header2 = () => {
 
 export const Header3 = () => {
   const { user } = useSelector((state: RootState) => state.userinfo);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userSet = async () => {
+    dispatch(setUser(await userInfo()));
+  };
+
+  useEffect(() => {
+    userSet();
+    console.log('----유저 정보-----', user);
+  }, [user.bakjoon_id]);
   const loginChecker = async () => {
     await fetch(`${import.meta.env.VITE_APP_IP}/tokenTest`, {
       method: 'POST',

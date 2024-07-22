@@ -241,6 +241,8 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                   padding="30px"
                   bottom="100px"
                   position="absolute"
+                  maxHightSet=""
+                  maxHightSet1=""
                 />
               ) : (
                 ''

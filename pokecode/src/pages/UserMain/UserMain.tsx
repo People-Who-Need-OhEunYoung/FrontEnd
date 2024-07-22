@@ -187,11 +187,12 @@ const UserMain = () => {
                   style={{ position: 'relative' }}
                 >
                   <Level>
-                    수학 : LV {Math.floor(user.math_exp / 100) + 1}
+                    수학 : LV {Math.floor(user.math_exp / 100)}
                     <br />
                     <StyledBase
                       onMouseEnter={() => setIsHoverMath(true)}
                       onMouseLeave={() => setIsHoverMath(false)}
+                      // onMouseLeave={() => setIsHoverMath(false)}
                     >
                       <StyledRange setprogress={user.math_exp % 100} />
                       {isHoverMath ? (
@@ -212,7 +213,7 @@ const UserMain = () => {
                   style={{ position: 'relative' }}
                 >
                   <Level>
-                    구현 : LV {Math.floor(user.impl_exp / 100) + 1}
+                    구현 : LV {Math.floor(user.impl_exp / 100)}
                     <br />
                     <StyledBase
                       onMouseEnter={() => setIsHoverImpl(true)}
@@ -237,7 +238,7 @@ const UserMain = () => {
                   style={{ position: 'relative' }}
                 >
                   <Level>
-                    DP : LV {Math.floor(user.dp_exp / 100) + 1}
+                    DP : LV {Math.floor(user.dp_exp / 100)}
                     <br />
                     <StyledBase
                       onMouseEnter={() => setIsHoverDp(true)}
@@ -262,7 +263,7 @@ const UserMain = () => {
                   style={{ position: 'relative' }}
                 >
                   <Level>
-                    자료 : LV {Math.floor(user.data_exp / 100) + 1}
+                    자료 : LV {Math.floor(user.data_exp / 100)}
                     <br />
                     <StyledBase
                       onMouseEnter={() => setIsHoverData(true)}
@@ -287,7 +288,7 @@ const UserMain = () => {
                   style={{ position: 'relative' }}
                 >
                   <Level>
-                    그래프 : LV {Math.floor(user.graph_exp / 100) + 1}
+                    그래프 : LV {Math.floor(user.graph_exp / 100)}
                     <br />
                     <StyledBase
                       onMouseEnter={() => setIsHoverGraph(true)}
@@ -487,6 +488,7 @@ const Button = styled(Link)`
 `;
 // 테두리 코드
 const StyledBase = styled.div`
+  position: relative;
   height: 10px;
   border: 3px solid;
   border-radius: 10px;
@@ -516,6 +518,7 @@ const HoverModal = styled.p<{ setprogress: number }>`
   display: block;
   z-index: 1000;
   border: none;
+  transform: translatex(-50%);
   &::after {
     position: absolute;
     bottom: 100%;
