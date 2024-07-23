@@ -13,6 +13,7 @@ import VoiceChatOV from './VoiceChatOV';
 import { setRoomId, setUsername } from '../../store/roomdataSlice';
 import { CodeAIWardBalloon } from '../CodeAIButton';
 import EvolutionModal from '../EvolutionModal/EvolutionModal';
+import { Bar, Radar } from 'react-chartjs-2';
 
 const Container = styled.div`
   display: flex;
@@ -218,7 +219,31 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
       style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
       {usersInfo !== null
-        ? usersInfo.map((userOne, key) => (
+        ? usersInfo.map((userOne, key) => {
+          let myData;
+          myData = [
+            {
+              "label": "구현",
+              "value": userOne.impl_exp
+            },
+            {
+              "label": "그래프",
+              "value": userOne.graph_exp
+            },
+            {
+              "label": "자료구조",
+              "value": userOne.data_exp
+            },
+            {
+              "label": "수학",
+              "value": userOne.math_exp
+            },
+            {
+              "label": "DP",
+              "value": userOne.dp_exp
+            }
+          ]
+          return (
             <motion.div
               drag
               dragControls={dragControls}
@@ -251,11 +276,48 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
               )}
               {hoveredPokeId === userOne.cur_poke_id && (
                 <div>
-                  <div>구현:{userOne.impl_exp}</div>
-                  <div>수학:{userOne.math_exp}</div>
-                  <div>자료구조:{userOne.data_exp}</div>
-                  <div>그래프:{userOne.graph_exp}</div>
-                  <div>DP:{userOne.dp_exp}</div>
+                  <BarGraph>
+                  <Bar
+                    data={{
+                      labels: myData.map((data) => data.label),
+                      datasets: [
+                        {
+                          label: 'Count',
+                          data: myData.map((data) => data.value),
+                          borderColor: '#6366F1', // 선 색
+                          backgroundColor: '#38bff8ce ', // 막대 배경색
+                          borderRadius: 7,
+                        },
+                      ],
+                    }}
+                    options={{
+                      indexAxis: 'y',
+                      scales: {
+                        x: {
+                          ticks: {
+                            color: '#ffffff', // x축 눈금 색상
+                            font: {
+                              size: 14, // x축 눈금 폰트 사이즈
+                            },
+                          },
+                        },
+                        y: {
+                          ticks: {
+                            color: '#ffffff', // y축 눈금 색상
+                            font: {
+                              size: 14, // y축 눈금 폰트 사이즈
+                            },
+                          },
+                        },
+                      },
+                      plugins: {
+                        legend: {
+                          display: false,
+                        },
+                      },
+                    }}
+                  />
+                  </BarGraph>
                 </div>
               )}
               <Pokemon
@@ -296,7 +358,8 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
               ) : null}
               <NicknameBox>{userOne.nick_name}</NicknameBox>
             </motion.div>
-          ))
+          )
+        })
         : null}
 
       <Container ref={containerRef}>
@@ -427,6 +490,20 @@ const NicknameBox = styled.p`
   text-align: center; /* 텍스트 중앙 정렬 */
   font-size: 14px; /* 글씨 크기 조정 */
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 추가 */
+`;
+
+//막대 그래프
+const BarGraph = styled.div`
+position: absolute;
+top: -250px; /* 그래프를 포켓몬 위로 이동시키기 위해 설정 */
+left: 50%;
+transform: translateX(-50%);
+width: 300px;
+height: 200px;
+background-color: #1c1c1e; /* 배경색 설정 */
+border-radius: 10px; /* 둥근 모서리 설정 */
+padding: 10px; /* 패딩 설정 */
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 설정 */
 `;
 
 export default ResizableTabsReview;
