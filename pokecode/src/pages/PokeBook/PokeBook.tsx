@@ -49,6 +49,7 @@ const PokeBook = () => {
   const [sortedPoketmon, setSortedPoketmon] = useState<any[]>([]);
   const [allPoketmon, setAllPoketmon] = useState<any[]>([]);
   const [ownPoketmon, setOwnPoketmon] = useState<any[]>([]);
+  const [hoveredType, setHoveredType] = useState<number | null>(null);
 
   const iconArr = [fireIcon, waterIcon, grassIcon, electricIcon, psychicIcon];
   const typeArr = ['구현', '그래프', '자료구조', '수학', 'DP'];
@@ -87,11 +88,11 @@ const PokeBook = () => {
         (pokemon: any) => pokemon.poke_id === user.cur_poke_id
       );
       if (currentPokemon) {
-         const typeIndex = typeArr.indexOf(currentPokemon.poke_type);
-         if (typeIndex !== -1) {
-           setType(typeIndex + 1); // setType은 1-based index 사용
-           setCurType(typeIndex + 1);
-         }
+        const typeIndex = typeArr.indexOf(currentPokemon.poke_type);
+        if (typeIndex !== -1) {
+          setType(typeIndex + 1); // setType은 1-based index 사용
+          setCurType(typeIndex + 1);
+        }
       }
     });
     pokemonnameSet(user.cur_poke_id);
@@ -124,7 +125,6 @@ const PokeBook = () => {
     }
   }, [type]);
 
-
   const HandleChangePokemon = () => {
     if (selectedPokemon) {
       dispatch(setPokemonId(selectedPokemon));
@@ -139,36 +139,21 @@ const PokeBook = () => {
     <MainWrapper>
       <MainContents>
         <ButtonGroup>
-          <TypeBtn
-            back_img={fireIcon}
-            onClick={() => {
-              setType(1);
-            }}
-          />
-          <TypeBtn
-            back_img={waterIcon}
-            onClick={() => {
-              setType(2);
-            }}
-          />
-          <TypeBtn
-            back_img={grassIcon}
-            onClick={() => {
-              setType(3);
-            }}
-          />
-          <TypeBtn
-            back_img={electricIcon}
-            onClick={() => {
-              setType(4);
-            }}
-          />
-          <TypeBtn
-            back_img={psychicIcon}
-            onClick={() => {
-              setType(5);
-            }}
-          />
+          {iconArr.map((icon, index) => (
+            <TypeBtn
+              key={index}
+              back_img={icon}
+              onMouseEnter={() => setHoveredType(index)}
+              onMouseLeave={() => setHoveredType(null)}
+              onClick={() => {
+                setType(index + 1);
+              }}
+            >
+              {hoveredType === index && (
+                <HoverInfo>{typeArr[hoveredType]}</HoverInfo>
+              )}
+            </TypeBtn>
+          ))}
         </ButtonGroup>
         <PokeMonViewWrap>
           <Titled> 도감 정보 </Titled>
@@ -401,6 +386,7 @@ const TypeBtn = styled.button<{ back_img: string }>`
   background-size: 100% 100%;
   text-align: center;
   border: 2px solid #111826;
+  position: relative;
   &:hover {
     border: 2px solid white;
   }
@@ -408,6 +394,21 @@ const TypeBtn = styled.button<{ back_img: string }>`
     border: 2px solid white;
     box-shadow: 0 0 10px 5px white;
   }
+`;
+
+const HoverInfo = styled.div`
+  position: absolute;
+  background-color: black;
+  border: 2px solid white;
+  color: white;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transform: translateX(-50%);
+  left: -150%;
+  top: -10%;
+  padding: 20px;
+  z-index: 10;
 `;
 
 //현재 포켓몬이 보이는 창
@@ -507,6 +508,14 @@ const CurPokeMonSelect = styled.button`
   color: white;
   font-size: 0.9rem;
   font-weight: bold;
+
+  &:hover {
+    border: 2px solid white;
+  }
+  &:focus {
+    border: 2px solid white;
+    background-color: #7f81f662;
+  }
 `;
 
 //포켓몬 도감 트리 보이는 창
@@ -519,6 +528,7 @@ const Contents = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 10px;
+  overflow: auto;
 `;
 
 //경험치 바 + 남은 경험치 텍스트 정보

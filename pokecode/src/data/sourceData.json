@@ -1,22 +1,22 @@
 [
   {
-    "label": "구현",
+    "label": "구현(불)",
     "value": 50
   },
   {
-    "label": "그래프",
+    "label": "그래프(물)",
     "value": 45
   },
   {
-    "label": "자료구조",
+    "label": "자료구조(풀)",
     "value": 40
   },
   {
-    "label": "수학",
+    "label": "수학(전기)",
     "value": 53
   },
   {
-    "label": "DP",
+    "label": "DP(에스퍼)",
     "value": 36
   }
 ]
