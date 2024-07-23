@@ -84,7 +84,13 @@ const userInfo = async () => {
       localStorage.setItem('nick_name', data.user[0].nick_name);
       localStorage.setItem('user_exp', data.user[0].user_exp);
       localStorage.setItem('user_level', data.user[0].user_level);
-      console.log(data);
+      localStorage.setItem('poke_title', data.user[0].poke_title);
+      localStorage.setItem('poke_eval', data.user[0].poke_eval);
+      localStorage.setItem('poke_legend_yn', data.user[0].poke_legend_yn);
+      localStorage.setItem('poke_type', data.user[0].poke_type);
+      localStorage.setItem('poke_name', data.user[0].poke_name);
+      localStorage.setItem('poke_img', data.user[0].poke_img);
+      localStorage.setItem('poke_profile_img', data.user[0].poke_profile_img);
       return data.user[0];
     })
     .catch((error) => {

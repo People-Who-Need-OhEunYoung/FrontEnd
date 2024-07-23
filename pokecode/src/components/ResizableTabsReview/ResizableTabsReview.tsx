@@ -106,7 +106,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   };
 
   const handleKickOut = (index: number) => {
-    alert(`객체 ${index + 1} 강퇴되었습니다.`);
+    alert(`${index + 1} 강퇴되었습니다.`);
     setContextMenus([null, null, null, null]);
   };
 
