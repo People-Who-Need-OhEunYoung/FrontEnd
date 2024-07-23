@@ -8,7 +8,7 @@ import { MainWrapper } from '../../components/MainWrapper';
 import poo from '../../assets/images/poo.png';
 import pokeball from '../../assets/images/poke-ball.png';
 
-import { pokemonName, getPooCount, removePoo } from '../../utils/api/api';
+import { getPooCount, removePoo } from '../../utils/api/api';
 
 import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
@@ -63,8 +63,8 @@ const UserMain = () => {
     });
   };
 
-  const pokemonnameSet = async (name: number) => {
-    setPokemonname(await pokemonName(name));
+  const pokemonnameSet = () => {
+    setPokemonname(user.poke_name);
   };
 
   const animateRandomly = async () => {
@@ -102,7 +102,7 @@ const UserMain = () => {
   };
 
   useEffect(() => {
-    if (user.cur_poke_id) pokemonnameSet(user.cur_poke_id);
+    if (user.cur_poke_id) pokemonnameSet();
   }, [user.cur_poke_id]);
 
   useEffect(() => {
@@ -412,11 +412,12 @@ const PokeName = styled.div`
 
 const LevelWrap = styled.div`
   position: absolute;
-  width: 10vw;
+  width: 40%;
   bottom: 0;
   left: 0;
   font-weight: 500;
   padding: 10px;
+  font-size: 30px;
   background: #111826;
   border-radius: 0px 20px 0px 0px;
 
@@ -440,13 +441,19 @@ const LevelWrap = styled.div`
     transform: rotate(-180deg);
     background: url(${art});
   }
+  @media (max-width: 750px) {
+    font-size: 1em;
+  }
 `;
 
 const Level = styled.div`
   border-radius: 30px;
-  font-size: 0.8rem;
+  font-size: 2rem;
   text-align: left;
   margin-left: 10%;
+  @media (max-width: 750px) {
+    font-size: 1em;
+  }
 `;
 
 const ButtonWrap = styled.div`
@@ -489,16 +496,16 @@ const Button = styled(Link)`
 // 테두리 코드
 const StyledBase = styled.div`
   position: relative;
-  height: 10px;
+  height: 20px;
   border: 3px solid;
-  border-radius: 10px;
+  border-radius: 20px;
   margin: 10px 10% 10px 0;
 `;
 
 const StyledRange = styled.div<{ setprogress: number }>`
   width: ${(props) => `${props.setprogress}%`};
-  height: 10px;
-  border-radius: 10px;
+  height: 20px;
+  border-radius: 20px;
   background: linear-gradient(to right, #38bdf8, #6366f1);
 `;
 
@@ -508,29 +515,21 @@ const HoverModal = styled.p<{ setprogress: number }>`
   font-family: 'Noto Sans KR', 'Arsenal SC', sans-serif;
   font-optical-sizing: auto;
   position: absolute;
-  width: 40px;
+  width: 100px;
   left: ${(props) => `${props.setprogress}%`};
-  top: 100%;
+  top: -180%;
   border-radius: 8px;
   background: #38bdf8;
   color: #fff;
-  font-size: 10px;
+  font-size: 30px;
   display: block;
   z-index: 1000;
   border: none;
   transform: translatex(-50%);
-  &::after {
-    position: absolute;
-    bottom: 100%;
-    width: 0;
-    height: 0;
-    margin-left: -10px;
-    border: solid transparent;
-    border-color: rgba(51, 51, 51, 0);
-    border-bottom-color: #38bdf8;
-    border-width: 5px;
-    pointer-events: none;
-    content: '';
+  @media (max-width: 750px) {
+    width: 50px;
+    font-size: 1em;
+    top: -100%;
   }
 `;
 export default UserMain;

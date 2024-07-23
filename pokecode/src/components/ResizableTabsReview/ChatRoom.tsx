@@ -18,13 +18,19 @@ interface User {
 
 interface ChatRoomProps {
   onUserChange: (users: any) => void;
+  kickOut: any;
+  kickOutReset: (set: boolean | null) => void;
 }
 
-const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
+const ChatRoom: React.FC<ChatRoomProps> = ({
+  onUserChange,
+  kickOut,
+  kickOutReset,
+}) => {
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
-  const [first, setFirst] = useState(false);
+
   const dispatch = useDispatch();
   const socketRef = useRef<Socket | null>(null);
 
@@ -37,6 +43,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+  useEffect(() => {
+    if (kickOut != null) forceOut(kickOut);
+    kickOutReset(null);
+  }, [kickOut, users.length]);
 
   const savedUsername: string | null = localStorage.getItem('nick_name');
   const savedRoomId: string | null = localStorage.getItem('roomId');
@@ -49,21 +59,16 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       sendMessage();
     }
   };
+
   const userChecker = async () => {
     let counter = await getRoomPeopleChecker(savedRoomId);
     console.log('-------------------유저인원', counter);
-    if (counter.count == 1) {
+    if (counter.count == 0) {
       alert('사용자정보가 없습니다. 다시 입장하세요');
       navigate('/roomlist');
       return;
     }
   };
-
-  useEffect(() => {
-    setMessage('[notice]' + savedUsername + '님이 입장했습니다.');
-    setFirst(true);
-    sendMessage();
-  }, [first]);
 
   useEffect(() => {
     if (!savedUsername || !savedRoomId) {
@@ -72,11 +77,25 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       return;
     }
 
+    setTimeout(() => {
+      userChecker();
+    }, 500);
+
     const socket = io(import.meta.env.VITE_APP_ROOM, {
       transports: ['websocket'],
     });
 
     socketRef.current = socket;
+
+    window.addEventListener('beforeunload', () => {
+      const leaveMessage = `[notice]${savedUsername}님이 퇴장했습니다.`;
+      socket.emit('SEND_MESSAGE', {
+        room_id: savedRoomId,
+        nick_name: savedUsername,
+        message: leaveMessage,
+      });
+    });
+
     socket.on('connect', () => {
       console.log(`Connected to socket, joining room ${savedRoomId}`);
       socket.emit('CONNECTED_TO_ROOM', {
@@ -84,6 +103,13 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         bakjoon_id: savedUserId,
         nick_name: savedUsername,
         cur_poke_id: savedPokeId,
+      });
+      console.log(`Disconnected from socket, leaving room ${savedRoomId}`);
+      const leaveMessage = `[notice]${savedUsername}님이 입장했습니다.`;
+      socket.emit('SEND_MESSAGE', {
+        room_id: savedRoomId,
+        nick_name: savedUsername,
+        message: leaveMessage,
       });
     });
 
@@ -105,9 +131,11 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       console.log(`Received message in room ${savedRoomId}:`, message);
       setMessages((prevMessages) => [...prevMessages, message]);
     });
+
     //강퇴기능 추가 필요
-    socket.on('USER:FORCED_OUT', (a) => {
-      setMessage(`[notice]${a}님이 퇴장당했습니다.`);
+    socket.on('USER:FORCED_OUT', () => {
+      alert('강제퇴장 당했습니다.');
+      navigate('/roomlist');
     });
 
     return () => {
@@ -162,9 +190,17 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   const forceOut = (nick_name: string) => {
     const socket = socketRef.current;
     if (socket) {
+      console.log(nick_name);
       socket.emit('FORCE_OUT', {
         room_id: savedRoomId,
         nick_name: nick_name,
+      });
+
+      const leaveMessage = `[notice]${nick_name}님이 강퇴당했습니다.`;
+      socket.emit('SEND_MESSAGE', {
+        room_id: savedRoomId,
+        nick_name: savedUsername,
+        message: leaveMessage,
       });
     }
   };
@@ -179,20 +215,12 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       }}
     >
       <Header>
-        <p style={{ position: 'absolute', left: '15px', fontSize: '1.2rem' }}>
+        <p style={{ position: 'absolute', left: '15px', fontSize: '1.5rem' }}>
           채팅
         </p>
-        <p style={{ position: 'absolute', right: '20px', fontSize: '1rem' }}>
+        <p style={{ position: 'absolute', right: '20px', fontSize: '1.2rem' }}>
           접속중인 인원: <b> {users.length}</b>
         </p>
-        <button
-          onClick={() => {
-            forceOut('우주최강다흰짱짱');
-          }}
-          style={{ position: 'absolute', left: '80px', fontSize: '1rem' }}
-        >
-          강퇴 테스트
-        </button>
       </Header>
       <div
         style={{
@@ -231,28 +259,31 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
             height: '100%',
             width: '80%',
             margin: '0',
-            border: '1px solid #ccc',
+            border: 'none',
+            borderRadius: '10px',
             padding: '10px',
             boxSizing: 'border-box',
             resize: 'none',
           }}
         />
-        <button
-          style={{
-            height: '100%',
-            width: '20%',
-            margin: '0',
-            border: 'none',
-            float: 'right',
-          }}
-          onClick={sendMessage}
-        >
-          보내기
-        </button>
+        <SendBtn onClick={sendMessage}>보내기</SendBtn>
       </div>
     </div>
   );
 };
+
+const SendBtn = styled.button`
+  height: 100%;
+  width: 20%;
+  margin: 0;
+  border: none;
+  float: right;
+  font-size: 1.2rem;
+  background-color: #6366f1;
+  color: white;
+  font-weight: bold;
+  border-radius: 30px;
+`;
 
 const UserName = styled.strong`
   display: inline-block;
@@ -271,6 +302,7 @@ const NoticeMessage = styled.p`
   box-sizing: border-box;
   margin: 40px auto;
   padding: 5px;
+  font-size: 1.3rem;
 `;
 
 const MessageContainer = styled.div<{ isOwnMessage?: boolean }>`
@@ -280,47 +312,34 @@ const MessageContainer = styled.div<{ isOwnMessage?: boolean }>`
 
 const MessageBubble = styled.pre<{ isOwnMessage?: boolean }>`
   box-sizing: border-box;
-  padding: 10px;
+  padding: 10px 20px;
   background: ${({ isOwnMessage }) =>
-    isOwnMessage
-      ? 'linear-gradient(to right, #6295A2, #538392)'
-      : 'linear-gradient(to right, #97b9b2, #80B9AD)'};
+    isOwnMessage ? '#9fa1fb78' : '#64aaf68e'};
   display: inline-block;
-  border-radius: 10px;
+  border-radius: 30px 30px 0 30px;
   margin: 0 10px;
   max-width: 300px;
   white-space: break-spaces;
   word-break: break-all;
   position: relative;
   color: ${({ isOwnMessage }) => (isOwnMessage ? 'white' : 'black')};
+  border-radius: ${({ isOwnMessage }) =>
+    isOwnMessage ? '30px 30px 0 30px' : '30px 30px 30px 0'};
 
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: 10px;
-    left: ${({ isOwnMessage }) => (isOwnMessage ? 'auto' : '-10px')};
-    right: ${({ isOwnMessage }) => (isOwnMessage ? '-10px' : 'auto')};
-    width: 0;
-    height: 0;
-    border: 10px solid transparent;
-    border-top-color: ${({ isOwnMessage }) =>
-      isOwnMessage ? '#538392' : '#97b9b2'};
-    border-bottom: 0;
-    margin-top: -5px;
-  }
+  font-size: 1.3rem;
 `;
 
 const Header = styled.div`
   height: 10%;
   color: #d3dde8;
-  line-height: 20px;
+  line-height: 40px;
   box-sizing: border-box;
-  border-bottom: 2px solid white;
   width: 100%;
   display: flex;
   align-items: center;
   padding-left: 10px;
   position: relative;
+  background-color: #111826;
 `;
 
 export default ChatRoom;

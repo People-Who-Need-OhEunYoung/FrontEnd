@@ -27,6 +27,10 @@ const ModalContent2 = ({ width, reset }: any) => {
   );
   const { user } = useSelector((state: RootState) => state.userinfo);
 
+  const problemDetails = useSelector(
+    (state: RootState) => state.probinfo.problemDetails
+  );
+
   //우현코드 start
   const navigate = useNavigate();
   //우현코드 end
@@ -44,6 +48,17 @@ const ModalContent2 = ({ width, reset }: any) => {
     //빌드를 위해 임시 콘솔 처리
     console.log(problems);
   }, []);
+
+  useEffect(() => {
+    if (problemDetails && problems.length > 0) {
+      const matchedProblem = problems.find(
+        (problem) => problem.title === problemDetails.title
+      );
+      if (matchedProblem) {
+        setSelectedProblem(matchedProblem);
+      }
+    }
+  }, [problemDetails, problems]);
 
   useEffect(() => {
     if (reset) {
@@ -140,6 +155,7 @@ const ModalContent2 = ({ width, reset }: any) => {
         }
       );
       localStorage.setItem('roomId', data.room_id);
+      localStorage.setItem('roomOwner', data.bakjoon_id);
 
       const queryParam: any = {
         roomid: data.room_id,
@@ -181,6 +197,7 @@ const ModalContent2 = ({ width, reset }: any) => {
                 getOptionLabel={(option) => option.title} // 라벨을 지정
                 getOptionValue={(option) => option.id} // 값을 지정
                 onChange={selecthandleChange}
+                value={selectedProblem}
               />
             </div>
             <div
