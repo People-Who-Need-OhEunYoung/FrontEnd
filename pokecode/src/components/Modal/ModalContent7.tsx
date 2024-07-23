@@ -40,6 +40,7 @@ const ModalContent7 = ({ id, title, roomId, maxPerson, event }: any) => {
       roomid: roomIdValue,
       id: id,
       title: title,
+      max_person : maxPerson
     };
 
     const params = new URLSearchParams(queryParam);
