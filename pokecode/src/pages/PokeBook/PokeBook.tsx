@@ -25,7 +25,11 @@ import psychicIcon from '../../assets/images/에스퍼.png';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { pokemonName, showPokemonBook } from '../../utils/api/api';
+import {
+  pokemonName,
+  showPokemonBook,
+  updateMyPokemon,
+} from '../../utils/api/api';
 import { setPokemonId } from '../../store/userInfo';
 
 ChartJS.register(
@@ -39,6 +43,11 @@ ChartJS.register(
   PointElement,
   LineElement
 );
+
+type ProblemType = {
+  label: string;
+  value: number;
+};
 
 defaults.maintainAspectRatio = false;
 defaults.responsive = true;
@@ -64,7 +73,33 @@ const PokeBook = () => {
   const [pokemonname, setPokemonname] = useState<string>();
   const [curType, setCurType] = useState<number>(0);
 
+  const [data, setData] = useState<ProblemType[]>(sourceData);
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const localStorageKeys: { [key: string]: string } = {
+      구현: 'impl_exp',
+      그래프: 'graph_exp',
+      자료구조: 'data_exp',
+      수학: 'math_exp',
+      DP: 'dp_exp',
+    };
+
+    // localStorage에서 값을 가져와서 업데이트
+    const updatedData = data.map((item) => {
+      const localStorageKey = localStorageKeys[item.label];
+      const localStorageValue = localStorage.getItem(localStorageKey);
+      if (localStorageValue !== null) {
+        return {
+          ...item,
+          value: parseInt(localStorageValue, 10)/100, // 문자열을 정수로 변환
+        };
+      }
+      return item;
+    });
+    setData(updatedData);
+  }, []);
 
   const fetchPokemonData = async () => {
     try {
@@ -128,6 +163,7 @@ const PokeBook = () => {
   const HandleChangePokemon = () => {
     if (selectedPokemon) {
       dispatch(setPokemonId(selectedPokemon));
+      updateMyPokemon(selectedPokemon);
       console.log('selectedPokemon', selectedPokemon);
     }
   };
@@ -181,11 +217,11 @@ const PokeBook = () => {
               <Bar
                 ref={chartRef}
                 data={{
-                  labels: [sourceData[type - 1].label], // 첫 번째 인덱스의 라벨
+                  labels: [data[type - 1].label], // 첫 번째 인덱스의 라벨
                   datasets: [
                     {
-                      label: sourceData[type - 1].label, // 첫 번째 인덱스의 라벨
-                      data: [sourceData[type - 1].value], // 첫 번째 인덱스의 값
+                      label: data[type - 1].label, // 첫 번째 인덱스의 라벨
+                      data: [data[type - 1].value], // 첫 번째 인덱스의 값
                       borderColor: '#000000', // 선 색
                       borderRadius: 5,
                     },
@@ -265,11 +301,11 @@ const PokeBook = () => {
           <RaderGraph>
             <Radar
               data={{
-                labels: sourceData.map((data) => data.label),
+                labels: data.map((data) => data.label),
                 datasets: [
                   {
                     label: 'Count',
-                    data: sourceData.map((data) => data.value),
+                    data: data.map((data) => data.value),
                     fill: true,
                     backgroundColor: 'rgba(47, 50, 255, 0.2)', // 배경색
                     borderColor: '#38BDF8 ', // 선 색
@@ -315,11 +351,11 @@ const PokeBook = () => {
           <BarGraph>
             <Bar
               data={{
-                labels: sourceData.map((data) => data.label),
+                labels: data.map((data) => data.label),
                 datasets: [
                   {
                     label: 'Count',
-                    data: sourceData.map((data) => data.value),
+                    data: data.map((data) => data.value),
                     borderColor: '#6366F1', // 선 색
                     backgroundColor: '#38bff8ce ', // 막대 배경색
                     borderRadius: 7,
