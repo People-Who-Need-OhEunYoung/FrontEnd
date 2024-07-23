@@ -1,12 +1,11 @@
 import { useEffect, useState, useRef, ChangeEvent, KeyboardEvent } from 'react';
 import io, { Socket } from 'socket.io-client';
 import { setWrittenCode } from '../../store/problemSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { RootState } from '../../store';
-
+import { getRoomPeopleChecker } from '../../utils/api/api';
 
 interface Message {
   nick_name: any;
@@ -26,7 +25,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
   const [first, setFirst] = useState(false);
-  const { user } = useSelector((state: RootState) => state.userinfo);
   const dispatch = useDispatch();
   const socketRef = useRef<Socket | null>(null);
 
@@ -51,6 +49,15 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       sendMessage();
     }
   };
+  const userChecker = async () => {
+    let counter = await getRoomPeopleChecker(savedRoomId);
+    console.log('-------------------유저인원', counter);
+    if (counter.count == 1) {
+      alert('사용자정보가 없습니다. 다시 입장하세요');
+      navigate('/roomlist');
+      return;
+    }
+  };
 
   useEffect(() => {
     setMessage('[notice]' + savedUsername + '님이 입장했습니다.');
@@ -61,11 +68,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   useEffect(() => {
     if (!savedUsername || !savedRoomId) {
       alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요');
-      navigate('/roomlist');
-      return;
-    }
-    if (user.nick_name == '' && users.length == 0) {
-      alert('사용자정보가 없습니다. 다시 입장하세요');
       navigate('/roomlist');
       return;
     }
@@ -176,7 +178,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         boxSizing: 'border-box',
       }}
     >
-
       <Header>
         <p style={{ position: 'absolute', left: '15px', fontSize: '1.2rem' }}>
           채팅
@@ -306,8 +307,6 @@ const MessageBubble = styled.pre<{ isOwnMessage?: boolean }>`
       isOwnMessage ? '#538392' : '#97b9b2'};
     border-bottom: 0;
     margin-top: -5px;
-    /* transform: ${({ isOwnMessage }) =>
-      isOwnMessage ? 'rotate(180deg)' : 'none'}; */
   }
 `;
 

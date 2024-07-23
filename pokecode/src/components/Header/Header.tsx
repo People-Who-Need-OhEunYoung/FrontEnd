@@ -131,8 +131,8 @@ export const Header2 = () => {
 
 export const Header3 = () => {
   const { user } = useSelector((state: RootState) => state.userinfo);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const userSet = async () => {
     dispatch(setUser(await userInfo()));
   };

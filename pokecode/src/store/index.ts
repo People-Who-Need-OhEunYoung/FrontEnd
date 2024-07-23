@@ -1,3 +1,4 @@
+import chatUsersSlice from './chatUsersSlice';
 import { configureStore } from '@reduxjs/toolkit';
 import timerReducer from './timerSlice';
 import userinfoReducer from './userInfo';
@@ -12,6 +13,7 @@ const store = configureStore({
     probinfo: problemReducer,
     codecaller: codeCallerReducer,
     roomdata: roomdataSlice,
+    chatUsers: chatUsersSlice,
   },
 });
 

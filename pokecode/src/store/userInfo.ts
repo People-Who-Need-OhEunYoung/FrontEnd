@@ -20,6 +20,13 @@ export interface User {
   nick_name: string;
   user_exp: number;
   user_level: number;
+  poke_title: string;
+  poke_eval: number;
+  poke_legend_yn: number;
+  poke_type: string;
+  poke_name: string;
+  poke_img: string;
+  poke_profile_img: string;
 }
 
 export interface UserState {
@@ -46,6 +53,13 @@ const initialState: UserState = {
     nick_name: '',
     user_exp: 0,
     user_level: 0,
+    poke_title: '',
+    poke_eval: 1,
+    poke_legend_yn: 0,
+    poke_type: '',
+    poke_name: '',
+    poke_img: '',
+    poke_profile_img: '',
   },
 };
 
