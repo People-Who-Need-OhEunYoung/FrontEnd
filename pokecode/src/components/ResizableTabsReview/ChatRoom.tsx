@@ -225,7 +225,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
       <div
         style={{
           overflowY: 'scroll',
-          height: '80%',
+          height: '75%',
         }}
       >
         {messages.map((msg, index) =>
@@ -246,7 +246,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div style={{ height: '10%' }}>
+      <div style={{ height: '15%', boxSizing: 'border-box', padding:'15px' }}>
         <textarea
           value={message}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -257,8 +257,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
           rows={2}
           style={{
             height: '100%',
-            width: '80%',
-            margin: '0',
+            width: '72%',
             border: 'none',
             borderRadius: '10px',
             padding: '10px',
@@ -274,15 +273,16 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
 
 const SendBtn = styled.button`
   height: 100%;
-  width: 20%;
-  margin: 0;
+  width: 25%;
+  box-sizing: border-box;
+  padding: 10px;
   border: none;
   float: right;
   font-size: 1.2rem;
-  background-color: #6366f1;
+  background-color: #6365f19f;
   color: white;
   font-weight: bold;
-  border-radius: 30px;
+  border-radius: 10px;
 `;
 
 const UserName = styled.strong`

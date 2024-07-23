@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useState } from 'react';
 import styled from 'styled-components';
 import DesignedButton1 from '../DesignedButton/DesignedButton1';
 import ModalContent1 from './ModalContent1';
@@ -7,8 +7,7 @@ import ModalContent3 from './ModalContent3';
 import ModalContent4 from './ModalContent4';
 import ModalContent5 from './ModalContent5';
 import ModalContent7 from './ModalContent7';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+
 /*
 
 모달 사용법 : 

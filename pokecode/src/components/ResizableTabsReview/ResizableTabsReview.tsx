@@ -494,6 +494,7 @@ const ChatRoomDiv = styled.div`
   overflow: auto;
   background-size: cover;
   border-radius: 10px;
+  
 `;
 
 const NicknameBox = styled.p`
