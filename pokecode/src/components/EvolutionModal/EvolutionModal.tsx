@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import './EvolutionModal.css';
 import { useSelector } from 'react-redux';
-import { pokemonName } from '../../utils/api/api';
+import { pokemonName, setEvolutionPokemon } from '../../utils/api/api';
 import { RootState } from '../../store';
+import { useDispatch } from 'react-redux';
+import { setPokemonId } from '../../store/userInfo';
 
 const EvolutionModal = () => {
   const [isEvolving, setIsEvolving] = useState(false);
@@ -26,6 +28,8 @@ const EvolutionModal = () => {
     fetchPokemonData();
   }, [currentPokemonNumber, nextPokemonNumber]);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     setTimeout(() => {
       setIsEvolving(true);
@@ -37,6 +41,8 @@ const EvolutionModal = () => {
     }, 7000); // 7초 후 진화 완료 상태로 변경
 
     setTimeout(() => {
+      setEvolutionPokemon(nextPokemonNumber);
+      dispatch(setPokemonId(nextPokemonNumber));
       setIsVisible(false); // 10초 후 모달 숨기기
     }, 10000); // 10초 후 모달 숨기기
   }, []);

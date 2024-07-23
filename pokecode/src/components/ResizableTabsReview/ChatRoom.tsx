@@ -18,9 +18,10 @@ interface User {
 
 interface ChatRoomProps {
   onUserChange: (users: any) => void;
+  kickOut: any;
 }
 
-const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
+const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange, kickOut }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
@@ -38,6 +39,9 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+  useEffect(() => {
+    if (kickOut != null) forceOut(kickOut);
+  }, [kickOut]);
 
   const savedUsername: string | null = localStorage.getItem('nick_name');
   const savedRoomId: string | null = localStorage.getItem('roomId');
@@ -94,6 +98,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
 
     socket.on('disconnect', () => {
       console.log(`Disconnected from socket, leaving room ${savedRoomId}`);
+      leaveRoom();
     });
 
     socket.on('ROOM:CONNECTION', (users: User[]) => {
@@ -111,8 +116,9 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
     //강퇴기능 추가 필요
-    socket.on('USER:FORCED_OUT', (a) => {
-      setMessage(`[notice]${a}님이 퇴장당했습니다.`);
+    socket.on('USER:FORCED_OUT', () => {
+      alert('강제퇴장 당했습니다.');
+      navigate('/roomlist');
     });
 
     return () => {
@@ -167,9 +173,17 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   const forceOut = (nick_name: string) => {
     const socket = socketRef.current;
     if (socket) {
+      console.log(nick_name);
       socket.emit('FORCE_OUT', {
         room_id: savedRoomId,
         nick_name: nick_name,
+      });
+
+      const leaveMessage = `[notice]${nick_name}님이 강퇴당했습니다.`;
+      socket.emit('SEND_MESSAGE', {
+        room_id: savedRoomId,
+        nick_name: savedUsername,
+        message: leaveMessage,
       });
     }
   };
@@ -190,14 +204,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         <p style={{ position: 'absolute', right: '20px', fontSize: '1rem' }}>
           접속중인 인원: <b> {users.length}</b>
         </p>
-        <button
-          onClick={() => {
-            forceOut('우주최강다흰짱짱');
-          }}
-          style={{ position: 'absolute', left: '80px', fontSize: '1rem' }}
-        >
-          강퇴 테스트
-        </button>
       </Header>
       <div
         style={{

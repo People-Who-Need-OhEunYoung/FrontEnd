@@ -412,7 +412,7 @@ const PokeName = styled.div`
 
 const LevelWrap = styled.div`
   position: absolute;
-  width: 50%;
+  width: 40%;
   bottom: 0;
   left: 0;
   font-weight: 500;
@@ -441,6 +441,9 @@ const LevelWrap = styled.div`
     transform: rotate(-180deg);
     background: url(${art});
   }
+  @media (max-width: 750px) {
+    font-size: 1em;
+  }
 `;
 
 const Level = styled.div`
@@ -448,6 +451,9 @@ const Level = styled.div`
   font-size: 2rem;
   text-align: left;
   margin-left: 10%;
+  @media (max-width: 750px) {
+    font-size: 1em;
+  }
 `;
 
 const ButtonWrap = styled.div`
@@ -490,16 +496,16 @@ const Button = styled(Link)`
 // 테두리 코드
 const StyledBase = styled.div`
   position: relative;
-  height: 30px;
+  height: 20px;
   border: 3px solid;
-  border-radius: 10px;
+  border-radius: 20px;
   margin: 10px 10% 10px 0;
 `;
 
 const StyledRange = styled.div<{ setprogress: number }>`
   width: ${(props) => `${props.setprogress}%`};
-  height: 30px;
-  border-radius: 10px;
+  height: 20px;
+  border-radius: 20px;
   background: linear-gradient(to right, #38bdf8, #6366f1);
 `;
 
@@ -511,7 +517,7 @@ const HoverModal = styled.p<{ setprogress: number }>`
   position: absolute;
   width: 100px;
   left: ${(props) => `${props.setprogress}%`};
-  top: -80%;
+  top: -180%;
   border-radius: 8px;
   background: #38bdf8;
   color: #fff;
@@ -520,5 +526,10 @@ const HoverModal = styled.p<{ setprogress: number }>`
   z-index: 1000;
   border: none;
   transform: translatex(-50%);
+  @media (max-width: 750px) {
+    width: 50px;
+    font-size: 1em;
+    top: -100%;
+  }
 `;
 export default UserMain;

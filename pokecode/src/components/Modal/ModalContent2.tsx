@@ -140,6 +140,7 @@ const ModalContent2 = ({ width, reset }: any) => {
         }
       );
       localStorage.setItem('roomId', data.room_id);
+      localStorage.setItem('roomOwner', data.bakjoon_id);
 
       const queryParam: any = {
         roomid: data.room_id,

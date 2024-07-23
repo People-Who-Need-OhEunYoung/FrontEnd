@@ -13,6 +13,7 @@ import VoiceChatOV from './VoiceChatOV';
 import { setRoomId, setUsername } from '../../store/roomdataSlice';
 import { CodeAIWardBalloon } from '../CodeAIButton';
 import EvolutionModal from '../EvolutionModal/EvolutionModal';
+import { Bar } from 'react-chartjs-2';
 
 const Container = styled.div`
   display: flex;
@@ -81,8 +82,8 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRef = useRef<HTMLDivElement | null>(null);
   const [usersInfo, setUsersInfo] = useState<any[]>([]);
+  const [userData, setUserDne] = useState<any>(null);
   const { user } = useSelector((state: RootState) => state.userinfo);
-  const { chatUsers } = useSelector((state: RootState) => state.chatUsers);
   const [hoveredPokeId, setHoveredPokeId] = useState(null);
 
   const [contextMenus, setContextMenus] = useState<
@@ -90,6 +91,8 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   >([null, null, null, null]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const roomOwner = localStorage.getItem('roomOwner');
 
   const handleContextMenu = (event: MouseEvent, index: number) => {
     event.preventDefault();
@@ -105,9 +108,11 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
     setContextMenus([null, null, null, null]);
   };
 
-  const handleKickOut = (index: number) => {
-    alert(`${index + 1} 강퇴되었습니다.`);
+  const handleKickOut = (user: any) => {
+    console.log(user);
+    alert(`${user.nick_name} 강퇴되었습니다.`);
     setContextMenus([null, null, null, null]);
+    setUserDne(user.nick_name);
   };
 
   useEffect(() => {
@@ -218,85 +223,148 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
       style={{ position: 'relative', height: 'calc(100vh - 160px)' }}
     >
       {usersInfo !== null
-        ? usersInfo.map((userOne, key) => (
-            <motion.div
-              drag
-              dragControls={dragControls}
-              animate={animationControls} // 애니메이션 컨트롤 적용
-              style={{
-                position: 'fixed',
-                display: 'inline-block',
-                zIndex: 9999,
-                bottom: '90px',
-                left: `${30 + 10 * key}%`,
-                transform: 'translateX(0px) translateY(0px) translateZ(0px)',
-                transition: '0.1s',
-                textAlign: 'center',
-              }}
-              className="pokemon"
-            >
-              {userOne.nick_name == user.nick_name ? (
-                <CodeAIWardBalloon
-                  width="300px"
-                  left="-150px"
-                  fontSize="1em"
-                  padding="30px"
-                  bottom="100px"
-                  position="absolute"
-                  maxHightSet=""
-                  maxHightSet1=""
-                />
-              ) : (
-                ''
-              )}
-              {hoveredPokeId === userOne.cur_poke_id && (
-                <div>
-                  <div>구현:{userOne.impl_exp}</div>
-                  <div>수학:{userOne.math_exp}</div>
-                  <div>자료구조:{userOne.data_exp}</div>
-                  <div>그래프:{userOne.graph_exp}</div>
-                  <div>DP:{userOne.dp_exp}</div>
-                </div>
-              )}
-              <Pokemon
-                src={'/' + userOne.cur_poke_id + '.gif'}
-                onContextMenu={(e: any) => handleContextMenu(e, key)}
-                onMouseEnter={() => {
-                  setHoveredPokeId(userOne.cur_poke_id);
+        ? usersInfo.map((userOne, key) => {
+            let myData;
+            myData = [
+              {
+                label: '구현',
+                value: userOne.impl_exp,
+              },
+              {
+                label: '그래프',
+                value: userOne.graph_exp,
+              },
+              {
+                label: '자료구조',
+                value: userOne.data_exp,
+              },
+              {
+                label: '수학',
+                value: userOne.math_exp,
+              },
+              {
+                label: 'DP',
+                value: userOne.dp_exp,
+              },
+            ];
+            return (
+              <motion.div
+                drag
+                dragControls={dragControls}
+                animate={animationControls} // 애니메이션 컨트롤 적용
+                style={{
+                  position: 'fixed',
+                  display: 'inline-block',
+                  zIndex: 9999,
+                  bottom: '90px',
+                  left: `${30 + 10 * key}%`,
+                  transform: 'translateX(0px) translateY(0px) translateZ(0px)',
+                  transition: '0.1s',
+                  textAlign: 'center',
                 }}
-                onMouseLeave={() => {
-                  setHoveredPokeId(null);
-                }}
-              ></Pokemon>
-              {contextMenus[key] ? (
-                <ul
-                  className="context-menu"
-                  style={{
-                    top: contextMenus[key].mouseY,
-                    left: contextMenus[key].mouseX,
-                    textAlign: 'center',
+                className="pokemon"
+              >
+                {userOne.nick_name == user.nick_name ? (
+                  <CodeAIWardBalloon
+                    width="300px"
+                    left="-150px"
+                    fontSize="1em"
+                    padding="30px"
+                    bottom="100px"
+                    position="absolute"
+                    maxHightSet=""
+                    maxHightSet1=""
+                  />
+                ) : (
+                  ''
+                )}
+                {hoveredPokeId === userOne.cur_poke_id && (
+                  <div>
+                    <BarGraph>
+                      <Bar
+                        data={{
+                          labels: myData.map((data) => data.label),
+                          datasets: [
+                            {
+                              label: 'Count',
+                              data: myData.map((data) => data.value),
+                              borderColor: '#6366F1', // 선 색
+                              backgroundColor: '#38bff8ce ', // 막대 배경색
+                              borderRadius: 7,
+                            },
+                          ],
+                        }}
+                        options={{
+                          indexAxis: 'y',
+                          scales: {
+                            x: {
+                              ticks: {
+                                color: '#ffffff', // x축 눈금 색상
+                                font: {
+                                  size: 14, // x축 눈금 폰트 사이즈
+                                },
+                              },
+                            },
+                            y: {
+                              ticks: {
+                                color: '#ffffff', // y축 눈금 색상
+                                font: {
+                                  size: 14, // y축 눈금 폰트 사이즈
+                                },
+                              },
+                            },
+                          },
+                          plugins: {
+                            legend: {
+                              display: false,
+                            },
+                          },
+                        }}
+                      />
+                    </BarGraph>
+                  </div>
+                )}
+                <Pokemon
+                  src={'/' + userOne.cur_poke_id + '.gif'}
+                  onContextMenu={(e: any) => handleContextMenu(e, key)}
+                  onMouseEnter={() => {
+                    setHoveredPokeId(userOne.cur_poke_id);
                   }}
-                >
-                  <li
+                  onMouseLeave={() => {
+                    setHoveredPokeId(null);
+                  }}
+                ></Pokemon>
+                {contextMenus[key] && roomOwner ? (
+                  <ul
+                    className="context-menu"
                     style={{
-                      position: 'absolute',
-                      left: '50%',
-                      top: '-40px',
-                      transform: 'translateX(-50%)',
-                      color: 'white',
-                      borderRadius: '10px',
-                      background: '#324056',
-                      width: '50px',
+                      top: contextMenus[key].mouseY,
+                      left: contextMenus[key].mouseX,
+                      textAlign: 'center',
                     }}
-                    onClick={() => handleKickOut(key)}
                   >
-                    강퇴
-                  </li>
-                </ul>
-              ) : null}
-              <NicknameBox>{userOne.nick_name}</NicknameBox>
-            </motion.div>
-          ))
+                    <li
+                      style={{
+                        position: 'absolute',
+                        left: '50%',
+                        top: '-40px',
+                        transform: 'translateX(-50%)',
+                        color: 'white',
+                        borderRadius: '10px',
+                        background: '#324056',
+                        width: '50px',
+                      }}
+                      onClick={() => handleKickOut(userOne)}
+                    >
+                      강퇴
+                    </li>
+                  </ul>
+                ) : null}
+                <NicknameBox>{userOne.nick_name}</NicknameBox>
+                <NicknameBox>{userOne.poke_title}</NicknameBox>
+              </motion.div>
+            );
+          })
         : null}
 
       <Container ref={containerRef}>
@@ -366,7 +434,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
         />
         <Tab width={width1}>
           <ChatRoomDiv>
-            <ChatRoom onUserChange={handlePokemons} />
+            <ChatRoom onUserChange={handlePokemons} kickOut={userData} />
           </ChatRoomDiv>
 
           <div
@@ -427,6 +495,20 @@ const NicknameBox = styled.p`
   text-align: center; /* 텍스트 중앙 정렬 */
   font-size: 14px; /* 글씨 크기 조정 */
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 추가 */
+`;
+
+//막대 그래프
+const BarGraph = styled.div`
+  position: absolute;
+  top: -250px; /* 그래프를 포켓몬 위로 이동시키기 위해 설정 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 200px;
+  background-color: #1c1c1e; /* 배경색 설정 */
+  border-radius: 10px; /* 둥근 모서리 설정 */
+  padding: 10px; /* 패딩 설정 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 설정 */
 `;
 
 export default ResizableTabsReview;

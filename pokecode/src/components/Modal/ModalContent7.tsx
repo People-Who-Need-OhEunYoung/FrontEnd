@@ -25,7 +25,7 @@ const ModalContent7 = ({ id, title, roomId, maxPerson, event }: any) => {
       event(false);
       return;
     }
-
+    localStorage.removeItem('roomOwner');
     const value = localStorage.getItem('bakjoon_id');
     const roomIdValue = roomId;
 
