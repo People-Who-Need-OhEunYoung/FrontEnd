@@ -288,7 +288,7 @@ const PokeBook = () => {
                     pointLabels: {
                       color: '#f5f5f5', // 라벨 폰트 색상
                       font: {
-                        size: 16, // 라벨 폰트 사이즈
+                        size: 20, // 라벨 폰트 사이즈
                         weight: 'bold',
                       },
                     },
@@ -333,7 +333,7 @@ const PokeBook = () => {
                     ticks: {
                       color: '#ffffff', // x축 눈금 색상
                       font: {
-                        size: 14, // x축 눈금 폰트 사이즈
+                        size: 20, // x축 눈금 폰트 사이즈
                       },
                     },
                   },
@@ -341,7 +341,7 @@ const PokeBook = () => {
                     ticks: {
                       color: '#ffffff', // y축 눈금 색상
                       font: {
-                        size: 14, // y축 눈금 폰트 사이즈
+                        size: 20, // y축 눈금 폰트 사이즈
                       },
                     },
                   },
@@ -349,6 +349,71 @@ const PokeBook = () => {
                 plugins: {
                   legend: {
                     display: false,
+                  },
+                  tooltip: {
+                    enabled: false,
+                    external: function (context) {
+                      // Tooltip Element
+                      let tooltipEl =
+                        document.getElementById('chartjs-tooltip');
+
+                      // Create element on first render
+                      if (!tooltipEl) {
+                        tooltipEl = document.createElement('div');
+                        tooltipEl.id = 'chartjs-tooltip';
+                        tooltipEl.style.opacity = '0';
+                        tooltipEl.style.position = 'absolute';
+                        tooltipEl.style.pointerEvents = 'none';
+                        tooltipEl.style.transition = 'opacity 0.3s';
+                        document.body.appendChild(tooltipEl);
+                      }
+
+                      // Hide if no tooltip
+                      const tooltipModel = context.tooltip;
+                      if (tooltipModel.opacity === 0) {
+                        tooltipEl.style.opacity = '0';
+                        return;
+                      }
+
+                      // Set Text
+                      if (tooltipModel.body) {
+                        const bodyLines = tooltipModel.body.map(
+                          (bodyItem: any) => bodyItem.lines
+                        );
+
+                        let innerHtml = '<div>';
+
+                        bodyLines.forEach((body: any, i: number) => {
+                          const index = tooltipModel.dataPoints[i].dataIndex;
+                          const icon = iconArr[index % iconArr.length];
+                          innerHtml += `
+                            <div style="display: flex; align-items: center; background-color: #00000071; padding: 10px 10px;">
+                              <img src="${icon}" alt="icon" style="width: 24px; height: 24px; border-radius: 5px; margin-right: 8px;" />
+                              <p style="color: white; margin: 0;">${body}</p>
+                            </div>
+                          `;
+                        });
+
+                        innerHtml += '</div>';
+
+                        tooltipEl.innerHTML = innerHtml;
+                      }
+
+                      const position =
+                        context.chart.canvas.getBoundingClientRect();
+
+                      tooltipEl.style.opacity = '1';
+                      tooltipEl.style.left =
+                        position.left +
+                        window.pageXOffset +
+                        tooltipModel.caretX +
+                        'px';
+                      tooltipEl.style.top =
+                        position.top +
+                        window.pageYOffset +
+                        tooltipModel.caretY +
+                        'px';
+                    },
                   },
                 },
               }}
@@ -499,14 +564,14 @@ export const Pokemon = styled.img`
 
 //현재 포켓몬으로 설정 버튼
 const CurPokeMonSelect = styled.button`
-  width: 70%;
-  height: 40px;
+  width: 90%;
+  height: 50px;
   margin: 6%;
   background-color: #6365f163;
   border: 2px solid #6366f1;
   border-radius: 10px;
   color: white;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   font-weight: bold;
 
   &:hover {

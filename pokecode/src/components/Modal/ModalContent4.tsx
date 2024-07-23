@@ -3,8 +3,10 @@ import { RainEffect } from '../RainEffect';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { CodeAIButton } from '../CodeAIButton';
-const ModalContent4 = ({ event, handleClose }: any) => {
+const ModalContent4 = ({ event, handleClose, probTitle }: any) => {
   const { user } = useSelector((state: RootState) => state.userinfo);
+
+ 
 
   return (
     <div style={{ width: '400px' }}>
