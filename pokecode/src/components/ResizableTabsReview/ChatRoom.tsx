@@ -25,6 +25,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
   const [first, setFirst] = useState(false);
+
   const dispatch = useDispatch();
   const socketRef = useRef<Socket | null>(null);
 
@@ -52,7 +53,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   const userChecker = async () => {
     let counter = await getRoomPeopleChecker(savedRoomId);
     console.log('-------------------유저인원', counter);
-    if (counter.count == 1) {
+    if (counter.count == 0) {
       alert('사용자정보가 없습니다. 다시 입장하세요');
       navigate('/roomlist');
       return;
@@ -71,6 +72,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       navigate('/roomlist');
       return;
     }
+
+    setTimeout(() => {
+      userChecker();
+    }, 500);
 
     const socket = io(import.meta.env.VITE_APP_ROOM, {
       transports: ['websocket'],

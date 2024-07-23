@@ -82,7 +82,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const tabRef = useRef<HTMLDivElement | null>(null);
   const [usersInfo, setUsersInfo] = useState<any[]>([]);
   const { user } = useSelector((state: RootState) => state.userinfo);
-
+  const { chatUsers } = useSelector((state: RootState) => state.chatUsers);
   const [hoveredPokeId, setHoveredPokeId] = useState(null);
 
   const [contextMenus, setContextMenus] = useState<
