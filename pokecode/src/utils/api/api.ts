@@ -4,6 +4,7 @@ export {
   pokemonName,
   getPooCount,
   removePoo,
+  setEvolutionPokemon,
   getGachaPokemon,
   updateMyPokemon,
   problemSearch,
@@ -139,6 +140,33 @@ const pokemonName = async (number: number) => {
     });
 };
 
+//진화한 포켓몬 도감 등록 및 현재포켓몬으로 변경
+const setEvolutionPokemon = async (number: number) => {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/evolution`, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      pok_id: number,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then(async (data) => {
+      console.log(data);
+      return data;
+    })
+    .catch((error) => {
+      return 'ERROR : ' + error;
+    });
+};
+
 //사용자 포켓몬 뽑기
 const getGachaPokemon: Function = async (coinSet: string) => {
   return await fetch(`${import.meta.env.VITE_APP_IP}/legendGambling`, {
@@ -185,6 +213,7 @@ const updateMyPokemon = async (pokId: number) => {
       return res.json();
     })
     .then((data) => {
+      console.log("변경요청 결과:",data);
       return data;
     })
     .catch((error) => {
