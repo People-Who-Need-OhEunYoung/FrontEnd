@@ -49,6 +49,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       sendMessage();
     }
   };
+
   const userChecker = async () => {
     let counter = await getRoomPeopleChecker(savedRoomId);
     console.log('-------------------유저인원', counter);
@@ -64,6 +65,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
     setFirst(true);
     sendMessage();
   }, [first]);
+
 
   useEffect(() => {
     if (!savedUsername || !savedRoomId) {
@@ -105,6 +107,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       console.log(`Received message in room ${savedRoomId}:`, message);
       setMessages((prevMessages) => [...prevMessages, message]);
     });
+  
     //강퇴기능 추가 필요
     socket.on('USER:FORCED_OUT', (a) => {
       setMessage(`[notice]${a}님이 퇴장당했습니다.`);
@@ -179,10 +182,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       }}
     >
       <Header>
-        <p style={{ position: 'absolute', left: '15px', fontSize: '1.2rem' }}>
+        <p style={{ position: 'absolute', left: '15px', fontSize: '1.5rem' }}>
           채팅
         </p>
-        <p style={{ position: 'absolute', right: '20px', fontSize: '1rem' }}>
+        <p style={{ position: 'absolute', right: '20px', fontSize: '1.2rem' }}>
           접속중인 인원: <b> {users.length}</b>
         </p>
         <button
@@ -231,28 +234,36 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
             height: '100%',
             width: '80%',
             margin: '0',
-            border: '1px solid #ccc',
+            border: 'none',
+            borderRadius: '10px',
             padding: '10px',
             boxSizing: 'border-box',
             resize: 'none',
           }}
         />
-        <button
-          style={{
-            height: '100%',
-            width: '20%',
-            margin: '0',
-            border: 'none',
-            float: 'right',
-          }}
+        <SendBtn
           onClick={sendMessage}
         >
           보내기
-        </button>
+        </SendBtn>
       </div>
     </div>
   );
 };
+
+const SendBtn = styled.button`
+  height: 100%;
+  width: 20%;
+  margin: 0;
+  border: none;
+  float: right;
+  font-size: 1.2rem;
+  background-color: #6366f1;
+  color: white;
+  font-weight: bold;
+  border-radius: 10px;
+
+`;
 
 const UserName = styled.strong`
   display: inline-block;
@@ -271,6 +282,7 @@ const NoticeMessage = styled.p`
   box-sizing: border-box;
   margin: 40px auto;
   padding: 5px;
+  font-size: 1.3rem;
 `;
 
 const MessageContainer = styled.div<{ isOwnMessage?: boolean }>`
@@ -280,47 +292,33 @@ const MessageContainer = styled.div<{ isOwnMessage?: boolean }>`
 
 const MessageBubble = styled.pre<{ isOwnMessage?: boolean }>`
   box-sizing: border-box;
-  padding: 10px;
+  padding: 10px 20px;
   background: ${({ isOwnMessage }) =>
     isOwnMessage
-      ? 'linear-gradient(to right, #6295A2, #538392)'
-      : 'linear-gradient(to right, #97b9b2, #80B9AD)'};
+      ? 'linear-gradient(to right, #8385fe, #6366f1)'
+      : 'linear-gradient(to right, #e8e8e8, #D3DDE8)  '};
   display: inline-block;
-  border-radius: 10px;
+  border-radius: 30px;
   margin: 0 10px;
   max-width: 300px;
   white-space: break-spaces;
   word-break: break-all;
   position: relative;
   color: ${({ isOwnMessage }) => (isOwnMessage ? 'white' : 'black')};
-
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: 10px;
-    left: ${({ isOwnMessage }) => (isOwnMessage ? 'auto' : '-10px')};
-    right: ${({ isOwnMessage }) => (isOwnMessage ? '-10px' : 'auto')};
-    width: 0;
-    height: 0;
-    border: 10px solid transparent;
-    border-top-color: ${({ isOwnMessage }) =>
-      isOwnMessage ? '#538392' : '#97b9b2'};
-    border-bottom: 0;
-    margin-top: -5px;
-  }
+  font-size: 1.3rem;
 `;
 
 const Header = styled.div`
   height: 10%;
   color: #d3dde8;
-  line-height: 20px;
+  line-height: 40px;
   box-sizing: border-box;
-  border-bottom: 2px solid white;
   width: 100%;
   display: flex;
   align-items: center;
   padding-left: 10px;
   position: relative;
+  background-color: #111826;
 `;
 
 export default ChatRoom;

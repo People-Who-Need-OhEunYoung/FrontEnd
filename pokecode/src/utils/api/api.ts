@@ -19,6 +19,7 @@ export {
   getRoomList,
   setRoom,
   getRoomPeopleChecker,
+  reviewSearch,
 };
 
 //닉네임 중복 검사
@@ -582,6 +583,32 @@ const getRoomPeopleChecker = async (roomId: string | null) => {
         throw new Error(`HTTP error! Status: ${res.statusText}`);
       }
       console.log(res);
+      return res.json();
+    })
+    .then((data) => {
+      console.log(data);
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return 'ERROR : ' + error;
+    });
+};
+
+
+//코드리뷰방 검색
+const reviewSearch = async (query: string) => {
+  return await fetch(`${import.meta.env.VITE_APP_ROOM}/reviewList?search=${query}`, {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.statusText}`);
+      }
       return res.json();
     })
     .then((data) => {

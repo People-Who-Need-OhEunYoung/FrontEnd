@@ -42,7 +42,7 @@ export const Header2 = () => {
   useEffect(() => {
     userSet();
     console.log('----유저 정보-----', user);
-  }, [user.bakjoon_id]);
+  }, [user.bakjoon_id, user.cur_poke_id]);
 
   const navigate = useNavigate();
   const loginChecker = async () => {
