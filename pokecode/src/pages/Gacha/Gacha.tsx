@@ -17,6 +17,7 @@ import { minusUserCoin } from '../../store/userInfo';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { setPokemonId } from '../../store/userInfo';
+import { PokeAudioGacha } from '../../components/PokeAudio';
 
 const gachaKind = [
   {
@@ -60,6 +61,7 @@ const Gacha = () => {
   const [getpokemonName, setGetpokemonName] = useState(0);
   const [isDisabled, setIsDisabled] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [bgmSet, setBgmSet] = useState(3);
   const prevIndexRef = useRef(currentIndex);
 
   const nextSlide = () => {
@@ -92,9 +94,11 @@ const Gacha = () => {
   const dispatch = useDispatch();
 
   const gachaRunning = async (index: number) => {
+    setBgmSet(2);
     const pokemonObj = await getGachaPokemon(gachaKind[currentIndex].kindDb);
     console.log(pokemonObj);
     if (pokemonObj.result == 'fail') {
+      setBgmSet(3);
       alert(pokemonObj.message);
       setGachaRun(false);
       setIsDisabled(false);
@@ -106,6 +110,10 @@ const Gacha = () => {
       setGetpokemonName(await pokemonName(pokemonObj.poke_id));
       setGachaResult(true);
       setIsDisabled(false);
+      setBgmSet(1);
+      setTimeout(() => {
+        setBgmSet(3);
+      }, 3000);
     }, Math.random() * 4000 + 3000);
   };
   return (
@@ -343,148 +351,7 @@ const Gacha = () => {
             <path d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z" />
           </svg>
         </button>
-
-        {/* <h1 style={{ color: '#80495C', fontWeight: 'bold', fontSize: '3em' }}>
-          전설의 포켓몬 뽑기
-        </h1>
-        <div
-          style={{
-            width: '40%',
-            overflow: 'hidden',
-            borderRadius: '50% 50% 50% 50%',
-          }}
-        >
-          <GachaImg src={garchimg} width={'100%'} />
-        </div>
-
-        {isDisabled ? (
-          <div style={{ height: '155px' }} />
-        ) : (
-          <>
-            <div>
-              <DesignedButton1
-                style={{ width: '400px', margin: '20px 0' }}
-                color="#fff"
-                onClick={(e) => {
-                  e.preventDefault();
-                  gachaRunning();
-                  setBackground(gachaArray[Math.floor(Math.random() * 6)]);
-                  setGachaRun(true);
-                  setGachaResult(false);
-                  setIsDisabled(true);
-                }}
-              >
-                뽑기 크래딧 (수학코인)
-              </DesignedButton1>
-            </div>
-            <div>
-              <DesignedButton1
-                style={{ width: '400px', margin: '20px 0' }}
-                color="#80495C"
-              >
-                <Link
-                  style={{
-                    display: 'inline-block',
-                    width: '100%',
-                    color: 'white',
-                  }}
-                  to={'/usermain'}
-                >
-                  나가기
-                </Link>
-              </DesignedButton1>
-            </div>
-          </>
-        )}
-        <div>
-          <MainWrapper
-            style={{
-              display: `${gachaRun ? 'block' : 'none'}`,
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              width: '450px',
-              height: '400px',
-              transform: 'translate(-50%, -50%)',
-              backgroundImage: `url(${background})`,
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
-            }}
-          ></MainWrapper>
-        </div>
-        <div>
-          <MainWrapper
-            style={{
-              display: `${gachaResult ? 'block' : 'none'}`,
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              width: '450px',
-              height: '400px',
-              transform: 'translate(-50%, -50%)',
-              textAlign: 'center',
-            }}
-          >
-            <h1 style={{ paddingTop: '20px' }}>
-              {duplication
-                ? '이미 뽑힌 포켓몬입니다'
-                : '다음 포켓몬이 뽑혔습니다'}
-            </h1>
-            <img
-              style={{
-                position: 'absolute',
-                top: '40%',
-                left: '50%',
-                transform: 'translate(-50%,-50%)',
-                width: '30%',
-              }}
-              src={'/' + getPokemon + '.gif'}
-            />
-            <h1
-              style={{ position: 'absolute', bottom: '110px', width: '100%' }}
-            >
-              {getpokemonName}
-            </h1>
-            <DesignedButton1
-              color=""
-              style={{
-                position: 'absolute',
-                left: '0',
-                bottom: '60px',
-                width: '60%',
-                boxSizing: 'border-box',
-                margin: '0 20%',
-              }}
-              onClick={() => {
-                updateMyPokemon(getPokemon);
-                //추가 수정 필요 dispatch(setGachaPokemon());
-                setGachaRun(false);
-                setGachaResult(false);
-              }}
-            >
-              현재 포켓몬으로 변경
-            </DesignedButton1>
-            <DesignedButton1
-              color="white"
-              style={{
-                position: 'absolute',
-                left: '0',
-                bottom: '10px',
-                width: '60%',
-                boxSizing: 'border-box',
-                margin: '0 20%',
-                color: 'white',
-              }}
-              onClick={() => {
-                setGachaRun(false);
-                setGachaResult(false);
-              }}
-            >
-              닫기
-            </DesignedButton1>
-          </MainWrapper>
-        </div> */}
+        <PokeAudioGacha runButton={bgmSet} event={bgmSet} />
       </MainWrapper>
     </motion.div>
   );

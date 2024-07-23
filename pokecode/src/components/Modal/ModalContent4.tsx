@@ -3,11 +3,15 @@ import { RainEffect } from '../RainEffect';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { CodeAIButton } from '../CodeAIButton';
-const ModalContent4 = ({ event, handleClose, probTitle }: any) => {
+import { useEffect, useRef } from 'react';
+const ModalContent4 = ({ event, handleClose, on }: any) => {
   const { user } = useSelector((state: RootState) => state.userinfo);
-
- 
-
+  const audioRefs = useRef<HTMLAudioElement | null>(null);
+  useEffect(() => {
+    if (on == true) {
+      audioRefs.current?.play();
+    }
+  }, [on]);
   return (
     <div style={{ width: '400px' }}>
       <RainEffect></RainEffect>
@@ -37,6 +41,11 @@ const ModalContent4 = ({ event, handleClose, probTitle }: any) => {
           코드 리뷰 요청
         </DesignedButton1>
       </div>
+      <audio
+        src="/voice/noanswer.mp3"
+        style={{ display: 'none' }}
+        ref={audioRefs}
+      ></audio>
     </div>
   );
 };

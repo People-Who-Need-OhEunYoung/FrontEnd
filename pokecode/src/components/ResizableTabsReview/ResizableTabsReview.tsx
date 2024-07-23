@@ -14,6 +14,7 @@ import { setRoomId, setUsername } from '../../store/roomdataSlice';
 import { CodeAIWardBalloon } from '../CodeAIButton';
 import EvolutionModal from '../EvolutionModal/EvolutionModal';
 import { Bar } from 'react-chartjs-2';
+import { PokeAudioOne } from '../PokeAudio';
 
 const Container = styled.div`
   display: flex;
@@ -91,7 +92,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   >([null, null, null, null]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [cry, setCry] = useState<boolean[]>([false, false, false, false]);
   const roomOwner = localStorage.getItem('roomOwner');
 
   const handleContextMenu = (event: MouseEvent, index: number) => {
@@ -337,6 +338,9 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                   onMouseLeave={() => {
                     setHoveredPokeId(null);
                   }}
+                  onClick={() => {
+                    setCry(cry.map((item, i) => (i === key ? !item : item)));
+                  }}
                 ></Pokemon>
                 {contextMenus[key] && roomOwner ? (
                   <ul
@@ -368,6 +372,10 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                 ) : null}
                 <NicknameBox>{userOne.nick_name}</NicknameBox>
                 <NicknameBox>{userOne.poke_title}</NicknameBox>
+                <PokeAudioOne
+                  runButton={userOne.cur_poke_id}
+                  event={cry[key]}
+                ></PokeAudioOne>
               </motion.div>
             );
           })
@@ -454,8 +462,9 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
               overflow: 'auto',
             }}
           >
-            {(maxPeople == 4) && <VoiceChatOV />}
-            {((maxPeople == 2) || (maxPeople == 3)) && <VoiceChat />} {/*진욱이 소스*/}
+            {maxPeople == 4 && <VoiceChatOV />}
+            {(maxPeople == 2 || maxPeople == 3) && <VoiceChat />}{' '}
+            {/*진욱이 소스*/}
           </div>
         </Tab>
       </Container>
