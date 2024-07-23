@@ -289,7 +289,7 @@ const UserName = styled.strong`
   display: inline-block;
   padding: 5px;
   border-radius: 5px;
-  margin: 0 10px;
+  margin: 0 10px 5px 10px; /* Add bottom margin to create space between nickname and message bubble */
   color: #d3dde8;
 `;
 
@@ -308,6 +308,10 @@ const NoticeMessage = styled.p`
 const MessageContainer = styled.div<{ isOwnMessage?: boolean }>`
   text-align: ${({ isOwnMessage }) => (isOwnMessage ? 'right' : 'left')};
   margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: ${({ isOwnMessage }) =>
+    isOwnMessage ? 'flex-end' : 'flex-start'};
 `;
 
 const MessageBubble = styled.pre<{ isOwnMessage?: boolean }>`
@@ -322,10 +326,9 @@ const MessageBubble = styled.pre<{ isOwnMessage?: boolean }>`
   white-space: break-spaces;
   word-break: break-all;
   position: relative;
-  color: ${({ isOwnMessage }) => (isOwnMessage ? 'white' : 'black')};
+  color: white;
   border-radius: ${({ isOwnMessage }) =>
     isOwnMessage ? '30px 30px 0 30px' : '30px 30px 30px 0'};
-
   font-size: 1.3rem;
 `;
 
