@@ -60,8 +60,7 @@ export const Profile = ({ ...props }) => {
       <DownMenu
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 320 512"
-        onMouseEnter={handleMouseOver}
-        onMouseLeave={handleMouseOut}
+        onMouseOver={handleMouseOver}
         className="downmenu"
         fill="white"
       >
@@ -112,6 +111,7 @@ export const Profile = ({ ...props }) => {
           </a>
         </MyMenuList>
       </MyMenu>
+
       <Logout>
         <svg
           fill="white"
