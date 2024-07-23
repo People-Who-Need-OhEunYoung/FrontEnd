@@ -599,7 +599,7 @@ const getRoomPeopleChecker = async (roomId: string | null) => {
 
 //코드리뷰방 검색
 const reviewSearch = async (query: string) => {
-  return await fetch(`${import.meta.env.VITE_APP_ROOM}/reviewList?search=${query}`, {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/reviewList?search=${query}`, {
     method: 'GET',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
