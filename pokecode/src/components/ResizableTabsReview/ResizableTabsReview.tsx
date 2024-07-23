@@ -12,7 +12,6 @@ import ChatRoom from './ChatRoom';
 import VoiceChatOV from './VoiceChatOV';
 import { setRoomId, setUsername } from '../../store/roomdataSlice';
 import { CodeAIWardBalloon } from '../CodeAIButton';
-// import { Terminal } from '../Terminal';
 import EvolutionModal from '../EvolutionModal/EvolutionModal';
 
 const Container = styled.div`
@@ -325,17 +324,21 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           <div style={{ position: 'relative' }}>
             <Home style={{ textAlign: 'center' }}>
               {/* 아마 이코드때문에 포켓몬 밑에 닉네임박스 길쭉해지고 난리날거임 */}
-              <div style={{
-                width: '150px',
-                height: '30px',
-                lineHeight: '20px',
-                position: 'absolute',
-                bottom: '40px',
-                right: '30px',
-                margin: 0,
-              }}>
-                <button onClick={() => setIsModalOpen(true)}>Evolve Pokemon</button>
-                {isModalOpen && (<EvolutionModal />)}
+              <div
+                style={{
+                  width: '150px',
+                  height: '30px',
+                  lineHeight: '20px',
+                  position: 'absolute',
+                  bottom: '40px',
+                  right: '30px',
+                  margin: 0,
+                }}
+              >
+                <button onClick={() => setIsModalOpen(true)}>
+                  Evolve Pokemon
+                </button>
+                {isModalOpen && <EvolutionModal />}
                 <button onClick={() => setIsModalOpen(false)}>Close</button>
               </div>
               {/* 아마 이코드때문에 포켓몬 밑에 닉네임박스 길쭉해지고 난리날거임 */}
