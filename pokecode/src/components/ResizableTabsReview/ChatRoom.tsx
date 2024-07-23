@@ -18,13 +18,19 @@ interface User {
 
 interface ChatRoomProps {
   onUserChange: (users: any) => void;
+  kickOut: any;
+  kickOutReset: (set: boolean | null) => void;
 }
 
-const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
+const ChatRoom: React.FC<ChatRoomProps> = ({
+  onUserChange,
+  kickOut,
+  kickOutReset,
+}) => {
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
-  const [first, setFirst] = useState(false);
+
   const dispatch = useDispatch();
   const socketRef = useRef<Socket | null>(null);
 
@@ -37,6 +43,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+  useEffect(() => {
+    if (kickOut != null) forceOut(kickOut);
+    kickOutReset(null);
+  }, [kickOut, users.length]);
 
   const savedUsername: string | null = localStorage.getItem('nick_name');
   const savedRoomId: string | null = localStorage.getItem('roomId');
@@ -53,19 +63,12 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   const userChecker = async () => {
     let counter = await getRoomPeopleChecker(savedRoomId);
     console.log('-------------------유저인원', counter);
-    if (counter.count == 1) {
+    if (counter.count == 0) {
       alert('사용자정보가 없습니다. 다시 입장하세요');
       navigate('/roomlist');
       return;
     }
   };
-
-  useEffect(() => {
-    setMessage('[notice]' + savedUsername + '님이 입장했습니다.');
-    setFirst(true);
-    sendMessage();
-  }, [first]);
-
 
   useEffect(() => {
     if (!savedUsername || !savedRoomId) {
@@ -74,11 +77,25 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
       return;
     }
 
+    setTimeout(() => {
+      userChecker();
+    }, 500);
+
     const socket = io(import.meta.env.VITE_APP_ROOM, {
       transports: ['websocket'],
     });
 
     socketRef.current = socket;
+
+    window.addEventListener('beforeunload', () => {
+      const leaveMessage = `[notice]${savedUsername}님이 퇴장했습니다.`;
+      socket.emit('SEND_MESSAGE', {
+        room_id: savedRoomId,
+        nick_name: savedUsername,
+        message: leaveMessage,
+      });
+    });
+
     socket.on('connect', () => {
       console.log(`Connected to socket, joining room ${savedRoomId}`);
       socket.emit('CONNECTED_TO_ROOM', {
@@ -86,6 +103,13 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         bakjoon_id: savedUserId,
         nick_name: savedUsername,
         cur_poke_id: savedPokeId,
+      });
+      console.log(`Disconnected from socket, leaving room ${savedRoomId}`);
+      const leaveMessage = `[notice]${savedUsername}님이 입장했습니다.`;
+      socket.emit('SEND_MESSAGE', {
+        room_id: savedRoomId,
+        nick_name: savedUsername,
+        message: leaveMessage,
       });
     });
 
@@ -109,8 +133,9 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
     });
   
     //강퇴기능 추가 필요
-    socket.on('USER:FORCED_OUT', (a) => {
-      setMessage(`[notice]${a}님이 퇴장당했습니다.`);
+    socket.on('USER:FORCED_OUT', () => {
+      alert('강제퇴장 당했습니다.');
+      navigate('/roomlist');
     });
 
     return () => {
@@ -165,9 +190,17 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
   const forceOut = (nick_name: string) => {
     const socket = socketRef.current;
     if (socket) {
+      console.log(nick_name);
       socket.emit('FORCE_OUT', {
         room_id: savedRoomId,
         nick_name: nick_name,
+      });
+
+      const leaveMessage = `[notice]${nick_name}님이 강퇴당했습니다.`;
+      socket.emit('SEND_MESSAGE', {
+        room_id: savedRoomId,
+        nick_name: savedUsername,
+        message: leaveMessage,
       });
     }
   };
@@ -188,14 +221,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange }) => {
         <p style={{ position: 'absolute', right: '20px', fontSize: '1.2rem' }}>
           접속중인 인원: <b> {users.length}</b>
         </p>
-        <button
-          onClick={() => {
-            forceOut('우주최강다흰짱짱');
-          }}
-          style={{ position: 'absolute', left: '80px', fontSize: '1rem' }}
-        >
-          강퇴 테스트
-        </button>
       </Header>
       <div
         style={{

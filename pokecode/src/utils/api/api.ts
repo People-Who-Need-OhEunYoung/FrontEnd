@@ -305,7 +305,8 @@ const showRoomList = async () => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
+      //진욱 기술적챌린지 주석
+      // console.log(data);
       return data;
     })
     .catch((error) => {
