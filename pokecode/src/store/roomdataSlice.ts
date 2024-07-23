@@ -5,14 +5,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface RoomdataState {
   username: string | null;
   roomId: string | null;
-  userArray: any;
+  userArray: string[];
 }
 
 //초기상태 설정
 const initialState: RoomdataState = {
   username: '',
   roomId: '',
-  userArray: {},
+  userArray: [], // 빈 배열로 초기화
 };
 
 const roomdataSlice = createSlice({
@@ -26,8 +26,12 @@ const roomdataSlice = createSlice({
     setRoomId(state, action: PayloadAction<string>) {
       state.roomId = action.payload;
     },
+    setUserArray(state, action: PayloadAction<string[]>) {
+      state.userArray = action.payload;
+    },
   },
 });
 
-export const { setUsername, setRoomId } = roomdataSlice.actions;
+export const { setUsername, setRoomId, setUserArray } = roomdataSlice.actions;
 export default roomdataSlice.reducer;
+

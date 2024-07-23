@@ -289,6 +289,7 @@ const PokeBook = () => {
                           setCurpokegif(pokemon.poke_img);
                           setSelectedPokemon(pokemon.idx);
                           setPokemonname(pokemon.poke_name);
+                          setCurType(type);
                         }
                       : undefined
                   }
