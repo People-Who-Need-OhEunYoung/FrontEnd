@@ -25,7 +25,11 @@ import psychicIcon from '../../assets/images/에스퍼.png';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { pokemonName, showPokemonBook } from '../../utils/api/api';
+import {
+  pokemonName,
+  showPokemonBook,
+  updateMyPokemon,
+} from '../../utils/api/api';
 import { setPokemonId } from '../../store/userInfo';
 
 ChartJS.register(
@@ -40,6 +44,11 @@ ChartJS.register(
   LineElement
 );
 
+type ProblemType = {
+  label: string;
+  value: number;
+};
+
 defaults.maintainAspectRatio = false;
 defaults.responsive = true;
 
@@ -49,6 +58,7 @@ const PokeBook = () => {
   const [sortedPoketmon, setSortedPoketmon] = useState<any[]>([]);
   const [allPoketmon, setAllPoketmon] = useState<any[]>([]);
   const [ownPoketmon, setOwnPoketmon] = useState<any[]>([]);
+  const [hoveredType, setHoveredType] = useState<number | null>(null);
 
   const iconArr = [fireIcon, waterIcon, grassIcon, electricIcon, psychicIcon];
   const typeArr = ['구현', '그래프', '자료구조', '수학', 'DP'];
@@ -63,7 +73,33 @@ const PokeBook = () => {
   const [pokemonname, setPokemonname] = useState<string>();
   const [curType, setCurType] = useState<number>(0);
 
+  const [data, setData] = useState<ProblemType[]>(sourceData);
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const localStorageKeys: { [key: string]: string } = {
+      구현: 'impl_exp',
+      그래프: 'graph_exp',
+      자료구조: 'data_exp',
+      수학: 'math_exp',
+      DP: 'dp_exp',
+    };
+
+    // localStorage에서 값을 가져와서 업데이트
+    const updatedData = data.map((item) => {
+      const localStorageKey = localStorageKeys[item.label];
+      const localStorageValue = localStorage.getItem(localStorageKey);
+      if (localStorageValue !== null) {
+        return {
+          ...item,
+          value: parseInt(localStorageValue, 10)/100, // 문자열을 정수로 변환
+        };
+      }
+      return item;
+    });
+    setData(updatedData);
+  }, []);
 
   const fetchPokemonData = async () => {
     try {
@@ -87,11 +123,11 @@ const PokeBook = () => {
         (pokemon: any) => pokemon.poke_id === user.cur_poke_id
       );
       if (currentPokemon) {
-         const typeIndex = typeArr.indexOf(currentPokemon.poke_type);
-         if (typeIndex !== -1) {
-           setType(typeIndex + 1); // setType은 1-based index 사용
-           setCurType(typeIndex + 1);
-         }
+        const typeIndex = typeArr.indexOf(currentPokemon.poke_type);
+        if (typeIndex !== -1) {
+          setType(typeIndex + 1); // setType은 1-based index 사용
+          setCurType(typeIndex + 1);
+        }
       }
     });
     pokemonnameSet(user.cur_poke_id);
@@ -124,10 +160,10 @@ const PokeBook = () => {
     }
   }, [type]);
 
-
   const HandleChangePokemon = () => {
     if (selectedPokemon) {
       dispatch(setPokemonId(selectedPokemon));
+      updateMyPokemon(selectedPokemon);
       console.log('selectedPokemon', selectedPokemon);
     }
   };
@@ -139,36 +175,21 @@ const PokeBook = () => {
     <MainWrapper>
       <MainContents>
         <ButtonGroup>
-          <TypeBtn
-            back_img={fireIcon}
-            onClick={() => {
-              setType(1);
-            }}
-          />
-          <TypeBtn
-            back_img={waterIcon}
-            onClick={() => {
-              setType(2);
-            }}
-          />
-          <TypeBtn
-            back_img={grassIcon}
-            onClick={() => {
-              setType(3);
-            }}
-          />
-          <TypeBtn
-            back_img={electricIcon}
-            onClick={() => {
-              setType(4);
-            }}
-          />
-          <TypeBtn
-            back_img={psychicIcon}
-            onClick={() => {
-              setType(5);
-            }}
-          />
+          {iconArr.map((icon, index) => (
+            <TypeBtn
+              key={index}
+              back_img={icon}
+              onMouseEnter={() => setHoveredType(index)}
+              onMouseLeave={() => setHoveredType(null)}
+              onClick={() => {
+                setType(index + 1);
+              }}
+            >
+              {hoveredType === index && (
+                <HoverInfo>{typeArr[hoveredType]}</HoverInfo>
+              )}
+            </TypeBtn>
+          ))}
         </ButtonGroup>
         <PokeMonViewWrap>
           <Titled> 도감 정보 </Titled>
@@ -196,11 +217,11 @@ const PokeBook = () => {
               <Bar
                 ref={chartRef}
                 data={{
-                  labels: [sourceData[type - 1].label], // 첫 번째 인덱스의 라벨
+                  labels: [data[type - 1].label], // 첫 번째 인덱스의 라벨
                   datasets: [
                     {
-                      label: sourceData[type - 1].label, // 첫 번째 인덱스의 라벨
-                      data: [sourceData[type - 1].value], // 첫 번째 인덱스의 값
+                      label: data[type - 1].label, // 첫 번째 인덱스의 라벨
+                      data: [data[type - 1].value], // 첫 번째 인덱스의 값
                       borderColor: '#000000', // 선 색
                       borderRadius: 5,
                     },
@@ -280,11 +301,11 @@ const PokeBook = () => {
           <RaderGraph>
             <Radar
               data={{
-                labels: sourceData.map((data) => data.label),
+                labels: data.map((data) => data.label),
                 datasets: [
                   {
                     label: 'Count',
-                    data: sourceData.map((data) => data.value),
+                    data: data.map((data) => data.value),
                     fill: true,
                     backgroundColor: 'rgba(47, 50, 255, 0.2)', // 배경색
                     borderColor: '#38BDF8 ', // 선 색
@@ -303,7 +324,7 @@ const PokeBook = () => {
                     pointLabels: {
                       color: '#f5f5f5', // 라벨 폰트 색상
                       font: {
-                        size: 16, // 라벨 폰트 사이즈
+                        size: 20, // 라벨 폰트 사이즈
                         weight: 'bold',
                       },
                     },
@@ -330,11 +351,11 @@ const PokeBook = () => {
           <BarGraph>
             <Bar
               data={{
-                labels: sourceData.map((data) => data.label),
+                labels: data.map((data) => data.label),
                 datasets: [
                   {
                     label: 'Count',
-                    data: sourceData.map((data) => data.value),
+                    data: data.map((data) => data.value),
                     borderColor: '#6366F1', // 선 색
                     backgroundColor: '#38bff8ce ', // 막대 배경색
                     borderRadius: 7,
@@ -348,7 +369,7 @@ const PokeBook = () => {
                     ticks: {
                       color: '#ffffff', // x축 눈금 색상
                       font: {
-                        size: 14, // x축 눈금 폰트 사이즈
+                        size: 20, // x축 눈금 폰트 사이즈
                       },
                     },
                   },
@@ -356,7 +377,7 @@ const PokeBook = () => {
                     ticks: {
                       color: '#ffffff', // y축 눈금 색상
                       font: {
-                        size: 14, // y축 눈금 폰트 사이즈
+                        size: 20, // y축 눈금 폰트 사이즈
                       },
                     },
                   },
@@ -364,6 +385,71 @@ const PokeBook = () => {
                 plugins: {
                   legend: {
                     display: false,
+                  },
+                  tooltip: {
+                    enabled: false,
+                    external: function (context) {
+                      // Tooltip Element
+                      let tooltipEl =
+                        document.getElementById('chartjs-tooltip');
+
+                      // Create element on first render
+                      if (!tooltipEl) {
+                        tooltipEl = document.createElement('div');
+                        tooltipEl.id = 'chartjs-tooltip';
+                        tooltipEl.style.opacity = '0';
+                        tooltipEl.style.position = 'absolute';
+                        tooltipEl.style.pointerEvents = 'none';
+                        tooltipEl.style.transition = 'opacity 0.3s';
+                        document.body.appendChild(tooltipEl);
+                      }
+
+                      // Hide if no tooltip
+                      const tooltipModel = context.tooltip;
+                      if (tooltipModel.opacity === 0) {
+                        tooltipEl.style.opacity = '0';
+                        return;
+                      }
+
+                      // Set Text
+                      if (tooltipModel.body) {
+                        const bodyLines = tooltipModel.body.map(
+                          (bodyItem: any) => bodyItem.lines
+                        );
+
+                        let innerHtml = '<div>';
+
+                        bodyLines.forEach((body: any, i: number) => {
+                          const index = tooltipModel.dataPoints[i].dataIndex;
+                          const icon = iconArr[index % iconArr.length];
+                          innerHtml += `
+                            <div style="display: flex; align-items: center; background-color: #00000071; padding: 10px 10px;">
+                              <img src="${icon}" alt="icon" style="width: 24px; height: 24px; border-radius: 5px; margin-right: 8px;" />
+                              <p style="color: white; margin: 0;">${body}</p>
+                            </div>
+                          `;
+                        });
+
+                        innerHtml += '</div>';
+
+                        tooltipEl.innerHTML = innerHtml;
+                      }
+
+                      const position =
+                        context.chart.canvas.getBoundingClientRect();
+
+                      tooltipEl.style.opacity = '1';
+                      tooltipEl.style.left =
+                        position.left +
+                        window.pageXOffset +
+                        tooltipModel.caretX +
+                        'px';
+                      tooltipEl.style.top =
+                        position.top +
+                        window.pageYOffset +
+                        tooltipModel.caretY +
+                        'px';
+                    },
                   },
                 },
               }}
@@ -401,6 +487,7 @@ const TypeBtn = styled.button<{ back_img: string }>`
   background-size: 100% 100%;
   text-align: center;
   border: 2px solid #111826;
+  position: relative;
   &:hover {
     border: 2px solid white;
   }
@@ -408,6 +495,21 @@ const TypeBtn = styled.button<{ back_img: string }>`
     border: 2px solid white;
     box-shadow: 0 0 10px 5px white;
   }
+`;
+
+const HoverInfo = styled.div`
+  position: absolute;
+  background-color: black;
+  border: 2px solid white;
+  color: white;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transform: translateX(-50%);
+  left: -150%;
+  top: -10%;
+  padding: 20px;
+  z-index: 10;
 `;
 
 //현재 포켓몬이 보이는 창
@@ -498,15 +600,23 @@ export const Pokemon = styled.img`
 
 //현재 포켓몬으로 설정 버튼
 const CurPokeMonSelect = styled.button`
-  width: 70%;
-  height: 40px;
+  width: 90%;
+  height: 50px;
   margin: 6%;
   background-color: #6365f163;
   border: 2px solid #6366f1;
   border-radius: 10px;
   color: white;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   font-weight: bold;
+
+  &:hover {
+    border: 2px solid white;
+  }
+  &:focus {
+    border: 2px solid white;
+    background-color: #7f81f662;
+  }
 `;
 
 //포켓몬 도감 트리 보이는 창
@@ -519,6 +629,7 @@ const Contents = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 10px;
+  overflow: auto;
 `;
 
 //경험치 바 + 남은 경험치 텍스트 정보
