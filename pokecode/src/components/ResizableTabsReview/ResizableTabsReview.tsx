@@ -202,7 +202,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
 
   const queryString = window.location.search;
   const params = new URLSearchParams(queryString);
-  const maxPeople = parseInt(params.get('max_person') || '4', 10);
+  const maxPeople = parseInt(params.get('max_people') || '4', 10);
 
   useEffect(() => {
     const tabElement = tabRef.current;
