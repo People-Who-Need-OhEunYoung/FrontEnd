@@ -19,9 +19,14 @@ interface User {
 interface ChatRoomProps {
   onUserChange: (users: any) => void;
   kickOut: any;
+  kickOutReset: (set: boolean | null) => void;
 }
 
-const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange, kickOut }) => {
+const ChatRoom: React.FC<ChatRoomProps> = ({
+  onUserChange,
+  kickOut,
+  kickOutReset,
+}) => {
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
@@ -40,7 +45,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange, kickOut }) => {
   }, [messages]);
   useEffect(() => {
     if (kickOut != null) forceOut(kickOut);
-  }, [kickOut]);
+    kickOutReset(null);
+  }, [kickOut, users.length]);
 
   const savedUsername: string | null = localStorage.getItem('nick_name');
   const savedRoomId: string | null = localStorage.getItem('roomId');
@@ -107,14 +113,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange, kickOut }) => {
     });
 
     socket.on('disconnect', () => {
-      alert('');
       console.log(`Disconnected from socket, leaving room ${savedRoomId}`);
-      const leaveMessage = `[notice]${savedUsername}님이 퇴장했습니다.`;
-      socket.emit('SEND_MESSAGE', {
-        room_id: savedRoomId,
-        nick_name: savedUsername,
-        message: leaveMessage,
-      });
     });
 
     socket.on('ROOM:CONNECTION', (users: User[]) => {

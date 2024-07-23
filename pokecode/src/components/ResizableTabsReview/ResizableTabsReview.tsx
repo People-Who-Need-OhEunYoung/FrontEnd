@@ -82,7 +82,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRef = useRef<HTMLDivElement | null>(null);
   const [usersInfo, setUsersInfo] = useState<any[]>([]);
-  const [userData, setUserDne] = useState<any>(null);
+  const [userData, setUserData] = useState<any>(null);
   const { user } = useSelector((state: RootState) => state.userinfo);
   const [hoveredPokeId, setHoveredPokeId] = useState(null);
 
@@ -112,7 +112,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
     console.log(user);
     alert(`${user.nick_name} 강퇴되었습니다.`);
     setContextMenus([null, null, null, null]);
-    setUserDne(user.nick_name);
+    setUserData(user.nick_name);
   };
 
   useEffect(() => {
@@ -354,7 +354,9 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                         background: '#324056',
                         width: '50px',
                       }}
-                      onClick={() => handleKickOut(userOne)}
+                      onClick={() => {
+                        handleKickOut(userOne);
+                      }}
                     >
                       강퇴
                     </li>
@@ -434,7 +436,11 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
         />
         <Tab width={width1}>
           <ChatRoomDiv>
-            <ChatRoom onUserChange={handlePokemons} kickOut={userData} />
+            <ChatRoom
+              onUserChange={handlePokemons}
+              kickOut={userData}
+              kickOutReset={setUserData}
+            />
           </ChatRoomDiv>
 
           <div
