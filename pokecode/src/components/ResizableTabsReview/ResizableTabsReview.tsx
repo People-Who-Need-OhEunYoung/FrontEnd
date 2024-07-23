@@ -13,7 +13,10 @@ import VoiceChatOV from './VoiceChatOV';
 import { setRoomId, setUsername } from '../../store/roomdataSlice';
 import { CodeAIWardBalloon } from '../CodeAIButton';
 import EvolutionModal from '../EvolutionModal/EvolutionModal';
+
 import { Bar } from 'react-chartjs-2';
+import { getRoomPeopleChecker } from '../../utils/api/api';
+
 
 const Container = styled.div`
   display: flex;
@@ -199,7 +202,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
 
   const queryString = window.location.search;
   const params = new URLSearchParams(queryString);
-  const maxPeople = parseInt(params.get('max_people') || '4', 10);
+  const maxPeople = parseInt(params.get('max_person') || '4', 10);
 
   useEffect(() => {
     const tabElement = tabRef.current;
