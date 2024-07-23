@@ -357,6 +357,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                 </ul>
               ) : null}
               <NicknameBox>{userOne.nick_name}</NicknameBox>
+              <NicknameBox>{userOne.poke_title}</NicknameBox>
             </motion.div>
           )
         })
