@@ -5,7 +5,7 @@ import { Pokemon } from '../../pages/UserMain/UserMain';
 import { TestSharedEditor } from '../TestSharedEditor';
 import { DesignedButton1 } from '../DesignedButton';
 import { ProblemText } from '../ProblemText';
-// 진욱이 소스 import { VoiceChat } from '../VoiceChat';
+import { VoiceChat } from '../VoiceChat'; //진욱이 소스
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import ChatRoom from './ChatRoom';
@@ -192,6 +192,10 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const handlePokemons = (users: any) => {
     setUsersInfo(users);
   };
+
+  const queryString = window.location.search;
+  const params = new URLSearchParams(queryString);
+  const maxPeople = parseInt(params.get('max_people') || '4', 10);
 
   useEffect(() => {
     const tabElement = tabRef.current;
@@ -440,8 +444,8 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
               overflow: 'auto',
             }}
           >
-            <VoiceChatOV />
-            {/* 진욱이 소스 <VoiceChat /> */}
+            {(maxPeople == 4) && <VoiceChatOV />}
+            {((maxPeople == 2) || (maxPeople == 3)) && <VoiceChat />} {/*진욱이 소스*/}
           </div>
         </Tab>
       </Container>

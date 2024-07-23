@@ -43,8 +43,8 @@ const RoomList = () => {
         master: 'ㅇㅇㅇ',
       },
     ]);
-
-  console.log(page);
+  //진욱 기술적챌린지 주석
+  // console.log(page);
 
   const fetchRoomData = async () => {
     try {
