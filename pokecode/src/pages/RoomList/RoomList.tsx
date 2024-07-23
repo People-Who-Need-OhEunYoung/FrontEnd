@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Modal from '../../components/Modal/Modal';
-import { showRoomList } from '../../utils/api/api';
+import { reviewSearch, showRoomList } from '../../utils/api/api';
 import reload from '../../assets/images/reload.png';
 type ItemType = {
   roomId: string;
@@ -16,7 +16,7 @@ type ItemType = {
 };
 
 const RoomList = () => {
-  const [query, setQuery] = useState(' '); // 검색 문자열 쿼리
+  const [query, setQuery] = useState(''); // 검색 문자열 쿼리
   const [page, setPage] = useState<number>(1);
   const [pageCount, setPageCount] = useState<number>(1);
   const [currentPageGroup, setCurrentPageGroup] = useState<number>(0);
@@ -48,7 +48,7 @@ const RoomList = () => {
 
   const fetchRoomData = async () => {
     try {
-      const res = await showRoomList();
+      const res = await reviewSearch(query);
       return res;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -79,7 +79,7 @@ const RoomList = () => {
 
     // 컴포넌트 언마운트 시 인터벌을 정리
     return () => clearInterval(intervalId);
-  }, []);
+  }, [query]);
 
   const switchButton = () => {
     setCheck(check === 'ON' ? 'OFF' : 'ON');

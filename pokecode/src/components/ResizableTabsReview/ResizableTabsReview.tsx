@@ -485,11 +485,12 @@ const Home = styled.div`
 `;
 
 const ChatRoomDiv = styled.div`
-  background-color: #282a3a;
+  background-color: #1c2637;
   width: 100%;
   height: 70%;
   overflow: auto;
   background-size: cover;
+  border-radius: 10px;
 `;
 
 const NicknameBox = styled.p`

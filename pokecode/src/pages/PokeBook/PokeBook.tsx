@@ -301,13 +301,13 @@ const PokeBook = () => {
           <RaderGraph>
             <Radar
               data={{
-                labels: data.map((data) => data.label),
+                labels: sourceData.map((data) => data.label),
                 datasets: [
                   {
                     label: 'Count',
-                    data: data.map((data) => data.value),
+                    data: sourceData.map((data) => data.value),
                     fill: true,
-                    backgroundColor: 'rgba(47, 50, 255, 0.2)', // 배경색
+                    backgroundColor: 'rgb(255, 255, 255)', // 배경색
                     borderColor: '#38BDF8 ', // 선 색
                   },
                 ],
@@ -335,7 +335,7 @@ const PokeBook = () => {
                       font: {
                         size: 14, // 눈금 폰트 사이즈
                       },
-                      stepSize: 10, // 눈금 단위
+                      stepSize: 130, // 눈금 단위
                     },
                   },
                 },
