@@ -25,7 +25,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange, kickOut }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
-  const [first, setFirst] = useState(false);
 
   const dispatch = useDispatch();
   const socketRef = useRef<Socket | null>(null);
@@ -65,12 +64,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange, kickOut }) => {
   };
 
   useEffect(() => {
-    setMessage('[notice]' + savedUsername + '님이 입장했습니다.');
-    setFirst(true);
-    sendMessage();
-  }, [first]);
-
-  useEffect(() => {
     if (!savedUsername || !savedRoomId) {
       alert('방정보 혹은 사용자정보가 없습니다. 다시 입장하세요');
       navigate('/roomlist');
@@ -86,6 +79,16 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange, kickOut }) => {
     });
 
     socketRef.current = socket;
+
+    window.addEventListener('beforeunload', () => {
+      const leaveMessage = `[notice]${savedUsername}님이 퇴장했습니다.`;
+      socket.emit('SEND_MESSAGE', {
+        room_id: savedRoomId,
+        nick_name: savedUsername,
+        message: leaveMessage,
+      });
+    });
+
     socket.on('connect', () => {
       console.log(`Connected to socket, joining room ${savedRoomId}`);
       socket.emit('CONNECTED_TO_ROOM', {
@@ -94,11 +97,24 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ onUserChange, kickOut }) => {
         nick_name: savedUsername,
         cur_poke_id: savedPokeId,
       });
+      console.log(`Disconnected from socket, leaving room ${savedRoomId}`);
+      const leaveMessage = `[notice]${savedUsername}님이 입장했습니다.`;
+      socket.emit('SEND_MESSAGE', {
+        room_id: savedRoomId,
+        nick_name: savedUsername,
+        message: leaveMessage,
+      });
     });
 
     socket.on('disconnect', () => {
+      alert('');
       console.log(`Disconnected from socket, leaving room ${savedRoomId}`);
-      leaveRoom();
+      const leaveMessage = `[notice]${savedUsername}님이 퇴장했습니다.`;
+      socket.emit('SEND_MESSAGE', {
+        room_id: savedRoomId,
+        nick_name: savedUsername,
+        message: leaveMessage,
+      });
     });
 
     socket.on('ROOM:CONNECTION', (users: User[]) => {
