@@ -40,7 +40,7 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
       editorContent = ' ';
     }
     try {
-      const res = await SubmitCode(writtenCode, id);
+      const res = await SubmitCode(writtenCode, id, elapsedTime, limitTime);
       if (res.evolutionPoketmon) {
         let evol = res.evolutionPoketmon;
         for (let i = 0; i < evol.length; i++)
@@ -62,7 +62,6 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
       if (res.isCorrect == '1') setIsSuccessModalOpen(true);
       else setIsFailModalOpen(true);
       return res;
-
     } catch (error) {
       console.error('테스트 케이스 과정 에러 발생 : ', error);
     }
