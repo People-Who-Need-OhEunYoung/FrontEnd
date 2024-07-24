@@ -66,7 +66,7 @@ const CodeAIWardBalloon: React.FC<WordBalwrapProps> = ({
           position: 'absolute',
           right: '15px',
           top: '15px',
-          cursor: 'pointer',
+          cursor: 'inherit',
           width: '30px',
         }}
         onClick={() => {

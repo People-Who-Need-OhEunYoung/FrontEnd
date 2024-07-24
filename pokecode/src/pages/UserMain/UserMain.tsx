@@ -499,6 +499,7 @@ const Button = styled(Link)`
   width: 100%;
   border-radius: 30px;
   text-align: center;
+  cursor: inherit;
 `;
 // 테두리 코드
 const StyledBase = styled.div`

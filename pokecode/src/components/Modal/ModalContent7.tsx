@@ -40,7 +40,7 @@ const ModalContent7 = ({ id, title, roomId, maxPerson, event }: any) => {
       roomid: roomIdValue,
       id: id,
       title: title,
-      max_people : maxPerson
+      max_people: maxPerson,
     };
 
     const params = new URLSearchParams(queryParam);
@@ -96,7 +96,7 @@ const SolveBtn = styled.button`
   border: none;
   background-color: #6366f1;
   box-sizing: border-box;
-  cursor: pointer;
+  cursor: 'inherit';
 `;
 
 export default ModalContent7;

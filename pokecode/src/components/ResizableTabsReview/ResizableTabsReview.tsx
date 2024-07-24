@@ -18,9 +18,6 @@ import { Bar } from 'react-chartjs-2';
 
 import { PokeAudioOne } from '../PokeAudio';
 
-import { getRoomPeopleChecker } from '../../utils/api/api';
-
-
 const Container = styled.div`
   display: flex;
   align-items: center;
@@ -288,7 +285,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                 ) : (
                   ''
                 )}
-                {hoveredPokeId === userOne.cur_poke_id && (
+                {hoveredPokeId === userOne.nick_name && (
                   <div>
                     <BarGraph>
                       <Bar
@@ -338,7 +335,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                   src={'/' + userOne.cur_poke_id + '.gif'}
                   onContextMenu={(e: any) => handleContextMenu(e, key)}
                   onMouseEnter={() => {
-                    setHoveredPokeId(userOne.cur_poke_id);
+                    setHoveredPokeId(userOne.nick_name);
                   }}
                   onMouseLeave={() => {
                     setHoveredPokeId(null);

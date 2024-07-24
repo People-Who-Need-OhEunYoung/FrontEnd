@@ -3,8 +3,9 @@ import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLimitTime } from '../../store/timerSlice';
+import { resolveCall } from '../../utils/api/api';
 
-const ModalContent1 = ({ width, id }: any) => {
+const ModalContent1 = ({ width, id, prob_title }: any) => {
   const [timeck, setTimeck] = useState('OFF');
   const [time, setTime] = useState<number>(0);
   const [isEditing, setIsEditing] = useState(false);
@@ -43,8 +44,9 @@ const ModalContent1 = ({ width, id }: any) => {
   };
 
   const gotoSolve = (id: number) => {
-    dispatch(setLimitTime(time*60));
-
+    dispatch(setLimitTime(time * 60));
+    resolveCall(id.toString(), prob_title, time * 60);
+    console.log(prob_title);
     navigate(`/problem?id=${id}`);
   };
 
@@ -69,7 +71,7 @@ const ModalContent1 = ({ width, id }: any) => {
       </div>
       <TimeSelecter timeck={timeck}>
         <span
-          style={{ width: '40px', cursor: 'pointer', userSelect: 'none' }}
+          style={{ width: '40px', cursor: 'inherit', userSelect: 'none' }}
           onClick={timeDown}
         >
           -
@@ -91,7 +93,7 @@ const ModalContent1 = ({ width, id }: any) => {
           )}
         </div>
         <span
-          style={{ width: '40px', cursor: 'pointer', userSelect: 'none' }}
+          style={{ width: '40px', cursor: 'inherit', userSelect: 'none' }}
           onClick={timeUp}
         >
           +
@@ -115,10 +117,8 @@ const SolveBtn = styled.button`
   background-color: #6366f1;
   color: white;
   box-sizing: border-box;
-  cursor: pointer;
+  cursor: 'inherit';
 `;
-
-
 
 const CheckSlide = styled.div<{ timeck: string }>`
   position: relative;
@@ -134,7 +134,7 @@ const CheckSlide = styled.div<{ timeck: string }>`
   border-radius: 9999px;
   padding: 0.25rem;
   margin: 0 10px;
-  cursor: pointer;
+  cursor: 'inherit';
   ${(props: any) =>
     props.timeck === 'ON' &&
     css`
@@ -211,9 +211,6 @@ const OnOffText = styled.span<{ timeck: string }>`
     `}
 `;
 
-
-
-
 const TimeSelecter = styled.ul<{ timeck: string }>`
   display: none;
   /* background: #f0f0f0; */
@@ -238,7 +235,7 @@ const Time = styled.input`
   background: none;
   border: none;
   font-weight: bold;
-  font-size:1.2rem;
+  font-size: 1.2rem;
   width: 40px;
   color: #000000;
   &::-webkit-outer-spin-button,
