@@ -122,7 +122,7 @@ const Background = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 999999999;
+  z-index: 999;
   background: #46464647;
   text-align: center;
   backdrop-filter: blur(5px);

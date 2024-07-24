@@ -12,12 +12,10 @@ import ChatRoom from './ChatRoom';
 import VoiceChatOV from './VoiceChatOV';
 import { setRoomId, setUsername } from '../../store/roomdataSlice';
 import { CodeAIWardBalloon } from '../CodeAIButton';
-import EvolutionModal from '../EvolutionModal/EvolutionModal';
 import { setUserArray } from '../../store/roomdataSlice';
 import { Bar } from 'react-chartjs-2';
 
 import { PokeAudioOne } from '../PokeAudio';
-
 
 const Container = styled.div`
   display: flex;
@@ -96,7 +94,6 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
     (ContextMenuPosition | null)[]
   >([null, null, null, null]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [cry, setCry] = useState<boolean[]>([false, false, false, false]);
   const roomOwner = localStorage.getItem('roomOwner');
 
@@ -415,25 +412,6 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           </div>
           <div style={{ position: 'relative' }}>
             <Home style={{ textAlign: 'center' }}>
-              {/* 아마 이코드때문에 포켓몬 밑에 닉네임박스 길쭉해지고 난리날거임 */}
-              <div
-                style={{
-                  width: '150px',
-                  height: '30px',
-                  lineHeight: '20px',
-                  position: 'absolute',
-                  bottom: '40px',
-                  right: '30px',
-                  margin: 0,
-                }}
-              >
-                <button onClick={() => setIsModalOpen(true)}>
-                  Evolve Pokemon
-                </button>
-                <button onClick={() => setIsModalOpen(false)}>Close</button>
-              </div>
-              {/* 아마 이코드때문에 포켓몬 밑에 닉네임박스 길쭉해지고 난리날거임 */}
-
               <DesignedButton1
                 style={{
                   width: '150px',
@@ -471,9 +449,6 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           </VoiceRoomDiv>
         </Tab>
       </Container>
-      {isModalOpen && (
-        <EvolutionModal currentPokemonNumber={user.cur_poke_id} />
-      )}
     </motion.div>
   );
 };

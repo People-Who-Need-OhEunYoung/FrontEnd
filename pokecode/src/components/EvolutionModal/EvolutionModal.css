@@ -22,26 +22,28 @@
   text-align: center;
 }
 .pokemon-container {
-  top: 50%;
+  top: 55%;
   position: absolute;
-  left: 52.5%;
+  left: 50%;
   transform: translate(-50%, -50%);
   scale: 2;
 }
 .text-box {
-  background-color: #d3d3d3;
+  background-color: #324056;
+  color: white;
   border: 2px solid #000;
+  border-radius: 10px;
   padding: 10px;
-  margin-top: 300px;
+  margin-top: 25px;
   font-size: 14px;
 }
 
 .fade-in {
-  animation: fadeIn 5s forwards; /* 2초 후 시작하여 7초에 끝남 */
+  animation: fadeIn 16s forwards; /* 2초 후 시작하여 7초에 끝남 */
 }
 
 .fade-out {
-  animation: fadeOut 5s forwards; /* 2초 후 시작하여 7초에 끝남 */
+  animation: fadeOut 16s forwards; /* 2초 후 시작하여 7초에 끝남 */
 }
 
 @keyframes fadeIn {
