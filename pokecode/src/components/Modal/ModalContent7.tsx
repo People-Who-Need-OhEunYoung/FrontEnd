@@ -96,7 +96,7 @@ const SolveBtn = styled.button`
   border: none;
   background-color: #6366f1;
   box-sizing: border-box;
-  cursor: 'inherit';
+  cursor: inherut;
 `;
 
 export default ModalContent7;

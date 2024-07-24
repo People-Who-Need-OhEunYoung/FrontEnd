@@ -108,7 +108,7 @@ const SelectBtn = styled.button<{ active: boolean }>`
   padding: 5px 50px;
   border: none;
   outline: none;
-  cursor: 'inherit';
+  cursor: inherut;
   font-size: 1.1rem;
   line-height: 1.75;
   text-transform: uppercase;

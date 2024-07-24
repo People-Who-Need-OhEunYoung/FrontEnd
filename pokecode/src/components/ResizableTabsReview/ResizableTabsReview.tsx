@@ -88,6 +88,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const [userData, setUserData] = useState<any>(null);
   const { user } = useSelector((state: RootState) => state.userinfo);
   const [hoveredPokeId, setHoveredPokeId] = useState(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const [contextMenus, setContextMenus] = useState<
     (ContextMenuPosition | null)[]
@@ -285,57 +286,59 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                 ) : (
                   ''
                 )}
-                {hoveredPokeId === userOne.nick_name && (
-                  <div>
-                    <BarGraph>
-                      <Bar
-                        data={{
-                          labels: myData.map((data) => data.label),
-                          datasets: [
-                            {
-                              label: 'Count',
-                              data: myData.map((data) => data.value),
-                              borderColor: '#6366F1', // 선 색
-                              backgroundColor: '#38bff8ce ', // 막대 배경색
-                              borderRadius: 7,
-                            },
-                          ],
-                        }}
-                        options={{
-                          indexAxis: 'y',
-                          scales: {
-                            x: {
-                              ticks: {
-                                color: '#ffffff', // x축 눈금 색상
-                                font: {
-                                  size: 14, // x축 눈금 폰트 사이즈
+                {hoveredPokeId === userOne.cur_poke_id &&
+                  key == hoveredIndex && (
+                    <div>
+                      <BarGraph>
+                        <Bar
+                          data={{
+                            labels: myData.map((data) => data.label),
+                            datasets: [
+                              {
+                                label: 'Count',
+                                data: myData.map((data) => data.value),
+                                borderColor: '#6366F1', // 선 색
+                                backgroundColor: '#38bff8ce ', // 막대 배경색
+                                borderRadius: 7,
+                              },
+                            ],
+                          }}
+                          options={{
+                            indexAxis: 'y',
+                            scales: {
+                              x: {
+                                ticks: {
+                                  color: '#ffffff', // x축 눈금 색상
+                                  font: {
+                                    size: 14, // x축 눈금 폰트 사이즈
+                                  },
+                                },
+                              },
+                              y: {
+                                ticks: {
+                                  color: '#ffffff', // y축 눈금 색상
+                                  font: {
+                                    size: 14, // y축 눈금 폰트 사이즈
+                                  },
                                 },
                               },
                             },
-                            y: {
-                              ticks: {
-                                color: '#ffffff', // y축 눈금 색상
-                                font: {
-                                  size: 14, // y축 눈금 폰트 사이즈
-                                },
+                            plugins: {
+                              legend: {
+                                display: false,
                               },
                             },
-                          },
-                          plugins: {
-                            legend: {
-                              display: false,
-                            },
-                          },
-                        }}
-                      />
-                    </BarGraph>
-                  </div>
-                )}
+                          }}
+                        />
+                      </BarGraph>
+                    </div>
+                  )}
                 <Pokemon
                   src={'/' + userOne.cur_poke_id + '.gif'}
                   onContextMenu={(e: any) => handleContextMenu(e, key)}
                   onMouseEnter={() => {
-                    setHoveredPokeId(userOne.nick_name);
+                    setHoveredPokeId(userOne.cur_poke_id);
+                    setHoveredIndex(key);
                   }}
                   onMouseLeave={() => {
                     setHoveredPokeId(null);
@@ -423,7 +426,6 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                 <button onClick={() => setIsModalOpen(true)}>
                   Evolve Pokemon
                 </button>
-                {isModalOpen && <EvolutionModal />}
                 <button onClick={() => setIsModalOpen(false)}>Close</button>
               </div>
               {/* 아마 이코드때문에 포켓몬 밑에 닉네임박스 길쭉해지고 난리날거임 */}
@@ -471,6 +473,9 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           </div>
         </Tab>
       </Container>
+      {isModalOpen && (
+        <EvolutionModal currentPokemonNumber={user.cur_poke_id} />
+      )}
     </motion.div>
   );
 };

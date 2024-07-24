@@ -1,25 +1,23 @@
 import { useState, useEffect } from 'react';
 import './EvolutionModal.css';
-import { useSelector } from 'react-redux';
 import { pokemonName, setEvolutionPokemon } from '../../utils/api/api';
-import { RootState } from '../../store';
 import { useDispatch } from 'react-redux';
 import { setPokemonId } from '../../store/userInfo';
 
-const EvolutionModal = () => {
+const EvolutionModal = ({ nextPokemonNumber }: any) => {
   const [isEvolving, setIsEvolving] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [showEvolved, setShowEvolved] = useState(false);
   const [currentPokemonName, setCurrentPokemonName] = useState('');
   const [nextPokemonName, setNextPokemonName] = useState('');
-  const { user } = useSelector((state: RootState) => state.userinfo);
 
-  let currentPokemonNumber = user.cur_poke_id;
-  let nextPokemonNumber = currentPokemonNumber + 1;
+  let currentPokemonNumber =
+    nextPokemonNumber == 25 ? 172 : nextPokemonNumber - 1;
 
   useEffect(() => {
     const fetchPokemonData = async () => {
       const currentName = await pokemonName(currentPokemonNumber);
+      console.log(currentPokemonNumber);
       const nextName = await pokemonName(nextPokemonNumber);
       setCurrentPokemonName(currentName);
       setNextPokemonName(nextName);
@@ -58,10 +56,7 @@ const EvolutionModal = () => {
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <div
-          className="pokemon-container"
-          style={{ margin: 'auto', top: '50%', transform: 'translateY(50%)' }}
-        >
+        <div className="pokemon-container">
           {!showEvolved && (
             <div className={`pokemon ${isEvolving ? 'fade-out' : 'fade-in'}`}>
               <img

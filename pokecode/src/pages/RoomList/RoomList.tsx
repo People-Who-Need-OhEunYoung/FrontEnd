@@ -271,7 +271,7 @@ const Probinfo = styled.div`
   align-items: center;
   font-size: 1.1rem;
   width: 100%;
-  cursor: 'inherit';
+  cursor: inherut;
 `;
 
 const Roominfo = styled.div`
@@ -320,7 +320,7 @@ const CheckSlide = styled.div<{ timeck: string }>`
   background: #ffffff;
   padding: 0.25rem;
   margin: 0 10px;
-  cursor: 'inherit';
+  cursor: inherut;
 
   ${(props: any) =>
     props.timeck === 'ON' &&
@@ -411,7 +411,7 @@ const MakeRoomButton = styled.button`
   font-weight: bold;
   border: none;
   margin-left: 2%;
-  cursor: 'inherit';
+  cursor: inherit;
 
   &:hover {
     background-color: #8284f5;
@@ -430,7 +430,7 @@ const Reload = styled.button`
   border: none;
   margin-left: 10px;
   transform: rotateZ('360deg');
-  cursor: 'inherit';
+  cursor: inherit;
 
   &:active {
     background-color: #35428b;

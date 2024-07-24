@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const DesignedButton = ({ event, text, link }: any) => {
   return (
-    <LinkButton to={link} onClick={event}>
+    <LinkButton style={{ cursor: 'inherit' }} to={link} onClick={event}>
       {text}
     </LinkButton>
   );

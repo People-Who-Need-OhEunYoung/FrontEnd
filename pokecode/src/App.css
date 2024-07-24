@@ -70,3 +70,6 @@ label,
 select {
   cursor: inherit;
 }
+a:-webkit-any-link {
+  cursor: inherit;
+}
