@@ -275,7 +275,7 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                     left="-150px"
                     fontSize="1em"
                     padding="30px"
-                    bottom="100px"
+                    bottom="150px"
                     position="absolute"
                     maxHightSet=""
                     maxHightSet1=""
@@ -370,8 +370,9 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                     </li>
                   </ul>
                 ) : null}
-                <NicknameBox>{userOne.nick_name}</NicknameBox>
+
                 <NicknameBox>{userOne.poke_title}</NicknameBox>
+                <NicknameBox>{userOne.nick_name}</NicknameBox>
                 <PokeAudioOne
                   runButton={userOne.cur_poke_id}
                   event={cry[key]}
@@ -503,17 +504,16 @@ const ChatRoomDiv = styled.div`
 `;
 
 const NicknameBox = styled.p`
-  transform: translateX(-10%);
   width: 120%;
   height: 10%;
   margin: 0 auto;
   overflow: hidden;
   color: white;
   background-color: #324056; /* 연보라색 배경 */
-  opacity: 60%; /* 수정된 부분 */
+  opacity: 0.8; /* 수정된 부분 */
   border-radius: 8px; /* 둥근 모서리 */
   text-align: center; /* 텍스트 중앙 정렬 */
-  font-size: 14px; /* 글씨 크기 조정 */
+  font-size: 20px; /* 글씨 크기 조정 */
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 추가 */
 `;
 
