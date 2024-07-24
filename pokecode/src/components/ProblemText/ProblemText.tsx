@@ -230,7 +230,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
               {problemDetails.samples.map((sample, index) => (
                 <div key={index}>
                   <TextBox> 예시 {index + 1} </TextBox>
-                  <Hr style={{ width: '60px' }} />
+                  <Hr style={{ width: '70px' }} />
                   <ExampleWrap>
                     <Example>
                       <p style={{ margin: '10px' }}>입력</p>
@@ -360,7 +360,7 @@ const ProblemWrap = styled.div`
   box-sizing: border-box;
   padding: 1% 6%;
   color: #ffffff;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
 `;
 
 const InoutWrap = styled.div`
@@ -371,7 +371,7 @@ const InoutWrap = styled.div`
 const Hr = styled.hr`
   border-color: #55e79e;
   margin: 10px 0 10px 0;
-  width: 45px;
+  width: 55px;
 `;
 
 const TextBox = styled.span`

@@ -230,7 +230,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
       <div
         style={{
           overflowY: 'scroll',
-          height: '80%',
+          height: '75%',
         }}
       >
         {messages.map((msg, index) =>
@@ -251,7 +251,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div style={{ height: '10%' }}>
+      <div style={{ height: '15%', boxSizing: 'border-box', padding:'15px' }}>
         <textarea
           value={message}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -262,13 +262,13 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
           rows={2}
           style={{
             height: '100%',
-            width: '80%',
-            margin: '0',
+            width: '72%',
             border: 'none',
             borderRadius: '10px',
             padding: '10px',
             boxSizing: 'border-box',
             resize: 'none',
+            overflow: 'hidden'
           }}
         />
         <SendBtn onClick={sendMessage}>보내기</SendBtn>
@@ -279,22 +279,21 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
 
 const SendBtn = styled.button`
   height: 100%;
-  width: 20%;
-  margin: 0;
+  width: 25%;
   border: none;
   float: right;
   font-size: 1.2rem;
-  background-color: #6366f1;
+  background-color: #6365f19f;
   color: white;
   font-weight: bold;
-  border-radius: 30px;
+  border-radius: 10px;
 `;
 
 const UserName = styled.strong`
   display: inline-block;
   padding: 5px;
   border-radius: 5px;
-  margin: 0 10px;
+  margin: 0 10px 5px 10px; /* Add bottom margin to create space between nickname and message bubble */
   color: #d3dde8;
 `;
 
@@ -313,6 +312,10 @@ const NoticeMessage = styled.p`
 const MessageContainer = styled.div<{ isOwnMessage?: boolean }>`
   text-align: ${({ isOwnMessage }) => (isOwnMessage ? 'right' : 'left')};
   margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: ${({ isOwnMessage }) =>
+    isOwnMessage ? 'flex-end' : 'flex-start'};
 `;
 
 const MessageBubble = styled.pre<{ isOwnMessage?: boolean }>`
@@ -327,10 +330,9 @@ const MessageBubble = styled.pre<{ isOwnMessage?: boolean }>`
   white-space: break-spaces;
   word-break: break-all;
   position: relative;
-  color: ${({ isOwnMessage }) => (isOwnMessage ? 'white' : 'black')};
+  color: white;
   border-radius: ${({ isOwnMessage }) =>
     isOwnMessage ? '30px 30px 0 30px' : '30px 30px 30px 0'};
-
   font-size: 1.3rem;
 `;
 

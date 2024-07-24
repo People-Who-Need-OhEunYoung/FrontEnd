@@ -45,9 +45,10 @@ const VoiceChatOV: React.FC = () => {
     if (roomId) {
       createSession();
     }
-  }, [roomId]);
+  }, [roomId, token]);
 
   const joinSession = async () => {
+    console.log('세션 참가 요청');
     if (isJoined) {
       console.log('이미 세션에 참가중입니다.');
       return;
@@ -59,11 +60,12 @@ const VoiceChatOV: React.FC = () => {
         {}
       );
       setToken(response.data);
-      console.log('Token received: ', response.data);
+      console.log('token:', response.data);
 
       const OV = new OpenVidu();
       const newSession = OV.initSession();
       setSession(newSession);
+      console.log('Session:', newSession);
 
       newSession.on('streamCreated', (event) => {
         const subscriber = newSession.subscribe(
@@ -83,6 +85,31 @@ const VoiceChatOV: React.FC = () => {
         console.log('Subscriber added:', subscriber);
       });
 
+      // Handle the signal that a user has left
+      newSession.on('signal:userLeft', (event) => {
+        if (event.data && typeof event.data === 'string') {
+          try {
+            // Parse the data received from the signal
+            const data = JSON.parse(event.data);
+            // Ensure data has the correct structure
+            if (data && typeof data.userName === 'string') {
+              setUsers((prevUsers) =>
+                prevUsers.filter((user) => user.username !== data.userName)
+              );
+            } else {
+              console.error('Invalid data format:', data);
+            }
+          } catch (error) {
+            console.error('Error parsing userLeft signal data:', error);
+          }
+        } else {
+          console.error(
+            'Received data is undefined or not a string:',
+            event.data
+          );
+        }
+      });
+
       await newSession.connect(response.data, { clientData: username });
 
       const newPublisher = OV.initPublisher('audio-container', {
@@ -96,19 +123,43 @@ const VoiceChatOV: React.FC = () => {
       setPublisher(newPublisher);
       setIsJoined(true);
     } catch (error) {
-      console.error('Error joining session:', error);
+      // Check if error is an instance of AxiosError
+      if (axios.isAxiosError(error)) {
+        // Axios error
+        console.error('Axios error:', error.message);
+        if (error.response) {
+          // Server responded with a status code outside the 2xx range
+          console.error('Response error:', error.response.data);
+        } else if (error.request) {
+          // Request was made but no response received
+          console.error('Request error:', error.request);
+        }
+      } else if (error instanceof Error) {
+        // General JS error
+        console.error('General error:', error.message);
+      } else {
+        // Unknown error type
+        console.error('An unknown error occurred');
+      }
     }
   };
 
   const leaveSession = () => {
     if (session) {
+      //user가 떠날때 시그널링
+      session.signal({
+        type: 'userLeft',
+        data: JSON.stringify({ userName: username }),
+      });
+
       session.disconnect();
       setSession(null);
       setPublisher(null);
-      setUsers((prevUsers) => prevUsers.filter((u) => u.username !== username));
+      setUsers([]); // Clear the users array
       setIsMuted(false);
     }
     setIsJoined(false);
+    setToken(''); // Clear the token
   };
 
   const toggleMute = () => {

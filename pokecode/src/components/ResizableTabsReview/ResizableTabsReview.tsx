@@ -13,10 +13,11 @@ import VoiceChatOV from './VoiceChatOV';
 import { setRoomId, setUsername } from '../../store/roomdataSlice';
 import { CodeAIWardBalloon } from '../CodeAIButton';
 import EvolutionModal from '../EvolutionModal/EvolutionModal';
-
+import { setUserArray } from '../../store/roomdataSlice';
 import { Bar } from 'react-chartjs-2';
 
 import { PokeAudioOne } from '../PokeAudio';
+
 
 const Container = styled.div`
   display: flex;
@@ -70,6 +71,7 @@ interface ResizableTabsProps {
   title: string;
   editorRoom: string;
 }
+
 interface ContextMenuPosition {
   mouseX: number;
   mouseY: number;
@@ -198,6 +200,8 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
 
   const handlePokemons = (users: any) => {
     setUsersInfo(users);
+    const nicknames = users.map((user: any) => user.nick_name);
+    dispatch(setUserArray(nicknames));
   };
 
   const queryString = window.location.search;
