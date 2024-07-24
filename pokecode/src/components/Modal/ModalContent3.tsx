@@ -3,9 +3,15 @@ import { CodeAIButton } from '../CodeAIButton';
 
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-const ModalContent3 = ({ handleClose }: any) => {
+import { useEffect, useRef } from 'react';
+const ModalContent3 = ({ handleClose, on }: any) => {
   const { user } = useSelector((state: RootState) => state.userinfo);
-
+  const audioRefs = useRef<HTMLAudioElement | null>(null);
+  useEffect(() => {
+    if (on == true) {
+      audioRefs.current?.play();
+    }
+  }, [on]);
   return (
     <div style={{ overflow: 'hidden', width: '400px' }}>
       <img
@@ -30,6 +36,11 @@ const ModalContent3 = ({ handleClose }: any) => {
           fontSize="1.2em"
         ></CodeAIButton>
       </div>
+      <audio
+        src="/voice/answer.mp3"
+        style={{ display: 'none' }}
+        ref={audioRefs}
+      ></audio>
     </div>
   );
 };

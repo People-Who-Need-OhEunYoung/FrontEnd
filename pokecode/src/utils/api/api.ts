@@ -220,7 +220,7 @@ const updateMyPokemon = async (pokId: number) => {
       return res.json();
     })
     .then((data) => {
-      console.log("변경요청 결과:",data);
+      console.log('변경요청 결과:', data);
       return data;
     })
     .catch((error) => {
@@ -596,9 +596,9 @@ const getRoomPeopleChecker = async (roomId: string | null) => {
     });
 };
 
-
 //코드리뷰방 검색
 const reviewSearch = async (query: string) => {
+
   return await fetch(`${import.meta.env.VITE_APP_IP}/reviewList?search=${query}`, {
     method: 'GET',
     headers: {

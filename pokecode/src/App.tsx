@@ -18,12 +18,34 @@ import { PokeBook } from './pages/PokeBook';
 import { ProblemList } from './pages/ProblemList';
 import { Provider } from 'react-redux';
 import store from './store';
+import { useEffect, useRef } from 'react';
 function App() {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  useEffect(() => {
+    const handleClick = () => {
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.volume = 0.3;
+        audioRef.current.play();
+      }
+    };
+    document.addEventListener('click', handleClick);
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  }, []);
+
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <div className="App">
+        <div className="App custom-cursor">
           <AnimatePresence>
+            <audio
+              ref={audioRef}
+              src="/voice/popbutton2.mp3"
+              preload="auto"
+              style={{ display: 'none' }}
+            />
             <Routes>
               <Route
                 path="/"

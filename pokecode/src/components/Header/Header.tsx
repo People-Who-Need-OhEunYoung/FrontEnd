@@ -38,7 +38,6 @@ export const Header2 = () => {
   const userSet = async () => {
     dispatch(setUser(await userInfo()));
   };
-
   useEffect(() => {
     userSet();
     console.log('----유저 정보-----', user);

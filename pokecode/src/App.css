@@ -60,3 +60,20 @@ input {
   overflow: hidden;
   box-sizing: border-box;
 }
+
+/* styles.css */
+.default-cursor {
+  cursor: default; /* 기본 커서 */
+}
+
+.pointer-cursor {
+  cursor: pointer; /* 클릭 가능한 요소를 나타내는 손 모양 커서 */
+}
+
+.crosshair-cursor {
+  cursor: crosshair; /* 교차선 커서 */
+}
+
+.custom-cursor {
+  cursor: url('/172.gif'), auto; /* 사용자 정의 커서 이미지 */
+}
