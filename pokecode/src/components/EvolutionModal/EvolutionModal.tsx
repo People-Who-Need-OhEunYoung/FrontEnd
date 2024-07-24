@@ -23,7 +23,13 @@ const EvolutionModal = () => {
       const nextName = await pokemonName(nextPokemonNumber);
       setCurrentPokemonName(currentName);
       setNextPokemonName(nextName);
-      console.log("상태:", currentPokemonNumber, currentName, nextPokemonNumber, nextName);
+      console.log(
+        '상태:',
+        currentPokemonNumber,
+        currentName,
+        nextPokemonNumber,
+        nextName
+      );
     };
     fetchPokemonData();
   }, [currentPokemonNumber, nextPokemonNumber]);
@@ -52,28 +58,35 @@ const EvolutionModal = () => {
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <div className="pokemon-container">
+        <div
+          className="pokemon-container"
+          style={{ margin: 'auto', top: '50%', transform: 'translateY(50%)' }}
+        >
           {!showEvolved && (
             <div className={`pokemon ${isEvolving ? 'fade-out' : 'fade-in'}`}>
-              <img 
-                src={`/${currentPokemonNumber}.gif`} 
-                alt={currentPokemonName} 
+              <img
+                src={`/${currentPokemonNumber}.gif`}
+                alt={currentPokemonName}
                 className="pokemon-image"
               />
             </div>
           )}
           {showEvolved && (
             <div className={`pokemon`}>
-              <img 
-                src={`/${nextPokemonNumber}.gif`} 
-                alt={nextPokemonName} 
+              <img
+                src={`/${nextPokemonNumber}.gif`}
+                alt={nextPokemonName}
                 className="pokemon-image"
               />
             </div>
           )}
         </div>
         <div className="text-box">
-          <p>{showEvolved ? `${currentPokemonName}는 ${nextPokemonName}로 진화했다!` : `어라！？ ${currentPokemonName}의 상태가！`}</p>
+          <p>
+            {showEvolved
+              ? `${currentPokemonName}는 ${nextPokemonName}로 진화했다!`
+              : `어라！？ ${currentPokemonName}의 상태가！`}
+          </p>
         </div>
       </div>
     </div>

@@ -23,6 +23,7 @@ const LinkButton = styled(Link)`
   width: 33.3333%;
   box-sizing: border-box;
   border-radius: 20px;
+  cursor: inherit;
   @media (min-width: 1900px) {
     font-size: 1.2em;
   }

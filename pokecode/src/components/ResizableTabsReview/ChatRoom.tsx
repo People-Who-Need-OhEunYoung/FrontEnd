@@ -30,7 +30,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<any>('');
-
+  //진화 로직 테스트
+  //const { user } = useSelector((state: RootState) => state.userinfo);
   const dispatch = useDispatch();
   const socketRef = useRef<Socket | null>(null);
 
@@ -69,6 +70,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
       return;
     }
   };
+  //진화 로직 테스트
+  // useEffect(() => {
+  //   onUserChange(users);
+  // }, [user]);
 
   useEffect(() => {
     if (!savedUsername || !savedRoomId) {

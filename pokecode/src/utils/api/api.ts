@@ -20,6 +20,7 @@ export {
   setRoom,
   getRoomPeopleChecker,
   reviewSearch,
+  resolveCall,
 };
 
 //닉네임 중복 검사
@@ -364,12 +365,16 @@ const SubmitCode = async (editorContent: string, id: string): Promise<any> => {
     body: JSON.stringify({
       code: editorContent,
       bojNumber: id,
+      lang: 'python',
+      elapsed_time: 0,
+      limit_time: 0,
     }),
   })
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.statusText}`);
       }
+      console.log('testruncode1-------------------', editorContent, id);
       return res.json();
     })
     .then((data) => {
@@ -408,8 +413,20 @@ const RunCode = async (
   })
     .then((res) => {
       if (!res.ok) {
+        console.log(
+          'testruncode1-------------------',
+          editorContent,
+          id,
+          testCases
+        );
         throw new Error(`HTTP error! Status: ${res.statusText}`);
       }
+      console.log(
+        'testruncode2-------------------',
+        editorContent,
+        id,
+        testCases
+      );
       return res.json();
     })
     .then((data) => {
@@ -598,15 +615,55 @@ const getRoomPeopleChecker = async (roomId: string | null) => {
 
 //코드리뷰방 검색
 const reviewSearch = async (query: string) => {
-
-  return await fetch(`${import.meta.env.VITE_APP_IP}/reviewList?search=${query}`, {
-    method: 'GET',
-    headers: {
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
-      'Content-Type': 'application/json',
-    },
-  })
+  return await fetch(
+    `${import.meta.env.VITE_APP_IP}/reviewList?search=${query}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+        'Content-Type': 'application/json',
+      },
+    }
+  )
     .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.statusText}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      console.log(data);
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return 'ERROR : ' + error;
+    });
+};
+
+//내가 푼 문제 화면
+const resolveCall = async (
+  problem_id: string | number,
+  problem_title: string,
+  limit_time: number
+) => {
+  return await fetch(
+    `${import.meta.env.VITE_APP_IP}/selectOrUpdateResolvedProblem`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        problem_id: problem_id,
+        problem_title: problem_title,
+        limit_time: limit_time,
+      }),
+    }
+  )
+    .then((res) => {
+      console.log('전송 데이터 : ', problem_id, problem_title, limit_time);
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.statusText}`);
       }

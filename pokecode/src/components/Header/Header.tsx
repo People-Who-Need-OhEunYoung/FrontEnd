@@ -96,6 +96,7 @@ export const Header2 = () => {
           position: 'absolute',
           zIndex: 100,
           left: '12.5%',
+          cursor: 'inherit',
         }}
       >
         POKE CODE
@@ -233,7 +234,7 @@ const ProfileWrap2 = styled.div`
   color: white;
   width: 250px;
   height: 100%;
-  right: 0%;
+  right: 50px;
 `;
 
 const NavWrap = styled.div`
