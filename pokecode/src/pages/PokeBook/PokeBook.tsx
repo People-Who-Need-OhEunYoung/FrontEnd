@@ -282,6 +282,7 @@ const PokeBook = () => {
                 }}
               />
             ))}
+
             <PokemonLegendTree>
               {sortedPoketmon.slice(3, 6).map((pokemon) => (
                 <PokemonCard

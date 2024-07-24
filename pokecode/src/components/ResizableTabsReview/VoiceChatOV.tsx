@@ -11,24 +11,24 @@ const SERVER_URL = 'https://api.poke-code.com:1235';
 
 interface User {
   username: string;
-  socketId: string | null;
+  socketId: string;
   isMuted: boolean;
-  isSpeaking: boolean;
 }
 
 const VoiceChatOV: React.FC = () => {
   const [sessionId, setSessionId] = useState<string>('');
   const [token, setToken] = useState<string>('');
-  const [users, setUsers] = useState<User[]>([]);
   const [session, setSession] = useState<Session | null>(null);
   const [publisher, setPublisher] = useState<Publisher | null>(null);
   const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [users, setUsers] = useState<User[]>([]);
   const [isJoined, setIsJoined] = useState<boolean>(false);
 
-  const { username, roomId, userArray } = useSelector(
+  console.log(token);
+
+  const { username, roomId } = useSelector(
     (state: RootState) => state.roomdata
   );
-
 
   useEffect(() => {
     const createSession = async () => {
@@ -46,66 +46,6 @@ const VoiceChatOV: React.FC = () => {
       createSession();
     }
   }, [roomId]);
-
-  useEffect(() => {
-    // 초기 users 배열 설정
-    const initialUsers = userArray.map((nickName: string) => ({
-      username: nickName,
-      socketId: null,
-      isMuted: false,
-      isSpeaking: false,
-    }));
-    setUsers(initialUsers);
-  }, [userArray]);
-
-  useEffect(() => {
-    if (session) {
-      session.on('signal:mute', (event) => {
-        if (event.data) {
-          const { userName, isSpeaking } = JSON.parse(event.data);
-          setUsers((prevUsers) =>
-            prevUsers.map((user) =>
-              user.username === userName ? { ...user, isSpeaking } : user
-            )
-          );
-        }
-      });
-
-      session.on('signal:leave', (event) => {
-        if (event.data) {
-          const { userName } = JSON.parse(event.data);
-          setUsers((prevUsers) =>
-            prevUsers.filter((user) => user.username !== userName)
-          );
-          alert(`${userName} has left the session.`);
-        }
-      });
-
-      // Add event listener for connectionCreated
-      session.on('connectionCreated', (event) => {
-        const newUser = {
-          username: JSON.parse(event.connection.data).clientData,
-          socketId: event.connection.connectionId,
-          isMuted: false,
-          isSpeaking: false,
-        };
-        setUsers((prevUsers) => {
-          if (prevUsers.some((user) => user.socketId === newUser.socketId)) {
-            return prevUsers;
-          }
-          return [...prevUsers, newUser];
-        });
-      });
-
-      // Add event listener for connectionDestroyed
-      session.on('connectionDestroyed', (event) => {
-        const connectionId = event.connection.connectionId;
-        setUsers((prevUsers) =>
-          prevUsers.filter((user) => user.socketId !== connectionId)
-        );
-      });
-    }
-  }, [session]);
 
   const joinSession = async () => {
     if (isJoined) {
@@ -126,22 +66,21 @@ const VoiceChatOV: React.FC = () => {
       setSession(newSession);
 
       newSession.on('streamCreated', (event) => {
-        const newUser = {
-          username: JSON.parse(event.stream.connection.data).clientData,
-          socketId: event.stream.connection.connectionId,
-          isMuted: false,
-          isSpeaking: false, // 초기값 설정
-        };
+        const subscriber = newSession.subscribe(
+          event.stream,
+          'audio-container'
+        );
 
-        setUsers((prevUsers) => {
-          if (prevUsers.some((user) => user.socketId === newUser.socketId)) {
-            return prevUsers;
-          }
-          return [...prevUsers, newUser];
-        });
+        setUsers((prevUsers) => [
+          ...prevUsers,
+          {
+            username: JSON.parse(event.stream.connection.data).clientData,
+            socketId: event.stream.connection.connectionId,
+            isMuted: false,
+          },
+        ]);
 
-        newSession.subscribe(event.stream, 'audio-container');
-        console.log('Subscriber added');
+        console.log('Subscriber added:', subscriber);
       });
 
       await newSession.connect(response.data, { clientData: username });
@@ -156,13 +95,6 @@ const VoiceChatOV: React.FC = () => {
       newSession.publish(newPublisher);
       setPublisher(newPublisher);
       setIsJoined(true);
-
-      // 자신의 상태를 isSpeaking = true로 설정
-      newSession.signal({
-        data: JSON.stringify({ userName: username, isSpeaking: true }),
-        to: [],
-        type: 'mute',
-      });
     } catch (error) {
       console.error('Error joining session:', error);
     }
@@ -170,27 +102,13 @@ const VoiceChatOV: React.FC = () => {
 
   const leaveSession = () => {
     if (session) {
-      // 자신의 상태를 isSpeaking = false로 설정
-      session
-        .signal({
-          data: JSON.stringify({ userName: username, isSpeaking: false }),
-          to: [],
-          type: 'leave',
-        })
-        .then(() => {
-          session.disconnect();
-          setSession(null);
-          setPublisher(null);
-          setUsers((prevUsers) =>
-            prevUsers.filter((user) => user.username !== username)
-          );
-          setIsMuted(false);
-          setIsJoined(false);
-        })
-        .catch((error) => {
-          console.error('Error sending signal:', error);
-        });
+      session.disconnect();
+      setSession(null);
+      setPublisher(null);
+      setUsers((prevUsers) => prevUsers.filter((u) => u.username !== username));
+      setIsMuted(false);
     }
+    setIsJoined(false);
   };
 
   const toggleMute = () => {
@@ -208,10 +126,7 @@ const VoiceChatOV: React.FC = () => {
         <h3 style={{ color: 'white' }}>참여 중인 사용자:</h3>
         <ul style={{ color: 'white' }}>
           {users.map((user) => (
-            <li
-              key={user.socketId}
-              style={{ color: user.isSpeaking ? 'red' : 'white' }}
-            >
+            <li key={user.socketId}>
               {user.username} {user.isMuted ? '(Muted)' : ''}
             </li>
           ))}

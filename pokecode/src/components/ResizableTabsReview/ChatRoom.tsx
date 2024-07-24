@@ -263,6 +263,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
             padding: '10px',
             boxSizing: 'border-box',
             resize: 'none',
+            overflow: 'hidden'
           }}
         />
         <SendBtn onClick={sendMessage}>보내기</SendBtn>
@@ -274,8 +275,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
 const SendBtn = styled.button`
   height: 100%;
   width: 25%;
-  box-sizing: border-box;
-  padding: 10px;
   border: none;
   float: right;
   font-size: 1.2rem;
