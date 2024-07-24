@@ -81,7 +81,6 @@ const ProblemList = () => {
     );
   };
 
-
   useEffect(() => {
     fetchProbData().then((res) => {
       const parsedData = res;
@@ -130,7 +129,7 @@ const ProblemList = () => {
                 width: '20px',
                 right: '15px',
                 top: '9px',
-                cursor: 'pointer',
+                cursor: 'inherit',
               }}
             ></img>
             <Inputsearch
@@ -265,7 +264,7 @@ const TitleBtn = styled.button`
   text-align: left;
   left: 20%;
   font-size: 1.2rem;
-  cursor: pointer;
+  cursor: 'inherit';
 `;
 
 const OrderButton = styled.img`
@@ -283,6 +282,7 @@ const PageButton = styled.button`
   border-radius: 10px;
   font-size: 1rem;
   border: none;
+  cursor: 'inherit';
 
   &:hover {
     background-color: #4ea7ff52;
@@ -298,7 +298,7 @@ const ProblemComponent = styled.div`
   margin: auto;
   align-items: center;
   position: relative;
-  cursor: pointer;
+  cursor: 'inherit';
 `;
 
 const ListView = styled.div`
@@ -368,7 +368,7 @@ const Item = styled.div`
   background-color: #1e293b;
   margin: 10px;
   padding: 15px;
-  cursor: pointer;
+  cursor: 'inherit';
 `;
 
 const ButtonGroup = styled.div`
@@ -384,7 +384,6 @@ const SelectBtn = styled.button`
   border: none;
   border-radius: 15px;
   outline: none;
-  cursor: pointer;
   font-size: 1rem;
   font-weight: 500;
   line-height: 1.75;

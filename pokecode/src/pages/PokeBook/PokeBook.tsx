@@ -498,6 +498,7 @@ const TypeBtn = styled.button<{ back_img: string }>`
   text-align: center;
   border: 2px solid #111826;
   position: relative;
+  cursor: inherit;
   &:hover {
     border: 2px solid white;
   }
@@ -579,6 +580,7 @@ const PokeMonType = styled.div<{ back_img: string }>`
   background-size: 100% 100%;
   text-align: center;
   border-radius: 5px;
+  cursor: inherit;
 `;
 
 //포켓몬 이름
@@ -619,7 +621,7 @@ const CurPokeMonSelect = styled.button`
   color: white;
   font-size: 1.2rem;
   font-weight: bold;
-
+  cursor: inherit;
   &:hover {
     border: 2px solid white;
   }

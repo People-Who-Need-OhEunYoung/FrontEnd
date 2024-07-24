@@ -124,7 +124,7 @@ const Button = styled.button`
   padding: 4px 35px;
   border-radius: 10px;
   outline: none;
-  cursor: pointer;
+  cursor: 'inherit';
   font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.5;

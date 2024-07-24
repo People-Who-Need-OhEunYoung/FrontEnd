@@ -60,7 +60,7 @@ const Modal = ({
           {nowcomponent === 1 ? (
             <>
               <Title>{prob_title}</Title>
-              <ModalContent1 id={id} />
+              <ModalContent1 id={id} prob_title={prob_title} />
             </>
           ) : nowcomponent === 2 ? (
             <>

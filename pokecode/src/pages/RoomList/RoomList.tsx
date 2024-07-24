@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Modal from '../../components/Modal/Modal';
-import { reviewSearch, showRoomList } from '../../utils/api/api';
+import { reviewSearch } from '../../utils/api/api';
 import reload from '../../assets/images/reload.png';
 type ItemType = {
   roomId: string;
@@ -44,7 +44,7 @@ const RoomList = () => {
       },
     ]);
   //진욱 기술적챌린지 주석
-  // console.log(page);
+  console.log(page);
 
   const fetchRoomData = async () => {
     try {
@@ -271,7 +271,7 @@ const Probinfo = styled.div`
   align-items: center;
   font-size: 1.1rem;
   width: 100%;
-  cursor: pointer;
+  cursor: 'inherit';
 `;
 
 const Roominfo = styled.div`
@@ -320,7 +320,7 @@ const CheckSlide = styled.div<{ timeck: string }>`
   background: #ffffff;
   padding: 0.25rem;
   margin: 0 10px;
-  cursor: pointer;
+  cursor: 'inherit';
 
   ${(props: any) =>
     props.timeck === 'ON' &&
@@ -411,7 +411,7 @@ const MakeRoomButton = styled.button`
   font-weight: bold;
   border: none;
   margin-left: 2%;
-  cursor: pointer;
+  cursor: 'inherit';
 
   &:hover {
     background-color: #8284f5;
@@ -430,7 +430,7 @@ const Reload = styled.button`
   border: none;
   margin-left: 10px;
   transform: rotateZ('360deg');
-  cursor: pointer;
+  cursor: 'inherit';
 
   &:active {
     background-color: #35428b;

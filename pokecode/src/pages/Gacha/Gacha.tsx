@@ -318,7 +318,7 @@ const Gacha = () => {
             transform: 'translateY(-50%)',
             zIndex: 1,
             border: 'none',
-            cursor: 'pointer',
+            cursor: 'inherit',
             background: 'none',
           }}
         >
@@ -339,7 +339,7 @@ const Gacha = () => {
             transform: 'translateY(-50%)',
             zIndex: 1,
             border: 'none',
-            cursor: 'pointer',
+            cursor: 'inherit',
             background: 'none',
           }}
         >

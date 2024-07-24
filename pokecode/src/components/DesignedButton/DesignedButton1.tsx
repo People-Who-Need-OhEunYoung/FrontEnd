@@ -10,6 +10,6 @@ const DesignedButton1 = styled.button<{ back_color?: string; color?: string }>`
   background-color: ${(props) => props.back_color || '#324056'};
   border: 1px solid #d3dde82f;
   box-sizing: border-box;
-  cursor: pointer;
+  cursor: 'inherit';
 `;
 export default DesignedButton1;
