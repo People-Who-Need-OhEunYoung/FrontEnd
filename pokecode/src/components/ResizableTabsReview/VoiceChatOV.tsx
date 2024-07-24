@@ -172,17 +172,25 @@ const VoiceChatOV: React.FC = () => {
   return (
     <div className="VoiceChat" style={{ position: 'relative', height: '100%' }}>
       {isJoined && session ? (
-        <div style={{ height: 'calc(100% - 80px)', overflowY: 'auto' }}>
+        <div
+          style={{
+            height: 'calc(100% - 80px)',
+            overflowY: 'auto',
+            width: '100%',
+          }}
+        >
           <div id="audio-container" style={{ display: 'none' }}></div>
-          <h3>현재 참여 중인 사용자: </h3>
-          <ul style={{ color: 'black' }}>
-            {users.map((user) => (
-              <li key={user.socketId}>
-                {user.username} {user.isMuted ? '(Muted)' : ''}
-              </li>
-            ))}
-          </ul>
-          <VoiceBtn onClick={leaveSession}>음성채팅종료</VoiceBtn>
+            <VoiceChatInfo>
+              <VoicechatTxt>현재 참여 중인 사용자 </VoicechatTxt>{' '}
+              <VoiceBtn onClick={leaveSession}>종료</VoiceBtn>
+            </VoiceChatInfo>
+            <ul style={{ color: 'black' }}>
+              {users.map((user) => (
+                <li key={user.socketId}>
+                  {user.username} {user.isMuted ? '(Muted)' : ''}
+                </li>
+              ))}
+            </ul>
         </div>
       ) : (
         <JoinBtnDiv>
@@ -243,16 +251,34 @@ const VoiceChatOV: React.FC = () => {
 
 export default VoiceChatOV;
 
+const VoicechatTxt = styled.div`
+  display: flex;
+  width: 60%;
+  justify-content: center;
+  background-color: #d3dde8;
+  text-align: center;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  font-weight: bold;
+  line-height: 40px;
+  color: #324056;
+`;
+
+const VoiceChatInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const VoiceBtn = styled.button`
   display: inline-block;
   background-color: #5f6275;
   color: white;
   font-size: 1.2em;
   font-weight: bold;
-  position: relative;
   height: 40px;
   right: 0;
-  width: 100%;
+  width: 30%;
+  margin :10px 40px;
 `;
 
 const MicrophoneImg = styled.img`

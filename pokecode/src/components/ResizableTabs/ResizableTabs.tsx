@@ -177,7 +177,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           }}
         >
           <div
-            style={{
+            style={{ 
               width: '100%',
               height: '100%',
               boxSizing: 'border-box',
