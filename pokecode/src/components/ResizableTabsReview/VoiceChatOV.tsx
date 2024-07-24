@@ -3,6 +3,8 @@ import axios from 'axios';
 import { OpenVidu, Session, Publisher } from 'openvidu-browser';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import styled from 'styled-components';
+import microphone from '../../assets/images/microphone3.png';
 // import { useStore } from '../store';
 // import io from 'socket.io-client';
 
@@ -23,9 +25,6 @@ const VoiceChatOV: React.FC = () => {
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [users, setUsers] = useState<User[]>([]);
   const [isJoined, setIsJoined] = useState<boolean>(false);
-
-  console.log(token);
-
   const { username, roomId } = useSelector(
     (state: RootState) => state.roomdata
   );
@@ -172,103 +171,172 @@ const VoiceChatOV: React.FC = () => {
 
   return (
     <div className="VoiceChat" style={{ position: 'relative', height: '100%' }}>
-      <div style={{ height: 'calc(100% - 80px)', overflowY: 'auto' }}>
-        <div id="audio-container" style={{ display: 'none' }}></div>
-        <h3 style={{ color: 'white' }}>참여 중인 사용자:</h3>
-        <ul style={{ color: 'white' }}>
-          {users.map((user) => (
-            <li key={user.socketId}>
-              {user.username} {user.isMuted ? '(Muted)' : ''}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            textAlign: 'center',
-            width: '100%',
-            display: 'inline-block',
-          }}
-        >
-          {publisher && (
-            <button
-              style={{
-                display: 'inline-block',
-                background: '#5F6275',
-                color: 'white',
-                fontSize: '1.2em',
-                fontWeight: 'bold',
-                position: 'relative',
-                height: '40px',
-                right: 0,
-                width: '100%',
-              }}
-              onClick={toggleMute}
-            >
-              {isMuted ? 'Unmute' : 'Mute'}
-            </button>
-          )}
-          {isJoined ? (
-            session && (
-              <button
-                onClick={leaveSession}
-                style={{
-                  display: 'inline-block',
-                  background: '#5F6275',
-                  color: 'white',
-                  fontSize: '1.2em',
-                  fontWeight: 'bold',
-                  position: 'relative',
-                  height: '40px',
-                  right: 0,
-                  width: '100%',
-                }}
-              >
-                음성채팅종료
-                <svg
-                  style={{ width: '37px' }}
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 640 512"
-                  fill="white"
-                >
-                  <path d="M228.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C76.1 30.2 64 46 64 64c0 107.4 37.8 206 100.8 283.1L9.2 469.1c-10.4 8.2-12.3 23.3-4.1 33.7s23.3 12.3 33.7 4.1l592-464c10.4-8.2 12.3-23.3 4.1-33.7s-23.3-12.3-33.7-4.1L253 278c-17.8-21.5-32.9-45.2-45-70.7L257.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96zm96.8 319l-91.3 72C310.7 476 407.1 512 512 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L368.7 368c-15-7.1-29.3-15.2-43-24.3z" />
-                </svg>
-              </button>
-            )
-          ) : (
-            <button
-              onClick={joinSession}
-              style={{
-                display: 'inline-block',
-                background: '#5F6275',
-                color: 'white',
-                fontSize: '1.2em',
-                fontWeight: 'bold',
-                position: 'relative',
-                height: '40px',
-                right: 0,
-                width: '100%',
-              }}
-            >
-              음성채팅참여
-              <svg
-                style={{ width: '30px' }}
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                fill="white"
-              >
-                <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" />
-              </svg>
-            </button>
-          )}
+      {isJoined && session ? (
+        <div style={{ height: 'calc(100% - 80px)', overflowY: 'auto' }}>
+          <div id="audio-container" style={{ display: 'none' }}></div>
+          <h3>현재 참여 중인 사용자: </h3>
+          <ul style={{ color: 'black' }}>
+            {users.map((user) => (
+              <li key={user.socketId}>
+                {user.username} {user.isMuted ? '(Muted)' : ''}
+              </li>
+            ))}
+          </ul>
+          <VoiceBtn onClick={leaveSession}>음성채팅종료</VoiceBtn>
         </div>
-      </div>
+      ) : (
+        <JoinBtnDiv>
+          <JoinBtn onClick={joinSession}>
+            <WavesContainer>
+              <svg
+                className="waves"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
+                viewBox="0 24 150 28"
+                preserveAspectRatio="none"
+                shapeRendering="auto"
+              >
+                <defs>
+                  <path
+                    id="gentle-wave"
+                    d="M-160 44c30 0 58-18 88-18s58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+                  />
+                </defs>
+                <g className="parallax">
+                  <use
+                    xlinkHref="#gentle-wave"
+                    x="48"
+                    y="0"
+                    fill="rgba(132, 178, 239, 0.901)"
+                  />
+                  <use
+                    xlinkHref="#gentle-wave"
+                    x="48"
+                    y="3"
+                    fill="rgba(113, 165, 233, 0.711)"
+                  />
+                  <use
+                    xlinkHref="#gentle-wave"
+                    x="48"
+                    y="5"
+                    fill="rgba(56, 123, 210, 0.434)"
+                  />
+                  <use
+                    xlinkHref="#gentle-wave"
+                    x="48"
+                    y="7"
+                    fill="rgba(56, 123, 210, 0.668)"
+                  />
+                </g>
+              </svg>
+            </WavesContainer>
+            <MicrophoneImg src={microphone}></MicrophoneImg>
+          </JoinBtn>
+        </JoinBtnDiv>
+      )}
+      {publisher && (
+        <VoiceBtn onClick={toggleMute}>{isMuted ? 'Unmute' : 'Mute'}</VoiceBtn>
+      )}
     </div>
   );
 };
 
 export default VoiceChatOV;
+
+const VoiceBtn = styled.button`
+  display: inline-block;
+  background-color: #5f6275;
+  color: white;
+  font-size: 1.2em;
+  font-weight: bold;
+  position: relative;
+  height: 40px;
+  right: 0;
+  width: 100%;
+`;
+
+const MicrophoneImg = styled.img`
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  overflow: hidden;
+  z-index: 100;
+`;
+
+const JoinBtn = styled.button`
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: none;
+  background-color: #fefefe34;
+  color: white;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    background-color: #fefefe82;
+    box-shadow: 0 0 10px 2px white;
+  }
+
+  & .waves {
+    position: absolute;
+    width: 100%;
+    height: 40%;
+    top: 60%;
+    left: 0%;
+  }
+
+  & .parallax > use {
+    animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.15, 0.5) infinite;
+  }
+
+  & .parallax > use:nth-child(1) {
+    animation-delay: -2s;
+    animation-duration: 2s;
+  }
+
+  & .parallax > use:nth-child(2) {
+    animation-delay: -3s;
+    animation-duration: 3s;
+  }
+
+  & .parallax > use:nth-child(3) {
+    animation-delay: -4s;
+    animation-duration: 4s;
+  }
+
+  & .parallax > use:nth-child(4) {
+    animation-delay: -5s;
+    animation-duration: 4s;
+  }
+
+  @keyframes move-forever {
+    0% {
+      transform: translate3d(-90px, 0, 0);
+    }
+    100% {
+      transform: translate3d(85px, 0, 0);
+    }
+  }
+`;
+
+const JoinBtnDiv = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const WavesContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  border-radius: 50%;
+`;
