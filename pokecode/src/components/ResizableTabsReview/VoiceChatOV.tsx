@@ -11,7 +11,7 @@ import MicOff from '../../assets/images/Micoff.png';
 // import { useStore } from '../store';
 // import io from 'socket.io-client';
 
-const SERVER_URL = 'https://api.poke-code.com:1235';
+const SERVER_URL = 'http://192.168.1.18:1235';
 //const SERVER_URL = 'http://192.168.1.18:3334';
 
 interface User {

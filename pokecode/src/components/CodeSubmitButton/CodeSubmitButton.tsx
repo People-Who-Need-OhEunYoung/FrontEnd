@@ -34,11 +34,7 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
   // };
 
   const handleRun = async () => {
-    let editorContent = writtenCode;
-    console.log('editorContent:', editorContent);
-    if (!editorContent) {
-      editorContent = ' ';
-    }
+    const editorContent = writtenCode || ' ';
     try {
       const res = await SubmitCode(writtenCode, id, elapsedTime, limitTime);
       if (res.evolutionPoketmon) {
@@ -61,6 +57,8 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
       dispatch(setReturnCall(res.data));
       if (res.isCorrect == '1') setIsSuccessModalOpen(true);
       else setIsFailModalOpen(true);
+
+      // return dataArray.every((item: any) => item.correct);
       return res;
     } catch (error) {
       console.error('테스트 케이스 과정 에러 발생 : ', error);
