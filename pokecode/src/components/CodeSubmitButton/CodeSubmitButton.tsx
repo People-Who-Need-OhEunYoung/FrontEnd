@@ -36,7 +36,7 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
   const handleRun = async () => {
     const editorContent = writtenCode || ' ';
     try {
-      const res = await SubmitCode(editorContent, id, elapsedTime, limitTime);
+      const res = await SubmitCode(writtenCode, id, elapsedTime, limitTime);
       if (res.evolutionPoketmon) {
         let evol = res.evolutionPoketmon;
         for (let i = 0; i < evol.length; i++)
