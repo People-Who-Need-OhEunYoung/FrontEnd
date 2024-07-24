@@ -31,6 +31,7 @@ import {
   updateMyPokemon,
 } from '../../utils/api/api';
 import { setPokemonId } from '../../store/userInfo';
+import { PokeAudio } from '../../components/PokeAudio';
 
 ChartJS.register(
   CategoryScale,
@@ -59,6 +60,8 @@ const PokeBook = () => {
   const [allPoketmon, setAllPoketmon] = useState<any[]>([]);
   const [ownPoketmon, setOwnPoketmon] = useState<any[]>([]);
   const [hoveredType, setHoveredType] = useState<number | null>(null);
+  const [soundButton, setSoundButton] = useState<number | null>(null);
+  const [durationButton, setDurationButton] = useState<number | null>(null);
 
   const iconArr = [fireIcon, waterIcon, grassIcon, electricIcon, psychicIcon];
   const typeArr = ['구현', '그래프', '자료구조', '수학', 'DP'];
@@ -93,7 +96,7 @@ const PokeBook = () => {
       if (localStorageValue !== null) {
         return {
           ...item,
-          value: parseInt(localStorageValue, 10)/100, // 문자열을 정수로 변환
+          value: parseInt(localStorageValue, 10) / 100, // 문자열을 정수로 변환
         };
       }
       return item;
@@ -265,16 +268,18 @@ const PokeBook = () => {
                 key={pokemon.idx}
                 back_img={pokemon.poke_profile_img}
                 isOwned={isOwned(pokemon.idx)}
-                onClick={
-                  isOwned(pokemon.idx)
-                    ? () => {
-                        setCurpokegif(pokemon.poke_img);
-                        setSelectedPokemon(pokemon.idx);
-                        setPokemonname(pokemon.poke_name);
-                        setCurType(type);
-                      }
-                    : undefined
-                }
+                onClick={() => {
+                  if (isOwned(pokemon.idx)) {
+                    setCurpokegif(pokemon.poke_img);
+                    setSelectedPokemon(pokemon.idx);
+                    setPokemonname(pokemon.poke_name);
+                    setCurType(type);
+                  } else {
+                    undefined;
+                  }
+                  setSoundButton(pokemon.idx);
+                  setDurationButton(3000);
+                }}
               />
             ))}
             <PokemonLegendTree>
@@ -283,16 +288,18 @@ const PokeBook = () => {
                   key={pokemon.idx}
                   back_img={pokemon.poke_profile_img}
                   isOwned={isOwned(pokemon.idx)}
-                  onClick={
-                    isOwned(pokemon.idx)
-                      ? () => {
-                          setCurpokegif(pokemon.poke_img);
-                          setSelectedPokemon(pokemon.idx);
-                          setPokemonname(pokemon.poke_name);
-                          setCurType(type);
-                        }
-                      : undefined
-                  }
+                  onClick={() => {
+                    if (isOwned(pokemon.idx)) {
+                      setCurpokegif(pokemon.poke_img);
+                      setSelectedPokemon(pokemon.idx);
+                      setPokemonname(pokemon.poke_name);
+                      setCurType(type);
+                    } else {
+                      undefined;
+                    }
+                    setSoundButton(pokemon.idx);
+                    setDurationButton(3000);
+                  }}
                 />
               ))}
             </PokemonLegendTree>
@@ -458,6 +465,7 @@ const PokeBook = () => {
           </BarGraph>
         </GraphWrap>
       </MainContents>
+      <PokeAudio runButton={soundButton} durationSec={durationButton} />
     </MainWrapper>
   );
 };

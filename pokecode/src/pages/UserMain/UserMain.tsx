@@ -12,6 +12,7 @@ import { getPooCount, removePoo } from '../../utils/api/api';
 
 import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
+import { PokeAudioOne } from '../../components/PokeAudio';
 
 const UserMain = () => {
   const [position, setPosition] = useState({
@@ -27,6 +28,7 @@ const UserMain = () => {
   const [isHoverDp, setIsHoverDp] = useState(false);
   const [isHoverData, setIsHoverData] = useState(false);
   const [isHoverGraph, setIsHoverGraph] = useState(false);
+  const [cry, setCry] = useState(false);
   const { user } = useSelector((state: RootState) => state.userinfo);
   const controls = useAnimation();
   const controlsPoo = useAnimation();
@@ -162,6 +164,7 @@ const UserMain = () => {
             className="pokemon"
           >
             <Pokemon
+              onClick={() => setCry(!cry)}
               style={{ transform: 'scale(2.5)' }}
               src={
                 user.cur_poke_id == 0 ? pokeball : `/${user.cur_poke_id}.gif`
@@ -339,6 +342,7 @@ const UserMain = () => {
           </ButtonWrap>
         </Home>
       </MainWrapper>
+      <PokeAudioOne runButton={user.cur_poke_id} event={cry}></PokeAudioOne>
     </motion.div>
   );
 };
@@ -355,7 +359,6 @@ const Home = styled.div`
   margin: 2em auto;
 `;
 export const Pokemon = styled.img`
-  transform: scale(2);
   -webkit-user-drag: none;
   -khtml-user-drag: none;
   -webkit-user-drag: none;
@@ -365,6 +368,10 @@ export const Pokemon = styled.img`
   -webkit-user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
+  transform: scale(0.8);
+  @media (min-height: 700px) {
+    transform: scale(2);
+  }
 `;
 
 const PokeNameWrap = styled.div`

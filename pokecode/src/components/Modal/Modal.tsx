@@ -1,4 +1,4 @@
-import {useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import DesignedButton1 from '../DesignedButton/DesignedButton1';
 import ModalContent1 from './ModalContent1';
@@ -45,9 +45,6 @@ const Modal = ({
   const [nowcomponent, setNowcomponent] = useState(component);
   const [reset, setReset] = useState(false);
 
-
- 
-
   const handleClose = () => {
     event(false);
     setReset(true); // Trigger the reset
@@ -73,7 +70,7 @@ const Modal = ({
           ) : nowcomponent === 3 ? (
             <>
               <Title>{'축하합니다!'}</Title>
-              <ModalContent3 handleClose={handleClose} />
+              <ModalContent3 handleClose={handleClose} on={on} />
             </>
           ) : nowcomponent === 4 ? (
             <>
@@ -81,6 +78,7 @@ const Modal = ({
               <ModalContent4
                 event={setNowcomponent}
                 handleClose={handleClose}
+                on={on}
               />
             </>
           ) : nowcomponent === 5 ? (

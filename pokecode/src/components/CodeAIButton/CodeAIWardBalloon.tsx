@@ -77,10 +77,10 @@ const CodeAIWardBalloon: React.FC<WordBalwrapProps> = ({
         {/* X */}
       </img>
       <WordBal
+        maxHeightSet={maxHightSet1}
         style={{
           width: '95%',
           whiteSpace: 'pre-wrap',
-          maxHeight: maxHightSet1,
           overflow: 'scroll',
           userSelect: 'all',
           textAlign: 'left',
@@ -97,7 +97,12 @@ const WordBalwrap = styled.pre`
     display: none;
   }
 `;
-const WordBal = styled.pre`
+const WordBal = styled.pre<{ maxHeightSet: string }>`
+  max-height: 300px;
+
+  @media (max-height: 950px) {
+    max-height: ${(props) => props.maxHeightSet};
+  }
   &::-webkit-scrollbar {
     display: none;
   }

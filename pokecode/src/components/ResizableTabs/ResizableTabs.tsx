@@ -10,6 +10,7 @@ import { CodeAIWardBalloon } from '../CodeAIButton';
 import { Terminal } from '../Terminal';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { PokeAudioOne } from '../PokeAudio';
 
 const Container = styled.div`
   display: flex;
@@ -78,6 +79,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
   const controls = useAnimation();
   const tabRef = useRef<HTMLDivElement | null>(null);
   const [tabWidth, setTabWidth] = useState(0); // Tab의 초기 너비 상태
+  const [cry, setCry] = useState(false);
 
   const handleDivClick = (e: any) => {
     const containerRect = e.currentTarget.getBoundingClientRect();
@@ -222,7 +224,12 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
                 }}
                 className="pokemon"
               >
-                <Pokemon src={`/${user.cur_poke_id}.gif`}></Pokemon>
+                <Pokemon
+                  onClick={() => {
+                    setCry(!cry);
+                  }}
+                  src={`/${user.cur_poke_id}.gif`}
+                ></Pokemon>
               </motion.div>
             </Home>
           </div>
@@ -237,6 +244,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           </div>
         </Tab>
       </Container>
+      <PokeAudioOne runButton={user.cur_poke_id} event={cry}></PokeAudioOne>
     </motion.div>
   );
 };
