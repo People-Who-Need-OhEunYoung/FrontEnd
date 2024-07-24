@@ -34,11 +34,8 @@ const CodeSubmitButton = () => {
   // };
 
   const handleRun = async () => {
-    let editorContent = writtenCode;
-    console.log('editorContent:', editorContent);
-    if (!editorContent) {
-      editorContent = ' ';
-    }
+    const editorContent = writtenCode || ' ';
+
     try {
       const response = await fetch(`http://192.168.1.18:3000/submit`, {
         method: 'POST',
@@ -60,11 +57,8 @@ const CodeSubmitButton = () => {
         })
         .then((data) => {
           const dataArray = data.result.results;
-          const allCorrect = dataArray.every((item: any) => item.correct);
-
-          
+          return dataArray.every((item: any) => item.correct); // Return allCorrect
         });
-
     } catch (error) {
       console.error('테스트 케이스 과정 에러 발생 : ', error);
     }

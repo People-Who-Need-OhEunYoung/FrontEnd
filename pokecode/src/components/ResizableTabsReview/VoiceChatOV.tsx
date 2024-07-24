@@ -11,7 +11,7 @@ import MicOff from '../../assets/images/Micoff.png';
 // import { useStore } from '../store';
 // import io from 'socket.io-client';
 
-const SERVER_URL = 'https://api.poke-code.com:1235';
+const SERVER_URL = 'http://192.168.1.18:1235';
 //const SERVER_URL = 'http://192.168.1.18:3334';
 
 interface User {
@@ -28,6 +28,7 @@ const VoiceChatOV: React.FC = () => {
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [users, setUsers] = useState<User[]>([]);
   const [isJoined, setIsJoined] = useState<boolean>(false);
+
   const { username, roomId } = useSelector(
     (state: RootState) => state.roomdata
   );
@@ -48,13 +49,13 @@ const VoiceChatOV: React.FC = () => {
       createSession();
     }
 
-    return () => {
-      if (isJoined && session && publisher) {
-        console.log('세션참가중');
-        leaveSession();
-      }
-    };
-  }, [roomId, token]);
+    // return () => {
+    //   if (Session) {
+    //     console.log('세션참가중');
+    //     leaveSession();
+    //   }
+    // };
+  }, [roomId]);
 
   const joinSession = async () => {
     console.log('세션 참가 요청');
@@ -68,6 +69,7 @@ const VoiceChatOV: React.FC = () => {
         `${SERVER_URL}/api/sessions/${sessionId}/connections`,
         {}
       );
+
       setToken(response.data);
       console.log('token:', response.data);
 
@@ -160,13 +162,13 @@ const VoiceChatOV: React.FC = () => {
         type: 'userLeft',
         data: JSON.stringify({ userName: username }),
       });
+
       session.disconnect();
       setSession(null);
       setPublisher(null);
       setUsers([]); // Clear the users array
       setIsMuted(false);
     }
-
     setIsJoined(false);
     setToken(''); // Clear the token
   };
@@ -178,6 +180,7 @@ const VoiceChatOV: React.FC = () => {
       setIsMuted(newMuteState);
     }
   };
+  
   console.log(isJoined, session, publisher);
   return (
     <div className="VoiceChat" style={{ position: 'relative', height: '100%' }}>
