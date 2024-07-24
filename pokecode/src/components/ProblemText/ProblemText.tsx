@@ -81,48 +81,54 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
 
   /* 타이머 업데이트  */
   useEffect(() => {
-    const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`); //localstorage에서 저장된 데이터 가져오기
-    let start_time = Date.now(); //시작 시간 설정
+    if (isshowheader) {
+      const storedSolvedTime = localStorage.getItem(`solvedTime-${id}`); //localstorage에서 저장된 데이터 가져오기
+      let start_time = Date.now(); //시작 시간 설정
 
-    if (storedSolvedTime) {
-      //저장된 시간이 있을 경우
-      const solvedData = JSON.parse(storedSolvedTime);
-      const updateElapsedTime =
-        solvedData.elapsed_time + Math.floor((Date.now() - start_time) / 1000); //localstorage에 저장된 경과시간 + 현재 경과시간 = 새로운 경과시간
-      dispatch(setElapsedTime(updateElapsedTime));
-    } else {
-      //저장된 시간이 없을 경우
-      localStorage.setItem(
-        `solvedTime-${id}`,
-        JSON.stringify({
-          _id: id,
-          start_time: start_time,
-          elapsed_time: 0,
-          limit_time: limitTime,
-        })
-      );
-    }
-    const interval = setInterval(() => {
-      if (startTime !== null) {
-        const newElapsedTime =
-          Math.floor((Date.now() - start_time) / 1000) + elapsedTime;
-        dispatch(setElapsedTime(newElapsedTime));
-
+      if (storedSolvedTime) {
+        //저장된 시간이 있을 경우
+        console.log('저장된 시간 존재');
+        const solvedData = JSON.parse(storedSolvedTime);
+        const updateElapsedTime =
+          solvedData.elapsed_time +
+          Math.floor((Date.now() - start_time) / 1000); //localstorage에 저장된 경과시간 + 현재 경과시간 = 새로운 경과시간
+        dispatch(setElapsedTime(updateElapsedTime));
+      } else {
+        console.log('저장된 시간 없음');
+        //저장된 시간이 없을 경우
         localStorage.setItem(
           `solvedTime-${id}`,
           JSON.stringify({
             _id: id,
-            start_time,
-            elapsed_time: newElapsedTime,
+            start_time: start_time,
+            elapsed_time: 0,
             limit_time: limitTime,
           })
         );
       }
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-      SendTimeData(elapsedTime, limitTime, id);
-    };
+
+      const interval = setInterval(() => {
+        if (startTime !== null) {
+          const newElapsedTime =
+            Math.floor((Date.now() - start_time) / 1000) + elapsedTime;
+          dispatch(setElapsedTime(newElapsedTime));
+
+          localStorage.setItem(
+            `solvedTime-${id}`,
+            JSON.stringify({
+              _id: id,
+              start_time,
+              elapsed_time: newElapsedTime,
+              limit_time: limitTime,
+            })
+          );
+        }
+      }, 1000);
+      return () => {
+        clearInterval(interval);
+        SendTimeData(elapsedTime, limitTime, id);
+      };
+    }
   }, [startTime, id]);
 
   /* 크롤링 데이터 가져오기  */
@@ -174,6 +180,7 @@ const ProblemText: React.FC<ResizableTabsProps> = ({
               <HeaderBtn
                 onClick={() => {
                   dispatch(resetElapsedTime());
+                  dispatch(setStartTime(Date.now()));
                   localStorage.removeItem(`solvedTime-${id}`);
                 }}
               >

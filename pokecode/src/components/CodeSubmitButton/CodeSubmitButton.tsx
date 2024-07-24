@@ -8,6 +8,9 @@ import { useState } from 'react';
 
 const CodeSubmitButton = () => {
   const { writtenCode } = useSelector((state: RootState) => state.probinfo);
+  const { elapsedTime, limitTime } = useSelector(
+    (state: RootState) => state.timer
+  );
   const dispatch = useDispatch();
   // PDG URL 파라미터 받기
   const searchParams = new URLSearchParams(location.search);
@@ -18,15 +21,52 @@ const CodeSubmitButton = () => {
     dispatch(setReturnCall(''));
   };
 
-  const handleSubmit = async () => {
+  // const handleSubmit = async () => {
+  //   try {
+  //     const res = await SubmitCode(writtenCode, id, elapsedTime, limitTime);
+  //     dispatch(setReturnCall(res.data));
+  //     if (res.isCorrect == '1') setIsSuccessModalOpen(true);
+  //     else setIsFailModalOpen(true);
+  //     return res;
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   }
+  // };
+
+  const handleRun = async () => {
+    let editorContent = writtenCode;
+    console.log('editorContent:', editorContent);
+    if (!editorContent) {
+      editorContent = ' ';
+    }
     try {
-      const res = await SubmitCode(writtenCode, id);
-      dispatch(setReturnCall(res.data));
-      if (res.isCorrect == '1') setIsSuccessModalOpen(true);
-      else setIsFailModalOpen(true);
-      return res;
+      const response = await fetch(`http://192.168.1.18:3000/submit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          code: editorContent,
+          lang: 'python',
+          bojNumber: id,
+          elapsed_time: elapsedTime,
+          limit_time: limitTime,
+          testCase: [],
+        }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          const dataArray = data.result.results;
+          const allCorrect = dataArray.every((item: any) => item.correct);
+
+          
+        });
+
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('테스트 케이스 과정 에러 발생 : ', error);
     }
   };
 
@@ -46,7 +86,7 @@ const CodeSubmitButton = () => {
         className="submit-button"
         onClick={() => {
           handleInit();
-          handleSubmit();
+          handleRun();
         }}
         style={{
           margin: '0',
