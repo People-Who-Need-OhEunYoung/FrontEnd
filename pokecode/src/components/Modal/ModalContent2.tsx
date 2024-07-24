@@ -125,7 +125,7 @@ const ModalContent2 = ({ width, reset }: any) => {
       width: '70%', // 부모 요소의 너비를 100%로 설정
       margin: 'auto',
       padding: '10px 0',
-      cursor: 'pointer',
+      cursor: 'inherit',
       color: 'black',
     }),
     control: (provided: any) => ({
@@ -223,7 +223,7 @@ const ModalContent2 = ({ width, reset }: any) => {
                     display: 'inline-block',
                     wordBreak: 'break-all',
                     padding: '10px',
-                    cursor: 'pointer',
+                    cursor: 'inherit',
                   }}
                   rows={1}
                   placeholder="방 제목을 입력해주세요"
@@ -233,14 +233,14 @@ const ModalContent2 = ({ width, reset }: any) => {
             </div>
             <PersonWrap>
               <span
-                style={{ width: '40px', cursor: 'pointer', userSelect: 'none' }}
+                style={{ width: '40px', cursor: 'inherit', userSelect: 'none' }}
                 onClick={personMinus}
               >
                 &lt;
               </span>
               <Person type="text" value={person} readOnly />
               <span
-                style={{ width: '40px', cursor: 'pointer', userSelect: 'none' }}
+                style={{ width: '40px', cursor: 'inherit', userSelect: 'none' }}
                 onClick={personPlus}
               >
                 &gt;

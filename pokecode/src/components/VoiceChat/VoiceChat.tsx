@@ -34,16 +34,16 @@ const VoiceChat = () => {
   const [isDisabled, setIsDisabled] = useState(false);
 
   const handleStartClick = () => {
-    console.log("스타트 클릭");
+    console.log('스타트 클릭');
     setIsDisabled(true);
     startWebRTC();
-  }
+  };
 
   const handleQuitClick = () => {
-    console.log("나가기 클릭");
+    console.log('나가기 클릭');
     setIsDisabled(false);
     quit();
-  }
+  };
 
   const startWebRTC = async () => {
     try {
@@ -260,11 +260,11 @@ const VoiceChat = () => {
           >
             {user.nick_name}
           </p>
-          <audio ref={localVideoRef} autoPlay className="local-video" muted/>
+          <audio ref={localVideoRef} autoPlay className="local-video" muted />
           <button
             onClick={handleStartClick}
-            disabled = {isDisabled}
-            style={{ padding: '0 3px', cursor: 'pointer' }}
+            disabled={isDisabled}
+            style={{ padding: '0 3px', cursor: 'inherit' }}
           >
             <svg
               style={{ width: '30px' }}
@@ -276,7 +276,7 @@ const VoiceChat = () => {
           </button>
           <button
             onClick={handleQuitClick}
-            style={{ margin: '0 10px', cursor: 'pointer' }}
+            style={{ margin: '0 10px', cursor: 'inherit' }}
           >
             <svg
               style={{ width: '37px' }}
