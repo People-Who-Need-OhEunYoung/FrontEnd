@@ -462,22 +462,27 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
             />
           </ChatRoomDiv>
 
-          <div
-            style={{
-              width: '100%',
-              height: '30%',
-              overflow: 'auto',
-            }}
-          >
+          <VoiceRoomDiv>
             {maxPeople == 4 && <VoiceChatOV />}
             {(maxPeople == 2 || maxPeople == 3) && <VoiceChat />}{' '}
             {/*진욱이 소스*/}
-          </div>
+          </VoiceRoomDiv>
         </Tab>
       </Container>
     </motion.div>
   );
 };
+
+const VoiceRoomDiv = styled.div`
+  width: 100%;
+  height: 29%;
+  overflow: auto;
+  border-radius: 10px;
+  background-color: #313c48;
+  box-sizing: border-box;
+  padding: 10px;
+  margin-top: 10px;
+`;
 
 const HeaderTxt = styled.p`
   height: 80px;
