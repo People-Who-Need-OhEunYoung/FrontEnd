@@ -117,7 +117,7 @@ const SolveBtn = styled.button`
   background-color: #6366f1;
   color: white;
   box-sizing: border-box;
-  cursor: 'inherit';
+  cursor: inherit;
 `;
 
 const CheckSlide = styled.div<{ timeck: string }>`
@@ -134,7 +134,7 @@ const CheckSlide = styled.div<{ timeck: string }>`
   border-radius: 9999px;
   padding: 0.25rem;
   margin: 0 10px;
-  cursor: 'inherit';
+  cursor: inherut;
   ${(props: any) =>
     props.timeck === 'ON' &&
     css`
