@@ -6,7 +6,7 @@ import { setReturnCall } from '../../store/codeCallerReducer';
 import { SubmitCode } from '../../utils/api/api';
 import { useState } from 'react';
 
-const CodeSubmitButton = () => {
+const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
   const { writtenCode } = useSelector((state: RootState) => state.probinfo);
   const dispatch = useDispatch();
   // PDG URL 파라미터 받기
@@ -21,6 +21,23 @@ const CodeSubmitButton = () => {
   const handleSubmit = async () => {
     try {
       const res = await SubmitCode(writtenCode, id);
+      if (res.evolutionPoketmon) {
+        let evol = res.evolutionPoketmon;
+        for (let i = 0; i < evol.length; i++)
+          setTimeout(() => {
+            evolEvent(evol[i].idx);
+          }, 20000 * i + 1000);
+      }
+      if (res.legendPoketmon1) {
+        setTimeout(() => {
+          coinEvent(res.legendPoketmon1);
+          if (res.legendPoketmon2) {
+            setTimeout(() => {
+              coinEvent(res.legendPoketmon2);
+            }, 6100);
+          }
+        }, 1000);
+      }
       dispatch(setReturnCall(res.data));
       if (res.isCorrect == '1') setIsSuccessModalOpen(true);
       else setIsFailModalOpen(true);

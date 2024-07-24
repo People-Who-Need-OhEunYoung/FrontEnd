@@ -139,14 +139,6 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
     }
   }, [tabWidth]);
 
-  // const userSet = async () => {
-  //   setUser(await userInfo());
-  // };
-
-  // useEffect(() => {
-  //   userSet();
-  // }, [controls]);
-
   return (
     <motion.div
       initial={{ opacity: 0 }}

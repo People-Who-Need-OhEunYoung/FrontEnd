@@ -32,29 +32,7 @@ const CodeRunButton = () => {
     const editorContent = writtenCode;
     console.log('editorContent:', editorContent);
     try {
-      const response1 = await fetch(`http://192.168.1.18:3000/submit`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-          code: editorContent,
-          lang: 'python',
-          bojNumber: id,
-          elapsed_time: elapsedTime,
-          limit_time: limitTime,
-          testCase: TestCases,
-        }),
-      })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-      });
-
-      // const response = await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
+      // const response1 = await fetch(`http://192.168.1.18:3000/submit`, {
       //   method: 'POST',
       //   headers: {
       //     'Content-Type': 'application/json',
@@ -62,20 +40,42 @@ const CodeRunButton = () => {
       //   },
       //   body: JSON.stringify({
       //     code: editorContent,
+      //     lang: 'python',
       //     bojNumber: id,
       //     elapsed_time: elapsedTime,
       //     limit_time: limitTime,
       //     testCase: TestCases,
       //   }),
+      // })
+      // .then((res) => {
+      //   return res.json();
+      // })
+      // .then((data) => {
+      //   console.log(data);
       // });
 
-      // if (!response.ok) {
-      //   throw new Error(`Error: ${response.statusText}`);
-      // }
+      const response = await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          code: editorContent,
+          bojNumber: id,
+          elapsed_time: elapsedTime,
+          limit_time: limitTime,
+          testCase: TestCases,
+        }),
+      });
 
-      // const data = await response.json();
-      // dispatch(setReturnCall(data.data2));
-      // console.log(data.data2);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      dispatch(setReturnCall(data.data2));
+      console.log(data.data2);
     } catch (error) {
       console.error('테스트 케이스 과정 에러 발생 : ', error);
     }
