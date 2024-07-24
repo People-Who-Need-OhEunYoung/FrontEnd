@@ -8,6 +8,9 @@ import { useState } from 'react';
 
 const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
   const { writtenCode } = useSelector((state: RootState) => state.probinfo);
+  const { elapsedTime, limitTime } = useSelector(
+    (state: RootState) => state.timer
+  );
   const dispatch = useDispatch();
   // PDG URL 파라미터 받기
   const searchParams = new URLSearchParams(location.search);
@@ -18,7 +21,24 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
     dispatch(setReturnCall(''));
   };
 
-  const handleSubmit = async () => {
+  // const handleSubmit = async () => {
+  //   try {
+  //     const res = await SubmitCode(writtenCode, id, elapsedTime, limitTime);
+  //     dispatch(setReturnCall(res.data));
+  //     if (res.isCorrect == '1') setIsSuccessModalOpen(true);
+  //     else setIsFailModalOpen(true);
+  //     return res;
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   }
+  // };
+
+  const handleRun = async () => {
+    let editorContent = writtenCode;
+    console.log('editorContent:', editorContent);
+    if (!editorContent) {
+      editorContent = ' ';
+    }
     try {
       const res = await SubmitCode(writtenCode, id);
       if (res.evolutionPoketmon) {
@@ -42,8 +62,9 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
       if (res.isCorrect == '1') setIsSuccessModalOpen(true);
       else setIsFailModalOpen(true);
       return res;
+
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('테스트 케이스 과정 에러 발생 : ', error);
     }
   };
 
@@ -63,7 +84,7 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
         className="submit-button"
         onClick={() => {
           handleInit();
-          handleSubmit();
+          handleRun();
         }}
         style={{
           margin: '0',

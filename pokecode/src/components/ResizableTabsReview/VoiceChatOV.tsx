@@ -5,6 +5,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import styled from 'styled-components';
 import microphone from '../../assets/images/microphone3.png';
+import exit from '../../assets/images/exit.png';
+import MicOn from '../../assets/images/Mic.png';
+import MicOff from '../../assets/images/Micoff.png';
 // import { useStore } from '../store';
 // import io from 'socket.io-client';
 
@@ -44,6 +47,13 @@ const VoiceChatOV: React.FC = () => {
     if (roomId) {
       createSession();
     }
+
+    return () => {
+      if (isJoined && session && publisher) {
+        console.log('세션참가중');
+        leaveSession();
+      }
+    };
   }, [roomId, token]);
 
   const joinSession = async () => {
@@ -150,13 +160,13 @@ const VoiceChatOV: React.FC = () => {
         type: 'userLeft',
         data: JSON.stringify({ userName: username }),
       });
-
       session.disconnect();
       setSession(null);
       setPublisher(null);
       setUsers([]); // Clear the users array
       setIsMuted(false);
     }
+
     setIsJoined(false);
     setToken(''); // Clear the token
   };
@@ -168,21 +178,58 @@ const VoiceChatOV: React.FC = () => {
       setIsMuted(newMuteState);
     }
   };
-
+  console.log(isJoined, session, publisher);
   return (
     <div className="VoiceChat" style={{ position: 'relative', height: '100%' }}>
-      {isJoined && session ? (
-        <div style={{ height: 'calc(100% - 80px)', overflowY: 'auto' }}>
+      {isJoined && publisher ? (
+        <div
+          style={{
+            height: 'calc(100% - 80px)',
+            overflowY: 'auto',
+            width: '100%',
+          }}
+        >
           <div id="audio-container" style={{ display: 'none' }}></div>
-          <h3>현재 참여 중인 사용자: </h3>
+          <VoiceChatInfo>
+            <VoicechatTxt>현재 참여 중인 사용자 </VoicechatTxt>
+            <BtnGroup>
+              <VoiceBtn
+                onClick={toggleMute}
+                style={{
+                  backgroundImage: `url(${isMuted ? MicOff : MicOn})`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                  backgroundSize: '80%',
+                  backgroundColor: 'rgb(204, 201, 244)',
+                }}
+              ></VoiceBtn>
+              <VoiceBtn
+                style={{
+                  backgroundImage: `url(${exit})`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                  backgroundSize: '80%',
+                  backgroundColor: 'rgb(204, 201, 244)',
+                }}
+                onClick={leaveSession}
+              ></VoiceBtn>
+            </BtnGroup>
+          </VoiceChatInfo>
           <ul style={{ color: 'black' }}>
-            {users.map((user) => (
-              <li key={user.socketId}>
-                {user.username} {user.isMuted ? '(Muted)' : ''}
-              </li>
-            ))}
+            {users.map((user) => {
+              return (
+                <li key={user.socketId}>
+                  <VoiceChatNickname
+                    style={{
+                      backgroundColor: '#64aaf68e',
+                    }}
+                  >
+                    {user.username} {user.isMuted ? '(Muted)' : ''}
+                  </VoiceChatNickname>
+                </li>
+              );
+            })}
           </ul>
-          <VoiceBtn onClick={leaveSession}>음성채팅종료</VoiceBtn>
         </div>
       ) : (
         <JoinBtnDiv>
@@ -234,25 +281,58 @@ const VoiceChatOV: React.FC = () => {
           </JoinBtn>
         </JoinBtnDiv>
       )}
-      {publisher && (
-        <VoiceBtn onClick={toggleMute}>{isMuted ? 'Unmute' : 'Mute'}</VoiceBtn>
-      )}
     </div>
   );
 };
 
 export default VoiceChatOV;
 
+const BtnGroup = styled.div`
+  position: absolute;
+  right: 0;
+`;
+
+const VoiceChatNickname = styled.div`
+  display: flex;
+  width: 50%;
+  margin: 10px 30px;
+  border-radius: 30px 30px 0 30px;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #ffffff;
+`;
+
+const VoicechatTxt = styled.div`
+  display: flex;
+  width: 40%;
+  margin: 10px;
+  justify-content: center;
+  background-color: #d3dde873;
+  text-align: center;
+  font-size: 1rem;
+  border-radius: 30px;
+  font-weight: bold;
+  line-height: 30px;
+  color: #ffffff;
+`;
+
+const VoiceChatInfo = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 50px;
+`;
+
 const VoiceBtn = styled.button`
   display: inline-block;
-  background-color: #5f6275;
   color: white;
   font-size: 1.2em;
   font-weight: bold;
-  position: relative;
   height: 40px;
-  right: 0;
-  width: 100%;
+  width: 40px;
+  margin: 10px;
+  background-color: white;
+  border-radius: 50%;
 `;
 
 const MicrophoneImg = styled.img`

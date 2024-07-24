@@ -29,8 +29,11 @@ const CodeRunButton = () => {
   // }, [TestCases]);
 
   const handleSubmit = async () => {
-    const editorContent = writtenCode;
+    let editorContent = writtenCode;
     console.log('editorContent:', editorContent);
+    if (!editorContent) {
+      editorContent = ' ';
+    }
     try {
       // const response1 = await fetch(`http://192.168.1.18:3000/submit`, {
       //   method: 'POST',
@@ -76,6 +79,7 @@ const CodeRunButton = () => {
       const data = await response.json();
       dispatch(setReturnCall(data.data2));
       console.log(data.data2);
+
     } catch (error) {
       console.error('테스트 케이스 과정 에러 발생 : ', error);
     }

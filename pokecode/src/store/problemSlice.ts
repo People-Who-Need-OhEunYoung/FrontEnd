@@ -26,7 +26,7 @@ export interface ProblemState {
 //초기상태 설정
 const initialState: ProblemState = {
   problemId: '',
-  writtenCode: '',
+  writtenCode: ' ',
   isAcquireReview: false,
   problemDetails: undefined,
   TestCases: undefined,
