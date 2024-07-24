@@ -598,16 +598,14 @@ const getRoomPeopleChecker = async (roomId: string | null) => {
 
 //코드리뷰방 검색
 const reviewSearch = async (query: string) => {
-  return await fetch(
-    `${import.meta.env.VITE_APP_IP}/reviewList?search=${query}`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
-        'Content-Type': 'application/json',
-      },
-    }
-  )
+
+  return await fetch(`${import.meta.env.VITE_APP_IP}/reviewList?search=${query}`, {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+    },
+  })
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.statusText}`);

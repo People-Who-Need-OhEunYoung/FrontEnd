@@ -13,8 +13,13 @@ import VoiceChatOV from './VoiceChatOV';
 import { setRoomId, setUsername } from '../../store/roomdataSlice';
 import { CodeAIWardBalloon } from '../CodeAIButton';
 import EvolutionModal from '../EvolutionModal/EvolutionModal';
+
 import { Bar } from 'react-chartjs-2';
+
 import { PokeAudioOne } from '../PokeAudio';
+
+import { getRoomPeopleChecker } from '../../utils/api/api';
+
 
 const Container = styled.div`
   display: flex;

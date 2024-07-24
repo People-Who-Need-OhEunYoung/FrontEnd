@@ -131,7 +131,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
       console.log(`Received message in room ${savedRoomId}:`, message);
       setMessages((prevMessages) => [...prevMessages, message]);
     });
-  
+
     //강퇴기능 추가 필요
     socket.on('USER:FORCED_OUT', () => {
       alert('강제퇴장 당했습니다.');
@@ -266,11 +266,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
             resize: 'none',
           }}
         />
-        <SendBtn
-          onClick={sendMessage}
-        >
-          보내기
-        </SendBtn>
+        <SendBtn onClick={sendMessage}>보내기</SendBtn>
       </div>
     </div>
   );
@@ -286,8 +282,7 @@ const SendBtn = styled.button`
   background-color: #6366f1;
   color: white;
   font-weight: bold;
-  border-radius: 10px;
-
+  border-radius: 30px;
 `;
 
 const UserName = styled.strong`
@@ -319,17 +314,18 @@ const MessageBubble = styled.pre<{ isOwnMessage?: boolean }>`
   box-sizing: border-box;
   padding: 10px 20px;
   background: ${({ isOwnMessage }) =>
-    isOwnMessage
-      ? 'linear-gradient(to right, #8385fe, #6366f1)'
-      : 'linear-gradient(to right, #e8e8e8, #D3DDE8)  '};
+    isOwnMessage ? '#9fa1fb78' : '#64aaf68e'};
   display: inline-block;
-  border-radius: 30px;
+  border-radius: 30px 30px 0 30px;
   margin: 0 10px;
   max-width: 300px;
   white-space: break-spaces;
   word-break: break-all;
   position: relative;
   color: ${({ isOwnMessage }) => (isOwnMessage ? 'white' : 'black')};
+  border-radius: ${({ isOwnMessage }) =>
+    isOwnMessage ? '30px 30px 0 30px' : '30px 30px 30px 0'};
+
   font-size: 1.3rem;
 `;
 
