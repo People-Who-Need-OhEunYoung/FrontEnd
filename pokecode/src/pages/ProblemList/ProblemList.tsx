@@ -264,7 +264,7 @@ const TitleBtn = styled.button`
   text-align: left;
   left: 20%;
   font-size: 1.2rem;
-  cursor: 'inherit';
+  cursor: inherut;
 `;
 
 const OrderButton = styled.img`
@@ -282,7 +282,7 @@ const PageButton = styled.button`
   border-radius: 10px;
   font-size: 1rem;
   border: none;
-  cursor: 'inherit';
+  cursor: inherut;
 
   &:hover {
     background-color: #4ea7ff52;
@@ -298,7 +298,7 @@ const ProblemComponent = styled.div`
   margin: auto;
   align-items: center;
   position: relative;
-  cursor: 'inherit';
+  cursor: inherut;
 `;
 
 const ListView = styled.div`
@@ -368,7 +368,7 @@ const Item = styled.div`
   background-color: #1e293b;
   margin: 10px;
   padding: 15px;
-  cursor: 'inherit';
+  cursor: inherut;
 `;
 
 const ButtonGroup = styled.div`

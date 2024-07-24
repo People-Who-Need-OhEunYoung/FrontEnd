@@ -293,7 +293,7 @@ const ButtonContainer = styled.div<{ ismenuopen: string; tabwidth: number }>`
 
 const HamburgerMenu = styled.div<{ tabwidth: number }>`
   display: none;
-  cursor: 'inherit';
+  cursor: inherut;
   color: white;
 
   ${({ tabwidth }) =>

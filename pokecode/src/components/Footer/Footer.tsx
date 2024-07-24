@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { CodeAIButton } from '../CodeAIButton';
 import { CodeLanguageButton } from '../CodeLanguageButton';
 import { CodeRunButton } from '../CodeRunButton';
 import CodeSubmitButton from '../CodeSubmitButton/CodeSubmitButton';
 import { CodeTestCaseButton } from '../CodeTestCaseButton';
+import { EvolutionModal } from '../EvolutionModal';
+import { GetCoin } from '../GetCoin';
 
 const Footer = () => {
   return (
@@ -16,6 +19,8 @@ const Footer = () => {
 };
 
 export const Footer1 = () => {
+  const [evol, setEvol] = useState(null);
+  const [coin, setCoin] = useState(null);
   return (
     <footer
       style={{
@@ -39,7 +44,9 @@ export const Footer1 = () => {
         <CodeAIButton />
         <CodeLanguageButton />
         <CodeRunButton />
-        <CodeSubmitButton />
+        <CodeSubmitButton evolEvent={setEvol} coinEvent={setCoin} />
+        {evol && <EvolutionModal nextPokemonNumber={evol} />}
+        {coin && <GetCoin coin={coin} />}
       </div>
     </footer>
   );

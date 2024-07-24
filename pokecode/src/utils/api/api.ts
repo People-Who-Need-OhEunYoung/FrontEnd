@@ -355,7 +355,7 @@ const createRoom = async (
 };
 
 //코드 제출하기
-const SubmitCode = async (editorContent: string, id: string, elapsedTime: number, limitTime: number, correct: boolean ): Promise<any> => {
+const SubmitCode = async (editorContent: string, id: string, elapsedTime: number, limitTime: number): Promise<any> => {
   return await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
     method: 'POST',
     headers: {
@@ -368,7 +368,6 @@ const SubmitCode = async (editorContent: string, id: string, elapsedTime: number
       lang: 'python',
       elapsed_time: elapsedTime,
       limit_time: limitTime,
-      correct: correct,
     }),
   })
     .then((res) => {

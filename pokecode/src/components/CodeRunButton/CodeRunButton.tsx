@@ -35,7 +35,29 @@ const CodeRunButton = () => {
       editorContent = ' ';
     }
     try {
-      const response = await fetch(`http://192.168.1.18:3000/submit`, {
+      // const response1 = await fetch(`http://192.168.1.18:3000/submit`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Authorization: `Bearer ${localStorage.getItem('token')}`,
+      //   },
+      //   body: JSON.stringify({
+      //     code: editorContent,
+      //     lang: 'python',
+      //     bojNumber: id,
+      //     elapsed_time: elapsedTime,
+      //     limit_time: limitTime,
+      //     testCase: TestCases,
+      //   }),
+      // })
+      // .then((res) => {
+      //   return res.json();
+      // })
+      // .then((data) => {
+      //   console.log(data);
+      // });
+
+      const response = await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,22 +65,21 @@ const CodeRunButton = () => {
         },
         body: JSON.stringify({
           code: editorContent,
-          lang: 'python',
           bojNumber: id,
           elapsed_time: elapsedTime,
           limit_time: limitTime,
           testCase: TestCases,
         }),
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          const dataArray = data.result.results;
-          const resultString = dataArray.map((item: any) => item.result).join('\n\n');
-          console.log(resultString);
-          dispatch(setReturnCall(resultString));
-        });
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      dispatch(setReturnCall(data.data2));
+      console.log(data.data2);
+
     } catch (error) {
       console.error('테스트 케이스 과정 에러 발생 : ', error);
     }

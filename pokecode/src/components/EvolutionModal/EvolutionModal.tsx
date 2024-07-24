@@ -1,21 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './EvolutionModal.css';
-import { useSelector } from 'react-redux';
 import { pokemonName, setEvolutionPokemon } from '../../utils/api/api';
-import { RootState } from '../../store';
 import { useDispatch } from 'react-redux';
 import { setPokemonId } from '../../store/userInfo';
 
-const EvolutionModal = () => {
+const EvolutionModal = ({ nextPokemonNumber }: any) => {
   const [isEvolving, setIsEvolving] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [showEvolved, setShowEvolved] = useState(false);
   const [currentPokemonName, setCurrentPokemonName] = useState('');
   const [nextPokemonName, setNextPokemonName] = useState('');
-  const { user } = useSelector((state: RootState) => state.userinfo);
+  const audioRefs = useRef<HTMLAudioElement | null>(null);
+  const dispatch = useDispatch();
 
-  let currentPokemonNumber = user.cur_poke_id;
-  let nextPokemonNumber = currentPokemonNumber + 1;
+  let currentPokemonNumber =
+    nextPokemonNumber === 25 ? 172 : nextPokemonNumber - 1;
 
   useEffect(() => {
     const fetchPokemonData = async () => {
@@ -23,46 +22,47 @@ const EvolutionModal = () => {
       const nextName = await pokemonName(nextPokemonNumber);
       setCurrentPokemonName(currentName);
       setNextPokemonName(nextName);
-      console.log(
-        '상태:',
-        currentPokemonNumber,
-        currentName,
-        nextPokemonNumber,
-        nextName
-      );
     };
     fetchPokemonData();
   }, [currentPokemonNumber, nextPokemonNumber]);
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    const evolveSequence = () => {
+      setTimeout(() => setIsEvolving(true), 3000);
+      setTimeout(() => {
+        setIsEvolving(false);
+        setShowEvolved(true);
+      }, 16000);
+      setTimeout(() => {
+        setEvolutionPokemon(nextPokemonNumber);
+        dispatch(setPokemonId(nextPokemonNumber));
+        setIsVisible(false);
+      }, 20000);
+    };
+    evolveSequence();
+  }, [dispatch, nextPokemonNumber]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsEvolving(true);
-    }, 2000); // 2초 후 진화 애니메이션 시작
-
-    setTimeout(() => {
-      setIsEvolving(false);
-      setShowEvolved(true);
-    }, 7000); // 7초 후 진화 완료 상태로 변경
-
-    setTimeout(() => {
-      setEvolutionPokemon(nextPokemonNumber);
-      dispatch(setPokemonId(nextPokemonNumber));
-      setIsVisible(false); // 10초 후 모달 숨기기
-    }, 10000); // 10초 후 모달 숨기기
+    const playSoundForDuration = () => {
+      const audioElement = audioRefs.current;
+      if (audioElement) {
+        audioElement.play();
+      }
+    };
+    playSoundForDuration();
   }, []);
+
+  if (nextPokemonNumber == null) {
+    return;
+  }
 
   if (!isVisible) return null;
 
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <div
-          className="pokemon-container"
-          style={{ margin: 'auto', top: '50%', transform: 'translateY(50%)' }}
-        >
-          {!showEvolved && (
+        <div className="pokemon-container">
+          {!showEvolved ? (
             <div className={`pokemon ${isEvolving ? 'fade-out' : 'fade-in'}`}>
               <img
                 src={`/${currentPokemonNumber}.gif`}
@@ -70,9 +70,8 @@ const EvolutionModal = () => {
                 className="pokemon-image"
               />
             </div>
-          )}
-          {showEvolved && (
-            <div className={`pokemon`}>
+          ) : (
+            <div className="pokemon">
               <img
                 src={`/${nextPokemonNumber}.gif`}
                 alt={nextPokemonName}
@@ -89,6 +88,12 @@ const EvolutionModal = () => {
           </p>
         </div>
       </div>
+      <audio
+        src="/voice/evol.mp3"
+        autoPlay
+        ref={audioRefs}
+        style={{ display: 'none' }}
+      />
     </div>
   );
 };

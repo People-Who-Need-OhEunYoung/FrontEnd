@@ -12,12 +12,10 @@ import ChatRoom from './ChatRoom';
 import VoiceChatOV from './VoiceChatOV';
 import { setRoomId, setUsername } from '../../store/roomdataSlice';
 import { CodeAIWardBalloon } from '../CodeAIButton';
-import EvolutionModal from '../EvolutionModal/EvolutionModal';
 import { setUserArray } from '../../store/roomdataSlice';
 import { Bar } from 'react-chartjs-2';
 
 import { PokeAudioOne } from '../PokeAudio';
-
 
 const Container = styled.div`
   display: flex;
@@ -90,12 +88,12 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
   const [userData, setUserData] = useState<any>(null);
   const { user } = useSelector((state: RootState) => state.userinfo);
   const [hoveredPokeId, setHoveredPokeId] = useState(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const [contextMenus, setContextMenus] = useState<
     (ContextMenuPosition | null)[]
   >([null, null, null, null]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [cry, setCry] = useState<boolean[]>([false, false, false, false]);
   const roomOwner = localStorage.getItem('roomOwner');
 
@@ -289,57 +287,59 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                 ) : (
                   ''
                 )}
-                {hoveredPokeId === userOne.nick_name && (
-                  <div>
-                    <BarGraph>
-                      <Bar
-                        data={{
-                          labels: myData.map((data) => data.label),
-                          datasets: [
-                            {
-                              label: 'Count',
-                              data: myData.map((data) => data.value),
-                              borderColor: '#6366F1', // 선 색
-                              backgroundColor: '#38bff8ce ', // 막대 배경색
-                              borderRadius: 7,
-                            },
-                          ],
-                        }}
-                        options={{
-                          indexAxis: 'y',
-                          scales: {
-                            x: {
-                              ticks: {
-                                color: '#ffffff', // x축 눈금 색상
-                                font: {
-                                  size: 14, // x축 눈금 폰트 사이즈
+                {hoveredPokeId === userOne.cur_poke_id &&
+                  key == hoveredIndex && (
+                    <div>
+                      <BarGraph>
+                        <Bar
+                          data={{
+                            labels: myData.map((data) => data.label),
+                            datasets: [
+                              {
+                                label: 'Count',
+                                data: myData.map((data) => data.value),
+                                borderColor: '#6366F1', // 선 색
+                                backgroundColor: '#38bff8ce ', // 막대 배경색
+                                borderRadius: 7,
+                              },
+                            ],
+                          }}
+                          options={{
+                            indexAxis: 'y',
+                            scales: {
+                              x: {
+                                ticks: {
+                                  color: '#ffffff', // x축 눈금 색상
+                                  font: {
+                                    size: 14, // x축 눈금 폰트 사이즈
+                                  },
+                                },
+                              },
+                              y: {
+                                ticks: {
+                                  color: '#ffffff', // y축 눈금 색상
+                                  font: {
+                                    size: 14, // y축 눈금 폰트 사이즈
+                                  },
                                 },
                               },
                             },
-                            y: {
-                              ticks: {
-                                color: '#ffffff', // y축 눈금 색상
-                                font: {
-                                  size: 14, // y축 눈금 폰트 사이즈
-                                },
+                            plugins: {
+                              legend: {
+                                display: false,
                               },
                             },
-                          },
-                          plugins: {
-                            legend: {
-                              display: false,
-                            },
-                          },
-                        }}
-                      />
-                    </BarGraph>
-                  </div>
-                )}
+                          }}
+                        />
+                      </BarGraph>
+                    </div>
+                  )}
                 <Pokemon
                   src={'/' + userOne.cur_poke_id + '.gif'}
                   onContextMenu={(e: any) => handleContextMenu(e, key)}
                   onMouseEnter={() => {
-                    setHoveredPokeId(userOne.nick_name);
+                    setHoveredPokeId(userOne.cur_poke_id);
+                    setHoveredIndex(key);
                   }}
                   onMouseLeave={() => {
                     setHoveredPokeId(null);
@@ -412,26 +412,6 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
           </div>
           <div style={{ position: 'relative' }}>
             <Home style={{ textAlign: 'center' }}>
-              {/* 아마 이코드때문에 포켓몬 밑에 닉네임박스 길쭉해지고 난리날거임 */}
-              <div
-                style={{
-                  width: '150px',
-                  height: '30px',
-                  lineHeight: '20px',
-                  position: 'absolute',
-                  bottom: '40px',
-                  right: '30px',
-                  margin: 0,
-                }}
-              >
-                <button onClick={() => setIsModalOpen(true)}>
-                  Evolve Pokemon
-                </button>
-                {isModalOpen && <EvolutionModal />}
-                <button onClick={() => setIsModalOpen(false)}>Close</button>
-              </div>
-              {/* 아마 이코드때문에 포켓몬 밑에 닉네임박스 길쭉해지고 난리날거임 */}
-
               <DesignedButton1
                 style={{
                   width: '150px',

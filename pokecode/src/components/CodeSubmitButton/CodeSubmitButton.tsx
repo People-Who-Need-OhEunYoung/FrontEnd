@@ -6,7 +6,7 @@ import { setReturnCall } from '../../store/codeCallerReducer';
 import { SubmitCode } from '../../utils/api/api';
 import { useState } from 'react';
 
-const CodeSubmitButton = () => {
+const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
   const { writtenCode } = useSelector((state: RootState) => state.probinfo);
   const { elapsedTime, limitTime } = useSelector(
     (state: RootState) => state.timer
@@ -35,30 +35,31 @@ const CodeSubmitButton = () => {
 
   const handleRun = async () => {
     const editorContent = writtenCode || ' ';
-
     try {
-      const response = await fetch(`http://192.168.1.18:3000/submit`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-          code: editorContent,
-          lang: 'python',
-          bojNumber: id,
-          elapsed_time: elapsedTime,
-          limit_time: limitTime,
-          testCase: [],
-        }),
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          const dataArray = data.result.results;
-          return dataArray.every((item: any) => item.correct); // Return allCorrect
-        });
+      const res = await SubmitCode(editorContent, id, elapsedTime, limitTime);
+      if (res.evolutionPoketmon) {
+        let evol = res.evolutionPoketmon;
+        for (let i = 0; i < evol.length; i++)
+          setTimeout(() => {
+            evolEvent(evol[i].idx);
+          }, 20000 * i + 1000);
+      }
+      if (res.legendPoketmon1) {
+        setTimeout(() => {
+          coinEvent(res.legendPoketmon1);
+          if (res.legendPoketmon2) {
+            setTimeout(() => {
+              coinEvent(res.legendPoketmon2);
+            }, 6100);
+          }
+        }, 1000);
+      }
+      dispatch(setReturnCall(res.data));
+      if (res.isCorrect == '1') setIsSuccessModalOpen(true);
+      else setIsFailModalOpen(true);
+
+      // return dataArray.every((item: any) => item.correct);
+      return res;
     } catch (error) {
       console.error('테스트 케이스 과정 에러 발생 : ', error);
     }
