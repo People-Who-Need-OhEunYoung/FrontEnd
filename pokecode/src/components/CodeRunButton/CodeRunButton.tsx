@@ -34,7 +34,7 @@ const CodeRunButton = () => {
   const handleSubmit = async () => {
     let editorContent = writtenCode || ' ';
     try {
-      const response = await fetch(`http://192.168.1.18:3000/submit`, {
+      const response = await fetch(`https://api.poke-code.com/submit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ const CodeRunButton = () => {
                 // TestCases에서 input_case 가져오기 (optional chaining 사용)
                 const inputCase =
                   TestCases[index]?.input_case || 'No input case available';
-                
+
                 return (
                   `[Test ${index + 1}]\n` +
                   '------------------------------------------\n' +

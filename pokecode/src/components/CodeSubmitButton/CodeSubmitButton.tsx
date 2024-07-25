@@ -24,7 +24,7 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
   const handleRun = async () => {
     const editorContent = writtenCode || ' ';
     try {
-      const response = await fetch(`http://192.168.1.18:3000/submit`, {
+      const response = await fetch(`https://api.poke-code.com/submit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
