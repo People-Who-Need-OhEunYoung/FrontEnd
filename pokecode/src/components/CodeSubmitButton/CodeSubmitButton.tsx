@@ -21,38 +21,46 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
     dispatch(setReturnCall(''));
   };
 
-  // const handleSubmit = async () => {
-  //   try {
-  //     const res = await SubmitCode(writtenCode, id, elapsedTime, limitTime);
-  //     dispatch(setReturnCall(res.data));
-  //     if (res.isCorrect == '1') setIsSuccessModalOpen(true);
-  //     else setIsFailModalOpen(true);
-  //     return res;
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   }
-  // };
-
   const handleRun = async () => {
     //const editorContent = writtenCode || ' ';
     try {
-      const res = await SubmitCode(writtenCode, id, elapsedTime, limitTime);
 
-      if (res.evolutionPoketmon && res.legendPoketmon) {
+      const response = await fetch(`https://api.poke-code.com/submit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          code: editorContent,
+          lang: 'python',
+          bojNumber: id,
+          elapsed_time: elapsedTime,
+          limit_time: limitTime,
+          testCase: [],
+        }),
+      });
+      const data = await response.json();
+      const dataArray = data.result.results;
+      const isCorrect = dataArray.every((item: any) => item.correct);
+
+      const res = await SubmitCode(
+        editorContent,
+        id,
+        elapsedTime,
+        limitTime,
+        isCorrect
+      );
+
+      if (res.evolutionPoketmon) {
         let evol = res.evolutionPoketmon;
-        setTimeout(() => {
-          evolEvent(evol[0].idx);
-        }, 1000);
-        setTimeout(() => {
-          coinEvent(res.legendPoketmon);
-        }, 22000 + 1000);
-      } else if (res.evolutionPoketmon) {
-        let evol = res.evolutionPoketmon;
-        for (let i = 0; i < evol.length; i++)
+        for (let i = 0; i < evol.length; i++) {
           setTimeout(() => {
             evolEvent(evol[i].idx);
           }, 22000 * i + 1000);
+
       } else if (res.legendPoketmon) {
+
         setTimeout(() => {
           coinEvent(res.legendPoketmon[0]);
           if (res.legendPoketmon) {
@@ -63,11 +71,10 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
         }, 1000);
       }
 
-      dispatch(setReturnCall(res.data));
-      if (res.isCorrect == '1') setIsSuccessModalOpen(true);
+      if (isCorrect == '1') setIsSuccessModalOpen(true);
+
       else setIsFailModalOpen(true);
 
-      // return dataArray.every((item: any) => item.correct);
       return res;
     } catch (error) {
       console.error('테스트 케이스 과정 에러 발생 : ', error);

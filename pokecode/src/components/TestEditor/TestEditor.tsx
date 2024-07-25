@@ -24,6 +24,7 @@ import './TestEditor.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setWrittenCode } from '../../store/problemSlice';
+import styled from 'styled-components';
 
 const TestEditor = () => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
@@ -75,13 +76,19 @@ const TestEditor = () => {
 
   return (
     <>
-      <div
-        style={{ height: '100%' }}
+      <Wrap
         ref={editorContainerRef}
         className="editor-container"
-      ></div>
+      ></Wrap>
     </>
   );
 };
+
+const Wrap = styled.div`
+  height: 100%;
+  & * {
+    font-family: 'D2Coding', sans-serif;
+  }
+`;
 
 export default TestEditor;

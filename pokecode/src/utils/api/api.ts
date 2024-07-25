@@ -359,9 +359,10 @@ const SubmitCode = async (
   editorContent: string,
   id: string,
   elapsedTime: number,
-  limitTime: number
+  limitTime: number,
+  correct : boolean,
 ): Promise<any> => {
-  return await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
+  return await fetch(`http://52.79.197.126:3000/runCode`, {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -373,6 +374,7 @@ const SubmitCode = async (
       lang: 'python',
       elapsed_time: elapsedTime,
       limit_time: limitTime,
+      correct: correct,
     }),
   })
     .then((res) => {
