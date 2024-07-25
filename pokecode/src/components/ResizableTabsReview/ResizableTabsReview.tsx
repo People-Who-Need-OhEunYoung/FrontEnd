@@ -308,6 +308,8 @@ const ResizableTabsReview: React.FC<ResizableTabsProps> = ({
                             indexAxis: 'y',
                             scales: {
                               x: {
+                                max: 120, // 최대값
+
                                 ticks: {
                                   color: '#ffffff', // x축 눈금 색상
                                   font: {

@@ -215,7 +215,7 @@ const PokeBook = () => {
         </PokeMonViewWrap>
         <Contents>
           <ExpInfoWrap>
-            <RestExp>진화까지 남은 경험치 - 000 </RestExp>
+            {/* <RestExp>진화까지 남은 경험치 - 000 </RestExp> */}
             <ExpBar>
               <Bar
                 ref={chartRef}
