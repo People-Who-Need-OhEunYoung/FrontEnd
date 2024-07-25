@@ -1,0 +1,223 @@
+/* EvolutionModal.css */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(0, 0, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.modal {
+  background: url('/evol1.gif') no-repeat;
+  background-size: contain;
+  width: 450px;
+  height: 350px;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+.pokemon-container {
+  top: 60%;
+  position: absolute;
+  left: 53%;
+  transform: translate(-50%, -50%);
+  scale: 2;
+}
+.text-box {
+  background-color: #324056;
+  color: white;
+  border: 2px solid #000;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 25px;
+  font-size: 14px;
+}
+
+.fade-in {
+  animation: fadeIn 16s forwards; /* 2초 후 시작하여 7초에 끝남 */
+}
+
+.fade-out {
+  animation: fadeOut 16s forwards; /* 2초 후 시작하여 7초에 끝남 */
+}
+
+@keyframes fadeIn {
+  0%,
+  10% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  5%,
+  15% {
+    opacity: 1;
+    filter: brightness(0) invert(0);
+  }
+  20%,
+  28% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  24%,
+  32% {
+    opacity: 1;
+    filter: brightness(0) invert(0);
+  }
+  35%,
+  42% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  38%,
+  45% {
+    opacity: 1;
+    filter: brightness(0) invert(0);
+  }
+  48%,
+  55% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  51%,
+  58% {
+    opacity: 1;
+    filter: brightness(0) invert(0);
+  }
+  60%,
+  66% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  62%,
+  68% {
+    opacity: 1;
+    filter: brightness(0) invert(0);
+  }
+  70%,
+  76% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  72%,
+  78% {
+    opacity: 1;
+    filter: brightness(0) invert(0);
+  }
+  80%,
+  84% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  82%,
+  86% {
+    opacity: 1;
+    filter: brightness(0) invert(0);
+  }
+  88%,
+  92% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  90%,
+  94% {
+    opacity: 1;
+    filter: brightness(0) invert(0);
+  }
+  96%,
+  100% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+}
+
+@keyframes fadeOut {
+  0%,
+  10% {
+    opacity: 1;
+    filter: brightness(1) invert(0);
+  }
+  5%,
+  15% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  20%,
+  28% {
+    opacity: 1;
+    filter: brightness(1) invert(0);
+  }
+  24%,
+  32% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  35%,
+  42% {
+    opacity: 1;
+    filter: brightness(1) invert(0);
+  }
+  38%,
+  45% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  48%,
+  55% {
+    opacity: 1;
+    filter: brightness(1) invert(0);
+  }
+  51%,
+  58% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  60%,
+  66% {
+    opacity: 1;
+    filter: brightness(1) invert(0);
+  }
+  62%,
+  68% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  70%,
+  76% {
+    opacity: 1;
+    filter: brightness(1) invert(0);
+  }
+  72%,
+  78% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  80%,
+  84% {
+    opacity: 1;
+    filter: brightness(1) invert(0);
+  }
+  82%,
+  86% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  88%,
+  92% {
+    opacity: 1;
+    filter: brightness(1) invert(0);
+  }
+  90%,
+  94% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+  96%,
+  100% {
+    opacity: 0;
+    filter: brightness(0) invert(1);
+  }
+}

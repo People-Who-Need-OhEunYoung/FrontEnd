@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "vidu", "vidu", "{CB86B2B7-59EF-44A5-A621-DE3A61CFDCAC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "openvidu-tutorials", "openvidu-tutorials", "{FAB69C30-8E3D-4596-9E01-603868D8C9EF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "openvidu-basic-dotnet", "vidu\openvidu-tutorials\openvidu-basic-dotnet\openvidu-basic-dotnet.csproj", "{FCF9DA8C-B1E4-4AF9-AD04-300ECD821472}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FCF9DA8C-B1E4-4AF9-AD04-300ECD821472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCF9DA8C-B1E4-4AF9-AD04-300ECD821472}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCF9DA8C-B1E4-4AF9-AD04-300ECD821472}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCF9DA8C-B1E4-4AF9-AD04-300ECD821472}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FAB69C30-8E3D-4596-9E01-603868D8C9EF} = {CB86B2B7-59EF-44A5-A621-DE3A61CFDCAC}
+		{FCF9DA8C-B1E4-4AF9-AD04-300ECD821472} = {FAB69C30-8E3D-4596-9E01-603868D8C9EF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5FF1BDF7-E404-44E0-A00E-C8C7151EA7B3}
+	EndGlobalSection
+EndGlobal

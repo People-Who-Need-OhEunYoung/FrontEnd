@@ -1,0 +1,33 @@
+.remote-caret {
+  position: absolute;
+  border-left: black;
+  border-left-style: solid;
+  border-left-width: 2px;
+  height: 1.5em;
+  background: url('/poke-ball.png') no-repeat;
+  background-size: contain;
+  color: black;
+}
+.remote-caret > div {
+  position: relative;
+  top: -0.5em;
+  margin-left: 30px;
+  font-size: 1em;
+  font-family: 'Arial', sans-serif;
+  font-style: normal;
+  font-weight: bold; /* 굵게 */
+  line-height: normal;
+  user-select: none;
+  padding-left: 2px;
+  padding-right: 2px;
+  z-index: 3;
+  opacity: 0.7;
+  background: white; /* 텍스트 블록에 흰색 배경 추가 */
+  border-radius: 3px; /* 둥근 모서리 */
+  padding: 0.2em; /* 패딩 추가 */
+}
+
+.CodeMirror.cm-s-dracula {
+  height: 100%;
+  border-radius: 10px;
+}

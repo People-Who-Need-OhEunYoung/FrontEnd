@@ -1,0 +1,28 @@
+/* TestSharedEditor.css */
+.user-id {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: gray;
+}
+
+.editor-container {
+  height: 100%;
+}
+
+.CodeMirror.cm-s-dracula {
+  height: 100%;
+}
+
+/* .remote-caret.hide-name > div {
+  background-color: green !important;
+} */
+
+.CodeMirror {
+  font-size: 22px;
+
+  /* 원하는 폰트 크기로 조정 */
+}
+
+.CodeMirror-lines {
+  padding: 20px 0;
+}
