@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import io from 'socket.io-client';
+import { useState, useEffect, useCallback, useRef } from 'react';
+//import io from 'socket.io-client';
 
-const FullScreenEffect = ({ person, onComplete }) => {
+const FullScreenEffect = ({ person, onComplete }: any) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onComplete();
@@ -20,7 +20,7 @@ const FullScreenEffect = ({ person, onComplete }) => {
 
 const usePersonQueue = () => {
   const [isEffectActive, setIsEffectActive] = useState(false);
-  const [currentPerson, setCurrentPerson] = useState('');
+  const [currentPerson, setCurrentPerson] = useState<any>('');
   const queueRef = useRef([]);
   const isProcessingRef = useRef(false);
 
@@ -36,40 +36,45 @@ const usePersonQueue = () => {
     setIsEffectActive(true);
   }, []);
 
-  const addToQueue = useCallback(
-    (person) => {
-      queueRef.current.push(person);
-      if (!isProcessingRef.current) {
-        processQueue();
-      }
-    },
-    [processQueue]
-  );
+  //   const addToQueue = useCallback(
+  // (person: any) => {
+  //   queueRef.current.push(person);
+  //   if (!isProcessingRef.current) {
+  //     processQueue();
+  //   }
+  // },
+  //     [processQueue]
+  //   );
 
   const completeEffect = useCallback(() => {
     setIsEffectActive(false);
     setTimeout(processQueue, 500); // 이펙트 사이의 짧은 지연
   }, [processQueue]);
 
-  return { isEffectActive, currentPerson, addToQueue, completeEffect };
+  return { isEffectActive, currentPerson, /*addToQueue,*/ completeEffect };
 };
 
-const PersonEntryEffects = () => {
-  const { isEffectActive, currentPerson, addToQueue, completeEffect } =
+const LegendEffect = () => {
+  const { isEffectActive, currentPerson, /*addToQueue,*/ completeEffect } =
     usePersonQueue();
-  const socketRef = useRef(null);
+  //const socketRef = useRef(null);
 
-  useEffect(() => {
-    socketRef.current = io('http://your-server-url'); // 실제 서버 URL로 변경하세요
+  useEffect(
+    () => {
+      // socketRef.current = io('http://your-server-url'); // 실제 서버 URL로 변경하세요
 
-    socketRef.current.on('personEntered', (person) => {
-      addToQueue(person);
-    });
+      // socketRef.current.on('personEntered', (person) => {
+      //   addToQueue(person);
+      // });
 
-    return () => {
-      socketRef.current.disconnect();
-    };
-  }, [addToQueue]);
+      return () => {
+        //socketRef.current.disconnect();
+      };
+    },
+    [
+      /*addToQueue*/
+    ]
+  );
 
   return (
     <>
@@ -80,4 +85,4 @@ const PersonEntryEffects = () => {
   );
 };
 
-export default PersonEntryEffects;
+export default LegendEffect;
