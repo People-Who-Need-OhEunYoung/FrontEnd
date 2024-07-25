@@ -21,28 +21,43 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
     dispatch(setReturnCall(''));
   };
 
-  // const handleSubmit = async () => {
-  //   try {
-  //     const res = await SubmitCode(writtenCode, id, elapsedTime, limitTime);
-  //     dispatch(setReturnCall(res.data));
-  //     if (res.isCorrect == '1') setIsSuccessModalOpen(true);
-  //     else setIsFailModalOpen(true);
-  //     return res;
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   }
-  // };
-
   const handleRun = async () => {
     const editorContent = writtenCode || ' ';
     try {
-      const res = await SubmitCode(writtenCode, id, elapsedTime, limitTime);
+      const response = await fetch(`http://192.168.1.18:3000/submit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          code: editorContent,
+          lang: 'python',
+          bojNumber: id,
+          elapsed_time: elapsedTime,
+          limit_time: limitTime,
+          testCase: [],
+        }),
+      });
+      const data = await response.json();
+      const dataArray = data.result.results;
+      const isCorrect = dataArray.every((item: any) => item.correct);
+
+      const res = await SubmitCode(
+        editorContent,
+        id,
+        elapsedTime,
+        limitTime,
+        isCorrect
+      );
+
       if (res.evolutionPoketmon) {
         let evol = res.evolutionPoketmon;
-        for (let i = 0; i < evol.length; i++)
+        for (let i = 0; i < evol.length; i++) {
           setTimeout(() => {
             evolEvent(evol[i].idx);
           }, 20000 * i + 1000);
+        }
       }
       if (res.legendPoketmon1) {
         setTimeout(() => {
@@ -54,11 +69,9 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
           }
         }, 1000);
       }
-      dispatch(setReturnCall(res.data));
-      if (res.isCorrect == '1') setIsSuccessModalOpen(true);
+      if (isCorrect == '1') setIsSuccessModalOpen(true);
       else setIsFailModalOpen(true);
 
-      // return dataArray.every((item: any) => item.correct);
       return res;
     } catch (error) {
       console.error('테스트 케이스 과정 에러 발생 : ', error);

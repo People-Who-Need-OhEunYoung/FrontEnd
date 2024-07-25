@@ -359,7 +359,8 @@ const SubmitCode = async (
   editorContent: string,
   id: string,
   elapsedTime: number,
-  limitTime: number
+  limitTime: number,
+  correct : boolean,
 ): Promise<any> => {
   return await fetch(`http://52.79.197.126:3000/runCode`, {
     method: 'POST',
@@ -373,7 +374,7 @@ const SubmitCode = async (
       lang: 'python',
       elapsed_time: elapsedTime,
       limit_time: limitTime,
-      correct: false,
+      correct: correct,
     }),
   })
     .then((res) => {

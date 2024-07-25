@@ -32,10 +32,6 @@ const CodeRunButton = () => {
 
   const handleSubmit = async () => {
     let editorContent = writtenCode || ' ';
-    console.log('editorContent:', editorContent);
-    if (!editorContent) {
-      editorContent = ' ';
-    }
     try {
       const response = await fetch(`http://192.168.1.18:3000/submit`, {
         method: 'POST',
@@ -70,21 +66,21 @@ const CodeRunButton = () => {
                   '------------------------------------------\n' +
                   `Memory: ${item['cg-mem']}KB | Time: ${item.time}s\n` +
                   '------------------------------------------\n' +
-                  `Input >\n` +
+                  `Input > ` +
                   `${inputCase}` +
-                  `Expected Output > \n` +
+                  `Expected Output > ` +
                   ` ${item.expected_output}\n` +
                   `Output > ${item.output}\n` +
                   `Result > ${item.correct ? 'Success!!' : 'Fail!!'}`
                 );
               })
               .join('\n\n');
-            console.log(formattedResults);
             dispatch(setReturnCall(formattedResults));
           } else {
             console.error('TestCases is undefined.');
           }
         });
+      console.log(response);
     } catch (error) {
       console.error('테스트 케이스 과정 에러 발생 : ', error);
     }
