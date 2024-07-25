@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import styled from 'styled-components';
@@ -17,6 +17,9 @@ const Terminal = () => {
   // ------- 타이핑 출력 end ---------
   const { returnCall } = useSelector((state: RootState) => state.codecaller);
   const dispatch = useDispatch();
+
+  // Ref to the pre element
+  const preRef = useRef<HTMLPreElement>(null);
 
   useEffect(() => {
     dispatch(setReturnCall(''));
@@ -49,11 +52,17 @@ const Terminal = () => {
       } else {
         setTextCount((prevCount) => prevCount + 1);
       }
-    }, 30); // 설정한 초만큼 일정한 간격마다 실행된다
+    }, 10); // 설정한 초만큼 일정한 간격마다 실행된다
 
     return () => clearInterval(typingInterval); //컴포넌트가 마운트 해제되거나, 재렌더링 될 때마다 setInterval를 정리하는 함수를 반환함.
     //텍스트결과, 컨텐츠, 타이핑 정지 여부 등의 변화로 타이핑 효과 연출
   }, [testcaseResult, textCount, isTypingPaused, returnCall]);
+
+  useEffect(() => {
+    if (preRef.current) {
+      preRef.current.scrollTop = preRef.current.scrollHeight;
+    }
+  }, [sequence]);
 
   return (
     <div
@@ -80,13 +89,14 @@ const Terminal = () => {
         </p>
       </Header>
       <pre
+        ref={preRef}
         style={{
-          height: '100%',
+          height: '86%',
           background: '#273244 ',
           color: '#D3DDE8',
           overflow: 'auto',
           boxSizing: 'border-box',
-          padding: '10px',
+          padding: '20px',
           whiteSpace: 'break-spaces',
           wordBreak: 'break-all',
         }}
