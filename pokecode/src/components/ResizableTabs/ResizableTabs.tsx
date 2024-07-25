@@ -12,12 +12,14 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { PokeAudioOne } from '../PokeAudio';
 
+
 const Container = styled.div`
   display: flex;
   align-items: center;
   height: 100%;
   border: none;
   background-color: #111826;
+
 `;
 
 interface TabProps {
@@ -169,7 +171,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
           }}
         >
           <div
-            style={{ 
+            style={{
               width: '100%',
               height: '100%',
               boxSizing: 'border-box',
@@ -232,6 +234,7 @@ const ResizableTabs: React.FC<ResizableTabsProps> = ({ id }) => {
               overflow: 'auto',
             }}
           >
+
             <Terminal />
           </div>
         </Tab>

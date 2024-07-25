@@ -28,14 +28,11 @@ const CodeRunButton = () => {
     expected_output: string;
     output: string;
     correct: boolean;
+    result: string;
   };
 
   const handleSubmit = async () => {
     let editorContent = writtenCode || ' ';
-    console.log('editorContent:', editorContent);
-    if (!editorContent) {
-      editorContent = ' ';
-    }
     try {
       const response = await fetch(`http://192.168.1.18:3000/submit`, {
         method: 'POST',
@@ -57,6 +54,7 @@ const CodeRunButton = () => {
         })
         .then((data) => {
           const dataArray = data.result.results;
+          console.log(dataArray);
           // 데이터 정제 로직 추가
           if (TestCases) {
             const formattedResults = dataArray
@@ -64,13 +62,19 @@ const CodeRunButton = () => {
                 // TestCases에서 input_case 가져오기 (optional chaining 사용)
                 const inputCase =
                   TestCases[index]?.input_case || 'No input case available';
-
+                
                 return (
                   `[Test ${index + 1}]\n` +
                   '------------------------------------------\n' +
                   `Memory: ${item['cg-mem']}KB | Time: ${item.time}s\n` +
                   '------------------------------------------\n' +
-                  `Input >\n` +
+                  `${
+                    item.result !== 'Success'
+                      ? item.result +
+                        '\n------------------------------------------\n'
+                      : ''
+                  }` +
+                  `Input > \n` +
                   `${inputCase}` +
                   `Expected Output > \n` +
                   ` ${item.expected_output}\n` +
@@ -79,12 +83,12 @@ const CodeRunButton = () => {
                 );
               })
               .join('\n\n');
-            console.log(formattedResults);
             dispatch(setReturnCall(formattedResults));
           } else {
             console.error('TestCases is undefined.');
           }
         });
+      console.log(response);
     } catch (error) {
       console.error('테스트 케이스 과정 에러 발생 : ', error);
     }
