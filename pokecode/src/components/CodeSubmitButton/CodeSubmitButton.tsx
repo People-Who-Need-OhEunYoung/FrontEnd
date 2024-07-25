@@ -34,26 +34,35 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
   // };
 
   const handleRun = async () => {
-    const editorContent = writtenCode || ' ';
+    //const editorContent = writtenCode || ' ';
     try {
       const res = await SubmitCode(writtenCode, id, elapsedTime, limitTime);
-      if (res.evolutionPoketmon) {
+
+      if (res.evolutionPoketmon && res.legendPoketmon) {
+        let evol = res.evolutionPoketmon;
+        setTimeout(() => {
+          evolEvent(evol[0].idx);
+        }, 1000);
+        setTimeout(() => {
+          coinEvent(res.legendPoketmon);
+        }, 22000 + 1000);
+      } else if (res.evolutionPoketmon) {
         let evol = res.evolutionPoketmon;
         for (let i = 0; i < evol.length; i++)
           setTimeout(() => {
             evolEvent(evol[i].idx);
           }, 22000 * i + 1000);
-      }
-      if (res.legendPoketmon1) {
+      } else if (res.legendPoketmon) {
         setTimeout(() => {
-          coinEvent(res.legendPoketmon1);
-          if (res.legendPoketmon2) {
+          coinEvent(res.legendPoketmon[0]);
+          if (res.legendPoketmon) {
             setTimeout(() => {
-              coinEvent(res.legendPoketmon2);
+              coinEvent(res.legendPoketmon[1]);
             }, 6100);
           }
         }, 1000);
       }
+
       dispatch(setReturnCall(res.data));
       if (res.isCorrect == '1') setIsSuccessModalOpen(true);
       else setIsFailModalOpen(true);

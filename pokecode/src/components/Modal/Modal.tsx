@@ -65,7 +65,7 @@ const Modal = ({
           ) : nowcomponent === 2 ? (
             <>
               <Title>{'리뷰방 만들기'} </Title>
-              <ModalContent2 reset={reset} />
+              <ModalContent2 reset={reset} handleClose={handleClose} />
             </>
           ) : nowcomponent === 3 ? (
             <>

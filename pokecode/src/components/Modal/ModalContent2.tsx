@@ -14,7 +14,7 @@ type ProblemType = {
   level: number;
 };
 
-const ModalContent2 = ({ width, reset }: any) => {
+const ModalContent2 = ({ width, reset, handleClose }: any) => {
   const [title, setTitle] = useState('');
   const [query, setQuery] = useState('');
   const [person, setPerson] = useState(2);
@@ -167,7 +167,10 @@ const ModalContent2 = ({ width, reset }: any) => {
       };
       const params = new URLSearchParams(queryParam);
       setTimeout(() => {
+        console.log('---------------------test-----------------------');
         navigate(`/room?${params}`);
+        setLoding(false);
+        handleClose();
       }, 2000);
     } catch (error) {
       console.error('Error creating room:', error);
