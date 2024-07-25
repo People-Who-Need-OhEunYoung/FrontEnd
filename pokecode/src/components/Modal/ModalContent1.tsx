@@ -146,36 +146,6 @@ const CheckSlide = styled.div<{ timeck: string }>`
   }
 `;
 
-// const CheckDoc = styled.p`
-//   display: none;
-//   position: absolute;
-//   width: 130px;
-//   padding: 8px;
-//   right: -8%;
-//   top: 100%;
-//   -webkit-border-radius: 8px;
-//   -moz-border-radius: 8px;
-//   border-radius: 8px;
-//   background: #646464;
-//   color: #fff;
-//   font-size: 14px;
-
-//   &::after {
-//     position: absolute;
-//     bottom: 100%;
-//     left: 50%;
-//     width: 0;
-//     height: 0;
-//     margin-left: -10px;
-//     border: solid transparent;
-//     border-color: rgba(51, 51, 51, 0);
-//     border-bottom-color: #646464;
-//     border-width: 10px;
-//     pointer-events: none;
-//     content: ' ';
-//   }
-// `;
-
 const TimeLimitCk = styled.div<{ timeck: string }>`
   height: 1rem;
   width: 1rem;

@@ -22,8 +22,9 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
   };
 
   const handleRun = async () => {
-    const editorContent = writtenCode || ' ';
+    //const editorContent = writtenCode || ' ';
     try {
+
       const response = await fetch(`https://api.poke-code.com/submit`, {
         method: 'POST',
         headers: {
@@ -57,19 +58,21 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
           setTimeout(() => {
             evolEvent(evol[i].idx);
           }, 22000 * i + 1000);
-        }
-      }
-      if (res.legendPoketmon1) {
+
+      } else if (res.legendPoketmon) {
+
         setTimeout(() => {
-          coinEvent(res.legendPoketmon1);
-          if (res.legendPoketmon2) {
+          coinEvent(res.legendPoketmon[0]);
+          if (res.legendPoketmon) {
             setTimeout(() => {
-              coinEvent(res.legendPoketmon2);
+              coinEvent(res.legendPoketmon[1]);
             }, 6100);
           }
         }, 1000);
       }
+
       if (isCorrect == '1') setIsSuccessModalOpen(true);
+
       else setIsFailModalOpen(true);
 
       return res;

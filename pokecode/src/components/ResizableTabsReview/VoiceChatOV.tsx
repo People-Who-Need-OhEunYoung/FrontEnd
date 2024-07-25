@@ -8,10 +8,8 @@ import microphone from '../../assets/images/microphone3.png';
 import exit from '../../assets/images/exit.png';
 import MicOn from '../../assets/images/Mic.png';
 import MicOff from '../../assets/images/Micoff.png';
-// import { useStore } from '../store';
-// import io from 'socket.io-client';
 
-// const SERVER_URL = 'http://192.168.1.18:1235';
+
 const SERVER_URL = 'https://api.poke-code.com:1235';
 
 interface User {
@@ -31,6 +29,12 @@ const VoiceChatOV: React.FC = () => {
   const { username, roomId } = useSelector(
     (state: RootState) => state.roomdata
   );
+  //GPT 해결
+  const handleBeforeUnload = () => {
+    leaveSession();
+  };
+  //GPT 해결
+  window.addEventListener('beforeunload', handleBeforeUnload);
 
   useEffect(() => {
     const createSession = async () => {
@@ -49,10 +53,10 @@ const VoiceChatOV: React.FC = () => {
     }
 
     return () => {
-      if (isJoined && session && publisher) {
-        console.log('세션참가중');
-        leaveSession();
-      }
+      //if (isJoined && session && publisher) {
+      console.log('세션참가중');
+      leaveSession();
+      //}
     };
   }, [roomId, token]);
 
@@ -98,9 +102,7 @@ const VoiceChatOV: React.FC = () => {
       newSession.on('signal:userLeft', (event) => {
         if (event.data && typeof event.data === 'string') {
           try {
-            // Parse the data received from the signal
             const data = JSON.parse(event.data);
-            // Ensure data has the correct structure
             if (data && typeof data.userName === 'string') {
               setUsers((prevUsers) =>
                 prevUsers.filter((user) => user.username !== data.userName)
@@ -132,22 +134,16 @@ const VoiceChatOV: React.FC = () => {
       setPublisher(newPublisher);
       setIsJoined(true);
     } catch (error) {
-      // Check if error is an instance of AxiosError
       if (axios.isAxiosError(error)) {
-        // Axios error
         console.error('Axios error:', error.message);
         if (error.response) {
-          // Server responded with a status code outside the 2xx range
           console.error('Response error:', error.response.data);
         } else if (error.request) {
-          // Request was made but no response received
           console.error('Request error:', error.request);
         }
       } else if (error instanceof Error) {
-        // General JS error
         console.error('General error:', error.message);
       } else {
-        // Unknown error type
         console.error('An unknown error occurred');
       }
     }
@@ -155,20 +151,31 @@ const VoiceChatOV: React.FC = () => {
 
   const leaveSession = () => {
     if (session) {
-      //user가 떠날때 시그널링
-      session.signal({
-        type: 'userLeft',
-        data: JSON.stringify({ userName: username }),
-      });
-      session.disconnect();
-      setSession(null);
-      setPublisher(null);
-      setUsers([]); // Clear the users array
-      setIsMuted(false);
+      session
+        .signal({
+          type: 'userLeft',
+          data: JSON.stringify({ userName: username }),
+        })
+        .then(() => {
+          session.disconnect();
+          setSession(null);
+          setPublisher(null);
+          setUsers([]);
+          setIsMuted(false);
+          setIsJoined(false);
+          setToken('');
+        })
+        .catch((error) => {
+          console.error('Failed to send signal:', error);
+          session.disconnect();
+          setSession(null);
+          setPublisher(null);
+          setUsers([]);
+          setIsMuted(false);
+          setIsJoined(false);
+          setToken('');
+        });
     }
-
-    setIsJoined(false);
-    setToken(''); // Clear the token
   };
 
   const toggleMute = () => {
@@ -176,9 +183,15 @@ const VoiceChatOV: React.FC = () => {
       const newMuteState = !isMuted;
       publisher.publishAudio(!newMuteState);
       setIsMuted(newMuteState);
+
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.username === username ? { ...user, isMuted: newMuteState } : user
+        )
+      );
     }
   };
-  console.log(isJoined, session, publisher);
+
   return (
     <div className="VoiceChat" style={{ position: 'relative', height: '100%' }}>
       {isJoined && publisher ? (
