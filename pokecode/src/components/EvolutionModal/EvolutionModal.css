@@ -14,36 +14,36 @@
 
 .modal {
   background: url('/evol1.gif') no-repeat;
-  background-size: contain;
-  width: 450px;
-  height: 350px;
-  padding: 20px;
+  background-size: 100% 100%;
+  width: 100%;
+  height: 100%;
   border-radius: 10px;
   text-align: center;
 }
 .pokemon-container {
   top: 60%;
   position: absolute;
-  left: 53%;
-  transform: translate(-50%, -50%);
-  scale: 2;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(5);
 }
 .text-box {
   background-color: #324056;
+  width: 70%;
+  margin: auto;
   color: white;
   border: 2px solid #000;
   border-radius: 10px;
-  padding: 10px;
+  padding: 10px 0;
   margin-top: 25px;
-  font-size: 14px;
+  font-size: 40px;
 }
 
 .fade-in {
-  animation: fadeIn 16s forwards; /* 2초 후 시작하여 7초에 끝남 */
+  animation: fadeIn 6s forwards; /* 2초 후 시작하여 7초에 끝남 */
 }
 
 .fade-out {
-  animation: fadeOut 16s forwards; /* 2초 후 시작하여 7초에 끝남 */
+  animation: fadeOut 6s forwards; /* 2초 후 시작하여 7초에 끝남 */
 }
 
 @keyframes fadeIn {

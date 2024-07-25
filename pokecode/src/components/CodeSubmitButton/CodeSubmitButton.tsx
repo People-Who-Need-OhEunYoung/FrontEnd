@@ -53,16 +53,18 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
 
       if (res.evolutionPoketmon && res.legendPoketmon) {
         let evol = res.evolutionPoketmon;
-        evolEvent(evol.idx);
+        setTimeout(() => {
+          evolEvent(evol[0][0].idx);
+        }, 2000);
         setTimeout(() => {
           coinEvent(res.legendPoketmon[0]);
-        }, 23000);
+        }, 16000);
       } else if (res.evolutionPoketmon) {
         let evol = res.evolutionPoketmon;
         for (let i = 0; i < evol.length; i++) {
           setTimeout(() => {
             evolEvent(evol[i].idx);
-          }, 22000 * i + 1000);
+          }, 16000 * i + 2000);
         }
       } else if (res.legendPoketmon) {
         setTimeout(() => {
