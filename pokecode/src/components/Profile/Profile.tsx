@@ -90,16 +90,7 @@ export const Profile = ({ ...props }) => {
       ) : (
         ''
       )}
-      <div
-        style={{
-          height: '80px',
-          width: '50px',
-          right: 0,
-          position: 'absolute',
-        }}
-        onMouseOver={handleMouseOver}
-        onMouseLeave={handleMouseOut}
-      >
+      <MiniMenu onMouseOver={handleMouseOver} onMouseLeave={handleMouseOut}>
         <DownMenu
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 320 512"
@@ -180,7 +171,7 @@ export const Profile = ({ ...props }) => {
             </a>
           </MyMenuList>
         </MyMenu>
-      </div>
+      </MiniMenu>
 
       <Logout>
         <svg
@@ -202,6 +193,13 @@ export const Profile = ({ ...props }) => {
     </div>
   );
 };
+
+const MiniMenu = styled.div`
+  height: 80px;
+  width: 50px;
+  right: 40px;
+  position: absolute;
+`;
 
 const MyPic = styled.img`
   position: absolute;

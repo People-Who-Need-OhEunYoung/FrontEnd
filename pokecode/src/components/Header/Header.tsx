@@ -24,7 +24,7 @@ const Header = () => {
           transform: 'translateX(-50%)',
           color: 'white',
           textAlign: 'center',
-          width: '350px',
+          width: '400px',
         }}
       ></div>
     </div>
@@ -109,7 +109,7 @@ export const Header2 = () => {
           transform: 'translateX(-50%)',
           color: 'white',
           textAlign: 'center',
-          width: '350px',
+          width: '400px',
         }}
       >
         <Nav></Nav>
@@ -243,7 +243,7 @@ const NavWrap = styled.div`
   left: 220px;
   color: white;
   text-align: center;
-  width: 350px;
+  width: 400px;
   @media (max-width: 750px) {
     left: 50%;
     transform: translateX(-50%);

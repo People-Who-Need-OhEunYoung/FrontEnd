@@ -2,20 +2,23 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 const Nav = () => {
   return (
-    <div style={cssHeadNav}>
+    <NavWrap>
       <LinkButton to={'/usermain'}>메인</LinkButton>
       <LinkButton to={'/problemlist'}>문제 풀기</LinkButton>
       <LinkButton to={'/roomlist'}>코드 리뷰</LinkButton>
-    </div>
+    </NavWrap>
   );
 };
 
-const cssHeadNav = {
-  padding: '15px 0',
-  width: '100%',
-  height: '50px',
-  lineHeight: '50px',
-};
+const NavWrap = styled.div`
+  padding: 15px 0;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  @media (max-width: 550px) {
+    width: 80%;
+  }
+`;
 
 const LinkButton = styled(Link)`
   display: inline-block;
@@ -26,6 +29,9 @@ const LinkButton = styled(Link)`
   cursor: inherit;
   @media (min-width: 1900px) {
     font-size: 1.2em;
+  }
+  @media (max-width: 550px) {
+    font-size: 11px;
   }
 
   &:focus {

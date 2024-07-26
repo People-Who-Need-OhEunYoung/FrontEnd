@@ -1,11 +1,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
 
-    @font-face {
-      font-family: 'D2Coding';
-      src: url('/pokecode/src/assets/fonts/D2Coding.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
+@font-face {
+  font-family: 'D2Coding';
+  src: url('./assets/fonts/D2Coding.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Galmuri11-Bold';
+  src: url('./assets/fonts/Galmuri11-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Galmuri11';
+  src: url('./assets/fonts/Galmuri11.woff2') format('woff2');
+  /* font-weight: normal;
+  font-style: normal; */
+}
+
+@font-face {
+  font-family: 'Galmuri14';
+  src: url('./assets/fonts/Galmuri14.woff2') format('woff2');
+  /* font-weight: normal;
+  font-style: normal; */
+}
+
+* {
+  font-family: 'Galmuri14';
+  /* font-family: 'GmarketSansMedium', sans-serif; */
+  font-optical-sizing: auto;
+}
 
 input::placeholder {
   color: white;
@@ -14,20 +41,6 @@ input::placeholder {
 /* Chrome, Firefox, Opera, Safari 10.1+ */
 input {
   outline: none;
-}
-
-* {
-  font-family: 'Noto Sans KR', 'Arsenal SC', sans-serif;
-  /* font-family: 'GmarketSansMedium', sans-serif; */
-  font-optical-sizing: auto;
-}
-
-@font-face {
-  font-family: 'GmarketSansMedium';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff')
-    format('woff');
-  font-weight: normal;
-  font-style: normal;
 }
 
 /* 스크롤바 전체 기본 꾸미기 */

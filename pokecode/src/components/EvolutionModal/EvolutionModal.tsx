@@ -32,12 +32,12 @@ const EvolutionModal = ({ nextPokemonNumber }: any) => {
       setTimeout(() => {
         setIsEvolving(false);
         setShowEvolved(true);
-      }, 16000);
+      }, 9000);
       setTimeout(() => {
         setEvolutionPokemon(nextPokemonNumber);
         dispatch(setPokemonId(nextPokemonNumber));
         setIsVisible(false);
-      }, 20000);
+      }, 14000);
     };
     evolveSequence();
   }, [dispatch, nextPokemonNumber]);

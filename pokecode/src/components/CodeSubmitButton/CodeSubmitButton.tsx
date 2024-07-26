@@ -51,24 +51,32 @@ const CodeSubmitButton = ({ evolEvent, coinEvent }: any) => {
         isCorrect
       );
 
-      if (res.evolutionPoketmon) {
+      if (res.evolutionPoketmon && res.legendPoketmon) {
+        let evol = res.evolutionPoketmon;
+        setTimeout(() => {
+          evolEvent(evol[0][0].idx);
+        }, 2000);
+        setTimeout(() => {
+          coinEvent(res.legendPoketmon[0]);
+        }, 16000);
+      } else if (res.evolutionPoketmon) {
         let evol = res.evolutionPoketmon;
         for (let i = 0; i < evol.length; i++) {
           setTimeout(() => {
             evolEvent(evol[i].idx);
-          }, 22000 * i + 1000);
+          }, 16000 * i + 2000);
         }
-      }
-      if (res.legendPoketmon1) {
+      } else if (res.legendPoketmon) {
         setTimeout(() => {
-          coinEvent(res.legendPoketmon1);
-          if (res.legendPoketmon2) {
+          coinEvent(res.legendPoketmon[0]);
+          if (res.legendPoketmon) {
             setTimeout(() => {
-              coinEvent(res.legendPoketmon2);
+              coinEvent(res.legendPoketmon[1]);
             }, 6100);
           }
         }, 1000);
       }
+
       if (isCorrect == '1') setIsSuccessModalOpen(true);
       else setIsFailModalOpen(true);
 

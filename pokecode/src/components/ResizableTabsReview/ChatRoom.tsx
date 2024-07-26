@@ -251,7 +251,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div style={{ height: '15%', boxSizing: 'border-box', padding:'15px' }}>
+      <div style={{ height: '15%', boxSizing: 'border-box', padding: '15px' }}>
         <textarea
           value={message}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -265,10 +265,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
             width: '72%',
             border: 'none',
             borderRadius: '10px',
-            padding: '10px',
+            padding: '4px 10px',
             boxSizing: 'border-box',
             resize: 'none',
-            overflow: 'hidden'
+            overflow: 'hidden',
           }}
         />
         <SendBtn onClick={sendMessage}>보내기</SendBtn>

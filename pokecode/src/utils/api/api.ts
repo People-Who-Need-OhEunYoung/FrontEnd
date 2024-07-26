@@ -360,9 +360,9 @@ const SubmitCode = async (
   id: string,
   elapsedTime: number,
   limitTime: number,
-  correct : boolean,
+  correct: boolean
 ): Promise<any> => {
-  return await fetch(`http://52.79.197.126:3000/runCode`, {
+  return await fetch(`${import.meta.env.VITE_APP_IP}/runCode`, {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
