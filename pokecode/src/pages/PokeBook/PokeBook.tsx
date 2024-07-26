@@ -650,6 +650,7 @@ const ExpInfoWrap = styled.div`
   height: 15%;
 `;
 
+
 const ExpBar = styled.div`
   width: 100%;
   height: 60px;

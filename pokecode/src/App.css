@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: 'D2Coding';
-  src: url('/pokecode/src/assets/fonts/D2Coding.ttf') format('truetype');
+  src: url('./assets/fonts/D2Coding.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }

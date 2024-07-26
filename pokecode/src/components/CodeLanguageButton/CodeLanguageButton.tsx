@@ -11,7 +11,7 @@ const CodeLanguageButton = () => {
     <DesignedButton1
       style={{
         margin: '0',
-        width: '200px',
+        width: '230px',
         fontSize: '1em',
         marginRight: '10px',
       }}
