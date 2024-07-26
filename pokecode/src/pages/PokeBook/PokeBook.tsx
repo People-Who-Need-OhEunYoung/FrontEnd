@@ -68,9 +68,7 @@ const PokeBook = () => {
   const iconArr = [fireIcon, waterIcon, grassIcon, electricIcon, psychicIcon];
   const typeArr = ['구현', '그래프', '자료구조', '수학', 'DP'];
   const { user } = useSelector((state: RootState) => state.userinfo);
-  const [curpokegif, setCurpokegif] = useState<string>(
-    `/${user.cur_poke_id}.gif`
-  );
+  const [curpokegif, setCurpokegif] = useState<any>(`/${user.cur_poke_id}.gif`);
 
   const [selectedPokemon, setSelectedPokemon] = useState<number>(
     user.cur_poke_id
@@ -90,7 +88,8 @@ const PokeBook = () => {
       수학: 'math_exp',
       DP: 'dp_exp',
     };
-
+    setCurpokegif(localStorage.getItem('poke_img'));
+    setCurpokegif(localStorage.getItem('poke_name'));
     // localStorage에서 값을 가져와서 업데이트
     const updatedData = data.map((item) => {
       const localStorageKey = localStorageKeys[item.label];

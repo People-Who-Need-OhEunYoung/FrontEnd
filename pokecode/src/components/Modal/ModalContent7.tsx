@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import rolling from '../../assets/images/rolling2.svg';
 import { useDispatch } from 'react-redux';
 import { setWrittenCode } from '../../store/problemSlice';
-import { getRoomPeopleChecker } from '../../utils/api/api';
+import { getRoomPeopleChecker, resolveCall } from '../../utils/api/api';
 
 const ModalContent7 = ({ id, title, roomId, maxPerson, event }: any) => {
   const [loding, setLoding] = useState(false);
@@ -66,8 +66,9 @@ const ModalContent7 = ({ id, title, roomId, maxPerson, event }: any) => {
             {id}번 {title}
           </ProblemInfo>
           <SolveBtn
-            onClick={() => {
+            onClick={async () => {
               enterRoom();
+              await resolveCall(id, title, 0);
             }}
           >
             <b>리뷰방 입장</b>
