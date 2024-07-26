@@ -11,7 +11,7 @@ const CodeLanguageButton = () => {
     <DesignedButton1
       style={{
         margin: '0',
-        width: '190px',
+        width: '200px',
         fontSize: '1em',
         marginRight: '10px',
       }}
@@ -20,7 +20,6 @@ const CodeLanguageButton = () => {
       <select
         id="language"
         style={{
-
           background: '#324056',
           border: 'none',
           color: 'white',

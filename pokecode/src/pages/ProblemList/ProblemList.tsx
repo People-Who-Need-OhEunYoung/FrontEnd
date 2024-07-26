@@ -302,14 +302,11 @@ const ProblemComponent = styled.div`
 `;
 
 const ListView = styled.div`
-  //background-color: #6666661d;
   width: 80%;
   height: 60%;
   overflow-y: auto;
   margin: auto;
   font-size: 1.2rem;
-  /* align-items: stretch;
-  flex-direction: column; */
 `;
 
 const Listheader = styled.div`
@@ -318,6 +315,7 @@ const Listheader = styled.div`
   margin: auto;
   justify-content: space-around;
   padding: 10px;
+  font-size: 0.9em;
 `;
 
 const SearchWrapper = styled.div`

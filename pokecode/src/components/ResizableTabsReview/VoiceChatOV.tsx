@@ -9,7 +9,6 @@ import exit from '../../assets/images/exit.png';
 import MicOn from '../../assets/images/Mic.png';
 import MicOff from '../../assets/images/Micoff.png';
 
-
 const SERVER_URL = 'https://api.poke-code.com:1235';
 
 interface User {
@@ -29,12 +28,12 @@ const VoiceChatOV: React.FC = () => {
   const { username, roomId } = useSelector(
     (state: RootState) => state.roomdata
   );
-  //GPT 해결
-  const handleBeforeUnload = () => {
-    leaveSession();
-  };
-  //GPT 해결
-  window.addEventListener('beforeunload', handleBeforeUnload);
+  // //GPT 해결
+  // const handleBeforeUnload = () => {
+  //   leaveSession();
+  // };
+  // //GPT 해결
+  // window.addEventListener('beforeunload', handleBeforeUnload);
 
   useEffect(() => {
     const createSession = async () => {
@@ -53,10 +52,10 @@ const VoiceChatOV: React.FC = () => {
     }
 
     return () => {
-      //if (isJoined && session && publisher) {
-      console.log('세션참가중');
-      leaveSession();
-      //}
+      if (isJoined && session && publisher) {
+        console.log('세션참가중');
+        leaveSession();
+      }
     };
   }, [roomId, token]);
 
