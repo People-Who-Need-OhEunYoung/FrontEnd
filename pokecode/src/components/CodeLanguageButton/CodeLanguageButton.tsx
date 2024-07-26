@@ -20,7 +20,6 @@ const CodeLanguageButton = () => {
       <select
         id="language"
         style={{
-
           background: '#324056',
           border: 'none',
           color: 'white',
