@@ -650,8 +650,8 @@ const reviewSearch = async (query: string) => {
 
 //내가 푼 문제 화면
 const resolveCall = async (
-  problem_id: string | number,
-  problem_title: string,
+  problem_id: any,
+  problem_title: any,
   limit_time: number
 ) => {
   return await fetch(

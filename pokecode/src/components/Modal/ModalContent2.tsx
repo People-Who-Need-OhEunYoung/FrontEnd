@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { DesignedButton1 } from '../DesignedButton';
 import Select from 'react-select';
-import { problemSearch } from '../../utils/api/api';
+import { problemSearch, resolveCall } from '../../utils/api/api';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -137,7 +137,6 @@ const ModalContent2 = ({ width, reset, handleClose }: any) => {
   //우현코드 start
   const createRoom = async () => {
     setLoding(true);
-
     if (!user.nick_name) {
       alert('사용자 정보가 없습니다. 재로그인 바랍니다.');
       return;
@@ -154,6 +153,12 @@ const ModalContent2 = ({ width, reset, handleClose }: any) => {
           room_owner: user.bakjoon_id,
         }
       );
+      await resolveCall(
+        selectedProblem?.id.toString(),
+        selectedProblem?.title,
+        0
+      );
+
       localStorage.setItem('roomId', data.room_id);
       localStorage.setItem('roomOwner', data.bakjoon_id);
 
