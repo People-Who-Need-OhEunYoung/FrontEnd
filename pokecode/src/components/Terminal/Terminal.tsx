@@ -13,7 +13,7 @@ const Terminal = () => {
   // 현재까지 타이핑된 문자열의 위치(인덱스)를 나타내는 변수 textCount를 선언합니다.
   const [textCount, setTextCount] = useState<number>(0);
   // 모든 문자열이 타이핑된 후 일시정지인지 아닌지 여부를 나타내는 변수를 선언합니다.
-  const [isTypingPaused, setIsTypingPaused] = useState<boolean>(false);
+  // const [isTypingPaused, setIsTypingPaused] = useState<boolean>(false);
   // ------- 타이핑 출력 end ---------
   const { returnCall } = useSelector((state: RootState) => state.codecaller);
   const dispatch = useDispatch();

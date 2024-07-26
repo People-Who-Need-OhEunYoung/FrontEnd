@@ -650,7 +650,6 @@ const ExpInfoWrap = styled.div`
   height: 15%;
 `;
 
-const RestExp = styled.p``;
 
 const ExpBar = styled.div`
   width: 100%;

@@ -2,28 +2,28 @@
 
 @font-face {
   font-family: 'D2Coding';
-  src: url('/pokecode/src/assets/fonts/D2Coding.ttf') format('truetype');
+  src: url('./assets/fonts/D2Coding.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Galmuri11-Bold';
-  src: url('/pokecode/src/assets/fonts/Galmuri11-Bold.woff2') format('woff2');
+  src: url('/assets/fonts/Galmuri11-Bold.woff2') format('woff2');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Galmuri11';
-  src: url('/pokecode/src/assets/fonts/Galmuri11.woff2') format('woff2');
+  src: url('/assets/fonts/Galmuri11.woff2') format('woff2');
   /* font-weight: normal;
   font-style: normal; */
 }
 
 @font-face {
   font-family: 'Galmuri14';
-  src: url('/pokecode/src/assets/fonts/Galmuri14.woff2') format('woff2');
+  src: url('/assets/fonts/Galmuri14.woff2') format('woff2');
   /* font-weight: normal;
   font-style: normal; */
 }

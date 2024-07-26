@@ -197,7 +197,7 @@ const VoiceChatOV: React.FC = () => {
       {isJoined && publisher ? (
         <div
           style={{
-            height: 'calc(100% - 80px)',
+            height: '100%',
             overflowY: 'auto',
             width: '100%',
           }}
