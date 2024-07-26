@@ -419,7 +419,7 @@ const PokeName = styled.div`
 
 const LevelWrap = styled.div`
   position: absolute;
-  width: 40%;
+  width: 30%;
   bottom: 0;
   left: 0;
   font-weight: 500;
@@ -455,7 +455,7 @@ const LevelWrap = styled.div`
 
 const Level = styled.div`
   border-radius: 30px;
-  font-size: 2rem;
+  font-size: 1.3rem;
   text-align: left;
   margin-left: 10%;
   @media (max-width: 750px) {
@@ -523,13 +523,13 @@ const HoverModal = styled.p<{ setprogress: number }>`
   font-family: 'Noto Sans KR', 'Arsenal SC', sans-serif;
   font-optical-sizing: auto;
   position: absolute;
-  width: 100px;
+  width: 50px;
   left: ${(props) => `${props.setprogress}%`};
-  top: -180%;
+  top: 0;
   border-radius: 8px;
   background: #38bdf8;
   color: #fff;
-  font-size: 30px;
+  font-size: 20px;
   display: block;
   z-index: 1000;
   border: none;

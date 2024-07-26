@@ -33,6 +33,8 @@ import {
 import { setPokemonId } from '../../store/userInfo';
 import { PokeAudio } from '../../components/PokeAudio';
 
+ChartJS.defaults.font.family = 'Galmuri14';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -310,11 +312,11 @@ const PokeBook = () => {
           <RaderGraph>
             <Radar
               data={{
-                labels: sourceData.map((data) => data.label),
+                labels: data.map((data) => data.label),
                 datasets: [
                   {
                     label: 'Count',
-                    data: sourceData.map((data) => data.value),
+                    data: data.map((data) => data.value),
                     fill: true,
                     backgroundColor: 'rgb(255, 255, 255)', // 배경색
                     borderColor: '#38BDF8 ', // 선 색
@@ -359,6 +361,7 @@ const PokeBook = () => {
           <AlertBadge>DP 문제에 더 분발해보세요!! </AlertBadge>
           <BarGraph>
             <Bar
+              style={{ fontFamily: 'Galmuri14' }}
               data={{
                 labels: data.map((data) => data.label),
                 datasets: [
@@ -378,7 +381,7 @@ const PokeBook = () => {
                     ticks: {
                       color: '#ffffff', // x축 눈금 색상
                       font: {
-                        size: 20, // x축 눈금 폰트 사이즈
+                        size: 16, // x축 눈금 폰트 사이즈
                       },
                     },
                   },
@@ -386,7 +389,7 @@ const PokeBook = () => {
                     ticks: {
                       color: '#ffffff', // y축 눈금 색상
                       font: {
-                        size: 20, // y축 눈금 폰트 사이즈
+                        size: 18, // y축 눈금 폰트 사이즈
                       },
                     },
                   },
@@ -619,7 +622,7 @@ const CurPokeMonSelect = styled.button`
   border: 2px solid #6366f1;
   border-radius: 10px;
   color: white;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bold;
   cursor: inherit;
   &:hover {
@@ -649,7 +652,6 @@ const ExpInfoWrap = styled.div`
   width: 90%;
   height: 15%;
 `;
-
 
 const ExpBar = styled.div`
   width: 100%;

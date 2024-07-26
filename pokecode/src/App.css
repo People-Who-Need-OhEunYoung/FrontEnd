@@ -28,6 +28,12 @@
   font-style: normal; */
 }
 
+* {
+  font-family: 'Galmuri14';
+  /* font-family: 'GmarketSansMedium', sans-serif; */
+  font-optical-sizing: auto;
+}
+
 input::placeholder {
   color: white;
 }
@@ -35,12 +41,6 @@ input::placeholder {
 /* Chrome, Firefox, Opera, Safari 10.1+ */
 input {
   outline: none;
-}
-
-* {
-  font-family: 'Galmuri14';
-  /* font-family: 'GmarketSansMedium', sans-serif; */
-  font-optical-sizing: auto;
 }
 
 /* 스크롤바 전체 기본 꾸미기 */

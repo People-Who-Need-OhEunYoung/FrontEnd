@@ -28,12 +28,12 @@ const VoiceChatOV: React.FC = () => {
   const { username, roomId } = useSelector(
     (state: RootState) => state.roomdata
   );
-  // //GPT 해결
-  // const handleBeforeUnload = () => {
-  //   leaveSession();
-  // };
-  // //GPT 해결
-  // window.addEventListener('beforeunload', handleBeforeUnload);
+  //GPT 해결
+  const handleBeforeUnload = () => {
+    leaveSession();
+  };
+  //GPT 해결
+  window.addEventListener('beforeunload', handleBeforeUnload);
 
   useEffect(() => {
     const createSession = async () => {
@@ -52,10 +52,10 @@ const VoiceChatOV: React.FC = () => {
     }
 
     return () => {
-      if (isJoined && session && publisher) {
-        console.log('세션참가중');
-        leaveSession();
-      }
+      //if (isJoined && session && publisher) {
+      console.log('세션참가중');
+      leaveSession();
+      //}
     };
   }, [roomId, token]);
 
@@ -193,17 +193,17 @@ const VoiceChatOV: React.FC = () => {
 
   return (
     <div className="VoiceChat" style={{ position: 'relative', height: '100%' }}>
-      {isJoined && publisher ? (
+      <div id="audio-container" style={{ display: 'none' }}></div>
+      {isJoined ? (
         <div
           style={{
-            height: '100%',
+            height: 'calc(100% - 10px)',
             overflowY: 'auto',
             width: '100%',
           }}
         >
-          <div id="audio-container" style={{ display: 'none' }}></div>
           <VoiceChatInfo>
-            <VoicechatTxt>현재 참여 중인 사용자 </VoicechatTxt>
+            <VoicechatTxt>현재 참여 중인 사용자</VoicechatTxt>
             <BtnGroup>
               <VoiceBtn
                 onClick={toggleMute}
@@ -296,7 +296,6 @@ const VoiceChatOV: React.FC = () => {
     </div>
   );
 };
-
 export default VoiceChatOV;
 
 const BtnGroup = styled.div`
@@ -316,7 +315,7 @@ const VoiceChatNickname = styled.div`
 
 const VoicechatTxt = styled.div`
   display: flex;
-  width: 40%;
+  width: 45%;
   margin: 10px;
   justify-content: center;
   background-color: #d3dde873;
